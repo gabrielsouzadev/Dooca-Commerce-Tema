@@ -1,0 +1,229 @@
+{% set buy_button_text = theme.settings.product_buy_button_text ?: 'Comprar' %}
+{% set buy_quantity = theme.settings.product_buy_button_type ?: null %}
+{% set attr_type = section.settings.product_atribute_type ?: null %}
+
+{% set has_grid = (buy_quantity == 'quantity' and attr_type != 'grid') ?  true : null %}
+
+<div class="product-action mt-4 position-relative">
+    {% ajax 'product-action' %}
+        {% if product.price > 0 %}
+            {% if product.balance > 0 %}
+                <{% if theme.settings.customize_position_customize == "before_buy" and product.kit %}div{% else %}form{% endif %}
+                    id="form-add-cart"
+                    name="form_add_cart"
+                    class="form"
+                    method="post"
+                    action="{{ 'cart' | action ('add') }}"
+                    {% if has_grid %}
+                        dc-quantity
+                        data-action="button"
+                        data-min="0"
+                        data-max="{{ (product.max_quantity > 0) ? product.max_quantity : product.balance }}"
+                    {% endif %}
+                >
+
+                    {% if theme.settings.product_cart_add_redirect != 'not_redirect' %}
+                        <input type="hidden" name="redirect" value="cart">
+                    {% endif %}
+
+                    {% if product.attribute and product.attribute.values | length >= 1 %}
+                        {% if product.attribute|length > 0 and product.attribute_secondary|length > 0 %}
+                            {% include "product-attribute-secondary.twig" %}
+                        {% else %}
+                            {% include 'product-attribute.twig' %}
+                        {% endif %}
+                    {% else %}
+                        {% app 'size-guide' %}
+                        <input type="hidden" name="variation_id" value="{{ product.variation.id }}">
+                    {% endif %}
+                    
+                    {% if section.settings.product_alert > 0 and section.settings.product_alert >= product.balance and section.settings.product_atribute_type != 'grid' %}
+                        <div class="product-balance">
+                            {% if section.settings.product_alert_message %}
+                                <div class="text p-3 text-center">
+                                    {{ section.settings.product_alert_message | raw }}
+                                </div>
+                            {% else %}
+                                {% if product.has_price_range and section.settings.variation_cheap_message %}
+                                    {% if _get.variation %}
+                                        {% if product.balance != 9999 %}
+                                            <div class="text p-3 text-center">
+                                                Aproveite! Possuímos apenas
+                                                    {{ product.balance }}
+                                                    {{ product.balance | pluralize ('unidade', 'unidades', false) }}
+                                                em estoque!
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                {% else %}
+                                    {% if product.balance != 9999 %}
+                                        <div class="text p-3 text-center">
+                                            Aproveite! Possuímos apenas
+                                                {{ product.balance }}
+                                                {{ product.balance | pluralize ('unidade', 'unidades', false) }}
+                                            em estoque!
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                    {% include 'product-stock.twig' %}
+
+                    {% if template == "product" and theme.settings.customize_position_customize == "before_buy" %}
+                        {% section 'customize-product' %}
+                    {% endif %}
+
+                    {% app 'customize' %}
+                    
+                    <div class="product-values mb-5">
+                        {% if product.has_price_range and section.settings.variation_cheap_message and not _get.variation %}
+                            <div class="product-action-price mt-5">
+                                <div class="row align-items-start justify-content-start">
+                                    {% if product.price_compare > 0 %}
+                                        <div class="col-auto">
+                                            <div class="product-price-discount mr-4">
+                                                {{ product.price_compare | currency }}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    <div class="col">
+                                        <div class="product-price-final">
+                                            <div class="text">A partir de</div>
+                                            <div>
+                                                <span class="total">{{ product.min_price_range | currency }}</span> 
+                                                {# <span class="text">no boleto</span> #}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {#<div class="row mt-4">
+                                    <div class="col-12">
+                                        <div class="py-3 border-bottom">
+                                            <span class="h2" style="color: var(--color-primary);">
+                                                Selecione uma opção abaixo:
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>#}
+                            </div>
+                        {% else %}
+                            {% include 'product-action-price.twig' %}
+                            {% if customer|length > 0 %}
+                                {% if theme.settings.seal_group_discount or theme.settings.seal_group_discount_mobile %}
+                                    {% include "product-group-promotion.twig" %}
+                                {% endif %}
+                            {% endif %}
+                            {% include 'product-installments.twig' %}
+                        {% endif %}
+                    </div>
+
+                    <div class="product-buy d-flex flex-wrap mt-3 no-gutters">
+                        {% if has_grid or (section.settings.product_atribute_type == 'grid' and product.attribute.values|length == 0) %}
+                            <div class="col-12 col-md-4 md-0 mr-md-3 mb-3 mb-md-0 dc-quantity">
+                                <button aria-label="dc-decrease" class="dc-decrease position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button">
+                                    <i class="icon">{{ 'img/dc-icons/minus.svg' | svg }}</i>
+                                </button>
+
+                                <input aria-label="dc-quantity" type="number" class="input dc-input text-center w-100 h-100" name="quantity" value="{% if _get.quantity > 0 %}{{ _get.quantity }}{% else %}1{% endif %}" min="{{ product.min_quantity }}" {% if not product.sell_out_of_stock %} max="{{ (product.max_quantity > 0) ? product.max_quantity : product.balance }}" {% endif %}>
+
+                                <button aria-label="dc-increase" class="dc-increase position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button">
+                                    <i class="icon">{{ 'img/dc-icons/plus.svg' | svg }}</i>
+                                </button>
+                            </div>
+                        {% endif %}
+
+                        <button
+                            class="product-action-buy btn col text-center p-3 position-relative"
+                            type="submit"
+                            style="
+                                background-color: {{ theme.settings.color_button_buy }};
+                                color: {{ theme.settings.color_button_buy_text }};
+                            "
+                        >
+                            <div class="product-action-buy-loader">
+                                <div class="loader"></div>
+                            </div>
+                            <span>{{ buy_button_text }}</span>
+                        </button>
+                    </div>
+
+                    {% if product.component_groups|length >= 1 %}
+                        <div class="product-action-personalize {% if theme.settings.customize_position_customize == "before_buy" %}d-none {% else %}d-flex{% endif %} mt-4 py-4 border-top justify-content-center align-items-center w-100">
+                            <div class="btn w-100">{{ text_btn_kit }}</div>
+                        </div>
+                    {% endif %}
+
+                    {% if is_ajax %}
+                        <div class="d-none">
+                            {% for product in product.components %}
+                                <input type="hidden" name="components[hash_{{ loop.index0 }}][product_component_id]" value="{{ product.product_component_id }}">
+                                <input type="hidden" name="components[hash_{{ loop.index0 }}][variation_id]" value="{{ product.variation.id }}">
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                </{% if theme.settings.customize_position_customize == "before_buy" and product.kit %}div{% else %}form{% endif %}>
+            {% else %}
+                {% if template == "product" and theme.settings.customize_position_customize == "before_buy" %}
+                    {% section 'customize-product' %}
+                {% endif %}
+                
+                {% include 'product-request.twig' %}
+            {% endif %}
+        {% else %}
+            {% include 'product-price-request.twig' %}
+        {% endif %}
+
+        {% if section.settings.product_shipping_seals %}
+            {% include 'product-shipping-seals.twig' %}
+        {% endif %}
+    {% endajax %}
+</div>
+
+{% if section.settings.product_atribute_type != 'grid' %}
+    {% javascript %}
+        $(function() {
+            // TODO: arrumar isso na diretiva no front dc-quantity.js
+
+            var action = $('.product-action .dc-quantity');
+
+            action.on('click', '.dc-decrease', function(el) { decrease(el); });
+            action.on('click', '.dc-increase', function(el) { increase(el); });
+
+            getInput = function(el) {
+                var input = $(el.target).parents('.dc-quantity').find('.dc-input');
+                console.log(input);
+                var obj = {};
+                
+                obj.val = parseInt(input.val());
+                obj.min = parseInt(input.attr('min'));
+                obj.max = {% if product.sell_out_of_stock %}999999{% else %}parseInt(input.attr('max')){% endif %};
+
+                return obj;
+            };
+
+            decrease = function(el) {
+                var data = getInput(el);
+                var input = $(el.target).parents('.dc-quantity').find('.dc-input');
+
+                var n = data.val - 1;
+                
+                if (n >= data.min) {
+                    input.val(n);
+                }
+            };
+
+            increase = function(el) {
+                var data = getInput(el);
+                var input = $(el.target).parents('.dc-quantity').find('.dc-input');
+
+                var n = data.val + 1;
+
+                if (n <= data.max) {
+                    input.val(n);
+                }
+            };
+        });
+    {% endjavascript %}
+{% endif %}

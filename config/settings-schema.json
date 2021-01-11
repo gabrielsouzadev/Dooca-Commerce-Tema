@@ -1,0 +1,1717 @@
+{
+	"theme_name": "DC Plus Theme",
+	"theme_author": "Dooca Commerce",
+	"theme_version": "1.0.0",
+	"theme_documentation_url": "https://suportedooca.zendesk.com/hc/pt-br/sections/360003400893-Tema-Minimalist",
+	"theme_support_url": "https://suportedooca.zendesk.com/hc/pt-br/sections/360003400893-Tema-Minimalist",
+	"settings": [
+		{
+			"name": "LGPD - Lei Geral de Proteção de Dados",
+			"fixed": 1,
+			"settings": [
+				{
+					"type": "header",
+					"content": "Desabilitar mensagem"
+				},
+				{
+					"type": "checkbox",
+					"id": "lgpd_disable",
+					"label": "Desabilitar a mensagem"
+				},
+				{
+					"type": "header",
+					"content": "Aparência"
+				},
+				{
+					"type": "color_picker",
+					"id": "lgpd_background",
+					"label": "Cor de fundo"
+				},
+				{
+					"type": "color_picker",
+					"id": "lgpd_text_color",
+					"label": "Cor de texto"
+				},
+				{
+					"type": "color_picker",
+					"id": "lgpd_button_background",
+					"label": "Cor de fundo do botão"
+				},
+				{
+					"type": "color_picker",
+					"id": "lgpd_button_text_color",
+					"label": "Cor de texto do botão"
+				},
+				{
+					"type": "header",
+					"content": "Conteúdo"
+				},
+				{
+					"type": "text",
+					"id": "lgpd_text",
+					"label": "Texto",
+					"default": "Utilizamos cookies para melhorar a sua experiência em nosso site."
+				},
+				{
+					"type": "text",
+					"id": "lgpd_button_text",
+					"label": "Texto do botão",
+					"default": "Continuar e fechar"
+				},
+				{
+					"type": "url",
+					"id": "lgpd_button_url",
+					"label": "Link da política de privacidade"
+				}
+			]
+		},
+		{
+			"name": "Termos de aceite para finalizar compra",
+			"fixed": 1,
+			"settings": [
+				{
+					"type": "checkbox",
+					"id": "terms_of_acceptance",
+					"label": "Exibir termos de aceite para finalizar a compra",
+					"default": "0"
+				},
+				{
+					"type": "text",
+					"label": "Título do termos de aceite",
+					"id": "terms_of_acceptance_title"
+				},
+				{
+					"type": "textarea",
+					"label": "Texto do termos de aceite",
+					"id": "terms_of_acceptance_text"
+				},
+				{
+					"type": "text",
+					"id": "terms_of_acceptance_button",
+					"label": "Texto do botão do termos de aceite"
+				}
+			]
+		},
+		{
+			"name": "Popup de aviso",
+			"fixed": 1,
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "modal_image",
+					"label": "Imagem",
+					"info": "Recomendado: 600x450px com até 250kb"
+				},
+				{
+					"type": "select",
+					"id": "modal_type",
+					"label": "Exibir o aviso:",
+					"default": "1",
+					"options": [
+						{
+							"value": "0",
+							"label": "Ao abrir a loja"
+						},
+						{
+							"value": "1",
+							"label": "Apenas uma vez ao dia"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"id": "modal_time",
+					"label": "Tempo para mostrar a janela",
+					"options": [
+						{
+							"value": "0",
+							"label": "Ao carregar a página"
+						},
+						{
+							"value": "5",
+							"label": "Após 5 segundos"
+						},
+						{
+							"value": "10",
+							"label": "Após 10 segundos"
+						},
+						{
+							"value": "15",
+							"label": "Após 15 segundos"
+						},
+						{
+							"value": "20",
+							"label": "Após 20 segundos"
+						}
+					]
+				},
+				{
+					"type": "text",
+					"label": "Título da mensagem",
+					"id": "modal_title",
+					"info": "Ex: Seja bem vindo!"
+				},
+				{
+					"type": "text",
+					"label": "Mensagem",
+					"id": "modal_message",
+					"info": "Ex: Para acessar esta loja, você precisa ter mais de 18 anos"
+				},
+				{
+					"type": "text",
+					"label": "Texto do botão",
+					"id": "modal_button",
+					"info": "Ex: Ok, tenho mais de 18 anos"
+				},
+				{
+					"type": "url",
+					"label": "Link do botão",
+					"id": "modal_button_url",
+					"info": "Ex: https://dooca.com.br/"
+				},
+				{
+					"type": "checkbox",
+					"label": "Abrir link do botão em nova aba",
+					"id": "modal_button_url_target"
+				}
+			]
+		},
+		{
+			"name": "Dias e horários de atendimento",
+			"fixed": 1,
+			"settings": [
+				{
+					"type": "header",
+					"content": "Horários de atendimento"
+				},
+				{
+					"type": "checkbox",
+					"id": "opening_hours",
+					"label": "Ativar horários de atendimento",
+					"default": "0"
+				},
+				{
+					"type": "header",
+					"content": "Dias da semana"
+				},
+				{
+					"type": "checkbox",
+					"id": "schedule_monday",
+					"label": "Segunda-feira",
+					"default": "0"
+				},
+				{
+					"type": "checkbox",
+					"id": "schedule_tuesday",
+					"label": "Terça-feira",
+					"default": "0"
+				},
+				{
+					"type": "checkbox",
+					"id": "schedule_wednesday",
+					"label": "Quarta-feira",
+					"default": "0"
+				},
+				{
+					"type": "checkbox",
+					"id": "schedule_thursday",
+					"label": "Quinta-feira",
+					"default": "0"
+				},
+				{
+					"type": "checkbox",
+					"id": "schedule_friday",
+					"label": "Sexta-feira",
+					"default": "0"
+				},
+				{
+					"type": "checkbox",
+					"id": "schedule_saturday",
+					"label": "Sabado",
+					"default": "0"
+				},
+				{
+					"type": "checkbox",
+					"id": "schedule_sunday",
+					"label": "Domingo",
+					"default": "0"
+				},
+				{
+					"type": "header",
+					"content": "Diurno (Horário)"
+				},
+				{
+					"type": "header",
+					"content": "Caso não atenda neste turno, deixe os campos em branco"
+				},
+				{
+					"type": "text",
+					"id": "daytime_of",
+					"label": "De:",
+					"info": "Exemplo de como digitar o horário <b>06:30</b>, <b>Necessário preencher o de/até caso for usar.</b>"
+				},
+				{
+					"type": "text",
+					"id": "daytime_for",
+					"label": "Até:",
+					"info": "Exemplo de como digitar o horário <b>11:00</b>, <b>Necessário preencher o de/até caso for usar.</b>"
+				},
+				{
+					"type": "header",
+					"content": "Noturno (Horário)"
+				},
+				{
+					"type": "header",
+					"content": "Caso não atenda neste turno, deixe os campos em branco"
+				},
+				{
+					"type": "text",
+					"id": "nightly_of",
+					"label": "De:",
+					"info": "Exemplo de como digitar o horário <b>13:00</b>, <b>Necessário preencher o de/até caso for usar.</b>"
+				},
+				{
+					"type": "text",
+					"id": "nightly_for",
+					"label": "Até:",
+					"info": "Exemplo de como digitar o horário <b>18:30</b>, <b>Necessário preencher o de/até caso for usar.</b>"
+				}
+			]
+		},
+		{
+			"name": "Paginas",
+			"fixed": 1,
+			"settings": [
+				{
+					"type": "header",
+					"content": "Fundo da loja"
+				},
+				{
+					"type": "image_picker",
+					"id": "store_background_image",
+					"label": "Imagem de fundo",
+					"info": "Recomendado: 1600x1000px com até 250kb"
+				},
+				{
+					"type": "color_picker",
+					"id": "store_background_color",
+					"label": "Cor de fundo"
+				},
+				{
+					"type": "select",
+					"id": "store_background_position",
+					"label": "Alinhamento da imagem",
+					"default": "top center",
+					"options": [
+						{
+							"value": "center center",
+							"label": "Centro"
+						},
+						{
+							"value": "top center",
+							"label": "Topo"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"id": "store_background_size",
+					"label": "Estilo da imagem de fundo",
+					"default": "cover",
+					"options": [
+						{
+							"value": "100%",
+							"label": "Fluida"
+						},
+						{
+							"value": "cover",
+							"label": "Preencher toda a tela"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Formato de imagem",
+			"fixed": 1,
+			"settings": [
+				{
+					"type": "select",
+					"id": "product_image_crop",
+					"label": "Formato da imagem do produto",
+					"default": "square",
+					"options": [
+						{
+							"value": "square",
+							"label": "Quadrado"
+						},
+						{
+							"value": "vertical",
+							"label": "Vertical"
+						}
+					]
+				},
+				{
+					"type": "text",
+					"id": "product_card_custom_crop",
+					"label": "Tamanho de imagem personalizado de produto",
+					"info": "Exemplo: 495x495 ou 450x600"
+				},
+				{
+					"type": "text",
+					"id": "product_info_custom_crop",
+					"label": "Tamanho de imagem personalizado da interna de produto",
+					"info": "Exemplo: 620x620 ou 600x800"
+				}
+			]
+		},
+		{
+			"name": "Fontes",
+			"fixed": 1,
+			"settings": [
+				{
+					"type": "header",
+					"content": "Menus"
+				},
+				{
+					"type": "font-picker",
+					"id": "font_menu"
+				},
+				{
+					"type": "header",
+					"content": "Títulos"
+				},
+				{
+					"type": "font-picker",
+					"id": "font_h1"
+				},
+				{
+					"type": "header",
+					"content": "Subtítulos"
+				},
+				{
+					"type": "font-picker",
+					"id": "font_h2"
+				},
+				{
+					"type": "header",
+					"content": "Destaques"
+				},
+				{
+					"type": "font-picker",
+					"id": "font_h3"
+				},
+				{
+					"type": "header",
+					"content": "Textos"
+				},
+				{
+					"type": "font-picker",
+					"id": "font_texts"
+				},
+				{
+					"hide": "true",
+					"type": "select",
+					"id": "font_family_mn",
+					"label": "Menu",
+					"default": {
+						"name": "roboto",
+						"css": "'Roboto', sans-serif",
+						"url": "https://fonts.googleapis.com/css?family=Roboto:"
+					},
+					"options": [
+						{
+							"value": {
+								"name": "arial",
+								"css": "Arial, sans-serif"
+							},
+							"label": "Arial"
+						},
+						{
+							"value": {
+								"name": "montserrat",
+								"css": "'Montserrat', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Montserrat:"
+							},
+							"label": "Montserrat"
+						},
+						{
+							"value": {
+								"name": "roboto",
+								"css": "'Roboto', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Roboto:"
+							},
+							"label": "Roboto"
+						},
+						{
+							"value": {
+								"name": "roboto_condensed",
+								"css": "'Roboto condensed', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Roboto+Condensed:"
+							},
+							"label": "Roboto condensed"
+						},
+						{
+							"value": {
+								"name": "roboto_slab",
+								"css": "'Roboto Slab', serif",
+								"url": "https://fonts.googleapis.com/css?family=Roboto+Slab:"
+							},
+							"label": "Roboto Slab"
+						},
+						{
+							"value": {
+								"name": "oswald",
+								"css": "'Oswald', serif",
+								"url": "https://fonts.googleapis.com/css?family=Oswald:"
+							},
+							"label": "Oswald"
+						},
+						{
+							"value": {
+								"name": "titillium_web",
+								"css": "'Titillium Web', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Titillium+Web:"
+							},
+							"label": "Titillium Web"
+						},
+						{
+							"value": {
+								"name": "ubuntu",
+								"css": "'Ubuntu', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Ubuntu:"
+							},
+							"label": "Ubuntu"
+						},
+						{
+							"value": {
+								"name": "barlow",
+								"css": "'Barlow', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Barlow:"
+							},
+							"label": "Barlow"
+						}
+					]
+				},
+				{
+					"hide": "true",
+					"type": "range",
+					"id": "mn_fs",
+					"min": "10",
+					"max": "50",
+					"default": "15",
+					"unit": "px",
+					"label": "Tamanho da fonte"
+				},
+				{
+					"hide": "true",
+					"type": "select",
+					"id": "mn_fw",
+					"label": "Peso da fonte",
+					"default": "400",
+					"options": [
+						{
+							"value": "400",
+							"label": "400"
+						},
+						{
+							"value": "500",
+							"label": "500"
+						},
+						{
+							"value": "600",
+							"label": "600"
+						},
+						{
+							"value": "700",
+							"label": "700"
+						},
+						{
+							"value": "800",
+							"label": "800"
+						}
+					]
+				},
+				{
+					"hide": "true",
+					"type": "range",
+					"id": "mn_ls",
+					"min": "0",
+					"max": "20",
+					"default": "0",
+					"label": "Espaçamento entre as letras"
+				},
+				{
+					"hide": "true",
+					"type": "select",
+					"id": "mn_tt",
+					"label": "Transformar texto da fonte",
+					"default": "none",
+					"options": [
+						{
+							"value": "none",
+							"label": "Normal"
+						},
+						{
+							"value": "uppercase",
+							"label": "Maiúsculas"
+						},
+						{
+							"value": "lowercase",
+							"label": "Minúsculas"
+						}
+					]
+				},
+				{
+					"hide": "true",
+					"type": "select",
+					"id": "font_family_h1",
+					"label": "Títulos (h1)",
+					"default": {
+						"name": "roboto",
+						"css": "'Roboto', sans-serif",
+						"url": "https://fonts.googleapis.com/css?family=Roboto:"
+					},
+					"options": [
+						{
+							"value": {
+								"name": "arial",
+								"css": "Arial, sans-serif"
+							},
+							"label": "Arial"
+						},
+						{
+							"value": {
+								"name": "montserrat",
+								"css": "'Montserrat', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Montserrat:"
+							},
+							"label": "Montserrat"
+						},
+						{
+							"value": {
+								"name": "roboto",
+								"css": "'Roboto', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Roboto:"
+							},
+							"label": "Roboto"
+						},
+						{
+							"value": {
+								"name": "roboto_condensed",
+								"css": "'Roboto condensed', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Roboto+Condensed:"
+							},
+							"label": "Roboto condensed"
+						},
+						{
+							"value": {
+								"name": "roboto_slab",
+								"css": "'Roboto Slab', serif",
+								"url": "https://fonts.googleapis.com/css?family=Roboto+Slab:"
+							},
+							"label": "Roboto Slab"
+						},
+						{
+							"value": {
+								"name": "oswald",
+								"css": "'Oswald', serif",
+								"url": "https://fonts.googleapis.com/css?family=Oswald:"
+							},
+							"label": "Oswald"
+						},
+						{
+							"value": {
+								"name": "titillium_web",
+								"css": "'Titillium Web', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Titillium+Web:"
+							},
+							"label": "Titillium Web"
+						},
+						{
+							"value": {
+								"name": "ubuntu",
+								"css": "'Ubuntu', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Ubuntu:"
+							},
+							"label": "Ubuntu"
+						},
+						{
+							"value": {
+								"name": "barlow",
+								"css": "'Barlow', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Barlow:"
+							},
+							"label": "Barlow"
+						}
+					]
+				},
+				{
+					"hide": "true",
+					"type": "range",
+					"id": "h1_fs",
+					"min": "10",
+					"max": "50",
+					"default": "16",
+					"unit": "px",
+					"label": "Tamanho da fonte"
+				},
+				{
+					"hide": "true",
+					"type": "select",
+					"id": "h1_fw",
+					"label": "Peso da fonte",
+					"default": "400",
+					"options": [
+						{
+							"value": "400",
+							"label": "400"
+						},
+						{
+							"value": "500",
+							"label": "500"
+						},
+						{
+							"value": "600",
+							"label": "600"
+						},
+						{
+							"value": "700",
+							"label": "700"
+						},
+						{
+							"value": "800",
+							"label": "800"
+						}
+					]
+				},
+				{
+					"hide": "true",
+					"type": "range",
+					"id": "h1_ls",
+					"min": "0",
+					"max": "20",
+					"default": "0",
+					"label": "Espaçamento entre as letras"
+				},
+				{
+					"hide": "true",
+					"type": "select",
+					"id": "h1_tt",
+					"label": "Transformar texto da fonte",
+					"default": "none",
+					"options": [
+						{
+							"value": "none",
+							"label": "Normal"
+						},
+						{
+							"value": "uppercase",
+							"label": "Maiúsculas"
+						},
+						{
+							"value": "lowercase",
+							"label": "Minúsculas"
+						}
+					]
+				},
+				{
+					"hide": "true",
+					"type": "select",
+					"id": "font_family_h2",
+					"label": "Subtítulos (h2)",
+					"default": {
+						"name": "roboto",
+						"css": "'Roboto', sans-serif",
+						"url": "https://fonts.googleapis.com/css?family=Roboto:"
+					},
+					"options": [
+						{
+							"value": {
+								"name": "arial",
+								"css": "Arial, sans-serif"
+							},
+							"label": "Arial"
+						},
+						{
+							"value": {
+								"name": "montserrat",
+								"css": "'Montserrat', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Montserrat:"
+							},
+							"label": "Montserrat"
+						},
+						{
+							"value": {
+								"name": "roboto",
+								"css": "'Roboto', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Roboto:"
+							},
+							"label": "Roboto"
+						},
+						{
+							"value": {
+								"name": "roboto_condensed",
+								"css": "'Roboto condensed', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Roboto+Condensed:"
+							},
+							"label": "Roboto condensed"
+						},
+						{
+							"value": {
+								"name": "roboto_slab",
+								"css": "'Roboto Slab', serif",
+								"url": "https://fonts.googleapis.com/css?family=Roboto+Slab:"
+							},
+							"label": "Roboto Slab"
+						},
+						{
+							"value": {
+								"name": "oswald",
+								"css": "'Oswald', serif",
+								"url": "https://fonts.googleapis.com/css?family=Oswald:"
+							},
+							"label": "Oswald"
+						},
+						{
+							"value": {
+								"name": "titillium_web",
+								"css": "'Titillium Web', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Titillium+Web:"
+							},
+							"label": "Titillium Web"
+						},
+						{
+							"value": {
+								"name": "ubuntu",
+								"css": "'Ubuntu', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Ubuntu:"
+							},
+							"label": "Ubuntu"
+						},
+						{
+							"value": {
+								"name": "barlow",
+								"css": "'Barlow', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Barlow:"
+							},
+							"label": "Barlow"
+						}
+					]
+				},
+				{
+					"hide": "true",
+					"type": "range",
+					"id": "h2_fs",
+					"min": "10",
+					"max": "50",
+					"default": "16",
+					"unit": "px",
+					"label": "Tamanho da fonte"
+				},
+				{
+					"hide": "true",
+					"type": "select",
+					"id": "h2_fw",
+					"label": "Peso da fonte",
+					"default": "400",
+					"options": [
+						{
+							"value": "400",
+							"label": "400"
+						},
+						{
+							"value": "500",
+							"label": "500"
+						},
+						{
+							"value": "600",
+							"label": "600"
+						},
+						{
+							"value": "700",
+							"label": "700"
+						},
+						{
+							"value": "800",
+							"label": "800"
+						}
+					]
+				},
+				{
+					"hide": "true",
+					"type": "range",
+					"id": "h2_ls",
+					"min": "0",
+					"max": "20",
+					"default": "0",
+					"label": "Espaçamento entre as letras"
+				},
+				{
+					"hide": "true",
+					"type": "select",
+					"id": "h2_tt",
+					"label": "Transformar texto da fonte",
+					"default": "none",
+					"options": [
+						{
+							"value": "none",
+							"label": "Normal"
+						},
+						{
+							"value": "uppercase",
+							"label": "Maiúsculas"
+						},
+						{
+							"value": "lowercase",
+							"label": "Minúsculas"
+						}
+					]
+				},
+				{
+					"hide": "true",
+					"type": "select",
+					"id": "font_family_h3",
+					"label": "Destaques (h3)",
+					"default": {
+						"name": "roboto",
+						"css": "'Roboto', sans-serif",
+						"url": "https://fonts.googleapis.com/css?family=Roboto:"
+					},
+					"options": [
+						{
+							"value": {
+								"name": "arial",
+								"css": "Arial, sans-serif"
+							},
+							"label": "Arial"
+						},
+						{
+							"value": {
+								"name": "montserrat",
+								"css": "'Montserrat', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Montserrat:"
+							},
+							"label": "Montserrat"
+						},
+						{
+							"value": {
+								"name": "roboto",
+								"css": "'Roboto', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Roboto:"
+							},
+							"label": "Roboto"
+						},
+						{
+							"value": {
+								"name": "roboto_condensed",
+								"css": "'Roboto condensed', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Roboto+Condensed:"
+							},
+							"label": "Roboto condensed"
+						},
+						{
+							"value": {
+								"name": "roboto_slab",
+								"css": "'Roboto Slab', serif",
+								"url": "https://fonts.googleapis.com/css?family=Roboto+Slab:"
+							},
+							"label": "Roboto Slab"
+						},
+						{
+							"value": {
+								"name": "oswald",
+								"css": "'Oswald', serif",
+								"url": "https://fonts.googleapis.com/css?family=Oswald:"
+							},
+							"label": "Oswald"
+						},
+						{
+							"value": {
+								"name": "titillium_web",
+								"css": "'Titillium Web', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Titillium+Web:"
+							},
+							"label": "Titillium Web"
+						},
+						{
+							"value": {
+								"name": "ubuntu",
+								"css": "'Ubuntu', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Ubuntu:"
+							},
+							"label": "Ubuntu"
+						},
+						{
+							"value": {
+								"name": "barlow",
+								"css": "'Barlow', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Barlow:"
+							},
+							"label": "Barlow"
+						}
+					]
+				},
+				{
+					"hide": "true",
+					"type": "range",
+					"id": "h3_fs",
+					"min": "10",
+					"max": "50",
+					"default": "16",
+					"unit": "px",
+					"label": "Tamanho da fonte"
+				},
+				{
+					"hide": "true",
+					"type": "select",
+					"id": "h3_fw",
+					"label": "Peso da fonte",
+					"default": "400",
+					"options": [
+						{
+							"value": "400",
+							"label": "400"
+						},
+						{
+							"value": "500",
+							"label": "500"
+						},
+						{
+							"value": "600",
+							"label": "600"
+						},
+						{
+							"value": "700",
+							"label": "700"
+						},
+						{
+							"value": "800",
+							"label": "800"
+						}
+					]
+				},
+				{
+					"hide": "true",
+					"type": "range",
+					"id": "h3_ls",
+					"min": "0",
+					"max": "20",
+					"default": "0",
+					"label": "Espaçamento entre as letras"
+				},
+				{
+					"hide": "true",
+					"type": "select",
+					"id": "h3_tt",
+					"label": "Transformar texto da fonte",
+					"default": "none",
+					"options": [
+						{
+							"value": "none",
+							"label": "Normal"
+						},
+						{
+							"value": "uppercase",
+							"label": "Maiúsculas"
+						},
+						{
+							"value": "lowercase",
+							"label": "Minúsculas"
+						}
+					]
+				},
+				{
+					"hide": "true",
+					"type": "select",
+					"id": "font_family_tx",
+					"label": "Textos",
+					"default": {
+						"name": "roboto",
+						"css": "'Roboto', sans-serif",
+						"url": "https://fonts.googleapis.com/css?family=Roboto:"
+					},
+					"options": [
+						{
+							"value": {
+								"name": "arial",
+								"css": "Arial, sans-serif"
+							},
+							"label": "Arial"
+						},
+						{
+							"value": {
+								"name": "montserrat",
+								"css": "'Montserrat', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Montserrat:"
+							},
+							"label": "Montserrat"
+						},
+						{
+							"value": {
+								"name": "roboto",
+								"css": "'Roboto', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Roboto:"
+							},
+							"label": "Roboto"
+						},
+						{
+							"value": {
+								"name": "roboto_condensed",
+								"css": "'Roboto condensed', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Roboto+Condensed:"
+							},
+							"label": "Roboto condensed"
+						},
+						{
+							"value": {
+								"name": "roboto_slab",
+								"css": "'Roboto Slab', serif",
+								"url": "https://fonts.googleapis.com/css?family=Roboto+Slab:"
+							},
+							"label": "Roboto Slab"
+						},
+						{
+							"value": {
+								"name": "oswald",
+								"css": "'Oswald', serif",
+								"url": "https://fonts.googleapis.com/css?family=Oswald:"
+							},
+							"label": "Oswald"
+						},
+						{
+							"value": {
+								"name": "titillium_web",
+								"css": "'Titillium Web', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Titillium+Web:"
+							},
+							"label": "Titillium Web"
+						},
+						{
+							"value": {
+								"name": "ubuntu",
+								"css": "'Ubuntu', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Ubuntu:"
+							},
+							"label": "Ubuntu"
+						},
+						{
+							"value": {
+								"name": "barlow",
+								"css": "'Barlow', sans-serif",
+								"url": "https://fonts.googleapis.com/css?family=Barlow:"
+							},
+							"label": "Barlow"
+						}
+					]
+				},
+				{
+					"hide": "true",
+					"type": "range",
+					"id": "tx_fs",
+					"min": "10",
+					"max": "50",
+					"default": "12",
+					"unit": "px",
+					"label": "Tamanho da fonte"
+				},
+				{
+					"hide": "true",
+					"type": "select",
+					"id": "tx_fw",
+					"label": "Peso da fonte",
+					"default": "400",
+					"options": [
+						{
+							"value": "400",
+							"label": "400"
+						},
+						{
+							"value": "500",
+							"label": "500"
+						},
+						{
+							"value": "600",
+							"label": "600"
+						},
+						{
+							"value": "700",
+							"label": "700"
+						},
+						{
+							"value": "800",
+							"label": "800"
+						}
+					]
+				},
+				{
+					"hide": "true",
+					"type": "range",
+					"id": "tx_ls",
+					"min": "0",
+					"max": "20",
+					"default": "0",
+					"label": "Espaçamento entre as letras"
+				},
+				{
+					"hide": "true",
+					"type": "select",
+					"id": "tx_tt",
+					"label": "Transformar texto da fonte",
+					"default": "none",
+					"options": [
+						{
+							"value": "none",
+							"label": "Normal"
+						},
+						{
+							"value": "uppercase",
+							"label": "Maiúsculas"
+						},
+						{
+							"value": "lowercase",
+							"label": "Minúsculas"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Cores",
+			"fixed": 1,
+			"settings": [
+				{
+					"type": "color_picker",
+					"id": "color_primary",
+					"label": "Cor padrão principal",
+					"default": "#3491bc"
+				},
+				{
+					"type": "color_picker",
+					"id": "color_secondary",
+					"label": "Cor padrão secundária",
+					"default": "#ffb400"
+				},
+				{
+					"type": "color_picker",
+					"id": "color_border",
+					"label": "Cor de bordas e divisórias",
+					"default": "#ecedee"
+				},
+				{
+					"type": "color_picker",
+					"id": "color_highlight",
+					"label": "Cor padrão de destaque",
+					"default": "#3FCCE3"
+				},
+				{
+					"type": "color_picker",
+					"id": "color_button_buy",
+					"label": "Cor do botão comprar",
+					"default": "#ecedee"
+				},
+				{
+					"type": "color_picker",
+					"id": "color_button_buy_text",
+					"label": "Cor do texto do botão comprar",
+					"default": "#ecedee"
+				},
+				{
+					"type": "color_picker",
+					"id": "color_text",
+					"label": "Cor dos textos",
+					"default": "#a0a7ab"
+				}
+			]
+		},
+		{
+			"name": "Formulários e botões",
+			"fixed": 1,
+			"settings": [
+				{
+					"type": "select",
+					"id": "radius_size",
+					"label": "Formato",
+					"default": "light_rounded",
+					"options": [
+						{
+							"value": "square",
+							"label": "Quadrado"
+						},
+						{
+							"value": "light_rounded",
+							"label": "Levemente Arredondado"
+						},
+						{
+							"value": "rounded",
+							"label": "Arredondado"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Vitrine de produto",
+			"fixed": 1,
+			"settings": [
+				{
+					"type": "select",
+					"id": "product_color_group",
+					"label": "Exibição de produtos na listagem",
+					"default": "grid",
+					"options": [
+						{
+							"value": "grid",
+							"label": "Cores lado a lado"
+						},
+						{
+							"value": "product",
+							"label": "Cores agrupadas"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"id": "product_buy_button_type",
+					"label": "Estilo de botão do produto",
+					"default": null,
+					"options": [
+						{
+							"value": null,
+							"label": "Não exibir botão de compra"
+						},
+						{
+							"value": "simple",
+							"label": "Exibir botão simples"
+						},
+						{
+							"value": "direct",
+							"label": "Exibir botão com compra direta"
+						},
+						{
+							"value": "quantity",
+							"label": "Exibir compra por quantidade"
+						},
+						{
+							"value": "color-variation",
+							"label": "Exibir compra direta com cor e variação"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"id": "product_cart_add_redirect",
+					"label": "Ao adicionar o produto no carrinho",
+					"edfault": false,
+					"options": [
+						{
+							"value": false,
+							"label": "Enviar o usuário ao carrinho"
+						},
+						{
+							"value": "not_redirect",
+							"label": "Permanecer na mesma tela"
+						}
+					]
+				},
+				{
+					"type": "text",
+					"id": "product_buy_button_text",
+					"label": "Texto do botão de compra",
+					"default": "Comprar"
+				},
+				{
+					"type": "text",
+					"id": "product_buy_button_outofstock_text",
+					"label": "Texto para produtos sem estoque",
+					"default": "Detalhes"
+				},
+				{
+					"type": "checkbox",
+					"id": "product_image_hover",
+					"label": "Exibir a segunda imagem na sobreposição do mouse",
+					"default": "0"
+				},
+				{
+					"type": "checkbox",
+					"id": "product_color_name",
+					"label": "Exibir cor do produto junto ao título",
+					"default": "0"
+				},
+				{
+					"type": "checkbox",
+					"id": "show_product_price_without_stock",
+					"label": "Exibir preço de produto sem estoque",
+					"default": "0"
+				},
+				{
+					"type": "header",
+					"content": "Exibição de preço"
+				},
+				{
+ 					"type": "select",
+					"id": "product_price_type",
+					"label": "Opções de exibição de preço",
+					"default": "final",
+					"options": [
+						{
+							"value": "final",
+							"label": "Exibir somente preço simples"
+						},
+						{
+							"value": "billet",
+							"label": "Exibir somente boleto"
+						},
+						{
+							"value": "only_creditcard",
+							"label": "Exibir somente cartão de crédito"
+						},
+						{
+							"value": "creditcard",
+							"label": "Exibir cartão de credito e boleto"
+						},
+						{
+							"value": "iconsmethods",
+							"label": "Exibir cartão e boleto com ícones"
+						}
+					]
+				},
+				{
+ 					"type": "select",
+					"id": "price_feature",
+					"label": "Destaque no preço (Somente com cartão e boleto)",
+					"default": "billet",
+					"options": [
+						{
+							"value": "billet",
+							"label": "Boleto"
+						},
+						{
+							"value": "creditcard",
+							"label": "Cartão de crédito"
+						},
+						{
+							"value": "billet-cc",
+							"label": "Boleto & Cartão de crédito"
+						}
+					]
+				},
+				{
+ 					"type": "select",
+					"id": "price_parcel",
+					"label": "Parcelamento",
+					"default": "0",
+					"options": [
+						{
+							"value": "0",
+							"label": "Parcelamento máximo sem juros"
+						},
+						{
+							"value": "1",
+							"label": "Parcelamento máximo"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Kit de produtos",
+			"fixed": 1,
+			"settings": [
+				{
+                    "type": "select",
+                    "id": "customize_position_customize",
+                    "label": "Exibição dos produtos do kit",
+                    "default": "after_description",
+                    "options": [
+						{
+                            "value": "before_description",
+                            "label": "Abaixo, antes da descrição"
+                        },
+						{
+                            "value": "after_description",
+                            "label": "Abaixo, após a descrição"
+                        },
+                        {
+                            "value": "before_buy",
+                            "label": "Acima do botão comprar"
+                        }
+                    ]
+                }
+			]
+		},
+		{
+			"name": "Selos",
+			"fixed": 1,
+			"settings": [
+				{
+					"type": "header",
+					"content": "Promoção"
+				},
+				{
+					"type": "checkbox",
+					"id": "seal_promotion",
+					"label": "Exibir selo",
+					"default": "1"
+				},
+				{
+					"type": "checkbox",
+					"id": "seal_promotion_billet_discount",
+					"label": "Somar o desconto do boleto com o DE/POR",
+					"default": "0"
+				},
+				{
+					"type": "select",
+					"id": "seal_promotion_type",
+					"label": "Formato do selo",
+					"default": "rounded",
+					"options": [
+						{
+							"value": "radius",
+							"label": "Redondo"
+						},
+						{
+							"value": "rectangular",
+							"label": "Retangular"
+						}
+					]
+				},
+				{
+					"type": "range",
+					"id": "seal_promotion_fontsize",
+					"min": "10",
+					"max": "15",
+					"unit": "px",
+					"default": "12",
+					"label": "Tamanho da fonte"
+				},
+				{
+					"type": "color_picker",
+					"id": "seal_promotion_fontcolor",
+					"label": "Cor da fonte"
+				},
+				{
+					"type": "color_picker",
+					"id": "seal_promotion_background",
+					"label": "Cor de fundo"
+				},
+				{
+					"type": "header",
+					"content": "Lançamento"
+				},
+				{
+					"type": "checkbox",
+					"id": "seal_launch",
+					"label": "Exibir selo",
+					"default": "1"
+				},
+				{
+					"type": "select",
+					"id": "seal_launch_time",
+					"label": "Tempo máximo de exibição do selo",
+					"info": "0 para não exibir o selo",
+					"default": 0,
+					"options": [
+						{
+							"value": 0,
+							"label": "0 dias"
+						},
+						{
+							"value": 10,
+							"label": "10 dias"
+						},
+						{
+							"value": 15,
+							"label": "15 dias"
+						},
+						{
+							"value": 30,
+							"label": "30 dias"
+						}
+					]
+				},
+				{
+					"type": "range",
+					"id": "seal_launch_fontsize",
+					"min": "10",
+					"max": "15",
+					"unit": "px",
+					"default": "12",
+					"label": "Tamanho da fonte"
+				},
+				{
+					"type": "color_picker",
+					"id": "seal_launch_fontcolor",
+					"label": "Cor da fonte"
+				},
+				{
+					"type": "color_picker",
+					"id": "seal_launch_background",
+					"label": "Cor de fundo"
+				},
+				{
+					"type": "header",
+					"content": "Descontos de grupos"
+				},
+				{
+					"type": "checkbox",
+					"id": "seal_group_discount",
+					"label": "Exibir selo no desktop",
+					"default": "0"
+				},
+				{
+					"type": "checkbox",
+					"id": "seal_group_discount_mobile",
+					"label": "Exibir selo no mobile",
+					"default": "0"
+				},
+				{
+					"type": "color_picker",
+					"id": "seal_group_fontcolor",
+					"label": "Cor da fonte"
+				},
+				{
+					"type": "color_picker",
+					"id": "seal_group_background",
+					"label": "Cor de fundo"
+				},
+				{
+					"type": "header",
+					"content": "Pré-venda"
+				},
+				{
+					"type": "checkbox",
+					"id": "seal_pre_sale",
+					"label": "Exibir selo",
+					"default": "1"
+				},
+				{
+					"type": "range",
+					"id": "seal_pre_sale_fontsize",
+					"min": "10",
+					"max": "15",
+					"unit": "px",
+					"default": "12",
+					"label": "Tamanho da fonte"
+				},
+				{
+					"type": "color_picker",
+					"id": "seal_pre_sale_fontcolor",
+					"label": "Cor da fonte"
+				},
+				{
+					"type": "color_picker",
+					"id": "seal_pre_sale_background",
+					"label": "Cor de fundo"
+				}
+			]
+		},
+		{
+			"name": "Estilo Customizado (CSS)",
+			"fixed": 1,
+			"settings": [
+				{
+					"type": "header",
+					"content": "Código CSS"
+				},
+				{
+					"type": "textarea",
+					"label": "Insira o código CSS para sobrescrever o atual",
+					"id": "custom_style_css",
+					"info": "Exemplo: body { color: #FFFFFF }"
+				}
+			]
+		},
+		{
+			"name": "Favicon & Share",
+			"fixed": 1,
+			"settings": [
+				{
+					"type": "header",
+					"content": "Favicon",
+					"tooltip": "<b>Favicon</b> é o ícone do navegador. São pequenos logotipos exibidos junto aos marcadores na barra de endereços da maioria dos navegadores"
+				},
+				{
+					"type": "image_picker",
+					"id": "favicon",
+					"label": "Favicon",
+					"info": "Formato .png 96x96px"
+				},
+				{
+					"type": "header",
+					"content": "Share",
+					"tooltip": "<b>Share</b> é a imagem de compartilhamento. Ela será exibida ao enviar o link da sua loja virtual via WhatsApp ou Facebook por exemplo"
+				},
+				{
+					"type": "image_picker",
+					"id": "img_share",
+					"label": "Share",
+					"info": "Formato .jpg 1200x628px"
+				}
+			]
+		},
+		{
+			"name": "Redes Sociais",
+			"fixed": 1,
+			"settings": [
+				{
+					"type": "header",
+					"content": "Redes Sociais",
+					"tooltip": "Informe os links das <b>redes sociais</b> da sua loja virtual. Os links destas redes serão exibidos no canto direito do rodapé"
+				},
+				{
+					"type": "checkbox",
+					"label": "Ocultar os ícones do cabeçalho",
+					"id": "hide_header_social_icons",
+					"default": 0
+				},
+				{
+					"type": "checkbox",
+					"label": "Ocultar os ícones do rodapé",
+					"id": "hide_footer_social_icons",
+					"default": 0
+				},
+				{
+					"type": "header",
+					"content": "Links das redes sociais"
+				},
+				{
+					"type": "text",
+					"id": "social_facebook_link",
+					"label": "Facebook",
+					"info": "https://facebook.com/doocacommerce"
+				},
+				{
+					"type": "text",
+					"id": "social_twitter_link",
+					"label": "Twitter",
+					"info": "https://twitter.com/doocacommerce"
+				},
+				{
+					"type": "text",
+					"id": "social_instagram_link",
+					"label": "Instagram",
+					"info": "http://instagram.com/doocacommerce"
+				},
+				{
+					"type": "text",
+					"id": "social_pinterest_link",
+					"label": "Pinterest",
+					"info": "https://br.pinterest.com/doocacommerce"
+				},
+				{
+					"type": "text",
+					"id": "social_youtube_link",
+					"label": "YouTube",
+					"info": "https://www.youtube.com/doocacommerce"
+				},
+				{
+					"type": "text",
+					"id": "social_linkedin_link",
+					"label": "Linkedin",
+					"info": "https://www.linkedin.com/doocacommerce/"
+				}
+			]
+		}
+	]
+}

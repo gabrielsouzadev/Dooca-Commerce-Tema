@@ -1,0 +1,88 @@
+@font-face {
+  font-family: 'DoocaCommerce-Flags';
+  src:  url('{{ 'fonts/doocacommerce_flags' | dc_assets_url }}');
+  src:  url('{{ 'fonts/doocacommerce_flags.eot' | dc_assets_url }}') format('embedded-opentype'),
+    url('{{ 'fonts/doocacommerce_flags.ttf' | dc_assets_url }}') format('truetype'),
+    url('{{ 'fonts/doocacommerce_flags.woff' | dc_assets_url }}') format('woff'),
+    url('{{ 'fonts/doocacommerce_flags.svg' | dc_assets_url }}') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+.footer-payment [class^="icon-"], [class*=" icon-"],
+.footer-security [class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'DoocaCommerce-Flags' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-dc-ssl:before {
+  content: "\e901";
+}
+.icon-dc-googlesf:before {
+  content: "\e900";
+}
+.icon-dc-ame:before {
+  content: "\e902";
+}
+.icon-dc-amex:before {
+  content: "\e903";
+}
+.icon-dc-aura:before {
+  content: "\e904";
+}
+.icon-bancodobrasil:before {
+  content: "\e905";
+}
+.icon-dc-boleto:before {
+  content: "\e906";
+}
+.icon-dc-dinners:before {
+  content: "\e907";
+}
+.icon-dc-discover:before {
+  content: "\e908";
+}
+.icon-dc-elo:before {
+  content: "\e909";
+}
+.icon-dc-hiper:before {
+  content: "\e90a";
+}
+.icon-dc-hipercard:before {
+  content: "\e90b";
+}
+.icon-dc-inter:before {
+  content: "\e90c";
+}
+.icon-dc-itau:before {
+  content: "\e90d";
+}
+.icon-dc-jcb:before {
+  content: "\e90e";
+}
+.icon-dc-mastercard:before {
+  content: "\e90f";
+}
+.icon-dc-mercadopago:before {
+  content: "\e910";
+}
+.icon-dc-paypal:before {
+  content: "\e911";
+}
+.icon-dc-picpay:before {
+  content: "\e912";
+}
+.icon-dc-visa:before {
+  content: "\e913";
+}

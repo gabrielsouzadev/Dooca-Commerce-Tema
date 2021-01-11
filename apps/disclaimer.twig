@@ -1,0 +1,90 @@
+{% if app.active %}
+    <div class="disclaimer-modal" data-modal-title="{{ app.title }}">
+        <div class="container"> 
+            <div class="row justify-content-center no-gutters">   
+                {% if app.image %}             
+                    <div class="col-12">
+                        <img class="img-fluid" src="{{ app.image.src }}" alt="{{ app.title }}">
+                    </div>
+                {% endif %}
+
+                <div class="col-12 text-center mt-4">
+                    <div id="accept-text" class="text" style="color: {{ app.text_color }};">
+                        {{ app.text }}
+                    </div>
+
+                    <div id="denied-text" class="text d-none" style="color: {{ app.text_color }};">
+                        {{ app.text_denied }}
+                    </div>
+                </div>
+
+                <div class="col-12 text-center mt-4">
+                    <button id="accept-btn" class="btn product-buy-button mr-4" style="background-color: {{ app.bt_background }}; color: {{ app.bt_text }};">
+                        Sim
+                    </button>
+
+                    <button id="denied-btn" class="btn product-buy-button" style="background-color: {{ app.bt_background }}; color: {{ app.bt_text }};">
+                        Não
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        #disclaimer-modal .modal__header {
+            padding: 2rem;
+        }
+
+        #disclaimer-modal .modal__container {
+            width: 100%;
+            max-width: 60rem;
+            background-color: {{ app.background }};
+            padding: 0 2.5rem 2.5rem;
+        }
+
+         #disclaimer-modal .modal__title {
+            color: {{ app.text_color }};
+        }
+        
+        #disclaimer-modal .modal__close {
+            display: none;
+        }
+
+        #disclaimer-modal .modal__overlay {
+            pointer-events: none;
+        }
+        
+        @media only screen and (max-width: 920px) {
+            #disclaimer-modal .modal__container {
+                margin: auto 2rem;
+            }
+        }
+    </style>
+
+    <script>
+        $(function() {
+            var modal = $('.disclaimer-modal').modal();
+            var storage = localStorage;
+
+            storage.setItem('hasDisclaimer', true);
+
+            if (!storage.getItem('disclaimer')) {
+                modal.open();
+            }
+
+            $('#denied-btn').on('click', function() {
+                $('#accept-text').remove();
+                $('#denied-text').removeClass('d-none');
+
+                $('#denied-btn').remove();
+                $('#accept-btn').remove();
+            });
+
+            $('#accept-btn').on('click', function() {
+                storage.setItem('disclaimer', true);
+                location.reload();
+            });
+        });
+    </script>
+{% endif %}

@@ -1,0 +1,45 @@
+{% set type = section.settings.type ?: '1' %}
+
+{% ajax 'product-description' %}
+    <div class="product-description style-{{ type }}" id="{{ section.id }}" {% if is_ajax %}style="border: 0; padding: 0;"{% elseif type != '2' %}style="border-width: {{ section.settings.border_size }}px 0;"{% endif %}>
+        <div class="container">
+            {% include 'product-description/style-' ~ type ~ '.twig' %}
+        </div>
+    </div>
+{% endajax %}
+
+{% schema %}
+    {
+        "name": "Descrição do produto",
+        "settings": [
+            {
+                "type": "select",
+                "id": "type",
+                "label": "Estilo da descrição do produto",
+                "default": "1",
+                "options": [
+                    {
+                        "value": "1",
+                        "label": "Descrição e características em abas"
+                    },
+                    {
+                        "value": "3",
+                        "label": "Descrição e características com ícones"
+                    },
+                    {
+                        "value": "2",
+                        "label": "Destaque nas características"
+                    }
+                ]
+            }, 
+            {
+                "type": "range",
+                "id": "border_size",
+                "min": "0",
+                "max": "10",
+                "default": "1",
+                "label": "Espessura da borda de seção"
+            }
+        ]
+    }
+{% endschema %}

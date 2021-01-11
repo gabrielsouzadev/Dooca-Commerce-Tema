@@ -1,0 +1,39 @@
+#product-kit-modal {
+    .modal__close {
+        display: block;
+        width: 4rem;
+        height: 4rem;
+        position: absolute;
+        top: .5rem;
+        right: .5rem;
+        cursor: pointer;
+        opacity: 1;
+        transition: all ease .15s;
+
+        &:before,
+        &:after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 60%;
+            border: solid 1px #fff;
+            height: 50%;
+            border-color: #fff;
+        }
+
+        &:before {
+            transform: translate(-50%,-50%) rotate(45deg);
+        }
+
+        &:after {
+            transform: translate(-50%,-50%) rotate(-45deg);
+        }
+
+        &:hover {
+            opacity: .65;
+        }
+    }
+}

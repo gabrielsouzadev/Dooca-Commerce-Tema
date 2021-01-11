@@ -1,0 +1,56 @@
+{# fontes antigas #}
+{% set mn_ff = (theme.settings.font_family_mn | raw) | str_to_array(true) %}
+{% set h1_ff = (theme.settings.font_family_h1 | raw) | str_to_array(true) %}
+{% set h2_ff = (theme.settings.font_family_h2 | raw) | str_to_array(true) %}
+{% set h3_ff = (theme.settings.font_family_h3 | raw) | str_to_array(true) %}
+{% set tx_ff = (theme.settings.font_family_tx | raw) | str_to_array(true) %}
+
+{# fontes novas #}
+{% set font_h1 = theme.settings.font_h1 %}
+{% set font_h2 = theme.settings.font_h2 %}
+{% set font_h3 = theme.settings.font_h3 %}
+{% set font_menu = theme.settings.font_menu %}
+{% set font_texts = theme.settings.font_texts %}
+
+{% if font_h1 and font_h1.family %}
+    {% set h1_url = "https://fonts.googleapis.com/css?family=" ~ font_h1.family ~ ":" ~ font_h1.font_weight ~ "&display=swap" %}
+{% else %}
+    {% set h1_url = h1_ff.url ~ theme.settings.h1_fw %}
+{% endif %}
+
+{% if font_h2 and font_h2.family %}
+    {% set h2_url = "https://fonts.googleapis.com/css?family=" ~ font_h2.family ~ ":" ~ font_h2.font_weight ~ "&display=swap" %}
+{% else %}
+    {% set h2_url = h2_ff.url ~ theme.settings.h2_fw %}
+{% endif %}
+
+{% if font_h3 and font_h3.family %}
+    {% set h3_url = "https://fonts.googleapis.com/css?family=" ~ font_h3.family ~ ":" ~ font_h3.font_weight ~ "&display=swap" %}
+{% else %}
+    {% set h3_url = h3_ff.url ~ theme.settings.h3_fw %}
+{% endif %}
+
+{% if font_menu and font_menu.family %}
+    {% set mn_url = "https://fonts.googleapis.com/css?family=" ~ font_menu.family ~ ":" ~ font_menu.font_weight ~ "&display=swap" %}
+{% else %}
+    {% set mn_url = mn_ff.url ~ theme.settings.mn_fw %}
+{% endif %}
+
+{% if font_texts and font_texts.family %}
+    {% set tx_url = "https://fonts.googleapis.com/css?family=" ~ font_texts.family ~ ":" ~ font_texts.font_weight ~ "&display=swap" %}
+{% else %}
+    {% set tx_url = tx_ff.url ~ theme.settings.tx_fw %}
+{% endif %}
+
+{% set _fonts = [h1_url, h2_url, h3_url, mn_url, tx_url] %}
+{% set fonts = [] %}
+
+{% for font in _fonts %}
+    {% if font not in fonts %}
+        {% set fonts = fonts|merge([font]) %}
+    {% endif %}
+{% endfor %}
+
+{% for url in fonts %}
+     <link rel="stylesheet" href="{{ url }}">
+{% endfor %}

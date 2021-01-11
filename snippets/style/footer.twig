@@ -1,0 +1,61 @@
+<style>
+    .f-pr-color {
+        color: {{ color_primary }} !important;
+    }
+
+    .f-sc-color {
+        color: {{ color_secondary }} !important;
+    }
+
+    .f-hl-color {
+        color: {{ color_highlight }} !important;
+    }
+
+    .f-mn-color {
+        color: {{ color_menu }} !important;
+    }
+
+    .f-tx-color {
+        color: {{ color_text }} !important;
+    }
+
+    .f-pr-background {
+        background: {{ color_primary }} !important;
+    }
+
+    .f-sc-background {
+        background: {{ color_secondary }} !important;
+    }
+
+    .f-hl-background {
+        background: {{ color_highlight }} !important;
+    }
+
+    {% set b_opacity = (section.settings.border_opacity == 10) ? '1' : '0.' ~ section.settings.border_opacity %}
+
+    .footer-terms,
+    .footer-logo {
+        border-top: solid .1rem {{ color_border | hex_to_rgb(b_opacity) }} !important;
+    }
+
+    .footer-top {
+        border-top: solid .1rem {{ color_border | hex_to_rgb(b_opacity) }} !important;
+    }
+
+    .footer-top,
+    .footer-middle {
+        border-bottom: solid .1rem {{ color_border | hex_to_rgb(b_opacity) }} !important;
+    }
+
+    .footer-input {
+        border: solid .1rem {{ color_border }} !important;
+    }
+
+    .footer-top,
+    .footer-middle,
+    .footer-bottom,
+    .footer-terms {
+        padding-top: {{ margin_up }}0px;
+        padding-bottom: {{ margin_dw }}0px;
+    }
+</style>

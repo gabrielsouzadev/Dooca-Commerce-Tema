@@ -1,0 +1,17 @@
+/**
+ * Grid
+ *
+ **/
+@mixin make-container ($width:100%) {
+	width: 100%;
+	margin: 0 auto;
+	padding: 0 2rem;
+	max-width: $width;
+
+	@include breakpoint('max-width: #{$bp-lg}') {}
+
+	@include breakpoint('max-width: #{$bp-md}') {
+		padding: 0 1rem;
+
+	}
+}

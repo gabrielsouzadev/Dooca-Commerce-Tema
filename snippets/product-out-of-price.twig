@@ -1,0 +1,9 @@
+{% set msg = 'Preço sob consulta' %}
+
+{% if shop.customer_register_for == 'view_prices' %}
+    {% set msg = '<span class="view-price-link" onclick="event.stopPropagation(); event.preventDefault(); location.href=\'/login\';">Entre</span> ou <span class="view-price-link" onclick="location.href=\'/cadastro\';">cadastre-se</span> para visualizar o preço' %}
+{% endif %}
+
+<div class="product-out-of-price text-center mb-3">
+    <span class="text">{{ msg | raw }}</span>
+</div>

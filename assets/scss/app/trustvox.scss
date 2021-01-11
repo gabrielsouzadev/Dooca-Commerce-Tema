@@ -1,0 +1,104 @@
+.trustvox-widget {
+    width: 100%;
+    max-width: 122rem;
+    margin: 5rem auto !important;
+
+    .ts-no-reviews_subtitle {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        font-family: $h1-ff;
+        font-weight: $h1-fw;
+        font-size: $h1-cs !important;
+        letter-spacing: $h1-cl;
+        text-transform: $h1-tt;
+        color: $color-primary;
+        position: relative;
+
+        &:after {
+            content: '';
+            width: 100%;
+            max-width: 4rem;
+            height: .4rem;
+            background: $color-secondary;
+            display: inline-block;
+            margin: 1.5rem auto;
+        }
+    }
+
+    span {
+        font-family: $h1-ff !important;
+        color: $color-primary;
+    }
+
+    .ts-button.ts-success {
+        width: 25%;
+        color: $buy_button_color;
+	    background-color: $buy_button_bg !important;
+        font-family: $mn-ff;
+        font-weight: $mn-fw;
+        font-size: $mn-cs;
+        letter-spacing: $mn-cl;
+        text-transform: $mn-tt;
+        opacity: 1 !important;
+
+        @include breakpoint('max-width: #{$bp-md}') {
+            width: 100% !important;
+            margin-top: 1.5rem;
+            margin-left: 0;
+        } 
+    }
+
+    .ts-customer-questions-form {
+        h2 {
+            font-size: 1.3rem !important;
+        }
+    }
+
+    .ts-customer-questions {
+        @include breakpoint('max-width: #{$bp-md}') {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+    }
+
+    .ts-v-footer-container {
+        @include breakpoint('max-width: #{$bp-md}') {
+            display: none;
+        }
+    }
+
+    .ts-customer-questions-form .ts-customer-questions-form-wrapper .ts-input {
+        width: 80% !important;
+        font-size: 1.3rem;
+
+        @include breakpoint('max-width: #{$bp-md}') {
+            width: 100% !important;
+        }
+    }
+
+    .ts-customer-questions__title {
+        color: $color-secondary !important;
+    }
+}
+
+.product-info {
+    .review-stars {
+        text-align: left !important;
+        margin-top: 1.5rem;
+    }
+}
+
+.product-card {
+    .review-stars {
+        margin-top: 1rem;
+    }
+}
+
+.ts-customer-questions-form-wrapper {
+    margin-top: 1.5rem;
+
+    @include breakpoint('max-width: #{$bp-md}') {
+        flex-wrap: wrap;
+    }
+}

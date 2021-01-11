@@ -1,0 +1,441 @@
+{% set show_section = true %}
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-lg-block' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-block d-lg-none' %}
+{% endif %}
+
+{% if show_section %}
+    <div class="{{ s }}">
+        {% include 'section-header.twig' with { 'name': 'products-tabs' }  %}
+
+            {% set data = section.blocks %}
+
+            {% set selected_tab_color = section.settings.selected_tab_color ?: theme.settings.color_primary %}
+            {% set button_bg_color = section.settings.button_bg_color ?: theme.settings.color_primary %}
+            {% set button_text_color = section.settings.button_text_color ?: '#FFFFFF' %}
+            {% set background_product = section.settings.products_background_color ?: null %}
+            {% set has_icon = null %}
+
+            {% for nav in data %}
+                {% set has_icon = nav.settings.icon_image ?: null %}
+            {% endfor %}
+
+            {% if data|length > 0 %}
+                <div class="mt-5" data-tabs>
+                    <div class="products-tabs-items {% if has_icon %} has-icons {% endif %} row justify-content-center align-items-center no-gutters position-relative" style="border-bottom: solid .1rem {{ section.settings.tabs_background_color ?: theme.settings.border_color }};">
+                        {% if has_icon %}
+                            {% for nav in data %}
+                                {% set nav_products = nav.settings.products %}
+                                {% set nav_title = nav.settings.title %}
+                                {% set icon = nav.settings.icon_image ?: null %}
+
+                                <div class="d-none d-lg-block products-tabs-item col text-center p-3 image {% if nav_title %} d-flex align-items-center justify-content-center {% endif %}" data-link="{{ loop.index0 }}" style="color: {{ section.settings.tabs_background_color }};">
+                                    <img loading="lazy" class="img-fluid products-tabs-image" src="{{ icon | img_url }}" alt="{{ nav_title }}" {% if nav_title %}style="margin: 0;"{% endif %}>
+
+                                    {% if nav_title %}
+                                        <h2 class="mb-0 ml-3 h2" style="color: {{ section.settings.title_color }};">{{ nav_title | raw }}</h2>
+                                    {% endif %}
+
+                                    <div class="d-block d-lg-none products-tabs-arrow">
+                                        {{ 'img/arrow-down.svg' | svg }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                            <div class="d-none d-lg-block products-tabs-line" style="background-color: {{ selected_tab_color }};"></div>
+                        {% else %}
+                            <div class="d-block d-lg-none products-tabs-select">
+                                <select class="select" id="product-tabs-selector" aria-label="Produtos em abas">
+                                    {% for nav in data %}
+                                        {% set nav_products = nav.settings.products %}
+                                        {% set nav_title = nav.settings.title %}
+
+                                        {% if nav_products %}
+                                            <option value="{{ loop.index0 }}">{{ nav_title }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                                <i class="products-tabs-icon">
+                                    {{ 'img/arrow-down.svg' | svg }}
+                                </i>
+                            </div>
+
+                            {% for nav in data %}
+                                {% set nav_title = nav.settings.title %}
+
+                                <div class="d-none d-lg-block products-tabs-item col text-center p-3" data-link="{{ loop.index0 }}">
+                                    <h2 class="h2" style="color: {{ section.settings.title_color }};">{{ nav_title | raw }}</h2>
+                                </div>
+                            {% endfor %}
+
+                            <div class="d-none d-lg-block products-tabs-line" style="background-color: {{ selected_tab_color }};"></div>
+                        {% endif %}
+                    </div>
+
+                    <div class="row p-3 p-md-5 no-gutters" style="background-color: {{ section.settings.tabs_background_color }};">
+                        {% for tab in data %}
+                            {% set tab_products = tab.settings.products %}
+
+                            {% set button_url = tab.settings.button_url ?: 'javascript:void(0)' %}
+                            {% set button_text = tab.settings.button_text ?: null %}
+                            {% set button_blank = tab.settings.button_blank ?: '_self' %}
+
+                            {% set slider = (tab_products|length > 4) ? true : false %}
+                            {% set cards = tab_products|length %}
+
+                            {% set cols = 'col-12 col-md-5 col-lg-3' %}
+
+                            {% if slider %}
+                                {% set cols = 'col-12' %}
+                            {% endif %}
+
+                            <div class="products-tabs-tab col-12">
+                                {% if tab.settings.description %}
+                                    <div class="products-tabs-description cms mb-3 mb-md-5 text-center" style="color: {{ section.settings.tabs_description_color }};">
+                                        {{ tab.settings.description | raw }}
+                                    </div>
+                                {% endif %}
+
+                                {% if tab_products %}
+                                    <div class="d-flex d-lg-none products-tabs-slider row justify-content-center owl-carousel owl-theme" data-tab-id="{{ loop.index0 }}">
+                                        {% for product_id in tab_products %}
+                                            {% if product_id %}
+                                                {% set product = products[product_id] %}
+
+                                                {% if product|length > 0 %}
+                                                    <div class="{{ cols }}">
+                                                        {% set params = { 'bg': background_product, 'cards': cards } %}
+                                                        {% include 'product-card.twig' with params %}
+                                                    </div>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+
+                                    <div class="d-none d-lg-flex products-tabs-slider row justify-content-center {% if slider %}owl-carousel owl-theme{% endif %}" data-tab-id="{{ loop.index0 }}">
+                                        {% for product_id in tab_products %}
+                                            {% if product_id %}
+                                                {% set product = products[product_id] %}
+
+                                                {% if product|length > 0 %}
+                                                    <div class="{{ cols }}">
+                                                        {% set params = { 'bg': background_product, 'cards': cards } %}
+                                                        {% include 'product-card.twig' with params %}
+                                                    </div>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+
+                                {% if button_text %}
+                                    <div class="row justify-content-center mt-3 mt-md-5">
+                                        <div class="col-auto text-center">
+                                            <a class="btn btn-{{ button_size }}" href="{{ button_url }}" target="{{ button_blank }}" aria-label="{{ button_text }}" role="button" style="background: {{ button_bg_color }}; color: {{ button_text_color }};">
+                                                {{ button_text }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+        {% include 'section-footer.twig' %}
+    </div>
+
+    {% javascript %}
+        $(function() {
+
+            $('.products-tabs-slider').each(function() {
+                var vm = $(this);
+
+                if (vm.hasClass('owl-carousel')) {
+                    vm.owlCarousel({
+                        lazyLoad: true,
+                        autoplay: true,
+                        autoheight: true,
+                        autoplayHoverPause:true,
+                        dots: true,
+                        loop: true,
+                        items: 4,
+                        responsive : {
+                            0 : {
+                                items: 1
+                            },
+                            480 : {
+                                items: 2
+                            },
+                            768 : {
+                                items: 4
+                            }
+                        }
+                    });
+                }
+            });
+
+            $(document).ready(function() {
+                var tabs = $('[data-tabs]');
+
+                tabs.each(function(){
+
+                    var nav = $('.products-tabs-item', this);
+                    var tab = $('.products-tabs-tab', this);
+                    var line = $('.products-tabs-line', this);
+                    var arrow = $(nav).find('.products-tabs-arrow');
+
+                    $(nav).eq(0).addClass('is-active');
+                    $(tab).eq(0).addClass('is-active');
+
+                    var left = 0;
+
+                    $(nav).each(function (index, elm) {
+                        $(elm).attr('data-left', left);
+                        left += $(elm).innerWidth();
+
+                        if(index === 0) {
+                            line.css({
+                                'width': left,
+                                'left': 0
+                            })
+                        }
+                    });
+
+                    $(nav).on('click', function(){
+                        var item = $(this).attr('data-link');
+
+                        $(nav).removeClass('is-active');
+                        $(this).addClass('is-active');
+
+                        $(tab).fadeOut(300).promise().done(function() {
+                            $(tab).eq(item).fadeIn(300);
+                        });
+
+                        line.css({
+                            'left': $(this).attr('data-left') + 'px'
+                        });
+
+                        $('.products-tabs-item').each(function() {
+                            $(this).removeClass('opened');
+                        });
+                    });
+
+                    if (window.is_mobile) {
+                        var arrow = $('.products-tabs-arrow', this);
+
+                        arrow.on('click', function(e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            $('.products-tabs-item').each(function() {
+                                if (!$(this).hasClass('is-active')) {
+                                    if ($(this).hasClass('opened')) {
+                                        $(this).removeClass('opened');
+                                    }
+                                    if (!$(this).hasClass('opened')) {
+                                        $(this).addClass('opened');
+                                    }
+                                }
+                            });
+                        });
+
+                        var select = $('.products-tabs-select .select', this);
+
+                        $(select).on('change', function() {
+                            var index = $(this).val();
+
+                            $(tab).fadeOut();
+                            $(tab).removeClass('is-active');
+
+                            $(tab).eq(index).fadeIn();
+                            $(tab).eq(index).addClass('is-active');
+                        });
+                    }
+                });
+            });
+        });
+    {% endjavascript %}
+{% endif %}
+
+{% schema %}
+{
+    "name": "Vitrine de produtos em abas",
+    "category": "Produtos",
+    "content_for_index": "1",
+    "max_blocks": "4",
+    "settings": [
+        {
+            "type": "accordion",
+            "content": "Conteúdo",
+            "icon": "content"
+        }, {
+            "type": "text",
+            "label": "Título",
+            "id": "title"
+        }, {
+            "type": "text",
+            "label": "Subtítulo",
+            "id": "subtitle"
+        }, {
+            "type": "accordion",
+            "content": "Aparência",
+            "icon": "design"
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em dispositivos móveis",
+            "id": "hide_mobile",
+            "default": 0
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em desktop",
+            "id": "hide_desktop",
+            "default": 0
+        },{
+            "type": "separator"
+        },{
+			"type": "text",
+			"id": "custom_class",
+			"label": "Classe customizada para editar o css"
+		},{
+            "type": "select",
+            "id": "container",
+            "label": "Estilo do conteúdo",
+            "tooltip": "Você poderá definir o se o conteúdo da seção é centralizado ou adaptável a largura da tela.",
+            "default": "container",
+            "options": [{
+                    "value": "container",
+                    "label": "Centralizado"
+                },
+                {
+                    "value": "container-fluid",
+                    "label": "Adaptável a largura da tela"
+                }
+            ]
+        }, {
+            "type": "separator"
+        },{
+            "type": "color_picker",
+            "id": "title_color",
+            "label": "Cor do título"
+        }, {
+            "type": "color_picker",
+            "id": "subtitle_color",
+            "label": "Cor do subtítulo"
+        }, {
+            "type": "color_picker",
+            "id": "selected_tab_color",
+            "label": "Cor da aba selecionada"
+        }, {
+            "type": "color_picker",
+            "id": "background_color",
+            "label": "Cor de fundo da seção"
+        },{
+            "type": "color_picker",
+            "id": "button_bg_color",
+            "label": "Cor de fundo do botão"
+        },
+        {
+            "type": "color_picker",
+            "id": "button_text_color",
+            "label": "Cor de texto do botão",
+            "default": "#FFFFFF"
+        }, {
+            "type": "color_picker",
+            "id": "products_background_color",
+            "label": "Cor de fundo do card de produto"
+        }, {
+            "type": "color_picker",
+            "id": "tabs_background_color",
+            "label": "Cor de fundo dos produtos"
+        }, {
+            "type": "color_picker",
+            "id": "tabs_description_color",
+            "label": "Cor da descrição da aba"
+        }, {
+            "type": "color_picker",
+            "id": "border_color",
+            "label": "Cor da borda de seção"
+        },{
+            "type": "image_picker",
+            "id": "background_image",
+            "label": "Imagem de fundo da seção",
+            "info": "Recomendado: 1600x600px com até 250kb"
+        },{
+            "type": "checkbox",
+            "label": "Imagem fixa de fundo",
+            "id": "background_parallax"
+        }, {
+            "type": "range",
+            "id": "border_size",
+            "min": "0",
+            "max": "10",
+            "default": "1",
+            "label": "Espessura da borda de seção"
+        }, {
+            "type": "range",
+            "id": "margin_up",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de cima da seção"
+        }, {
+            "type": "range",
+            "id": "margin_dw",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de baixo da seção"
+        }
+    ],
+    "blocks": [{
+        "type": "product",
+        "name": "Aba",
+        "settings": [{
+            "type": "image_picker",
+            "id": "icon_image",
+            "label": "Imagem de fundo da seção",
+            "info": "Recomendado: 60x60px com até 250kb"
+        },{
+            "type": "text",
+            "id": "title",
+            "label": "Título",
+            "tooltip": "Este é o título da aba que ficará sobre os produtos, como 'mais vendidos', por exemplo."
+        },{
+            "type": "text",
+            "id": "description",
+            "label": "Descrição",
+            "tooltip": "Este é o título da aba que ficará sobre os produtos, como 'mais vendidos', por exemplo."
+        },{
+            "type": "text",
+            "id": "button_text",
+            "label": "Texto do botão"
+        },
+        {
+            "type": "url",
+            "id": "button_url",
+            "label": "Link do botão"
+        },
+        {
+            "type": "checkbox",
+            "label": "abrir em nova aba",
+            "id": "button_blank",
+            "default": 0
+        },{
+            "type": "header",
+            "content": "Produtos"
+        },{
+            "type": "product",
+            "max": 8,
+            "id": "products"
+        }]
+    }]
+}
+{% endschema %}

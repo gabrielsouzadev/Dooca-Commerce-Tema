@@ -1,0 +1,59 @@
+{% if product.balance <= 0 and not product.selling_out_of_stock %}
+    {% set text = 'Avise-me' %}
+{% endif %}
+
+{% if product.kit %}
+    <div class="product-buy text-center col-12">
+        <button onclick="location.href='{{ product.url }}';" class="btn product-buy-button w-100 {% if product.balance <= 0 and not product.selling_out_of_stock %} no-stock {% endif %}">
+            {{ text }}
+        </button>
+    </div> 
+{% else %}       
+    <form 
+        id="form-add-cart"
+        class="w-100"
+        method="post"
+        action="{{ 'cart' | action ('add') }}"
+    >
+        <input type="hidden" name="redirect" value="cart">
+
+        {% if theme.settings.product_color_group == 'product' and product.colors|length > 1 %}
+            <div class="row align-items-center no-gutters mb-4 px-3 cv-colors-direct">
+                <div class="product-card-loader-bg"></div>
+                <div class="product-card-loader position-absolute">
+                    <div class="loader"></div>
+                </div>
+
+                <div class="col-2 col-sm-1">
+                    <div class="cv-prev" id="col-prev">
+                        <i>{{ 'img/arrow-left.svg' | svg }}</i>
+                    </div>
+                </div>
+
+                <div class="col-8 col-sm-10">
+                    <div class="cv-colors owl-carousel owl-theme">
+                        {% for color in product.colors %}
+                            <div class="cv-color {% if color.id == product.color_id %} active {% endif %}" data-url="{{ color.url }}" data-img-src="{{ color.product_images[0].src }}" data-img-rpt="{{ color.product_images[1].src }}">
+                                <i class="d-block" style="background-color: {{ color.hexadecimal }}; background-image: url({{ color.image | img_url() }});"></i>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="col-2 col-sm-1">
+                    <div class="cv-next" id="col-next">
+                        <i>{{ 'img/arrow-right.svg' | svg }}</i>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="product-buy text-center col-12">
+            <button class="btn product-buy-button w-100 {% if product.balance <= 0 and not product.selling_out_of_stock %} no-stock {% endif %}">
+                {{ text }}
+            </button>
+        </div> 
+
+        {% include 'product-card-action/modal.twig' %}
+    </form>
+{% endif %}

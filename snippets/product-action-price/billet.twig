@@ -1,0 +1,18 @@
+<div class="d-flex align-items-center w-100 text-left {% if quick_buy %}justify-content-end{% endif %}">
+    {% if discount > 0 %}
+        <div class="product-price-discount mr-4">
+            <span>{{ discount | currency }}</span>
+        </div>
+    {% endif %}
+
+    {% if billet %}
+        <div class="product-price-final">
+            <span class="total">{{ billet.total | currency }}</span>
+            <span class="text">no boleto</span>
+        </div>
+    {% else %}
+        <div class="product-price-final">
+            <span class="total">{{ product.price | currency }}</span>
+        </div>
+    {% endif %}
+</div>

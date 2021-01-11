@@ -1,0 +1,50 @@
+{% set pr = theme.settings.seal_promotion ?: null %}
+{% set pr_type = theme.settings.seal_promotion_type ?: 'radius' %}
+{% set pr_font_size = theme.settings.seal_promotion_fontsize ?: 12 %}
+{% set pr_text_color = theme.settings.seal_promotion_fontcolor ?: '#FFFFFF' %}
+{% set pr_background_color = theme.settings.seal_promotion_background ?: theme.settings.color_primary %}
+
+<div class="d-flex w-100 text-left {% if quick_buy %}align-items-start justify-content-end{% else %}align-items-center{% endif %}">
+    
+    {% if discount > 0 %}
+        <div class="product-price-discount mr-4">
+            <span>{{ discount | currency }}</span>
+        </div>
+    {% endif %}
+
+    <div class="product-price-final {% if quick_buy %}text-right{% endif %}">
+        <span class="total {% if quick_buy %}d-block{% endif %}">{{ product.price | currency }}</span>
+        {% if quick_buy and discount > 0 %}
+            <span class="product-price-save d-block mt-2">
+                {% set price_save = discount - product.price %}
+                Economize {{ price_save | currency }}
+            </span>
+        {% endif %}
+    </div>
+
+    {% if pr and product.discount %}
+        <div class="d-none d-lg-block product-tags">
+            <div class="tag-offer ml-4 {% if pr_type == 'radius' %}radius{% endif %}">
+                <div 
+                    class="tag-offer-bg text-center {% if pr_type != 'radius'%}d-flex{% endif %}" 
+                    style="
+                        background-color: {{ pr_background_color }}; 
+                        font-size: {{ pr_font_size }}px;
+                        color: {{ pr_text_color }};
+                    "
+                >
+                    <div class="discount {% if pr_type != 'radius' %}mr-2{% endif %}">{{ product.discount | round }}%</div>
+                    <div class="off">OFF</div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+</div>
+
+{% if discount > 0 %}
+    <div class="product-price-save mt-1 {% if quick_buy %}d-none{% endif %}">
+        {% set price_save = discount - product.price %}
+        Economize {{ price_save | currency }}
+    </div>
+{% endif %}

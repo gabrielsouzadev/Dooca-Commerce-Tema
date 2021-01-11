@@ -1,0 +1,101 @@
+{% set show_product_price_without_stock = theme.settings.show_product_price_without_stock ?: null %}
+
+{% if not shop.catalog %}
+	<div class="product-request mt-5">
+
+		{% if show_product_price_without_stock %}
+			<div class="mb-5">
+                {% include 'product-action-price.twig' %}
+                {% include 'product-installments.twig' %}
+            </div>
+		{% endif %}
+
+		{% if is_ajax and not product.kit %}
+			{% if product.attribute|length > 0 and product.attribute_secondary|length > 0 %}
+                {% include "product-attribute-secondary.twig" %}
+            {% elseif product.attribute|length > 1 %}
+                {% include 'product-attribute.twig' %}
+            {% endif %}
+		{% endif %}
+
+		<div class="product-request-info p-3 text-center">
+			{% if product.kit %}
+				Um ou mais produtos deste kit não estão disponíveis.
+				
+				<div class="product-request-info-kit">
+					Clique e veja outras opções.
+				</div>
+
+				{% javascript %}
+					$('.product-request-info-kit').on('click', function() {
+						var header_fixed = $('.header-fixed').outerHeight() + 40;
+						var customize = $('.customize-product').offset().top;
+						var diff = customize - header_fixed;
+
+						$('html, body').animate({
+							scrollTop: diff
+						}, 1000);
+					});
+				{% endjavascript %}
+			{% else %}
+				{{ section.settings.product_request_text|default('Infelizmente o estoque deste item acabou :(') }}
+			{% endif %}
+		</div>
+
+		<button class="product-request-btn btn mt-3 w-100" data-grid-id="{{ product.grid_id }}"> 
+			{{ section.settings.product_request_text_button|default('Avise-me quando chegar') }} 
+		</button>
+
+		<div class="product-request-modal-{{ product.grid_id }}" data-modal-title="{{ section.settings.product_request_text_button|default('Avise-me quando chegar') }} ">
+			<form 
+				class="form form-request-product" 
+				action="{{ 'product-request' | action ('add') }}" 
+				method="post"
+			>
+				<input type="hidden" name="form_type" value="product_request">
+				<input type="hidden" name="variation_id" value="{{ product.variation.id }}">
+				
+				<div class="text mb-4">
+					{{ section.settings.product_request_text_instruction|default('Insira seus dados e receba uma notificação quando este produto estiver disponível') }}
+				</div>
+
+				<div class="w-100 d-flex flex-wrap">
+					<label class="label w-100 text">Nome</label>
+					<input type="text" name="name" class="pl-2 pr-2 input w-100" value="{{ customer.name }}" required>
+				</div>
+				
+				<div class="w-100 d-flex flex-wrap mt-4">
+					<label class="label w-100 text">E-mail</label>
+					<input type="email" name="email" class="pl-2 pr-2 input w-100" value="{{ customer.email }}" required>
+				</div>
+				
+				<div class="w-100 d-flex flex-wrap mt-4">
+					<label class="label w-100 text">Whatsapp</label>
+					<input id="phone" type="tel" name="phone" class="pl-2 pr-2 input w-100" value="" required minlength="11" maxlength="15">
+				</div>
+
+				<div class="w-100 mt-4">
+					<button class="btn w-100">Avise-me</button>
+				</div>
+			</form>
+
+			<div class="d-none text-center p-3" id="request-success">
+				<span class="text">Você será notificado através do e-mail ou número de WhatsApp inserido, assim que o produto estiver disponível para venda ;)</span>
+			</div>
+		</div>
+	</div>
+
+	{% javascript %}
+		$(function() {
+			$('body').delegate('#phone', 'keydown', function(e) {
+				var input = $(e.target);
+				var x = input.val();
+
+				if (input.val().length <= 15) {
+					x = x.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
+					input.val(!x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : ''));
+				}
+			});
+		});
+	{% endjavascript %}
+{% endif %}

@@ -1,0 +1,465 @@
+{% set show_section = true %}
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-lg-flex' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-flex d-lg-none' %}
+{% endif %}
+
+{% if show_section %}
+    {% include 'section-header.twig' with { 'name':'banners-grid' } %}
+
+        {% set margin = section.settings.margin ?: 0 %}
+        {% set align = section.settings.align ?: null %}
+        {% set style = section.settings.style ?: 'style-1' %}
+        {% set columns = (style == 'style-3') ? 'col-md-6' : 'col-md' %}
+
+        <div class="{{ s }} banners-grid-content row {{ align }} no-gutters {{ style }} {% if section.settings.title %}mt-5{% endif %}" id="banners-grid-{{ section.id }}">
+            <div class="col-12 col-md-6">
+                {% set main_image = section.settings.main_image ?: null %}
+                {% set main_class = 'h-100 h1-title' %}
+                {% set main_params = { 'banner': main_image, 'crop': '', 'data': section.settings, 'class': main_class, 'lazyoff': true } %}
+
+                {% if style == 'style-4' %}
+                    <div class="row no-gutters h-100">
+                        <div class="col-12 col-md-6">
+                            <div class="banners-grid-main p-{{ margin }} w-100 h-100 block-banner">
+                                {% include 'banner.twig' with main_params %}
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            {% set image = section.blocks[0].settings.image ?: null %}
+                            {% set class = 'h-100 h1-title' %}
+                            {% set params = { 'banner': image, 'crop': '', 'data': section.blocks[0].settings, 'class': class, 'lazyoff': true } %}
+
+                            <div class="banners-grid-block p-{{ margin }} w-100 h-100 block-banner">
+                                {% include 'banner.twig' with params %}
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="banners-grid-main p-{{ margin }}">
+                        {% if not main_image %}
+                            <div class="banner">
+                                {% include 'placeholder.twig' with main_params %}
+                            </div>
+                        {% endif %}
+
+                        {% if main_image %}
+                            {% include 'banner.twig' with main_params %}
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-12 col-md-6">
+                <div class="banners-grid-blocks row justify-content-center no-gutters h-100 {% if style != 'style-3' %} flex-row flex-md-column {% endif %}">
+                    {% set banners_blocks = section.blocks %}
+
+                    {% if style == 'style-4' %}
+                        {% set banners_blocks = section.blocks|slice(1) %}
+                    {% endif %}
+
+                    {% if banners_blocks|length <= 1 %}
+                        {% if not section.blocks[0].settings.title and not section.blocks[0].settings.description and not section.blocks[0].settings.image %}
+                            {% set banners_blocks = [
+                                {
+                                    settings: {
+                                        title: "outlet",
+                                        text: "promoções imperdíveis",
+                                        button_text: "confira"
+                                    }
+                                },
+                                {
+                                    settings: {
+                                        title: "frete grátis",
+                                        text: "tudo com frete grátis",
+                                        button_text: "confira"
+                                    }
+                                }
+                            ] %}
+                        {% endif %}
+                    {% endif %}
+
+                    {% for banner in banners_blocks %}
+                        {% set image = banner.settings.image ?: null %}
+                        {% set class = 'h-100 h1-title' %}
+                        {% set params = { 'banner': image, 'crop': '', 'data': banner.settings, 'class': class, 'lazyoff': true, 'flex': true } %}
+
+                        <div class="col-12 {{ columns }}">
+                            <div class="banners-grid-block p-{{ margin }} w-100 h-100 block-banner">
+                                {% if not image %}
+                                    <div class="banner">
+                                        {% include 'placeholder.twig' with params %}
+                                    </div>
+                                {% endif %}
+
+                                {% if image %}
+                                    {% include 'banner.twig' with params %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    {% include 'section-footer.twig' %}
+
+    {% if style != 'style-1' or style != 'style-4' %}
+        {% javascript %}
+            $(function() {
+                if (!window.is_mobile) {
+                    var grid = $('#banners-grid-{{ section.id }}');
+                    var banners = grid.find('.banners-grid-block .banner');
+                    var main_banner = grid.find('.banners-grid-main .banner');
+
+                    var style = '{{ style }}';
+
+                    var initGrid = function(type) {
+
+                        var main_height = main_banner.height();
+                        var max_height = 'auto';
+
+                        if (type == 'style-2') {
+                            var banners_qtd = {{ section.blocks|length }};
+                            var banners_padding = parseInt(grid.find('.banners-grid-block').css('padding'));
+                            max_height = ((main_height - banners_padding) / banners_qtd) - banners_padding;
+                        }
+
+                        banners.each(function() {
+                            $(this).css('max-height', max_height + 'px');
+                        });
+                    };
+
+                    $(document).ready(function() {
+                        initGrid(style);
+                    });
+
+                    $(window).resize(function() {
+                        initGrid(style);
+                    });
+                }
+            });
+        {% endjavascript %}
+    {% endif %}
+{% endif %}
+
+{% schema %}
+{
+    "name": "Banners em grid",
+    "category": "Imagens",
+    "content_for_index": "1",
+    "max_blocks": 3,
+    "settings": [
+        {
+            "type": "accordion",
+            "content": "Conteúdo",
+            "icon": "content"
+        },{
+            "type": "text",
+            "label": "Título",
+            "id": "title"
+        },{
+            "type": "text",
+            "label": "Subtítulo",
+            "id": "subtitle"
+        }, {
+            "type": "accordion",
+            "content": "Aparência",
+            "icon": "design"
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em dispositivos móveis",
+            "id": "hide_mobile",
+            "default": 0
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em desktop",
+            "id": "hide_desktop",
+            "default": 0
+        },{
+            "type": "separator"
+        },{
+			"type": "text",
+			"id": "custom_class",
+			"label": "Classe customizada para editar o css"
+		},{
+            "type": "select",
+            "id": "container",
+            "label": "Estilo do conteúdo",
+            "default": "container",
+            "options": [
+                {
+                    "value": "container",
+                    "label": "Centralizado"
+                },
+                {
+                    "value": "container-fluid",
+                    "label": "Adaptável a largura da tela"
+                }
+            ]
+        },{
+            "type": "select",
+            "id": "style",
+            "label": "Estilo de exibição dos banners",
+            "default": "style-3",
+            "options": [
+                {
+                    "value": "style-1",
+                    "label": "Estilo 1"
+                },
+                {
+                    "value": "style-2",
+                    "label": "Estilo 2"
+                },
+                {
+                    "value": "style-3",
+                    "label": "Estilo 3"
+                },
+                {
+                    "value": "style-4",
+                    "label": "Estilo 4"
+                }
+            ]
+        },{
+            "type": "select",
+            "id": "align",
+            "label": "Alinhamento do banner principal",
+            "default": "",
+            "options": [
+                {
+                    "value": "",
+                    "label": "Direita"
+                },
+                {
+                    "value": "flex-row-reverse",
+                    "label": "Esquerda"
+                }
+            ]
+        },{
+            "type": "range",
+            "id": "margin",
+            "min": "0",
+            "max": "5",
+            "default": "3",
+            "label": "Espaçamento entre os banners"
+        }, {
+            "type": "separator"
+        },{
+            "type": "color_picker",
+            "id": "title_color",
+            "label": "Cor do título"
+        }, {
+            "type": "color_picker",
+            "id": "subtitle_color",
+            "label": "Cor do subtítulo"
+        }, {
+            "type": "color_picker",
+            "id": "background_color",
+            "label": "Cor de fundo da seção"
+        }, {
+            "type": "color_picker",
+            "id": "border_color",
+            "label": "Cor da borda de seção"
+        },{
+            "type": "image_picker",
+            "id": "background_image",
+            "label": "Imagem de fundo da seção",
+            "info": "Recomendado: 1600x600px com até 250kb"
+        },{
+            "type": "checkbox",
+            "label": "Imagem fixa de fundo",
+            "id": "background_parallax"
+        },{
+            "type": "range",
+            "id": "border_size",
+            "min": "0",
+            "max": "10",
+            "default": "1",
+            "label": "Espessura da borda de seção"
+        }, {
+            "type": "range",
+            "id": "margin_up",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de cima da seção"
+        }, {
+            "type": "range",
+            "id": "margin_dw",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de baixo da seção"
+        }, {
+            "type": "accordion",
+            "content": "Banner principal",
+            "icon": "image"
+        }, {
+            "type": "image_picker",
+            "id": "main_image",
+            "label": "Imagem"
+        },
+        {
+            "type": "checkbox",
+            "label": "Textos sempre visíveis",
+            "id": "visible",
+            "default": 0
+        },
+        {
+            "type": "checkbox",
+            "label": "Textos sempre visíveis no mobile",
+            "id": "visible_mobile",
+            "default": 0
+        },
+        {
+            "type": "text",
+            "id": "main_title",
+            "label": "Título"
+        },
+        {
+            "type": "textarea",
+            "id": "text",
+            "label": "Descrição"
+        },
+        {
+            "type": "text",
+            "id": "button_text",
+            "label": "Texto do botão"
+        },
+        {
+            "type": "url",
+            "id": "banner_url",
+            "label": "Link do banner"
+        },
+        {
+            "type": "checkbox",
+            "label": "abrir em nova aba",
+            "id": "banner_blank",
+            "default": 0
+        },
+        {
+            "type": "color_picker",
+            "id": "mask_color",
+            "label": "Cor da máscara de fundo"
+        },
+        {
+            "type": "range",
+            "id": "mask_opacity",
+            "min": "1",
+            "max": "10",
+            "default": "6",
+            "label": "Opacidade da máscara de fundo"
+        },
+        {
+            "type": "color_picker",
+            "id": "title_color_main",
+            "label": "Cor do título"
+        },
+        {
+             "type": "color_picker",
+            "id": "text_color",
+            "label": "Cor da descrição"
+        },
+        {
+            "type": "color_picker",
+            "id": "button_bg_color",
+            "label": "Cor de fundo do botão"
+        },
+        {
+            "type": "color_picker",
+            "id": "button_text_color",
+            "label": "Cor de texto do botão"
+        }
+    ],
+    "blocks": [
+        {
+	        "type": "image",
+			"name": "Banners secundários",
+	        "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "image",
+                    "label": "Imagem"
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Textos sempre visíveis",
+                    "id": "visible",
+                    "default": 0
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Textos sempre visíveis no mobile",
+                    "id": "visible_mobile",
+                    "default": 0
+                },
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Título"
+                }, {
+                    "type": "textarea",
+                    "id": "text",
+                    "label": "Descrição"
+                },
+                {
+                    "type": "text",
+                    "id": "button_text",
+                    "label": "Texto do botão"
+                },
+                {
+                    "type": "url",
+                    "id": "banner_url",
+                    "label": "Link do banner"
+                },
+                {
+                    "type": "checkbox",
+                    "label": "abrir em nova aba",
+                    "id": "banner_blank",
+                    "default": 0
+                },
+                {
+                    "type": "color_picker",
+                    "id": "mask_color",
+                    "label": "Cor da máscara de fundo"
+                },
+                {
+                    "type": "range",
+                    "id": "mask_opacity",
+                    "min": "1",
+                    "max": "10",
+                    "default": "6",
+                    "label": "Opacidade da máscara de fundo"
+                },
+                {
+                    "type": "color_picker",
+                    "id": "title_color",
+                    "label": "Cor do título",
+                    "default": "#FFFFFF"
+                },
+                {
+                    "type": "color_picker",
+                    "id": "text_color",
+                    "label": "Cor da descrição",
+                    "default": "#FFFFFF"
+                },
+                {
+                    "type": "color_picker",
+                    "id": "button_bg_color",
+                    "label": "Cor de fundo do botão"
+                },
+                {
+                    "type": "color_picker",
+                    "id": "button_text_color",
+                    "label": "Cor de texto do botão"
+                }
+            ]
+		}
+    ]
+}
+{% endschema %}

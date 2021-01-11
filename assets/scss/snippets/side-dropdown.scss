@@ -1,0 +1,32 @@
+.side-dropdown {
+    position: absolute;
+    top: 0;
+    left: -30rem;
+    width: 30rem;
+    height: calc(100vh - 6.5rem);
+    overflow: auto;
+    transition: all ease-in-out .35s;
+    z-index: 100;
+    background: $body-bg;
+    border: 0 !important;
+    
+    @include media-breakpoint-down(xs) {
+        left: -80vw;
+        width: 80vw;
+    }
+
+    &.open {
+        left: 0;
+    }
+
+    .icon {
+        width: 1.1rem;
+    }
+
+    .col-12{
+        &:last-of-type{
+            margin-bottom: 4.5rem;
+        }
+    }
+    
+}

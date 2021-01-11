@@ -1,0 +1,44 @@
+@function calc-percent($target, $container) {
+	@return ($target / $container) * 100%;
+}
+
+@function calc-viewport($target) {
+	$return: ($target / 1920) * 100;
+	@return #{$return}vw;
+}
+
+@mixin section-spacing($margin : $section-margin) {
+	padding-top: $margin/2;
+	padding-bottom: $margin/2;
+
+	@include breakpoint('max-width: #{$bp-xs}') {
+		padding-top: $margin/4;
+		padding-bottom: $margin/4;
+	}
+}
+
+@mixin transition($time:.15s) {
+	transition: all $time linear;
+}
+
+@mixin placeholder {
+	&.placeholder {
+		@content;
+	}
+
+	&:-moz-placeholder {
+		@content;
+	}
+
+	&::-moz-placeholder {
+		@content;
+	}
+
+	&:-ms-input-placeholder {
+		@content;
+	}
+
+	&::-webkit-input-placeholder {
+		@content;
+	}
+}

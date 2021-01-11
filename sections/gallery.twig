@@ -1,0 +1,242 @@
+{% set show_section = true %}
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-lg-block' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-block d-lg-none' %}
+{% endif %}
+
+{% if show_section %}
+    {% include 'section-header.twig' with { 'name':'gallery' } %}
+
+        {% set gallery = section.blocks %}
+        {% set bpl = section.settings.bpl ?: 4 %}
+        {% set margin = section.settings.margin ?: 0 %}
+        {% set max_height = (section.settings.max_height == 0) ? 'unset' : section.settings.max_height %}
+
+        {% if gallery|length <= 1 %}
+            {% if not section.blocks[0].settings.title and not section.blocks[0].settings.description and not section.blocks[0].settings.image %}
+                {% set gallery = [{}, {}, {}, {}] %}
+            {% endif %}
+        {% endif %}
+
+        {% if gallery|length > 0 %}
+            <div class="{{ s }} gallery__list row justify-content-center mt-5 no-gutters">
+                {% for item in gallery %}
+
+                    {% set src = item.settings.image ?: null %}
+
+                        <div class="gallery__item col-6 cl-md-{{ bpl }}"
+                            data-featured="{{ src | img_url }}"
+                            data-zoom="{{ src | img_url }}"
+                            data-legend='
+                                {% if item.settings.title %}
+                                    <h2 class="h2 mt-3">{{ item.settings.title }}</h2>
+                                {% endif %}
+                                {% if item.settings.button_text %}
+                                    <a
+                                        class="btn mt-3"
+                                        {% if item.settings.banner_url %}href="{{ item.settings.banner_url }}"{% endif %}
+                                        {% if item.settings.banner_blank %} target="_blank" {% endif %}
+                                    >
+                                        {{ item.settings.button_text }}
+                                    </a>
+                                {% endif %}
+                            '
+                            style="max-height: {{ max_height }}px;">
+
+                            {% set params = { 'banner': src, 'crop': null } %}
+
+                            <div class="p-{{ margin }} h-100">
+                                {% if src %}
+                                    {% include 'banner.twig' with params %}
+                                {% endif %}
+
+                                {% if not src %}
+                                    {% include 'placeholder.twig' %}
+                                {% endif %}
+                            </div>
+                        </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+    {% include 'section-footer.twig' %}
+
+    {% javascript %}
+        $(function(){
+            $('.gallery__list').gallery_p({
+                zoom__class: 'gallery-section',
+                only_zoom: true
+            });
+        });
+    {% endjavascript %}
+{% endif %}
+
+{% schema %}
+{
+    "name": "Galeria de imagens",
+    "category": "Imagens",
+    "content_for_index": "1",
+    "settings": [
+        {
+            "type": "accordion",
+            "content": "Conteúdo",
+            "icon": "content"
+        },
+        {
+            "type": "text",
+            "label": "Título",
+            "id": "title"
+        }, {
+            "type": "text",
+            "label": "Subtítulo",
+            "id": "subtitle"
+        }, {
+            "type": "accordion",
+            "content": "Aparência",
+            "icon": "design"
+        }, {
+            "type": "checkbox",
+            "label": "Não exibir em dispositivos móveis",
+            "id": "hide_mobile",
+            "default": 0
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em desktop",
+            "id": "hide_desktop",
+            "default": 0
+        },{
+            "type": "separator"
+        },{
+			"type": "text",
+			"id": "custom_class",
+			"label": "Classe customizada para editar o css"
+		}, {
+            "type": "select",
+            "id": "container",
+            "label": "Estilo do conteúdo",
+            "tooltip": "Você poderá definir o se o conteúdo da seção é centralizado ou adaptável a largura da tela.",
+            "default": "container",
+            "options": [
+                {
+                    "value": "container",
+                    "label": "Centralizado"
+                },
+                {
+                    "value": "container-fluid",
+                    "label": "Adaptável a largura da tela"
+                }
+            ]
+        }, {
+            "type": "range",
+            "id": "bpl",
+            "min": "0",
+            "max": "8",
+            "default": "4",
+            "label": "Quantidade de imagens por linha"
+        }, {
+            "type": "range",
+            "id": "margin",
+            "min": "0",
+            "max": "5",
+            "default": "3",
+            "label": "Espaçamento entre as imagens"
+        }, {
+            "type": "text",
+            "label": "Altura máxima dos banners (px)",
+            "tooltip": "Este é o subtítulo complementar que será exibida logo abaixo do título.",
+            "id": "max_height",
+            "default": "0",
+            "info": "Digite 0 para deixar sem tamanho máximo."
+        }, {
+            "type": "separator"
+        },{
+            "type": "color_picker",
+            "id": "title_color",
+            "label": "Cor do título"
+        }, {
+            "type": "color_picker",
+            "id": "subtitle_color",
+            "label": "Cor do subtítulo"
+        }, {
+            "type": "color_picker",
+            "id": "background_color",
+            "label": "Cor de fundo da seção"
+        }, {
+            "type": "color_picker",
+            "id": "border_color",
+            "label": "Cor da borda de seção"
+        },{
+            "type": "image_picker",
+            "id": "background_image",
+            "label": "Imagem de fundo da seção",
+            "info": "Recomendado: 1600x600px com até 250kb"
+        },{
+            "type": "checkbox",
+            "label": "Imagem fixa de fundo",
+            "id": "background_parallax"
+        }, {
+            "type": "range",
+            "id": "border_size",
+            "min": "0",
+            "max": "10",
+            "default": "1",
+            "label": "Espessura da borda de seção"
+        }, {
+            "type": "range",
+            "id": "margin_up",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de cima da seção"
+        }, {
+            "type": "range",
+            "id": "margin_dw",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de baixo da seção"
+        }
+    ],
+    "blocks": [
+        {
+	        "type": "image",
+			"name": "Imagens",
+	        "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "image",
+                    "label": "Imagem",
+                    "info": "Recomendado: 1000x1000px"
+                },
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Título"
+                },
+                {
+                    "type": "text",
+                    "id": "button_text",
+                    "label": "Texto do botão"
+                },
+                {
+                    "type": "url",
+                    "id": "banner_url",
+                    "label": "Link do botão"
+                },
+                {
+                    "type": "checkbox",
+                    "label": "abrir em nova aba",
+                    "id": "banner_blank",
+                    "default": 0
+                }
+            ]
+		}
+    ]
+}
+{% endschema %}

@@ -1,0 +1,10 @@
+<div class="header-bottom position-relative {% if opacity <= 0 and section.settings.menu_color_bg %}h-mn-background{% endif %}">
+    <div class="header-bg {% if version %}h-mn-background{% else %}h-pr-background{% endif %}" style="opacity: {{ opacity_css }};"></div>
+    <div class="{{ container }}">
+        <div class="row">
+            <div class="col">
+                {% include 'navigation.twig' %}
+            </div>
+        </div>
+    </div>
+</div>

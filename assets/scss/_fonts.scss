@@ -1,0 +1,129 @@
+/*!
+
+{# fontes antigas #}
+{% set mn_ff = (theme.settings.font_family_mn | raw) | str_to_array(true) %}
+{% set h1_ff = (theme.settings.font_family_h1 | raw) | str_to_array(true) %}
+{% set h2_ff = (theme.settings.font_family_h2 | raw) | str_to_array(true) %}
+{% set h3_ff = (theme.settings.font_family_h3 | raw) | str_to_array(true) %}
+{% set tx_ff = (theme.settings.font_family_tx | raw) | str_to_array(true) %}
+
+{# fontes novas #}
+{% set font_h1 = theme.settings.font_h1 %}
+{% set font_h2 = theme.settings.font_h2 %}
+{% set font_h3 = theme.settings.font_h3 %}
+{% set font_menu = theme.settings.font_menu %}
+{% set font_texts = theme.settings.font_texts %}
+*/
+
+$mn-ff: var(--m-ff, '"{{ font_menu.family ?: mn_ff.css | raw }}"') !default;
+$mn-fs: var(--m-fs, "{{ font_menu.font_size | default(theme.settings.mn_fs) ~ 'px'}}") !default;
+$mn-fw: var(--m-fw, "{{ font_menu.font_weight | default(theme.settings.mn_fw) | replace({ 'italic': '' }) }}") !default;
+$mn-ls: var(--m-ls, "{{ font_menu.letter_spacing | default(theme.settings.mn_ls) ~ 'px' }}") !default;
+$mn-tt: var(--m-tt, "{{ font_menu.text_transform | default(theme.settings.mn_tt) }}") !default;
+$mn-st: var(--m-st, "{{ font_menu.font_style | default('normal') }}") !default;
+
+$h1-ff: var(--h1-ff, '"{{ font_h1.family ?: h1_ff.css | raw }}"') !default;
+$h1-fs: var(--h1-fs, "{{ font_h1.font_size | default(theme.settings.h1_fs) ~ 'px'}}") !default;
+$h1-fw: var(--h1-fw, "{{ font_h1.font_weight | default(theme.settings.h1_fw) | replace({ 'italic': '' }) }}") !default;
+$h1-ls: var(--h1-ls, "{{ font_h1.letter_spacing | default(theme.settings.h1_ls) ~ 'px' }}") !default;
+$h1-tt: var(--h1-tt, "{{ font_h1.text_transform | default(theme.settings.h1_tt) }}") !default;
+$h1-st: var(--h1-st, "{{ font_h1.font_style | default('normal') }}") !default;
+
+$h2-ff: var(--h2-ff, '"{{ font_h2.family ?: h2_ff.css | raw }}"') !default;
+$h2-fs: var(--h2-fs, "{{ font_h2.font_size | default(theme.settings.h2_fs) ~ 'px'}}") !default;
+$h2-fw: var(--h2-fw, "{{ font_h2.font_weight | default(theme.settings.h2_fw) | replace({ 'italic': '' }) }}") !default;
+$h2-ls: var(--h2-ls, "{{ font_h2.letter_spacing | default(theme.settings.h2_ls) ~ 'px' }}") !default;
+$h2-tt: var(--h2-tt, "{{ font_h2.text_transform | default(theme.settings.h2_tt) }}") !default;
+$h2-st: var(--h2-st, "{{ font_h2.font_style | default('normal') }}") !default;
+
+$h3-ff: var(--h3-ff, '"{{ font_h3.family ?: h3_ff.css | raw }}"') !default;
+$h3-fs: var(--h3-fs, "{{ font_h3.font_size | default(theme.settings.h3_fs) ~ 'px'}}") !default;
+$h3-fw: var(--h3-fw, "{{ font_h3.font_weight | default(theme.settings.h3_fw) | replace({ 'italic': '' }) }}") !default;
+$h3-ls: var(--h3-ls, "{{ font_h3.letter_spacing | default(theme.settings.h3_ls) ~ 'px' }}") !default;
+$h3-tt: var(--h3-tt, "{{ font_h3.text_transform | default(theme.settings.h3_tt) }}") !default;
+$h3-st: var(--h3-st, "{{ font_h3.font_style | default('normal') }}") !default;
+
+$tx-ff: var(--tx-ff, '"{{ font_texts.family ?: tx_ff.css | raw }}"') !default;
+$tx-fs: var(--tx-fs, "{{ font_texts.font_size | default(theme.settings.tx_fs) ~ 'px'}}") !default;
+$tx-fw: var(--tx-fw, "{{ font_texts.font_weight | default(theme.settings.tx_fw) | replace({ 'italic': '' }) }}") !default;
+$tx-ls: var(--tx-ls, "{{ font_texts.letter_spacing | default(theme.settings.tx_ls) ~ 'px' }}") !default;
+$tx-tt: var(--tx-tt, "{{ font_texts.text_transform | default(theme.settings.tx_tt) }}") !default;
+$tx-st: var(--tx-st, "{{ font_texts.font_style | default('normal') }}") !default;
+
+// Google font display
+@font-face {
+    font-family: $mn-ff;
+    font-display: auto !important;
+}
+
+@font-face {
+    font-family: $h1-ff;
+    font-display: auto !important;
+}
+
+@font-face {
+    font-family: $h2-ff;
+    font-display: auto !important;
+}
+
+@font-face {
+    font-family: $h3-ff;
+    font-display: auto !important;
+}
+
+@font-face {
+    font-family: $tx-ff;
+    font-display: auto !important;
+}
+
+$mn-cs: $mn-fs !default;
+$h1-cs: $h1-fs !default;
+$h2-cs: $h2-fs !default;
+$h3-cs: $h3-fs !default;
+$tx-cs: $tx-fs !default;
+
+$mn-cl: $mn-ls !default;
+$h1-cl: $h1-ls !default;
+$h2-cl: $h2-ls !default;
+$h3-cl: $h3-ls !default;
+$tx-cl: $tx-ls !default;
+
+.h1 {
+    font-family:    $h1-ff;
+    font-weight:    $h1-fw;
+    font-size:      $h1-cs;
+    letter-spacing: $h1-cl;
+    text-indent:    $h1-cl;
+    text-transform: $h1-tt;
+    font-style:     $h1-st;
+}
+
+.h2 {
+    font-family:    $h2-ff;
+    font-weight:    $h2-fw;
+    font-size:      $h2-cs;
+    letter-spacing: $h2-cl;
+    text-indent:    $h2-cl;
+    text-transform: $h2-tt;
+    font-style:     $h2-st;
+}
+
+.h3 {
+    font-family:    $h3-ff;
+    font-weight:    $h3-fw;
+    font-size:      $h3-cs;
+    letter-spacing: $h3-cl;
+    text-indent:    $h3-cl;
+    text-transform: $h3-tt;
+    font-style:     $h3-st;
+}
+
+.text,
+body {
+    font-family:    $tx-ff;
+    font-weight:    $tx-fw;
+    font-size:      $tx-cs;
+    letter-spacing: $tx-cl;
+    text-transform: $tx-tt;
+    font-style:     $tx-st;
+}

@@ -1,0 +1,59 @@
+.footer-logo {
+    border-top: solid .1rem $border-color;
+    
+    &.version {
+        p,
+        h1,
+        a,
+        .text {
+            color: $text-color-secondary;
+            opacity: 0.7;
+        }
+    }
+}
+.footer-logo-dooca {
+    display: inline-flex;
+    width: 7.5rem;
+}
+
+.footer-logo-text {
+    font-size: 1rem;
+    max-width: 16rem;
+    line-height: 1.2;
+    margin: 0 auto;
+    color: $text-color;
+}
+
+.footer-logo-seo {
+    h1 {
+        line-height: 1;
+        font-size: 1.2rem;
+        font-weight: bold;
+        text-transform: none;
+        letter-spacing: 0;
+        text-indent: 0;
+        color: $text-color;
+    }
+
+    p {
+        line-height: 1.2;
+        font-size: 1rem;
+        margin-bottom: .5rem;
+        color: $text-color;
+    }
+
+    p:last-of-type {
+        margin-bottom: 0;
+    }
+
+    .h1 {
+        letter-spacing: 0;
+        text-indent: 0;
+    }
+}
+
+.footer-logo-dooca {
+    @include media-breakpoint-down(md) {
+        height: 3.25rem;
+    }
+}

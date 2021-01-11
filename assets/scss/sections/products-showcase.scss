@@ -1,0 +1,28 @@
+.products-showcase {
+    .owl-item {
+        float: unset;
+    }
+
+    .owl-stage-outer {
+        padding: 1.5rem 0;
+    }
+
+    .owl-stage {
+        display: flex;
+    }
+
+    .owl-stage>.owl-item>.col-12 {
+        height: 100%;
+    }
+
+    .showcase-prev,
+    .showcase-next{
+        .icon{
+            cursor: pointer;
+            svg{
+                height: 3rem;
+                width: 3rem;
+            }
+        }
+    }
+}

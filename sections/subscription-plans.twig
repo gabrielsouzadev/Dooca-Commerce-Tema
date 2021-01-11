@@ -1,0 +1,343 @@
+{% set show_section = true %}
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-lg-block' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-block d-lg-none' %}
+{% endif %}
+
+{% if show_section %}
+    {% include 'section-header.twig' with { 'name': 'subscription-plans' }  %}
+
+    {% set _blocks = section.blocks ?: null %}
+    
+    {% set slider = section.settings.slider ?: null %}
+    {% set arrows = section.settings.arrows ?: null %}
+
+    {% set bpl = section.settings.bpl ?: 3 %}
+    {% set clm = '4' %}
+
+    {% if bpl == 1 %}
+        {% set clm = '12' %}
+    {% elseif bpl == 2 %}
+        {% set clm = '6' %}
+    {% elseif bpl == 3 %}
+        {% set clm = '4' %}
+    {% elseif bpl == 4 %}
+        {% set clm = '3' %}
+    {% endif %}
+
+    {% if _blocks|length > 0 %}
+        <div class="{{ s }} position-relative {% if arrows and slider %}has-arrows{% endif %}">
+            <div class="row justify-content-center {% if slider %}no-gutters owl-carousel owl-theme{% endif %}" id="subscription-slider">
+                {% for _block in _blocks %}
+                    {% if _block.settings.products|length > 0 %}
+                        {% set plan = _getSubscriptionPlans(_block.settings.products)['data'][0] %}
+                    {% endif %}
+                    {% if plan.active and plan.price > 0 %}
+
+                    {% set most_sell = _block.settings.show_most_seal ?: null %}
+
+                    <form class="col-12 {% if not slider %}col-md-6 col-lg-{{ clm }} mt-4{% endif %}" action="{{ 'cart' | action ('subscribe') }}" method="POST" data-redactor-type="form">
+                        <input type="hidden" value="{{ plan.id }}" name="subscription_plan_id">
+
+                        <div class="plan" style="background-color: {{ section.settings.product_background_color }};">
+                            {% if most_sell %}
+                                <div class="plan-sell">
+                                    <span class="text">
+                                        {{ section.settings.most_seal_text ?: 'Mais vendido' }} 
+                                    </span>
+                                </div>
+                            {% endif %}
+
+                            <div class="plan-name">
+                                <span class="h2">
+                                    {{ plan.name }}
+                                </span>
+                            </div>
+			
+                            {% if plan.description %}
+                                <div class="plan-description">
+                                    <span class="text">
+                                        {{ plan.description | raw }}
+                                    </span>
+                                </div>
+                            {% endif %}
+
+                            {% if plan.image %}
+                                <div class="plan-image">
+                                    <img loading="lazy" class="plan-image-src" src="{{ plan.image | img_url() }}" alt="{{ plan.name }}">
+                                   
+                                    {% if plan.price_compare > 0 %}
+                                        {% set pr = theme.settings.seal_promotion ?: null %}
+                                        {% set pr_type = theme.settings.seal_promotion_type ?: 'radius' %}
+                                        {% set pr_font_size = theme.settings.seal_promotion_fontsize ?: 12 %}
+                                        {% set pr_text_color = theme.settings.seal_promotion_fontcolor ?: '#FFFFFF' %}
+                                        {% set pr_billet_discount = theme.settings.seal_promotion_billet_discount ?: null %}
+                                        {% set pr_background_color = theme.settings.seal_promotion_background ?: theme.settings.color_primary %}
+                                        {% set discount = ((plan.price - plan.price_compare) / plan.price_compare ) * 100 %}
+
+                                        {% if pr %}
+                                            <div class="product-tags position-absolute d-flex align-items-start justify-content-between flex-column">
+                                                <div class="tag-offer mb-2 {% if pr_type == 'radius' %}radius{% endif %}">
+                                                    <div
+                                                        class="tag-offer-bg d-flex justify-content-center align-items-center flex-column text-center {% if pr_type != 'radius'%}d-flex{% endif %}"
+                                                        style="
+                                                            background-color: {{ pr_background_color }};
+                                                            font-size: {{ pr_font_size }}px;
+                                                            color: {{ pr_text_color }};
+                                                        "
+                                                    >
+                                                        <div class="discount {% if pr_type != 'radius' %}mr-2{% endif %}">{{ (discount * - 1) | round }}%</div>
+                                                        <div class="off">OFF</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+
+                            <div class="plan-price">
+                                {% if plan.price_compare > 0 %}
+                                    <div class="price-compare">
+                                        <span class="text">
+                                            {{ plan.price_compare | currency }}
+                                        </span>
+                                    </div>
+                                {% endif %}
+
+                                <div class="price">{{ plan.price | currency }}</div>
+                            </div>
+
+                            <div class="plan-button">
+                                <button class="btn product-buy-button" type="submit">
+                                    {{ section.settings.button_text ?: 'Assinar agora!' }}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+ 		   {% endif %}
+                {% endfor %}
+            </div>
+
+            {% if arrows and slider %}
+                <div class="d-none d-lg-block subscription-arrow" id="prev">
+                    <i class="icon">{{ 'img/reviews/arrow-left.svg' | svg }}</i>
+                </div>
+
+                <div class="d-none d-lg-block subscription-arrow" id="next">
+                    <i class="icon">{{ 'img/reviews/arrow-right.svg' | svg }}</i>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    {% include 'section-footer.twig' %}
+
+    {% if slider %}
+        {% javascript %}
+            $(function() {
+                var opts = {
+                    autoplay: true,
+                    autoheight: false,
+                    autoplayHoverPause: true,
+                    loop: true,
+                    dots: true,
+                    items: {{ bpl }},
+                    margin: 0,
+                    responsive : {
+                        0 : {
+                            items: 1
+                        },
+                        920 : {
+                            items: 2
+                        },
+                        1180 : {
+                            items: {{ bpl }}
+                        }
+                    }
+                };
+
+                var section = '#subscription-slider';
+                var owl = $(section).owlCarousel(opts);
+
+                {% if arrows and slider %}
+                    if (!window.is_mobile) {
+                        var prev = $('.subscription-plans').find('#prev');
+                        var next = $('.subscription-plans').find('#next');
+
+                        prev.click(function() {
+                            owl.trigger('prev.owl.carousel', [300]);
+                        });
+
+                        next.click(function() {
+                            owl.trigger('next.owl.carousel', [300]);
+                        });
+                    }
+                {% endif %}
+            });
+        {% endjavascript %}
+    {% endif %}
+{% endif %}
+
+{% schema %}
+{
+    "name": "Planos de assinatura",
+    "category": "Produtos",
+    "content_for_index": "1",
+    "settings": [
+        {
+            "type": "accordion",
+            "content": "Conteúdo",
+            "icon": "content"
+        }, {
+            "type": "text",
+            "label": "Título",
+            "id": "title"
+        }, {
+            "type": "text",
+            "label": "Subtítulo",
+            "id": "subtitle"
+        },{
+            "type": "text",
+            "label": "Texto selo mais vendido",
+            "id": "most_seal_text"
+        }, {
+            "type": "text",
+            "label": "Texto do botão",
+            "id": "button_text"
+        }, {
+            "type": "accordion",
+            "content": "Aparência",
+            "icon": "design"
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em dispositivos móveis",
+            "id": "hide_mobile",
+            "default": 0
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em desktop",
+            "id": "hide_desktop",
+            "default": 0
+        },{
+            "type": "separator"
+        },{
+			"type": "text",
+			"id": "custom_class",
+			"label": "Classe customizada para editar o css"
+		},{
+            "type": "select",
+            "id": "container",
+            "label": "Estilo do conteúdo",
+            "default": "container",
+            "options": [{
+                    "value": "container",
+                    "label": "Centralizado"
+                },
+                {
+                    "value": "container-fluid",
+                    "label": "Adaptável a largura da tela"
+                }
+            ]
+        }, {
+            "type": "range",
+            "id": "bpl",
+            "min": "0",
+            "max": "4",
+            "default": "3",
+            "label": "Quantidade máxima de produtos por linha"
+        },{
+            "type": "checkbox",
+            "label": "Habilitar slider",
+            "id": "slider",
+            "default": 0
+        }, {
+            "type": "checkbox",
+            "label": "Exibir setas de navegação",
+            "id": "arrows",
+            "default": 0
+        }, {
+            "type": "separator"
+        },{
+            "type": "color_picker",
+            "id": "title_color",
+            "label": "Cor do título"
+        }, {
+            "type": "color_picker",
+            "id": "subtitle_color",
+            "label": "Cor do subtítulo"
+        }, {
+            "type": "color_picker",
+            "id": "background_color",
+            "label": "Cor de fundo da seção",
+            "default": "#FFFFFF"
+        }, {
+            "type": "color_picker",
+            "id": "product_background_color",
+            "label": "Cor de fundo do plano",
+            "default": "#FFFFFF"
+        }, {
+            "type": "color_picker",
+            "id": "border_color",
+            "label": "Cor da borda de seção"
+        }, {
+            "type": "color_picker",
+            "id": "arrows_color",
+            "label": "Cor das setas"
+        },{
+            "type": "image_picker",
+            "id": "background_image",
+            "label": "Imagem de fundo da seção",
+            "info": "Recomendado: 1600x600px com até 250kb"
+        },{
+            "type": "checkbox",
+            "label": "Imagem fixa de fundo",
+            "id": "background_parallax"
+        }, {
+            "type": "range",
+            "id": "border_size",
+            "min": "0",
+            "max": "10",
+            "default": "1",
+            "label": "Espessura da borda de seção"
+        }, {
+            "type": "range",
+            "id": "margin_up",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de cima da seção"
+        }, {
+            "type": "range",
+            "id": "margin_dw",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de baixo da seção"
+        }
+    ],
+	"blocks": [{
+        "type": "subscription",
+        "name": "Planos",
+        "settings": [
+            {
+                "type": "subscription",
+                "max": "1",
+                "id": "products",
+                "label": "Planos"
+            }, {
+                "type": "checkbox",
+                "label": "Exibir selo de mais vendido",
+                "id": "show_most_seal",
+                "default": 0
+            }
+        ]
+    }]
+}
+{% endschema %}

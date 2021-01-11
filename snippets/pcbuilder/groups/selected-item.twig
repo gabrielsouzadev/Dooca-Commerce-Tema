@@ -1,0 +1,115 @@
+<style>@media (min-width: 992px) { .selected-item-img { max-width: 14rem; } }</style>
+
+<div class="col-12 col-md">
+    <div class="row align-items-center justify-content-start h-100">
+        <div class="col-4 col-md-3">
+            {% if is_modal %}
+                <div class="m-icon d-lg-none">
+                    <i>{{ 'img/dc-icons/check-bold.svg' | svg }}</i>
+                </div>
+            {% endif %}
+            <div class="p-3 text-center">
+                {% if item.image.src %}
+                    <img alt="{{ item.name }}" class="img-fluid {% if is_modal %}selected-item-img{% endif %}" src="{{ item.image.src | img_url('495x495+fill_ffffff+crop_center') }}">
+                {% else %}
+                    <div class="icon p-3" {% if is_modal %}style="max-width: 14rem; margin: 0 auto;"{% endif %}>
+                        {{ 'img/dc-icons/image.svg' | svg }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-8 col-md-9">
+            <div class="p-3">
+                <div class="row">
+                    <div class="col-12 mb-4">
+                        <h2 class="h3">{{ item.name }}</h2>
+                    </div>
+                    {% if item.payments %}
+                        {% if item.payments.billet %}
+                            <div class="col-auto mb-4 mb-md-0 mr-4 mr-md-4">
+                                <div class="d-flex align-items-center">
+                                    <i class="pcbuilder-price-icon mr-3">
+                                        {{ 'img/dc-icons/barcode.svg' | svg }}
+                                    </i>
+                                    <div class="pcbuilder-price-billet">
+                                        <div class="pcbuilder-price m-0">{{ item.payments.billet.total | currency }}</div>
+                                        <span class="text">à vista no boleto</span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if item.payments.creditcard %}
+                            <div class="col-auto">
+                                <div class="d-flex align-items-center">
+                                    <i class="pcbuilder-price-icon mr-3">
+                                        {{ 'img/dc-icons/creditcard.svg' | svg }}
+                                    </i>
+                                    <div class="pcbuilder-price-creditcard">
+                                        <div class="pcbuilder-price m-0">{{ item.payments.creditcard.total | currency }}</div>
+                                        <span class="text">em até {{ item.payments.creditcard.parcels }}x no cartão</span>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="col-auto mr-4">
+                            <div class="d-flex align-items-center">
+                                <div class="pcbuilder-price-billet">
+                                    <div class="pcbuilder-price m-0">{{ item.price | currency }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-12 col-md-2">
+    <div class="h-100 d-flex align-items-center justify-content-center">
+        <div class="pcbuilder-quantity text-center w-100 d-flex align-items-center {% if is_modal %}justify-content-between{% else %}justify-content-around py-4 py-md-0{% endif %} d-md-block mr-0 mr-md-4">
+            {% if not components.data.unique %}
+                {% if max_quantity == 1 %}
+                    <div class="pcbuilder-quantity-item border py-3 w-100 disabled">
+                        <span class="text">1</span>
+                    </div>
+                {% else %}
+                    <div class="pcbuilder-quantity-item" data-type="{% if is_modal %}modal{% else %}list{% endif %}" data-pcbuilder-id="{{ component_id ?: item.id }}">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col-auto">
+                                <div class="pcbuilder-quantity-minus d-flex align-items-center justify-content-center" data-id="{{ loop.index0 }}">
+                                    <i class="icon">{{ 'img/minus.svg' | svg }}</i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <input class="pcbuilder-quantity-value" type="number" data-min="{{ item.min_quantity }}" data-max="{{ max_quantity }}" value="{{ quantity ?: item.min_quantity }}" data-id="{{ loop.index0 }}" data-type="{% if is_modal %}modal{% else %}list{% endif %}" data-pcbuilder-id="{{ component_id ?: item.id }}">
+                            </div>
+                            <div class="col-auto">
+                                <div class="pcbuilder-quantity-plus d-flex align-items-center justify-content-center" data-id="{{ loop.index0 }}">
+                                    <i class="icon">{{ 'img/plus.svg' | svg }}</i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+            {% if is_modal %}
+                <button class="btn mt-0 mt-md-3 py-1 px-4 {% if is_modal %}w-lg-100{% endif %}" type="button">
+                    <span>Selecionar</span>
+                </button>
+                <div class="pcbuilder-product-details mr-3 mr-md-0 mt-0 mt-md-3" data-modal-id="pcbuilder-detail-{{ item.id }}">
+                    <span class="text">detalhes</span>
+                </div>
+            {% else %}
+                <button class="pcbuilder-quantity-change btn btn-sm mt-0 mt-md-3 py-2 px-4" data-modal-id="{{ component_id }}" data-step="{{ loop.index0 }}" type="button">
+                    <span>Alterar</span>
+                </button>
+
+                <div class="pcbuilder-item-remove mt-0 mt-md-2" data-position="{{ component_position }}">
+                    <span>remover</span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

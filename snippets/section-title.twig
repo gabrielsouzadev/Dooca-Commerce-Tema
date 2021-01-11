@@ -1,0 +1,27 @@
+{% set title = section.settings.title | raw %}
+{% set subtitle = section.settings.subtitle | raw %}
+
+{% set title_color = section.settings.title_color ?: theme.settings.color_primary %}
+{% set subtitle_color = section.settings.subtitle_color ?: theme.settings.color_text %}
+
+{% if title or subtitle %}
+    <div class="section-title row">
+
+        {% if title %}
+            <div class="col-12 text-center">
+                <h2 class="h1" style="color: {{ title_color }};">
+                    {{ title | richtext | raw }}
+                </h2>
+            </div>
+        {% endif %} 
+
+        {% if subtitle %}
+            <div class="col-12 text-center">
+                <h3 class="h3" style="color: {{ subtitle_color }};">
+                    {{ subtitle | richtext | raw }}
+                </h3>
+            </div>
+        {% endif %}
+
+    </div>
+{% endif %}

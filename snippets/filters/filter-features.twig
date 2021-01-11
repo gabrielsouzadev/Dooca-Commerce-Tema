@@ -1,0 +1,43 @@
+{% set sidebarSettings = theme.sections.sidebar.settings ?: null %}
+{% set sidebarCustom = sidebarSettings.sidebar_custom ?: null %}
+{% set sidebarCustomIds = null %}
+
+{% if sidebarSettings.sidebar_ids %}
+    {% set sidebarCustomIds = sidebarSettings.sidebar_ids|split(',') %}
+{% endif %}
+
+{% set features = sidebar.filters.features %}
+
+{% if sidebarCustom and sidebarCustomIds|length > 0 %}
+    {% set features = [] %}
+    {% for feature in sidebar.filters.features %}
+        {% if feature.id not in sidebarCustomIds %}
+            {% set features = features|merge([feature]) %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+{% if features|length >= 1 %}
+    {% for feature in features %}
+        {% if feature.values|length > 1 or feature.filter_active %}
+        <div class="sidebar-block sidebar-block--list sidebar-block--feature sidebar--{{ feature.slug }} {% if feature.filter_active %}is-active{% endif %}">
+            <div class="sidebar-block__header">
+                <span class="close"></span>
+                <h2 class="h2 m-0">{{ feature.name }}</h2>
+            </div>
+            <div class="sidebar-block__content" dc-scroll>
+                <ul class="sidebar-block__list">
+                    {% for item in feature.values %}
+                        <li class="sidebar-block__item {% if item.filter_active %}is-active{% endif %}">
+                            <a href="{{ item.id | url_params ('feature', 'append') }}" class="link" rel="nofollow">
+                                <span class="icon"><i>{{ 'img/dc-icons/check-bold.svg' | svg }}</i></span>
+                                <h3 class="text">{{ item.name }}</h3>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}

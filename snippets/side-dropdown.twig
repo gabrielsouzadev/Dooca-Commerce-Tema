@@ -1,0 +1,86 @@
+<div class="side-dropdown {% if section.settings.menu_color_bg %}h-mn-background{% endif %}" style="border-right: solid .1rem {{ color_border }};">
+    <div class="row no-gutters pb-3 position-static">
+        <div class="col-12 text-left position-static">
+            <a href="" class="side-link side-dropdown-back d-flex justify-content-start align-items-center pl-5 pr-5 pt-3 pb-3 {% if section_menu %}h-mn-color{% elseif section_primary and not version %}h-sc-color{% else %}h-pr-color{% endif %}">
+                <i class="icon {% if section_menu %}h-mn-color{% elseif section_primary and not version %}h-sc-color{% else %}h-pr-color{% endif %} mr-3">
+                    <i class="material-icons" style="font-size: 18px">keyboard_arrow_left</i>
+                </i>
+                <span>Voltar</span>
+            </a>
+        </div>
+        <div class="col-12 text-left position-static">
+            {% if department %}
+                <a 
+                    href="{{ item.menu_type_link }}" 
+                    class="
+                    side-link d-flex justify-content-between align-items-center pl-5 pr-5 pt-5 pb-3 
+                        {% if section_menu %}
+                            h-mn-color
+                        {% else %}
+                            h-pr-color
+                        {% endif %}
+                    "
+                    {% if shop.domain and shop.domain not in item.menu_type_link %}
+                        target="_blank"
+                    {% endif %}
+                >
+                    <span>Ver tudo</span>
+                </a>
+            {% else %}
+                <a 
+                    href="{{ item.menu_type_link }}" 
+                    class="
+                        side-link d-flex justify-content-between align-items-center pl-5 pr-5 pt-5 pb-3 
+                        {% if section_menu %}
+                            h-mn-color
+                        {% elseif section_primary and not version %}
+                            h-sc-color
+                        {% else %}
+                            h-pr-color
+                        {% endif %}
+                    "
+                    {% if shop.domain and shop.domain not in item.menu_type_link %}
+                        target="_blank"
+                    {% endif %}
+                >
+                    <span>Ver tudo</span>
+                </a>
+            {% endif %}
+        </div>
+        {% for item in items %}
+            {% if item.active %}
+                <div class="col-12 text-left position-static">
+                    <a 
+                        href="{{ item.menu_type_link }}" 
+                        class="
+                            {% if item.children %}
+                                has-children
+                            {% endif %} 
+                            side-link d-flex justify-content-between align-items-center pl-5 pr-5 pt-3 pb-3 {{ item.slug }}
+                            {% if section_menu %}
+                                h-mn-color
+                            {% elseif section_primary and not version %}
+                                h-sc-color
+                            {% else %}
+                                h-pr-color
+                            {% endif %}
+                        "
+                        {% if shop.domain and shop.domain not in item.menu_type_link %}
+                            target="_blank"
+                        {% endif %}
+                    >
+                        <span>{{ item.name }}</span>
+                        {% if item.children %}
+                            <i class="icon">
+                                <i class="material-icons" style="font-size: 18px">keyboard_arrow_right</i>
+                            </i>
+                        {% endif %}
+                    </a>
+                    {% if item.children %}
+                        {% include 'side-dropdown.twig' with { 'items' : item.children, 'parent': item } %}
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>

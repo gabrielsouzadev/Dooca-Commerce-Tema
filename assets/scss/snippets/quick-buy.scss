@@ -1,0 +1,47 @@
+.quick-buy {
+    width: 100%;
+    bottom: -8rem;
+    left: 0;
+    right: 0;
+    background: $body-bg;
+    box-shadow: 0px 0px 40px 0px rgba(0,0,0,0.15);
+    z-index: 0;
+    transition: all ease-in-out .25s;
+    opacity: 0;
+
+    &.is-visible {
+        opacity: 1;
+        bottom: 0;
+        z-index: 50;
+    }
+
+    .img-fluid {
+        max-width: 6.5rem;
+    }
+
+    .quick-buy-title {
+        font-family:    $tx-ff;
+        font-weight:    $tx-fw;
+        font-size:      $tx-cs;
+        letter-spacing: 0;
+        text-transform: $tx-tt;
+        font-style:     $tx-st;
+    }
+
+    .product-action-price {
+        margin: 0 !important;
+    }
+
+    .product-action-price.iconsmethods .row {
+        border-bottom: 0;
+        padding-bottom: 0 !important;
+    }
+
+    .product-action-price.my-5 {
+        margin-bottom: 0 !important;
+    }
+
+    .quick-buy-action {
+        min-height: 6rem;
+    }
+}

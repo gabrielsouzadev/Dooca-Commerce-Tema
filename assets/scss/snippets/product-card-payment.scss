@@ -1,0 +1,63 @@
+/*
+ * Product card payment
+ */
+
+.product-card-payment {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+
+    .icon {
+        display: none;
+    }
+
+    .payment {
+        margin-bottom: 1.5rem;
+        order: 2;
+
+        &.highlight {
+            order: 1;
+
+            .payment-price {
+                font-family: $h1-ff;
+                font-weight: $h1-fw;
+                font-size: 1.6rem;
+                color: $color-secondary;
+            }
+        }
+
+        .payment-info {
+            color: $text-color;
+            line-height: normal;
+
+            b {
+                font-size: 1.4rem;
+            }
+
+            .payment-discount {
+                font-size: 1.2rem;
+                text-decoration: line-through;
+            }
+        }
+    }
+
+    &.icons {
+        justify-content: flex-start;
+        text-align: left;
+        border: solid .1rem $border-color;
+        border-width: .1rem 0;
+        padding: 1.5rem 0;
+
+        .icon {
+            margin-right: 1.5rem;
+            color: $color-highlight;
+        }
+
+        .payment {
+            .payment-discount {
+                display: block;
+            }
+        }
+    }
+}

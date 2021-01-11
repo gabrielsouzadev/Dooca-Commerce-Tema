@@ -1,0 +1,485 @@
+{% set show_section = true %}
+
+{% set banners = section.blocks %}
+{% set banners_size = section.blocks | length %}
+{% set arrows = section.settings.arrows ?: null %}
+{% set dots = section.settings.dots ?: null %}
+{% set speed = section.settings.speed ?: 3 %}
+{% set container = section.settings.container ?: 'container' %}
+{% set border_size = section.settings.border_size ?: 1 %}
+{% set border_color = section.settings.border_color ?: theme.settings.color_border %}
+{% set background_color = section.settings.background_color ?: null %}
+{% set background_image = section.settings.background_image ?: null %}
+{% set section_maxheight = section.settings.section_maxheight ?: 0 %}
+{% set custom_class = section.settings.custom_class ?: null %}
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+{% set has_video = null %}
+{% set section_id = section.id %}
+
+{% if not section_id %}
+    {% set section_id = random(1, 100) %}
+{% endif %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-lg-block' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-block d-lg-none' %}
+{% endif %}
+
+{% if banners_size == 1 %}
+    {% if not section.blocks[0].settings.src and not section.blocks[0].settings.src_mobile and not section.blocks[0].settings.title and not section.blocks[0].settings.text and not section.blocks[0].settings.video %}
+        {% set banners = [{
+                        "type": "image",
+                        "settings": {
+                            "src": null,
+                            "src_mobile": null,
+                            "video": null,
+                            "parallax": false,
+                            "zoom_off": false,
+                            "title": "Imperdível",
+                            "text": "Conheça o produto mais vendido na última semana e entenda porque ele se tornou o queridinho do Brasil.",
+                            "button_text": "conheça",
+                            "banner_url": null,
+                            "banner_blank": false,
+                            "banner_align": "text-center justify-content-center",
+                            "mask_color": null,
+                            "mask_opacity": "0",
+                            "title_color": "#000",
+                            "text_color": "#000",
+                            "button_bg_color": null,
+                            "button_text_color": null
+                        }
+                    },
+                    {
+                        "type": "image",
+                        "settings": {
+                            "src": null,
+                            "src_mobile": null,
+                            "video": null,
+                            "parallax": false,
+                            "zoom_off": false,
+                            "title": "Inacreditável",
+                            "text": "Conheça o produto mais vendido na última semana e entenda porque ele se tornou o queridinho do Brasil.",
+                            "button_text": "confira",
+                            "banner_url": null,
+                            "banner_blank": false,
+                            "banner_align": "text-center justify-content-center",
+                            "mask_color": null,
+                            "mask_opacity": "0",
+                            "title_color": "#000",
+                            "text_color": "#000",
+                            "button_bg_color": null,
+                            "button_text_color": null
+                        }
+                    }] %}
+        {% endif %}
+{% endif %}
+
+
+{% if show_section %}
+    <div class="{{ s }} banners-carousel {{ custom_class }}"
+        style="
+            background-color: {{ background_color }};
+            {% if background_image %}
+                background-image: url({{ background_image | img_url }});
+            {% endif %}
+            background-size: cover;
+            background-position: center center;
+    " id="{{ section_id }}">
+        <div class="{{ container }}">
+            {% if banners_size > 0 %}
+                <div class="carousel slide">
+                    <div class="carousel-inner owl-carousel owl-theme" id="banners-carousel-{{ section_id }}">
+                        {% set has_h1 = null %}
+                        {% for banner in banners %}
+                            {% set show = true %}
+                            {% if banner.settings.banner_date %}
+                                {% set show = _bannerDate(banner.settings.banner_date) %}
+                            {% endif %}
+
+                            {% set url = banner.settings.banner_url ?: null %}
+                            {% set target = (banner.settings.banner_blank) ? '_blank' : '_self' %}
+                            {% set align = banner.settings.banner_align ?: 'text-center' %}
+
+                            {% set video = banner.settings.video.id ?: null %}
+
+                            {% set image = banner.settings.src ?: null %}
+                            {% set image_mobile = banner.settings.src_mobile ?: null %}
+
+                            {% set parallax = (banner.settings.parallax) ? 'parallax' : null %}
+                            {% set zoom_off = banner.settings.zoom_off ?: null %}
+
+                            {% set title = banner.settings.title ?: null %}
+                            {% set description = banner.settings.content ?: null %}
+
+                            {% set mask_color = banner.settings.mask_color ?: null %}
+                            {% set mask_opacity = banner.settings.mask_opacity ?: 0 %}
+
+                            {% set title_color = banner.settings.title_color ?: '#FFFFFF' %}
+                            {% set text_color = banner.settings.text_color ?: '#FFFFFF' %}
+
+                            {% set button_text = banner.settings.button_text ?: null %}
+                            {% set button_bg_color = banner.settings.button_bg_color ?: theme.settings.color_primary %}
+                            {% set button_text_color = banner.settings.button_text_color ?: '#FFFFFF' %}
+
+                            {% set src = (image) ? image | img_url () : null %}
+                            {% set src_mobile = (image_mobile) ? image_mobile | img_url () : image | img_url %}
+
+                            {% set negative_margin = (align == 'text-right' and theme.settings.h1_ls > 0) ? 'margin-right: -' ~ theme.settings.h1_ls ~ 'px;' : null %}
+
+                            {% if video %}
+                                {% set src = 'https://img.youtube.com/vi/' ~ video ~ '/maxresdefault.jpg' %}
+                                {% set has_video = true %}
+                            {% endif %}
+
+                            {% if not mask_color and not src %}
+                                {% set mask_color = 'transparent' %}
+                                {% set mask_opacity = 0 %}
+                            {% endif %}
+
+                            {% if show %}
+                                <div class="carousel-item d-block position-relative {% if video %}has-video{% endif %} {% if zoom_off %}zoom-off{% endif %}" style="
+                                    {% if video %}
+                                        background-size: cover;
+                                        background-position: center;
+                                    {% endif %}
+                                    {% if section_maxheight > 0 %}max-height: {{ section_maxheight }}px;{% endif %}
+                                    {% if not src %} max-height: 72rem;{% endif %}
+                                ">
+                                    {% if template == 'hotsite' and not has_h1 and title %}
+                                        {% set has_h1 = true %}
+                                        <h1 style="position: absolute; opacity: 0; z-index: -9999;">{{ title }}</h1>
+                                    {% endif %}
+                                    <{% if url %}a{% else %}div{% endif %} class="carousel-link" aria-label="{{ loop.index }}" href="{{ url }}" target="{{ target }}">
+                                        
+                                        <div class="d-block d-lg-none">
+                                            <div class="carousel-bg" style="background-image: url({{ src_mobile }});"></div>
+                                            <img loading="lazy" src="{{ src_mobile }}" class="d-block w-100" alt="{{ src_mobile | get_filename }}" style="opacity: 0">
+                                        </div>
+                                        
+                                        <div class="d-none d-lg-block">
+                                            {% if video %}
+                                                <div class="dc-youtube" dc-youtube="{{ video }}">
+                                                    <div class="frame" id="video"></div>
+                                                </div>
+                                            {% else %}
+                                                <div class="carousel-bg {{ parallax }}" style="background-image: url({{ src }});"></div>
+                                                <img loading="lazy" src="{{ src }}" class="d-block w-100" alt="{{ src | get_filename }}" style="opacity: 0">
+                                            {% endif %}
+                                        </div>
+
+                                        {% if not src and not background_color %}
+                                            <img loading="lazy"  class="d-block w-100" style="opacity: 0" src="{{ 'img/dumb.png' | assets_url | img_url }}" alt="{{ loop.index }}">
+                                            {% include 'placeholder-bg.twig' %}
+                                        {% endif %}
+
+                                        <div class="carousel-mask" style=" background-color: {{ mask_color }}; opacity: .{{ mask_opacity }}; "></div>
+                                        <div class="carousel-caption d-flex justify-content-center w-100">
+                                            <div class="carousel-info row {{ align }} align-items-center h-100 w-100">
+                                                <div class="col-12 banners-carousel-content">
+                                                    {% if title %}
+                                                        <h2 class="h1 mb-3" style="color: {{ title_color }}; {{ negative_margin }}">
+                                                            {{ title | raw }}
+                                                        </h2>
+                                                    {% endif %}
+
+                                                    {% if description %}
+                                                        <h3 style="color: {{ text_color }};" class="text mb-4">
+                                                            {{ description | richtext| raw }}
+                                                        </h3>
+                                                    {% endif %}
+
+                                                    {% if button_text %}
+                                                        <button class="btn" href="{{ url }}" target="{{ target }}" style="
+                                                            background-color: {{ button_bg_color }};
+                                                            color: {{ button_text_color }};
+                                                        ">
+                                                            {{ button_text }}
+                                                        </button>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </{% if url %}a{% else %}div{% endif %}>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% if arrows %}
+                        <span class="carousel-control-prev" aria-label="prev">
+                            <span aria-hidden="true" class="carousel-control-prev-icon"></span>
+                        </span>
+                        <span class="carousel-control-next" aria-label="next">
+                            <span aria-hidden="true" class="carousel-control-next-icon"></span>
+                        </span>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% javascript %}
+        $(function() {
+            function translateBackground(i) {
+                var bc = $('#banners-carousel-{{ section_id }}');
+                
+                var wh = bc.outerWidth();
+                var it = bc.find('.owl-item').eq(i);
+                var pl = it.find('.parallax');
+                
+                wh = wh * i;
+
+                pl.css('background-position', wh + 'px');
+            };
+
+            var prev = $('#{{ section_id }}').find('.carousel-control-prev');
+            var next = $('#{{ section_id }}').find('.carousel-control-next');
+
+            $('#banners-carousel-{{ section_id }}').owlCarousel({
+                onInitialized: function(event) {
+                    translateBackground(event.item.index);
+                },
+                onChanged: function(event) {
+                    translateBackground(event.item.index);
+                },
+                items:1,
+                {% if arrows %}
+                nav:true,
+                navText:[prev, next],
+                {% else %}
+                nav:false,
+                {% endif %}
+                {% if dots %}
+                dots:true,
+                {% else %}
+                dots:false,
+                {% endif %}
+                margin: 0,
+                autoplay:true,
+                // autoHeight:true,
+                {% if banners_size > 1 %}
+                loop: false,
+                {% endif %}
+                rewind: true,
+                autoplayHoverPause:false,
+                autoplayTimeout: {{ speed }} * 1000,
+                touchDrag: true,
+                mouseDrag: true
+            });
+        });
+    {% endjavascript %}
+{% endif %}
+
+{% schema %}
+{
+    "name": "Banners em carrossel",
+    "category": "Imagens",
+    "content_for_index": "1",
+    "max_blocks": 6,
+    "settings": [
+        {
+            "type": "accordion",
+            "content": "Aparência",
+            "icon": "design"
+        }, {
+            "type": "checkbox",
+            "label": "Não exibir em dispositivos móveis",
+            "id": "hide_mobile",
+            "default": 0
+        }, {
+            "type": "checkbox",
+            "label": "Não exibir em desktop",
+            "id": "hide_desktop",
+            "default": 0
+        }, {
+            "type": "separator"
+        }, {
+			"type": "text",
+			"id": "custom_class",
+			"label": "Classe customizada para editar o css"
+		}, {
+            "type": "select",
+            "id": "container",
+            "label": "Estilo do conteúdo",
+            "default": "container-fluid",
+            "options": [
+                {
+                    "value": "container",
+                    "label": "Centralizado"
+                }, {
+                    "value": "container-fluid",
+                    "label": "Adaptável a largura da tela"
+                }
+            ]
+        }, {
+            "type": "text",
+            "label": "Tempo de transição (em segundos)",
+            "default": "3",
+            "id": "speed"
+        }, {
+            "type": "text",
+            "label": "Tamanho máximo da seção (em px)",
+            "info": "0 (ou em branco) para deixar sem tamanho máximo",
+            "id": "section_maxheight"
+        }, {
+            "type": "checkbox",
+            "label": "Exibir setas de navegação",
+            "id": "arrows",
+            "default": 0
+        }, {
+            "type": "checkbox",
+            "label": "Exibir índice de navegação",
+            "id": "dots",
+            "default": 1
+        }, {
+            "type": "color_picker",
+            "id": "background_color",
+            "label": "Cor de fundo da seção"
+        }, {
+            "type": "image_picker",
+            "id": "background_image",
+            "label": "Imagem de fundo da seção",
+            "info": "Recomendado: 1600x400px com até 250kb"
+        },
+        {
+            "type": "checkbox",
+            "label": "Imagem fixa de fundo",
+            "id": "background_parallax"
+        }
+    ],
+    "blocks": [
+        {
+            "type": "image",
+            "name": "Banners",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "src",
+                    "label": "Imagem Desktop",
+                    "info": "Recomendado: 1600x600px"
+                },
+                {
+                    "type": "checkbox",
+                    "label": "Efeito de imagem fixa",
+                    "id": "parallax",
+                    "default": 0
+                }, 
+                {
+                    "type": "checkbox",
+                    "label": "Desativar efeito de zoom",
+                    "id": "zoom_off",
+                    "default": 0
+                },
+                {
+                    "type": "image_picker",
+                    "id": "src_mobile",
+                    "label": "Imagem Mobile",
+                    "info": "Recomendado: 600x800px"
+                },
+                {
+                    "type": "separator"
+                },
+                {
+                    "type": "video_url",
+                    "id": "video",
+                    "label": "Vídeo de fundo (Youtube)",
+                    "accept": ["youtube"]
+                },
+                {
+                    "type": "separator"
+                },
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Título"
+                }, 
+                {
+                    "type": "html",
+                    "id": "content",
+                    "label": "Descrição"
+                },
+                {
+                    "type": "text",
+                    "id": "button_text",
+                    "label": "Texto do botão"
+                }, 
+                {
+                    "type": "url",
+                    "id": "banner_url",
+                    "label": "Link do banner"
+                }, 
+                {
+                    "type": "checkbox",
+                    "label": "abrir em nova aba",
+                    "id": "banner_blank",
+                    "default": 0
+                },
+                {
+                    "type": "separator"
+                },
+                {
+                    "type": "date_picker",
+                    "id": "banner_date",
+                    "label": "Selecione uma data para exibição do banner",
+                    "info": "O banner será exibido somente dentro do período selecionado. Caso você não insira uma data limite, o banner não será oculto automaticamente.",
+                    "rangeDatePicker": true
+                },
+                {
+                    "type": "separator"
+                },
+                {
+                    "type": "select",
+                    "id": "banner_align",
+                    "label": "Alinhamento do conteúdo",
+                    "tooltip": "Você poderá definir o alinhamento do conteúdo.",
+                    "default": "text-center justify-content-center",
+                    "options": [
+                        {
+                            "value": "text-center justify-content-center",
+                            "label": "Centralizado"
+                        }, {
+                            "value": "text-left justify-content-start",
+                            "label": "Esquerda"
+                        }, {
+                            "value": "text-right justify-content-end",
+                            "label": "Direita"
+                        }
+                    ]
+                }, {
+                    "type": "color_picker",
+                    "id": "mask_color",
+                    "label": "Cor da máscara de fundo"
+                }, {
+                    "type": "range",
+                    "id": "mask_opacity",
+                    "min": "0",
+                    "max": "10",
+                    "default": "0",
+                    "label": "Intensidade da máscara de fundo"
+                }, {
+                    "type": "color_picker",
+                    "id": "title_color",
+                    "label": "Cor do título",
+                    "default": "#FFFFFF"
+                }, {
+                    "type": "color_picker",
+                    "id": "text_color",
+                    "label": "Cor da descrição",
+                    "default": "#FFFFFF"
+                }, {
+                    "type": "color_picker",
+                    "id": "button_bg_color",
+                    "label": "Cor de fundo do botão"
+                }, {
+                    "type": "color_picker",
+                    "id": "button_text_color",
+                    "label": "Cor de texto do botão"
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

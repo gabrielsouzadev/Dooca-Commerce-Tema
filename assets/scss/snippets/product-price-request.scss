@@ -1,0 +1,37 @@
+.product-price-request-info {
+    border: solid .1rem $border-color;
+}
+
+// .product-price-request-btn {
+//     height: 4rem;
+// }
+
+[class^="product-price-request-modal"] {
+    display: none;
+
+    [id^="product-price-request-modal"] & {
+        display: block;
+    }
+
+    .form {
+        .input {
+            border: solid .1rem $border-color;
+            border-radius: $border-radius;
+        }
+
+        .btn,
+        .input {
+            height: 4rem;
+        }
+    }
+}
+
+[id^="product-price-request-modal"] {
+    .modal__title {
+        font-family:    $h3-ff;
+        font-weight:    $h3-fw;
+        font-size:      $h3-cs;
+        letter-spacing: $h3-cl;
+        text-transform: $h3-tt;
+    }
+}

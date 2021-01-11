@@ -1,0 +1,44 @@
+<div class="product-kit-modal" id="modal-kit-{{ product.variation.id }}">
+    <div class="container p-0">
+        <div class="row no-gutters justify-content-center align-items-center">
+            <div class="col-12">
+                <div class="customize-product__modal__title w-100 text-left p-4">
+                    <h2 class="h1 m-0">{{ product.name }}</h2>
+                </div>
+            </div>
+
+            <div class="col-12 text-center">
+                <img loading="lazy" src="{{ product.images[0].src | img_url }}" alt="{{ product.name }}" class="img-fluid mt-4">
+            </div>
+
+            <div class="p-4 mt-4">
+                <div class="cms pr-4" dc-scroll>
+                    {{ product.description | richtext | raw }}
+
+                    {% if product.features %}
+                        <div class="col-12 mt-3">
+                            <div class="product-features">
+                                {% set features = product.features %}
+                                {% for feature in features %}
+                                    {% if feature.values %}
+                                        <div class="col-12 pt-4 pb-4">
+                                            <div class="d-flex align-items-center justify-content-start">
+                                                <h4 class="h4 mb-0 mr-4">{{ feature.name }}</h4>
+                                                <span class="text">
+                                                    {% set values = feature.values %}
+                                                    {% for value in values %}
+                                                        {{ value.name }}
+                                                    {% endfor %}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

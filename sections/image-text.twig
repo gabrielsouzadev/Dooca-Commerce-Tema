@@ -1,0 +1,333 @@
+{% set show_section = true %}
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-md-block' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-block d-md-none' %}
+{% endif %}
+
+{% if show_section %}
+    <div class="{{ s }}">
+        {% include 'section-header.twig' with { 'name': 'image-text' } %}
+
+            {% set bpl = section.settings.bpl ?: 12 %}
+            {% set align = section.settings.align ?: null %}
+            {% set blocks = section.blocks | length %}
+            {# {% set text_center = (align == 'flex-column') ? 'text-center' : null %} #}
+            {% set max_width = (blocks == 1 and section.settings.container != 'container-fluid') ? 'p-5' : null %}
+
+            {# {% if blocks <= 1 %}
+                {% if not section.blocks[0].settings.image and not section.blocks[0].settings.title and not section.blocks[0].settings.text %}
+                    {% set blocks = 1 %}
+                    {% set section = {
+                        blocks: [
+                            {
+                                settings: {
+                                    title: "Imperdível",
+                                    text: "Conheça o produto mais vendido na última semana e entenda porque ele se tornou o queridinho do Brasil. Compre você também!",
+                                    button_text: "compre agora"
+                                }
+                            }
+                        ]
+                    } %}
+                {% endif %}
+            {% endif %} #}
+
+            {% if blocks > 0 %}
+                <div class="row justify-content-center {{ max_width }} {% if section.settings.container == 'container-fluid' %} no-gutters {% endif %} position-relative">
+                    {% for content in section.blocks %}
+
+                        {% set block_title = content.settings.title ?: null %}
+                        {% set block_content = content.settings.text ?: null %}
+                        {% set block_image = content.settings.image ?: null %}
+
+                        {% set button_text = content.settings.button_text ?: null %}
+                        {% set button_url = content.settings.button_url ?: null %}
+                        {% set button_blank = content.settings.button_blank ?: '_self' %}
+                        {% set button_bg_color = content.settings.button_bg_color ?: theme.settings.color_primary %}
+                        {% set button_text_color = content.settings.button_text_color ?: '#FFFFFF' %}
+
+                        {% if not block_image %}
+                            {% set block_image = 'preview' %}
+                        {% endif %}
+
+                        {% if (bpl == 4 or bpl == 3) and not (align == 'flex-column') %}
+                            {% set p = 'p-md-4' %}
+                        {% elseif align == 'flex-column' %}
+                            {% set p = 'py-md-5' %}
+                        {% elseif align == 'flex-row-reverse' %}
+                            {% set p = 'pr-md-5' %}
+                        {% else %}
+                            {% set p = 'pl-md-5' %}
+                        {% endif %}
+
+                        {% set cols = (align == 'flex-column') ? 'pt-3 col-12' : 'col-sm-12 col-md-6 col-lg-6' %}
+
+                        {% if not block_image %}
+                            {% set cols = 'col-12 text-center' %}
+                            {% set p = null %}
+                        {% endif %}
+                        
+                        {% set data = { title: content.settings.title } %}
+                        {% set params = { 'banner': block_image, 'crop': '', 'class': 'no-zoom', 'data': data } %}
+
+                        <div class="col-sm-12 {% if blocks != 1 %}col-md-6{% endif %} col-lg-{{ bpl }} {% if section.settings.container == 'container-fluid' %} p-0 {% endif %}">
+                            <div class="{% if block_title %}mt-5{% endif %} d-flex justify-content-center align-items-center">
+                                <div class="row w-100 justify-content-center align-items-center {{ align }}">
+                                    {% if block_image and block_image != 'preview' %}
+                                        <div class="{{ cols }} text-center mb-4 mb-md-0 {% if section.settings.container == 'container-fluid' %} p-0 {% endif %}">
+                                            {% include 'banner.twig' with params %}
+                                        </div>
+                                    {% endif %}
+
+                                    {% if block_image == 'preview' and _get.preview %}
+                                        <div class="{{ cols }} text-center mb-4 mb-md-0 {% if section.settings.container == 'container-fluid' %} p-0 {% endif %}">
+                                            {% include 'placeholder.twig' with { flex: true } %}
+                                        </div>
+                                    {% endif %}
+
+                                    <div class="{{ cols }}">
+                                        <div class="pb-4 px-4 pb-md-0 {{ p }} image-text-content">
+                                            {% if block_title %}
+                                                {% if blocks != 1 %}
+                                                    <h2 class="h2" style="color: {{ section.settings.title_color }};">{{ block_title | raw }}</h2>
+                                                {% else %}
+                                                    <h2 class="h1 mb-4" style="color: {{ section.settings.title_color }};">{{ block_title | raw }}</h2>
+                                                {% endif %}
+                                            {% endif %}
+
+                                            {% if block_content %}
+                                                <div style="
+                                                    color: {{ section.settings.subtitle_color }};
+                                                    {% if blocks == 1 %} line-height: 2.5rem {% endif %}
+                                                ">
+                                                    {{ block_content | raw }}
+                                                </div>
+                                            {% endif %}
+
+                                            {% if button_text %}
+                                                <a class="btn mt-3" href="{{ button_url }}" target="{{ button_blank }}" role="button"
+                                                    style="background: {{ button_bg_color }}; color: {{ button_text_color }};">
+                                                    {{ button_text }}
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if button_url %}
+                                <a class="image-text-link" href="{{ button_url }}" target="{{ button_blank }}"></a>
+                            {% endif %}
+                        </div>
+
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+        {% include 'section-footer.twig' %}
+    </div>
+{% endif %}
+
+{% schema %}
+{
+    "name": "Texto com imagem",
+    "category": "Conteúdo",
+    "content_for_index": "1",
+    "settings": [
+        {
+            "type": "accordion",
+            "content": "Conteúdo",
+            "icon": "content"
+        },
+        {
+            "type": "text",
+            "label": "Título",
+            "id": "title"
+        }, {
+            "type": "text",
+            "label": "Subtítulo",
+            "id": "subtitle"
+        }, {
+            "type": "accordion",
+            "content": "Aparência",
+            "icon": "design"
+        }, {
+            "type": "checkbox",
+            "label": "Não exibir em dispositivos móveis",
+            "id": "hide_mobile",
+            "default": 0
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em desktop",
+            "id": "hide_desktop",
+            "default": 0
+        },{
+            "type": "separator"
+        }, {
+			"type": "text",
+			"id": "custom_class",
+			"label": "Classe customizada para editar o css"
+		},{
+            "type": "select",
+            "id": "container",
+            "label": "Estilo do conteúdo",
+            "tooltip": "Você poderá definir o se o conteúdo da seção é centralizado ou adaptável a largura da tela.",
+            "default": "container",
+            "options": [{
+                    "value": "container",
+                    "label": "Centralizado"
+                },
+                {
+                    "value": "container-fluid",
+                    "label": "Adaptável a largura da tela"
+                }
+            ]
+        },
+        {
+            "type": "select",
+            "id": "align",
+            "label": "Alinhamento da imagem",
+            "tooltip": "Você poderá definir o alinhamento da imagem, optando por deixá-la ao lado esquerdo ou direito do conteúdo (título e descrição).",
+            "default": "default",
+            "options": [{
+                    "value": "default",
+                    "label": "Esquerda"
+                },
+                {
+                    "value": "flex-row-reverse",
+                    "label": "Direita"
+                },
+                {
+                    "value": "flex-column",
+                    "label": "Sob"
+                }
+            ]
+        },
+        {
+            "type": "select",
+            "id": "bpl",
+            "label": "Quantidade de blocos por linha",
+            "tooltip": "Você poderá definir a quantidade de blocos por linha",
+            "default": "12",
+            "options": [
+                {
+                    "value": "12",
+                    "label": "1"
+                },
+                {
+                    "value": "6",
+                    "label": "2"
+                },
+                {
+                    "value": "4",
+                    "label": "3"
+                },
+                {
+                    "value": "3",
+                    "label": "4"
+                }
+            ]
+        },{
+            "type": "separator"
+        }, {
+            "type": "color_picker",
+            "id": "title_color",
+            "label": "Cor do título"
+        }, {
+            "type": "color_picker",
+            "id": "subtitle_color",
+            "label": "Cor do subtítulo"
+        }, {
+            "type": "color_picker",
+            "id": "background_color",
+            "label": "Cor de fundo da seção"
+        }, {
+            "type": "color_picker",
+            "id": "border_color",
+            "label": "Cor da borda de seção"
+        },{
+            "type": "image_picker",
+            "id": "background_image",
+            "label": "Imagem de fundo da seção",
+            "info": "Recomendado: 1600x600px com até 250kb"
+        },{
+            "type": "checkbox",
+            "label": "Imagem fixa de fundo",
+            "id": "background_parallax"
+        }, {
+            "type": "range",
+            "id": "border_size",
+            "min": "0",
+            "max": "10",
+            "default": "1",
+            "label": "Espessura da borda de seção"
+        }, {
+            "type": "range",
+            "id": "margin_up",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de cima da seção"
+        }, {
+            "type": "range",
+            "id": "margin_dw",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de baixo da seção"
+        }
+    ],
+    "blocks": [
+        {
+	        "type": "image",
+			"name": "Blocos",
+	        "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "image",
+                    "label": "Imagem",
+                    "info": "Recomendado: 800x600px"
+                },{
+                    "type": "text",
+                    "id": "title",
+                    "label": "Título"
+                }, {
+                    "type": "html",
+                    "id": "text",
+                    "label": "Descrição"
+                },
+                {
+                    "type": "text",
+                    "id": "button_text",
+                    "label": "Texto do botão"
+                },
+                {
+                    "type": "url",
+                    "id": "button_url",
+                    "label": "Link do botão"
+                },
+                {
+                    "type": "checkbox",
+                    "label": "abrir em nova aba",
+                    "id": "button_blank",
+                    "default": 0
+                },
+                {
+                    "type": "color_picker",
+                    "id": "button_bg_color",
+                    "label": "Cor de fundo do botão"
+                },
+                {
+                    "type": "color_picker",
+                    "id": "button_text_color",
+                    "label": "Cor de texto do botão"
+                }
+            ]
+		}
+    ]
+}
+{% endschema %}

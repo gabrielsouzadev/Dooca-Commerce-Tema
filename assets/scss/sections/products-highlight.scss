@@ -1,0 +1,112 @@
+.products-highlight {
+    .container {
+        max-width: 128rem;
+        position: unset;
+
+        @include media-breakpoint-down(sm) {
+            padding-left: 7.5px !important;
+            padding-right: 7.5px !important;
+        }
+
+        &>.row {
+            @include media-breakpoint-down(md) {
+                justify-content: center !important;
+            }
+        }
+    }
+}
+
+.products-highlight-bg {
+    top: 0;
+    left: 30%;
+    right: 0;
+    bottom: 0;
+
+    &.end {
+        left: 0;
+        right: 30%;
+    }
+
+    &.center {
+        left: 0;
+        right: 0;
+        width: 100%;
+    }
+}
+
+.products-highlight-main {
+    max-width: 35rem;
+    min-width: 20rem;
+    box-shadow: 0 0 6rem rgba(0, 0, 0, 0.15);
+    padding: 4rem;
+    background: $body-bg;
+
+    @include media-breakpoint-down(md) {
+        position: relative;
+        top: -6rem;
+    }
+
+    @include media-breakpoint-down(sm) {
+        max-width: 100%;
+        min-width: 100%;
+        padding: 3rem .75rem;
+    }
+
+    .product-card:hover {
+        box-shadow: none;
+    }
+
+    .product-image {
+        .img-fluid {
+            max-width: 65%;
+            margin: 0 auto;
+
+            &.placeholder {
+                max-width: 100%;
+            }
+        }
+    }
+}
+
+.products-highlight-border {
+    width: 100%;
+}
+
+.owl-theme .owl-dots .owl-dot span {
+    background: $body-bg;
+    border: solid .1rem $border-color;
+    opacity: .65;
+}
+
+.owl-theme .owl-dots .owl-dot.active span {
+    background: $color-secondary;
+    opacity: 1; 
+}
+
+.products-highlight-background {
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    
+    @include media-breakpoint-down(md) {
+        width: 100% !important;
+        min-height: 30rem;
+    }
+
+    &.start {
+        right: 0;
+    }
+
+    &.center {
+        right: 0;
+        left: 0;
+        width: 100%;
+    }
+
+    &.end {
+        left: 0;
+    }  
+}

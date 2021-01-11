@@ -1,0 +1,477 @@
+{% set has_breadcrumb = section.settings.product_breadcrumb ?: null %}
+{% set align = section.settings.image_position ?: 'left' %}
+
+{% set text_btn_kit = section.settings.text_btn_kit ?: 'Produtos do kit' %}
+
+<div class="product-info pb-5" id="{{ section.id }}">
+    {% if has_breadcrumb %}
+        <div class="d-none d-lg-block">
+            {% include 'breadcrumbs.twig' %}
+        </div>
+    {% endif %}
+    <div class="container">
+        {% if align == 'left' %}
+            <div class="row no-gutters mt-3 mt-md-5">
+                <div class="col-12 col-md-7">
+                    {% include 'product-gallery.twig' %}
+                </div>
+                <div class="col-12 col-md-5">
+                    <div class="product-info-content p-0 p-md-5">
+                        {% include 'product-title.twig' %}
+                        <div class="review-stars" data-id="{{ product.id }}"></div>
+                        {% include 'product-description-short.twig' %}
+                        {% if product.is_pre_sale %}
+                            {% include 'pre-sale.twig' %}
+                        {% endif %}
+                        {% if not shop.catalog and not product.is_pre_sale %}
+                            {% include 'product-action.twig' %}
+                            {% if not product.is_virtual %}
+                                {% include 'product-shipping.twig' %}
+                            {% endif %}
+                        {% endif %}
+                        {% include 'product-colors.twig' %}
+                        {% include 'product-attachment.twig' %}
+                        {% app 'product-grouper' %}
+                        {% include "product-share.twig" %}
+                    </div>
+                </div>
+            </div>
+        {% elseif align == 'right' %}
+            <div class="row no-gutters mt-3 mt-md-5">
+                <div class="col-12 col-md-5">
+                    <div class="product-info-content">
+                        {% include 'product-title.twig' %}
+                        <div class="review-stars" data-id="{{ product.id }}"></div>
+                        {% include 'product-description-short.twig' %}
+                        {% if product.is_pre_sale %}
+                            {% include 'pre-sale.twig' %}
+                        {% endif %}
+                        {% if not shop.catalog and not product.is_pre_sale %}
+                            {% include 'product-action.twig' %}
+                            {% if not product.is_virtual %}
+                                {% include 'product-shipping.twig' %}
+                            {% endif %}
+                        {% endif %}
+                        {% include 'product-colors.twig' %}
+                        {% include 'product-attachment.twig' %}
+                        {% app 'product-grouper' %}
+                        {% include "product-share.twig" %}
+                    </div>
+                </div>
+                <div class="col-12 col-md-6 offset-md-1">
+                    {% include 'product-gallery.twig' %}
+                </div>
+            </div>
+        {% elseif align == 'center' %}
+            <div class="row mt-3 mt-md-5">
+                <div class="col-12">
+                    {% include 'product-title.twig' with { center: true } %}
+                    <div class="review-stars" data-id="{{ product.id }}"></div>
+                </div>
+
+                <div class="d-none d-md-block col-12 col-md-4 px-3 px-lg-5">
+                    <div class="product-info-content">
+                        {% include 'product-description-short.twig' %}
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4 px-3 px-lg-5">
+                    {% include 'product-gallery.twig' with { center: true } %}
+                </div>
+
+                <div class="d-block d-md-none col-12 col-md-4">
+                    <div class="product-info-content">
+                        {% if product.short_description %}
+                            <div class="product-description-short mt-5">
+                                <div class="cms">
+                                    {{ product.short_description | richtext | raw }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-4 px-3 px-lg-5">
+                    <div class="product-info-content">
+                        {% if product.is_pre_sale %}
+                            {% include 'pre-sale.twig' %}
+                        {% endif %}
+                        {% if not shop.catalog and not product.is_pre_sale %}
+                            {% include 'product-action.twig' %}
+                            {% if not product.is_virtual %}
+                                {% include 'product-shipping.twig' %}
+                            {% endif %}
+                        {% endif %}
+                        {% include 'product-colors.twig' %}
+                        {% include 'product-attachment.twig' %}
+                        {% app 'product-grouper' %}
+                        {% include "product-share.twig" %}
+                    </div>
+                </div>
+            </div>        
+        {% endif %}
+    </div>
+</div>
+
+{% include 'quick-buy.twig' %}
+
+{% javascript %}
+    $(function() {
+        $('body').delegate('.personalize-product__title', 'click', function(e) {
+            var icon = $(e.target);
+            var content = $('.personalize-product__content');
+
+            icon.toggleClass('opened');
+            content.slideToggle();
+        });
+    });
+{% endjavascript %}
+
+{% schema %}
+    {
+        "name": "Informações do produto",
+        "settings": [
+            {
+                "type": "header",
+                "content": "Breadcrumb"
+            },
+            {
+                "type": "checkbox",
+                "id": "product_breadcrumb",
+                "label": "Exibir breadcrumb (migalhas)",
+                "default": "0"
+            },
+            {
+                "type": "header",
+                "content": "Galeria de produto"
+            },
+            {
+                "type": "select",
+                "id": "image_position",
+                "label": "Posição da imagem",
+                "default": "left",
+                "options": [
+                    {
+                        "value": "left",
+                        "label": "Esquerda"
+                    },
+                    {
+                        "value": "center",
+                        "label": "Centralizado"
+                    },
+                    {
+                        "value": "right",
+                        "label": "Direita"
+                    }
+                ]
+            },
+            {
+                "type": "select",
+                "id": "image_galery",
+                "label": "Galeria de imagens do produto",
+                "default": "gallery",
+                "options": [
+                    {
+                        "value": "gallery",
+                        "label": "Galeria com miniatura lateral"
+                    },
+                    {
+                        "value": "gallery-down",
+                        "label": "Galeria com miniatura inferior"
+                    },
+                    {
+                        "value": "navigation",
+                        "label": "Galeria sem miniatura"
+                    },
+                    {
+                        "value": "fixed",
+                        "label": "Galeria com rolagem"
+                    }
+                ]
+            },
+            {
+                "type": "checkbox",
+                "id": "mobile_zoom",
+                "label": "Exibir zoom mobile",
+                "default": "0"
+            },
+            {
+                "type": "checkbox",
+                "id": "product_main_image_zoom",
+                "label": "Desativar o zoom da imagem principal",
+                "default": "0"
+            },
+            {
+                "type": "header",
+                "content": "Título do produto"
+            },
+            {
+                "type": "feature-group",
+                "id": "product_features",
+                "max": 5,
+                "label": "Características no título de produto"
+            },
+            {
+                "type": "checkbox",
+                "id": "product_reference",
+                "label": "Exibir referência do produto",
+                "default": "0"
+            },
+            {
+                "type": "checkbox",
+                "id": "id_erp",
+                "label": "Exibir id erp do produto",
+                "default": "0"
+            },
+            {
+                "type": "checkbox",
+                "id": "product_brand",
+                "label": "Exibir marca do produto",
+                "default": "0"
+            },
+            {
+                "type": "header",
+                "content": "Personalizador de produto (app)"
+            },
+            {
+                "type": "select",
+                "id": "customize_style",
+                "label": "Estilo de exibição do personalizador de produto (app)",
+                "default": "closed",
+                "options": [
+                    {
+                        "value": "closed",
+                        "label": "Fechado"
+                    },
+                    {
+                        "value": "opened",
+                        "label": "Aberto"
+                    }
+                ]
+            },
+            {
+                "type": "header",
+                "content": "Avise-me"
+            },
+            {
+                "type": "text",
+                "id": "product_request_text",
+                "label": "Texto do aviso",
+                "default": "Infelizmente o estoque deste item acabou :("
+            },
+            {
+                "type": "text",
+                "id": "product_request_text_button",
+                "label": "Texto do botão",
+                "default": "Avise-me quando chegar"
+            },
+            {
+                "type": "text",
+                "id": "product_request_text_instruction",
+                "label": "Texto de instrução",
+                "default": "Insira seus dados e receba uma notificação quando este produto estiver disponível"
+            },
+            {
+                "type": "header",
+                "content": "Pré-venda"
+            },
+            {
+                "type": "text",
+                "id": "pre_sale_text",
+                "label": "Texto de pré-venda",
+                "default": "Seja o primeiro a comprar este produto. Insira seus dados abaixo para ser notificado no seu lançamento."
+            },
+            {
+                "type": "text",
+                "id": "pre_sale_button",
+                "label": "Texto do botão de pré-venda",
+                "default": "Avise-me no lançamento"
+            },
+            {
+                "type": "header",
+                "content": "Mensagem de estoque"
+            },
+            {
+                "type": "text",
+                "id": "product_alert",
+                "label": "Exibir informação de estoque baixo a partir de:",
+                "info": "0 para não exbir a mensagem de estoque baixo",
+                "default": "0"
+            },
+            {
+                "type": "checkbox",
+                "id": "product_quantity",
+                "label": "Exibir quantidade disponível em estoque",
+                "default": "0"
+            },
+            {
+                "type": "text",
+                "id": "product_alert_message",
+                "label": "Mensagem de estoque baixo personalizada",
+                "info": "Caso utilize a mensagem personalizada, a quantidade não será exibida."
+            },
+            {
+                "type": "header",
+                "content": "Atributos"
+            },
+            {
+                "type": "checkbox",
+                "id": "variation_cheap_message",
+                "label": "Exibir preço de variação com menor preço",
+                "default": "0"
+            },
+            {
+                "type": "select",
+                "id": "product_atribute_type",
+                "label": "Estilo de exibição de atributos",
+                "default": "button",
+                "options": [
+                    {
+                        "value": "button",
+                        "label": "Botões"
+                    },
+                    {
+                        "value": "select",
+                        "label": "Seleção"
+                    },
+                    {
+                        "value": "grid",
+                        "label": "Grades"
+                    }
+                ]
+            },
+            {
+                "type": "header",
+                "content": "Opções de pagamento"
+            },
+            {
+                "type": "checkbox",
+                "id": "product_payment",
+                "label": "Exibir opções de pagamento",
+                "default": "0"
+            },
+            {
+                "type": "header",
+                "content": "Cálculo de frete"
+            },
+            {
+                "type": "checkbox",
+                "id": "product_shipping",
+                "label": "Exibir cálculo de frete",
+                "default": "0"
+            },
+            {
+                "type": "checkbox",
+                "id": "product_shipping_seals",
+                "label": "Exibir selos de informação de entrega",
+                "default": "0"
+            },
+            {
+                "type": "header",
+                "content": "KIT"
+            },
+            {
+                "type": "text",
+                "id": "text_btn_kit",
+                "label": "Título do botão de personalizar produto",
+                "default": "Produtos do kit"
+            },
+            {
+                "type": "header",
+                "content": "Outras cores"
+            },
+            {
+                "type": "text",
+                "id": "product_colors_title",
+                "label": "Título de outras cores"
+            },
+            {
+                "type": "select",
+                "id": "product_colors_type",
+                "label": "Estilo de exibição de outras cores",
+                "default": "colors",
+                "options": [
+                    {
+                        "value": "colors",
+                        "label": "Cor do produto"
+                    },
+                    {
+                        "value": "images",
+                        "label": "Imagem do produto"
+                    },
+                    {
+                        "value": "select",
+                        "label": "Seletor de cores"
+                    }
+                ]
+            },
+            {
+                "type": "checkbox",
+                "id": "product_colors_slider",
+                "label": "Habilitar slider em outras cores",
+                "default": "0"
+            },
+            {
+                "type": "header",
+                "content": "Outras opções"
+            },
+            {
+                "type": "text",
+                "id": "product_options_title",
+                "label": "Título de outras opções"
+            },
+            {
+                "type": "header",
+                "content": "Compartilhamento do produto"
+            },
+            {
+                "type": "checkbox",
+                "id": "share_product",
+                "label": "Exibir botões de compartilhamento",
+                "default": "0"
+            },
+            {
+                "type": "checkbox",
+                "id": "share_product_colors",
+                "label": "Exibir botões de compartilhamento coloridos",
+                "default": "0"
+            },{
+				"type": "separator"
+			},
+            {
+                "type": "checkbox",
+                "id": "share_whatsapp",
+                "label": "Exibir botão de whatsapp",
+                "default": "1"
+            },
+            {
+                "type": "checkbox",
+                "id": "share_facebook",
+                "label": "Exibir botão de facebook",
+                "default": "1"
+            },
+            {
+                "type": "checkbox",
+                "id": "share_twitter",
+                "label": "Exibir botão de twitter",
+                "default": "1"
+            },
+            {
+                "type": "checkbox",
+                "id": "share_pinterest",
+                "label": "Exibir botão de pinterest",
+                "default": "0"
+            },
+            {
+                "type": "header",
+                "content": "Barra de compra rápida"
+            },
+            {
+                "type": "checkbox",
+                "id": "quick_buy",
+                "label": "Exibir barra de compra rápida",
+                "default": "0"
+            }
+        ]
+    }
+{% endschema %}

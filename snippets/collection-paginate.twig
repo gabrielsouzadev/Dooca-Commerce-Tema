@@ -1,0 +1,125 @@
+<div class="collection-paginate {{ type }} d-flex align-items-center justify-content-between" style="background-color: transparent !important;">
+
+    <div class="d-flex">
+        {% if filter_position != 'top' %}
+        <div class="collection-paginate-filter d-lg-none mr-3 d-flex align-items-center justify-content-center px-3 px-md-4">
+            <span class="text">Filtrar</span>
+        </div>
+        {% endif %}
+
+        {% if filter_position == 'top' %}
+            <div class="d-none d-lg-flex collection-paginate-filter mr-3 d-flex align-items-center justify-content-center px-3 px-md-4">
+                <span class="text">Filtrar</span>
+            </div>
+        {% endif %}
+
+        <div class="collection-paginate-sort form-group form-group--select m-0 mr-md-3">
+            <div class="select">
+                <select class="change-page select" name="sort">
+                    <option data-sort="-relevance" value="{{ '-relevance' | url_params ('sort') }}" {% if collection_sort == '-relevance' %}selected{% endif %}>Mais relevantes</option>
+                    <option data-sort="-created_at" value="{{ '-created_at' | url_params ('sort') }}" {% if collection_sort == '-created_at' %}selected{% endif %}>Novidades</option>
+                    <option data-sort="-price" value="{{ '-price' | url_params ('sort') }}" {% if collection_sort == '-price' %}selected{% endif %}>Maiores preços</option>
+                    <option data-sort="price" value="{{ 'price' | url_params ('sort') }}" {% if collection_sort == 'price' %}selected{% endif %}>Menores preços</option>
+                    <option data-sort="-discount" value="{{ '-discount' | url_params ('sort') }}" {% if collection_sort == '-discount' %}selected{% endif %}>Maiores descontos</option>
+                    <option data-sort="name" value="{{ 'name' | url_params ('sort') }}" {% if collection_sort == 'name' %}selected{% endif %}>Alfabética de A>Z</option>
+                    <option data-sort="-name" value="{{ '-name' | url_params ('sort') }}" {% if collection_sort == '-name' %}selected{% endif %}>Alfabética de Z>A</option>
+                </select>
+            </div>
+        </div>
+
+        {% if paginate.limit == 25 and section.settings.products_per_page != 24 %}
+            {% set products_per_page = section.settings.products_per_page %}
+        {% else %}
+            {% set products_per_page = paginate.limit %}
+        {% endif %}
+
+        <div class="collection-paginate-limit form-group form-group--select">
+            <div class="select">
+                <select class="change-page" name="limit">
+                    <option value="{{ 24 | url_params ('limit') }}" {% if products_per_page == 24 %}selected{% endif %}>24</option>
+                    <option value="{{ 36 | url_params ('limit') }}" {% if products_per_page == 36 %}selected{% endif %}>36</option>
+                    <option value="{{ 48 | url_params ('limit') }}" {% if products_per_page == 48 %}selected{% endif %}>48</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="collection-paginate-grid d-flex">
+        <a class="d-flex ml-3 mr-3 collection-grid {% if collection_grid == 2 %}is-active{% endif %}"
+           href="{{ 2 | url_params_paginate ('grid') }}"
+           rel="nofollow"
+        >
+            <i></i><i></i>
+        </a>
+        <a class="d-flex ml-3 mr-3 collection-grid {% if collection_grid == 3 %}is-active{% endif %}"
+           href="{{ 3 | url_params_paginate ('grid') }}"
+           rel="nofollow"
+        >
+            <i></i><i></i><i></i>
+        </a>
+        <a class="d-flex ml-3 mr-3 collection-grid {% if collection_grid == 4 %}is-active{% endif %}"
+           href="{{ 4 | url_params_paginate ('grid') }}"
+           rel="nofollow"
+        >
+            <i></i><i></i><i></i><i></i>
+        </a>
+    </div>
+
+    <div class="collection-paginate-pagination d-flex">
+        {% include 'paginate.twig' %}
+    </div>
+</div>
+
+    {% javascript %}
+        $(function() {
+            var collection_paginate = $('.collection-paginate.{{ type }}');
+            var collection_sort = collection_paginate.find('.collection-paginate-sort');
+
+            collection_sort.on('change', function() {
+                var element = $(this).find('option:selected');
+                var sort = element.data('sort');
+
+                var now = new Date();
+                now.setTime(now.getTime() + 1 * 3600 * 1000);
+
+                document.cookie = "_dc_collection_sort=" + sort + "; expires=" + now.toUTCString() + "; path=/";
+            });
+            
+            var _filter_position = '{{ filter_position }}';
+            var _type = '{{ type }}';
+
+            if ((window.is_mobile || _filter_position == 'top') && _type == 'header') {
+                var collection_filter = $('.collection-paginate-filter');
+                var collection_sidebar = $('.collection-sidebar');
+                var collection_sidebar_close = $('.collection-sidebar-close');
+                var scroll = $('body, html');
+
+                collection_filter.click(function() {
+                    scroll.addClass('no-scroll');
+                    collection_sidebar.addClass('open');
+                    collection_sidebar_close.stop().fadeIn();
+                });
+
+                collection_sidebar_close.click(function(e) {
+                    scroll.removeClass('no-scroll');
+                    collection_sidebar.removeClass('open');
+                    collection_sidebar_close.stop().fadeOut();
+                });
+            }
+        });
+    {% endjavascript %}
+
+{% if filter_position == 'top' and type == 'header' %}
+    {% javascript %}
+        $(function() {
+            if (!window.is_mobile) {
+                var sidebar = $('.collection-sidebar');
+                var open_sidebar = $('.top-filters');
+
+                open_sidebar.click(function() {
+                    sidebar.toggleClass('active');
+                });
+            }
+        });
+    {% endjavascript %}
+{% endif %}

@@ -1,0 +1,18 @@
+<div class="product-attribute-select position-relative mt-3">
+    <select class="select product-attribute-action product-attributes-selects" data-product-url="{{ product.url }}" name="variation_id" required="required">
+        <option disabled selected value="">Selecione</option>
+        {% for variation in variations %}
+            {% set active = (variation.id == product_variation) ? true : null %}
+            <option {% if active %} selected {% endif %} value="{{ variation.id }}">
+                {{ variation.attribute.name }}
+                {% if variation.balance > 0 and not product.selling_out_of_stock %}
+                    (Em estoque)
+                {% elseif product.selling_out_of_stock %}
+                    (Sob encomenda)
+                {% else %}
+                    (Esgotado)
+                {% endif %}
+            </option>
+        {% endfor %}
+    </select>
+</div>

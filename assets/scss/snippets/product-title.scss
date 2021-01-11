@@ -1,0 +1,36 @@
+.product-title {
+    &.center {
+        max-width: 70rem;
+        margin: 0 auto;
+    }
+
+    .h1 {
+        color: $color-primary;
+        font-size: $h1-fs;
+        letter-spacing: 0;
+        text-indent: 0;
+    }
+    
+    .product-brand {
+        width: 8.5rem;
+        height: 8.5rem;
+        min-width: 8.5rem;
+        border: solid .1rem $border-color;
+        opacity: 1;
+        transition: all ease .15s;
+
+        &:hover {
+            opacity: .65;
+        }
+    }
+
+    .product-features {
+        .h3 {
+            transition: all ease .15s;
+
+            &:hover {
+                color: $color-secondary;
+            }
+        }
+    }
+}

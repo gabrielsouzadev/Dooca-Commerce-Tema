@@ -1,0 +1,146 @@
+<script type="text/javascript" defer>
+    $(function () {
+        const url = '{{ "search" | action ("get") }}';
+        const xhr = _dcs.Xhr(url);
+        var searching = null;
+        var result = null;
+        var q = 0;
+
+        function currency(n, currency) {
+            return currency + n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+        }
+
+        const getResult = (res) => {
+            var content = [];
+            var products = res;
+
+            products.forEach(product => {
+
+                var price_formated = currency(Number(product.price), 'R$ ');
+                var price_compare_formated = currency(Number(product.price_compare), 'R$ ');
+
+                var tmp = `<li class="result-item container">
+                            <a class="result-link py-3 py-md-0 row justify-content-between align-items-center" href="${product.url}">
+                                <div class="col-auto p-1 p-md-3 smart-search-image">
+                                    <img class="img-fluid" src="${product.image.src}" alt="${product.name}">
+                                </div>
+                                ${window.is_mobile ? `
+                                    <div class="col">
+                                        <div class="d-flex flex-column text-left justify-content-start">
+                                            <span class="title mb-3">${product.name}</span>
+                                        </div>
+                                        {% if not shop.catalog %}
+                                            <div class="price d-flex">
+                                                <span class="price-compare mr-2">${product.price_compare > 0 && product.balance > 0 ? price_compare_formated : ''}</span>
+                                                <span class="price-total">${product.balance > 0 ? price_formated : ''}</span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                ` : `
+                                    <div class="col p-3 text-left">
+                                        <span class="title">${product.name}</span>
+                                    </div>
+                                    {% if not shop.catalog %}
+                                        <div class="col-auto p-0 pt-md-3 pb-md-3 pl-md-5 pr-md-5">
+                                            <div class="price d-flex flex-column">
+                                                <span class="price-compare">${product.price_compare > 0 && product.balance > 0 ? price_compare_formated : ''}</span>
+                                                <span class="price-total">${product.balance > 0 ? price_formated : ''}</span>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                `}
+                                <div class="col-auto px-3 px-md-5">
+                                    <div class="icon">
+                                        {{ 'img/arrow-right.svg' | svg }}
+                                    </div>
+                                </div>
+                            </a>
+                        </li>`;
+
+                content.push(tmp);
+            });
+
+            return content;
+        };
+
+        $('body').on('keyup', '.smart-input', function (evt) {
+            evt.preventDefault();
+
+            if (evt.keyCode == 13) {
+                return false;
+            }
+
+            var input = $(this);
+            q = $(input).val();
+            result = $(input).parent().find('.smart-search-result');
+            result.hide();
+
+            var data = {
+                q: q,
+                limit: 5{% if customer.customer_group_id %},
+                customer_id: {{ customer.customer_group_id }} {% endif %}
+            };
+
+            if (q.length >= 1) {
+                if (searching) {
+                    searching.abort();
+                }
+
+                $('.smart-submit .icon').fadeOut(0);
+                $('.smart-search-result').fadeIn();
+                $('.smart-search-loader').fadeIn();
+
+                searching = xhr.get({
+                    id: 'smart-search',
+                    data: data
+                }).done(response => {
+                    var res = response;
+                    var template = getResult(res.data);
+
+                    $('.result-list', result).empty().append(template);
+
+                    $('.smart-search-loader').fadeOut(0);
+                    $('.smart-submit .icon').fadeIn();
+
+                    $('.result-list .result-item').each(function(i) {
+                        $(this).delay(180*i).fadeIn(300);
+                    });
+                });
+            } else {
+                $('.smart-search-result').fadeOut();
+                $('.smart-search-loader').fadeOut(0);
+                $('.smart-submit .icon').fadeIn();
+            }
+
+            if (!window.is_mobile) {
+                $(document).click(function(e) {
+                    var target = $(e.target).attr('class');
+
+                    var classes = [
+                        'smart-search-term p-3 d-flex align-items-center justify-content-start'
+                    ];
+
+                    if (classes.indexOf(target) == -1) {
+                        $('.smart-search-result').fadeOut();
+                        $('.smart-search-loader').fadeOut();
+                        $('.smart-submit .icon').fadeIn();
+                    }
+                });
+
+                $(window).scroll(function(e) {
+                    if ($(this).scrollTop() > 0) {
+                        $('.smart-search-result').fadeOut();
+                    }
+                });
+            }
+
+            /*var elm = '.smart-search-result, .result__search, .result-list, .result-item, .result-link';
+
+            $(elm).hover(function() {
+                $('body').addClass('no-scroll');
+            }, function() {
+                $('body').removeClass('no-scroll');
+            });*/
+        });
+    });
+</script>

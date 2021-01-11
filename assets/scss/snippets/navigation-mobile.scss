@@ -1,0 +1,46 @@
+.navigation-mobile {
+    border: solid .1rem $border-color;
+    border-radius: $border-radius;
+    overflow: hidden;
+    max-height: 5.3rem;
+
+    &.open {
+        max-height: none;
+
+        .navigation-mobile-item .icon {
+            transform: rotate(180deg);
+        }
+    }
+}
+
+.navigation-mobile-item {
+    .text {
+        font-family: $h1-ff;
+        font-weight: $h1-fw;
+        font-size: 1.4rem;
+        text-transform: $h1-tt;
+        line-height: 1;
+    }
+
+    &.active {
+        .icon {
+            display: block;
+        }
+    }
+
+    .icon {
+        display: none;
+        max-width: 2rem;
+        color: $color-primary;
+        transition: all ease .25s;
+    }
+
+    &:hover {
+        cursor: pointer;
+
+        .link {
+            color: $color-primary;
+        }
+    }
+}
+

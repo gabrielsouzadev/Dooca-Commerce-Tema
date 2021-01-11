@@ -1,0 +1,12 @@
+.product-unique {
+    .info {
+        padding: 5% 10% 10%;
+    }
+
+    @include media-breakpoint-up(md) {
+        .info {
+            padding: 0 7.5px;
+            max-width: 30%;
+        }
+    }
+}

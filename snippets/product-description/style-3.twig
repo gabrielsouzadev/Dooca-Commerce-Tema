@@ -1,0 +1,48 @@
+{% set features = product.features %}
+
+{% if features|length > 0 %}
+    <div class="row section-title">
+        <div class="col-12 text-center">
+            <h1 class="h1" style="color: {{ theme.settings.color_primary }}">Características</h1>
+        </div>
+    </div>
+
+	<div class="row no-gutters justify-content-start mt-5">
+		{% for feature in features %}
+			<div class="col-12 col-md-4 col-lg-3 px-0 px-md-4 mb-5">
+				<div class="d-flex align-items-start justify-content-start">
+					{% if feature.values %}
+                        {% if feature.image.src %}
+						    <img class="img-fluid mr-4" src="{{ feature.image.src }}" alt="{{ feature.name }}">
+                        {% endif %}
+
+						<div class="text-left">
+							<div class="text">
+								<b>{{ feature.name }}</b>
+							</div> 
+
+							<div class="text">
+								{% set values = feature.values %}
+								{% for value in values %}
+									{{ value.name }}{% if not loop.last %}, {% endif %}
+								{% endfor %}
+							</div>
+						</div>
+					{% endif %}
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+{% endif %}
+
+{% if product.description %}
+    <div class="row mt-5 no-gutters">
+        <div class="col-12 px-4">
+            <div class="cms w-100">
+                {% ajax 'product-description' %}
+                    {{ product.description | richtext | raw }}
+                {% endajax %}
+            </div>
+        </div>
+    </div>
+{% endif %}

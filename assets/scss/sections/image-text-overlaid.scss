@@ -1,0 +1,54 @@
+.image-text-overlaid-main {
+    box-shadow: 0 0 6rem rgba(0,0,0,0.15);
+    max-width: 63rem;
+    width: 100%;
+    padding: 8rem 6.25rem;
+    background: $body-bg;
+
+    @include media-breakpoint-down(md) {
+        padding: 3rem;
+        margin: 0;
+        position: relative;
+        top: -6rem;
+    }
+
+    .text {
+        line-height: 1.8;
+    }
+}
+
+.image-text-overlaid-bg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    @include media-breakpoint-down(md) {
+        position: relative;
+        min-height: 30rem;
+
+        img {
+            opacity: 0;
+        }
+    }
+
+    &.right {
+        right: 30%;
+        left: 0;
+    }
+
+    &.left {
+        left: 30%;
+        right: 0;
+    }
+
+    @include media-breakpoint-down(sm) {
+        &.right,
+        &.left {
+            right: 0;
+            left: 0;
+        }
+    }
+}

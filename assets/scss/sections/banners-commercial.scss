@@ -1,0 +1,19 @@
+.banners-commercial {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+
+    .banner.placeholder {
+        display: none;
+    }
+
+    .col-6:nth-child(3),
+    .col-6:nth-child(4) {
+        @include media-breakpoint-down(md) {
+            margin-top: 1.5rem;
+        }
+    }
+
+    .section-title {
+        margin-bottom: 2rem;
+    }
+}

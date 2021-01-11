@@ -1,0 +1,75 @@
+{% set menu_footer_1 = navigation[section.settings.menu_footer_1] %}
+{% set menus_1 = menu_footer_1.values %}
+
+{% set menu_footer_2 = navigation[section.settings.menu_footer_2] %}
+{% set menus_2 = menu_footer_2.values %}
+
+{% set menu_footer_3 = navigation[section.settings.menu_footer_3] %}
+{% set menus_3 = menu_footer_3.values %}
+
+<div class="footer-navigation">
+    <div class="row justify-content-between align-items-start">
+        {% if menus_1 %}
+            <div class="col">
+                <div class="d-flex flex-column">
+                    {% if menu_footer_1.name %}
+                        <div class="col-12 mb-4">
+                            <div class="h2 {% if section_secondary %} f-sc-color {% endif %}">{{ menu_footer_1.name }}</div>
+                        </div>
+                    {% endif %}
+                    {% for item in menus_1 %}
+                        {% if item.active %}
+                            <div class="col-12 mb-2">
+                                <a class="{% if section_secondary %}f-sc-color{% else %}f-tx-color{% endif %} d-block text-center text-md-left" href="{{ item.menu_type_link }}" aria-label="{{ item.name }}">
+                                    <span class="text">{{ item.name }}</span>
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if menus_2 %}
+            <div class="col">
+                <div class="d-flex flex-column">
+                    {% if menu_footer_2.name %}
+                        <div class="col-12 mb-4">
+                            <h2 class="h2 {% if section_secondary %} f-sc-color {% endif %}">{{ menu_footer_2.name }}</h2>
+                        </div>
+                    {% endif %}
+                    {% for item in menus_2 %}
+                        {% if item.active %}
+                            <div class="col-12 mb-2">
+                                <a class="{% if section_secondary %}f-sc-color{% else %}f-tx-color{% endif %} d-block text-center text-md-left" href="{{ item.menu_type_link }}" aria-label="{{ item.name }}">
+                                    <span class="text">{{ item.name }}</span>
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if menus_3 %}
+            <div class="col">
+                <div class="d-flex flex-column">
+                    {% if menu_footer_3.name %}
+                        <div class="col-12 mb-4">
+                            <h2 class="h2 {% if section_secondary %} f-sc-color {% endif %}">{{ menu_footer_3.name }}</h2>
+                        </div>
+                    {% endif %}
+                    {% for item in menus_3 %}
+                        {% if item.active %}
+                            <div class="col-12 mb-2">
+                                <a class="{% if section_secondary %}f-sc-color{% else %}f-tx-color{% endif %} d-block text-center text-md-left" href="{{ item.menu_type_link }}" aria-label="{{ item.name }}">
+                                    <span class="text">{{ item.name }}</span>
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>

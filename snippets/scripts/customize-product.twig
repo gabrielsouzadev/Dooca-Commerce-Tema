@@ -1,0 +1,316 @@
+{% if template == 'product' and product.kit %}    
+    {% javascript %}
+        $(function() {
+            // Product
+            var grid_id = '{{ product.grid_id }}';
+
+            /*
+             * Watch nos atributos selecionados
+             * @return void
+             */
+            $('body').delegate('.product-attribute-action', 'change', function() {
+                var product_component_ids = getComponents();
+                updateCustomize(product_component_ids);
+            });
+            
+            /*
+             * Watch nos componentes selecionados
+             * @return void
+             */
+            $('body').delegate(".customize-product-radio input[type='radio']", 'change', function () {
+                var product_component_ids = getComponents();
+                updateCustomize(product_component_ids);
+            });
+
+            /*
+             * Atualiza o customizador com os novos componentes
+             * @param components_ids String
+             * @return void
+             */
+            var updateCustomize = function(components_ids) {
+                var form = $('.customize-product');
+                var container = form.find('.customize-product-ajax');
+                
+                var url = '{{ product.url }}';
+                url = url + '?' + $('.customize-product').serialize();
+
+                // Xhr
+                var xhr = _dcs.Xhr(url);
+
+                loader(true);
+
+                xhr.get({
+                        id: 'customize-product',
+                        data: {
+                            grid_id: grid_id,
+                            product_component_ids: components_ids
+                        }
+                    }).done(function(html) {
+                        container.empty();
+                        container.append(html);
+                        
+                        xhr.get({
+                            id: 'product-action',
+                            data: {
+                                grid_id: grid_id,
+                                product_component_ids: components_ids
+                            }
+                        }).done(function(html) {
+                            $('.product-action').empty();
+                            $('.product-action').append(html);
+                            updatePrice();
+                            loader(false);
+                        }).fail(function() {
+                            loader(false);
+                        });
+                    }).fail(function() {
+                        loader(false);
+                    });
+            };
+
+            /*
+             * Atualizar o preço do produto final
+             * @return void
+             */
+            var updatePrice = function() {
+                var product_info = $('.product-info-content');
+                var quick_buy = $('.quick-buy');
+                var new_price_pi = $('.customize-product .product-info .product-action-price').html();
+                var new_price_qb = $('.customize-product .quick-buy .product-action-price').html();
+                product_info.find('.product-action-price').empty();
+                quick_buy.find('.product-action-price').empty();  
+                product_info.find('.product-action-price').append(new_price_pi);
+                quick_buy.find('.product-action-price').append(new_price_qb);  
+            };
+
+            /*
+             * Retorna uma string dos componentes selecionados
+             * @return String
+             */
+            var getComponents = function() {
+                var arr = [];
+                $("input[type='radio']:checked").each(function() {
+                    arr.push($(this).val());
+                });
+                return arr.join(',').toString();
+            };
+
+            /*
+             * FadeIn/FadeOut loader
+             * @param status Boolean
+             * @return void
+             */
+            var loader = function(status = false) {
+                var loader = $('.customize-product-loader');
+                (status) ? loader.fadeIn() : loader.fadeOut();
+            };
+
+            /*
+             * Ativar o slider da modal de detalhe
+             * @return void
+             */
+            $('.customize-modal-images').each(function() {
+                $(this).owlCarousel({
+                    autoheight: true,
+                    dots: true,
+                    items: 1
+                });
+            });
+
+            /*
+             * Scroll até o customizador
+             * @return void
+             */
+            $('.product-action-personalize').on('click', function() {
+                var header_fixed = $('.header-fixed').outerHeight() + 40;
+
+                if ($('.styleheader').length > 0) {
+                    header_fixed = $('.header-box').outerHeight() + 40;
+                }
+
+                var customize = $('.customize-product').offset().top;
+                var diff = customize - header_fixed;
+                $('html, body').animate({
+                    scrollTop: diff
+                }, 1000);
+            });
+
+            /*
+             * Adicionar ao carrinho
+             * @return void
+             */
+            $('body').delegate('.product-action__bt-buy, .product-action-buy', 'click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                var customizeMessage = false;
+                var offsetTop = false;
+
+                $('.customize-product-component').each(function() {
+                    var checked = $(this).find("input[type='radio']:checked");
+
+                    if (checked.length > 0) {
+                        var select = $(this).find('.select');
+                        var button = $(this).find('.customize-product-button');
+
+                        if (button) {
+                            if (button.length > 0) {
+                                var hasActive = false;
+
+                                button.each(function() {
+                                    if ($(this).hasClass('active')) {
+                                        hasActive = true;
+                                    }
+                                });
+
+                                if (!hasActive) {
+                                    customizeMessage = true;
+
+                                    var html = `
+                                        <div class="alert-shipping col-12 m-0 customize-product-alert">
+                                            <span>Por favor selecione uma variação</span>
+                                        </div>
+                                    `;
+
+                                    $(this).find('.alert-shipping').remove();
+                                    $(this).find('.customize-product-title').append(html);
+
+                                    if(!offsetTop) {
+                                        offsetTop = $(this).offset().top;
+
+                                        if (!window.is_mobile) {
+                                            offsetTop = offsetTop - $('.header-fixed').outerHeight();
+                                        }
+
+                                        offsetTop = offsetTop - 30;
+                                    }
+                                } else {
+                                    $(this).find('.alert-shipping').remove();
+                                }
+                            }
+                        }
+
+                        if (select) {
+                            if (select.length > 0) {
+                                var hasSelectedVariation = select.val();
+                                
+                                if (!hasSelectedVariation) {
+                                    customizeMessage = true;
+
+                                    var html = `
+                                        <div class="alert-shipping col-12 m-0 customize-product-alert">
+                                            <span>Por favor selecione uma variação</span>
+                                        </div>
+                                    `;
+
+                                    $(this).find('.alert-shipping').remove();
+                                    $(this).find('.customize-product-title').append(html);
+
+                                    if(!offsetTop) {
+                                        offsetTop = $(this).offset().top;
+
+                                        if (!window.is_mobile) {
+                                            offsetTop = offsetTop - $('.header-fixed').outerHeight();
+                                        }
+
+                                        offsetTop = offsetTop - 30;
+                                    }
+                                } else {
+                                    $(this).find('.alert-shipping').remove();
+                                }
+                            }
+                        }
+                    } 
+                });
+
+                if (customizeMessage) {  
+                    if (offsetTop > 0) {
+                        $('html, body').animate({
+                            scrollTop: offsetTop 
+                        }, 1500);
+                    }
+                                  
+                    return false;
+                } else {
+                    var submitButton = $('.customize-product').find('#buy-kit');
+
+                    if (submitButton.length > 0) {
+                        submitButton.trigger('click');
+                    } else {
+                        $('.customize-product').submit();
+                    }
+
+                    return false;
+                }
+            });
+            
+            /*
+             * Abrir modal
+             * @return void
+             */
+             $('body').delegate(".customize-product-detail", 'click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                openModal($(this).data('id'));
+            });
+
+            /*
+             * Abrir uma modal
+             * @param id Integer
+             * @return void
+             */
+            var openModal = function(id) {
+                var modal = $('#customize-modal-' + id);
+                var modal_bg = $('.customize-product-modalbg');
+                modal_bg.fadeIn(500);
+                modal.addClass('open');
+            };
+
+            /*
+             * Fechar uma modal
+             * @return void
+             */
+            $('body').delegate(".customize-modal-close", 'click', function () {
+                var modal_bg = $('.customize-product-modalbg');
+                var modal = $('#customize-modal-' + $(this).data('id'));
+                modal.removeClass('open');
+                modal_bg.fadeOut(500);
+                $('body').removeClass('no-scroll');
+            });
+
+            /*
+             * Fechar uma modal
+             * @return void
+             */
+            $('body').delegate(".customize-product-modalbg", 'click', function () {
+                var modal_bg = $('.customize-product-modalbg');
+                $('body').removeClass('no-scroll');
+                $('.customize-modal').each(function() { $(this).removeClass('open'); });
+                modal_bg.fadeOut(500);
+            });
+
+            {% if section.settings.variation_select_type == 'buttons' %}
+            /*
+             * Selecionar uma variação de um produto do kit por botões
+             * @return void
+             */
+            $('body').delegate('.customize-product-buttons', 'click', function (e) {
+
+                var _this = $(this);
+                var target = $(e.target);
+                
+                _this.find('.customize-product-button').removeClass('active');
+                target.parent().addClass('active');
+            });
+            {% endif %}
+
+            $('.customize-product-group').each(function() {
+                var components = $(this).find('.customize-product-components');
+                
+                if (components.find('.customize-product-component.d-flex').length <= 0) {
+                    $(this).find('.customize-product-alert').removeClass('d-none');
+                } 
+            });
+        });
+    {% endjavascript %}
+{% endif %}

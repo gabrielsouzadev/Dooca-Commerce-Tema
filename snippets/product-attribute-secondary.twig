@@ -1,0 +1,187 @@
+{% set attributes = [] %}
+{% set attributes = attributes|merge([product.attribute]) %}
+
+{% set attributes2 = [] %}
+{% set attributes2 = attributes2|merge([product.attribute_secondary]) %}
+
+{% set variations = product.variations|json_encode|raw %}
+
+<div class="product-attribute-secondary mb-5">
+    <div class="product-attribute-header">
+        <span>Selecione uma opção</span>
+        {% app 'size-guide' %}
+    </div>
+    <div class="product-attributes">
+        {% for attribute in attributes %}
+            {% set s_attr = _get.attr1 ?: null %} 
+
+            <div class="product-attribute">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h3 class="h3 m-0">{{ attribute.name }}</h3>
+                    </div>
+                    <div class="col">
+                        <div class="product-attribute-select position-relative">
+                            <select class="select product-attribute-action" name="attr-1" required="required">
+                                <option disabled selected value="">Selecione</option>
+                                {% for attr in attribute.values %}
+                                    <option value="{{ attr.id }}" {% if s_attr == attr.id %}selected{% endif %}>
+                                        {{ attr.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        {# {% if _get.attr1 %} #}
+            {% set _ids = [] %}
+
+            {% for variation in product.variations %}
+                {% if _get.attr1 == variation.attribute_value_id %}
+                    {% if variation.attribute_value_secondary_id not in _ids %}
+                        {% set _ids = _ids|merge([variation.attribute_value_secondary_id]) %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+            {% for attribute2 in attributes2 %}
+                {% set s_attr = _get.attr2 ?: null %} 
+                <div class="product-attribute {% if not _get.attr1 %}disabled{% endif %}">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h3 class="h3 m-0">{{ attribute2.name }}</h3>
+                        </div>
+                        <div class="col">
+                            <div class="product-attribute-select position-relative">
+                                <select class="select product-attribute-action" name="attr-2" required="required">
+                                    <option disabled selected value="">Selecione</option>
+                                    {% for attr in attribute2.values %}
+                                        {% if attr.id in _ids %}
+                                            <option value="{{ attr.id }}" {% if s_attr == attr.id %}selected{% endif %}>
+                                                {{ attr.name }}
+                                            </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {# {% endif %} #}
+    </div>
+</div>
+
+{% if _get.variation %}
+    <input type="hidden" name="variation_id" value="{{ _get.variation }}">
+{% endif %}
+
+<div class="product-attribute-loader">
+    <span class="loader"></span>
+</div>
+
+{% javascript %}
+    $(function() {
+        var variations = {{ variations|json_encode|raw }};
+        var attributes = $('.product-attribute');
+        var quick_buy = $('.quick-buy');
+
+        variations = JSON.parse(variations);
+
+        var updateQuickBuyPrice = function() {
+            var total;
+            var installments;
+            var save;
+
+            var target = $('.product-action .product-action-price');
+
+            total = target.find('.product-price-final .total').text();
+            installments = target.find('.product-price-installments').text();
+            save = target.find('.product-price-save').text();
+
+            quick_buy.find('.product-price-final .total').text(total);
+            quick_buy.find('.product-price-installments').text(installments);
+            quick_buy.find('.product-price-save').text(save);
+        };
+
+        var getProductVariation = function(variation_id, attr1, attr2) {
+            var loader = $('.product-attribute-loader');
+
+            var url = '{{ 'product' | url (product) }}?variation=' + variation_id + "&attr1=" + attr1 + "&attr2=" + attr2;
+            var action = $('.product-action-content, .product-action');
+
+            $('div[id^="installment-modal"], div[id^="size-guide-modal"]').each(function() {
+                $(this).remove();
+            });
+
+            var xhr = _dcs.Xhr(url);
+
+            xhr.get({
+                id: 'product-id-erp'
+            }).done(function(res) {
+                $('.product-reference').empty();
+                $('.product-reference').append(res);
+            });
+
+            xhr.get({
+                id: 'product-action'
+            }).done(function(res) {
+                action.empty();
+                action.append(res);
+                if (quick_buy.length > 0) { updateQuickBuyPrice(); }
+                window.history.replaceState(null, null, "?variation=" + variation_id + "&attr1=" + attr1 + "&attr2=" + attr2);
+                loader.fadeOut();
+            });
+        };
+
+        var findVariation = function(val1, val2) {     
+            var loader = $('.product-attribute-loader');
+
+            for(var i = 0; i < variations.length; i++) {
+                var _attr1 = variations[i].attribute_value_id;
+                var _attr2 = variations[i].attribute_value_secondary_id;
+
+                if (_attr1 == val1 && _attr2 == val2) {
+                    loader.fadeIn();
+                    getProductVariation(variations[i].id, _attr1, _attr2)
+                }
+            }
+        };
+
+        var s_attr1;
+        var s_attr2;
+
+        $('body').delegate('select[name="attr-1"]', 'change', function() {
+            var loader = $('.product-attribute-loader');
+
+            s_attr1 = $(this).val();
+
+            if (s_attr1 != '') {
+                loader.fadeIn();
+
+                var url = '{{ 'product' | url (product) }}?attr1=' + s_attr1;
+                var action = $('.product-action-content, .product-action');
+
+                var xhr = _dcs.Xhr(url);
+
+                xhr.get({
+                    id: 'product-action'
+                }).done(function(res) {
+                    action.empty();
+                    action.append(res);
+                    loader.fadeOut();
+                });
+            }
+        });
+
+        $('body').delegate('select[name="attr-2"]', 'change', function() {
+            s_attr1 = $('select[name="attr-1"]').val();
+            s_attr2 = $(this).val();
+            
+            findVariation(s_attr1, s_attr2);
+        });
+    });
+{% endjavascript %}

@@ -1,0 +1,33 @@
+.custom-badge {
+    max-width: 50%;
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 9;
+    .custom-badge-item{
+        padding: .2rem .7rem;
+	    border-radius: .4rem;
+    }
+    .custom-badge-image{
+        width: auto !important;
+        max-height: 10rem;
+        max-width: 14rem;
+    }
+    .custom-badge-more{
+        background-color: white;
+        border: 1px solid #eaeaea;
+        cursor: pointer;
+        height: 4rem;
+        width: 4rem;
+        line-height: 4rem;
+        margin: .2rem .7rem;
+    }
+}
+.product-card{
+    .custom-badge{
+        .custom-badge-image{
+            max-height: 6rem;
+            max-width: 12rem;
+        }
+    }
+}

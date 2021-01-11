@@ -1,0 +1,120 @@
+{% javascript %}
+    $(function () {
+        var products = $('.product-card');
+        var modal_class = window.innerWidth < 768 ? 'modal--mobile' : '';
+        var loader = $('.product-buy-loader');
+
+        modal_class += 'modal--product-buy';
+
+        var hasAttrPers = function(data) {
+            var res = false;
+            var str = data;
+            var reg = new RegExp(/product-attribute|personalize-product/g);
+
+            res = reg.test(str);
+
+            return res;
+        };
+
+        products.each(function() {
+
+            var card = $(this);
+            
+            var modal = card.find('.product-buy-modal');
+            var btn_buy = card.find('.product-buy-button');
+            var modal_content = modal.find('.product-action-content');
+            
+            if (!card.hasClass('kit')) {
+                btn_buy.off('click').on('click', function(event) {
+                    var url = card.attr('data-product-url');
+                    var grid_id = card.attr('data-grid-id');
+                    var xhr = _dcs.Xhr(url);
+                    var product_name = card.attr('data-product-name');
+
+                    if (modal.length == 0) {
+                        card.append('<div class="product-buy-modal" data-modal-title="' + product_name + '"><div class="product-action-content mt-5"></div></div>');
+                        
+                        modal = card.find('.product-buy-modal');
+                        modal_content = modal.find('.product-action-content'); 
+
+                        {# console.log(modal_content.length); #}
+                    }
+
+                    event.preventDefault();
+                    event.stopPropagation();
+                    
+                    var quantity = card.find('.dc-quantity input[type="number"]').val() || 1;
+
+                    if ($('.' + grid_id).length) {
+                        $('.' + grid_id).fadeIn();
+                        $('body').addClass('modal-open');
+                        $('body').css('overflow', 'hidden');
+                    } else {
+                        loader.fadeIn();
+
+                        xhr.get({
+                            id: 'product-action',
+                            data: {
+                                quantity: quantity
+                            }
+                        }).done(function(res) {
+                            modal_content.empty();
+                            modal_content.append(res);
+
+                            console.log(res);
+
+                            modal.modal({ class: modal_class + ' ' + grid_id });
+
+                            if (!hasAttrPers(res)) {
+                                $('.' + grid_id).find('#form-add-cart').submit();
+                            } else {
+                                modal.open();
+                                loader.fadeOut();
+                            }
+
+                            var DOMContentLoaded_event = document.createEvent("Event");
+                            DOMContentLoaded_event.initEvent("DOMContentLoaded", true, true);
+                            window.document.dispatchEvent(DOMContentLoaded_event);
+
+                            {% if theme.settings.product_cart_add_redirect != 'not_redirect' %}
+                                loader.fadeOut();
+                            {% endif %}
+                        });
+                    }
+                });
+            } else {
+                btn_buy.off('click').on('click', function(event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    
+                    var url = card.attr('data-product-url');
+                    var grid_id = card.attr('data-grid-id');
+                    var xhr = _dcs.Xhr(url);
+
+                    var quantity = card.find('.dc-quantity input[type="number"]').val() || 1;
+
+                    loader.fadeIn();
+
+                    xhr.get({
+                        id: 'collection-customize-buy',
+                        data: {
+                            quantity: quantity
+                        }
+                    }).done(function(res) {
+                        modal_content.empty();
+                        modal_content.append(res);
+                        modal.modal({ class: modal_class + ' ' + grid_id });
+
+                        $('.' + grid_id).find('#form-add-cart-custom').submit();
+
+                        var DOMContentLoaded_event = document.createEvent("Event");
+                        DOMContentLoaded_event.initEvent("DOMContentLoaded", true, true);
+                        window.document.dispatchEvent(DOMContentLoaded_event);
+
+                        loader.fadeOut();
+                    });
+                });
+            }
+        });
+    });
+{% endjavascript %}

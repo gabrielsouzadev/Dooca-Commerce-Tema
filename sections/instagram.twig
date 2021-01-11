@@ -1,0 +1,397 @@
+{# {% set show_section = true %}
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-lg-block' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-block d-lg-none' %}
+{% endif %}
+
+{% if show_section %}
+    <div class="{{ s }}">
+        {% include 'section-header.twig' with { 'name': 'instagram' }  %}
+
+            {% set limit = section.settings.limit ?: 4 %}
+            {% set grid = section.settings.grid ?: null %}
+
+            {% set username = section.settings.instagram_username ?: null %}
+
+            {% if grid %}
+                {% set limit = 5 %}
+            {% endif %}
+
+            {% set border_color = section.settings.border_color ?: theme.settings.color_border %}
+            {% set border_width = section.settings.border_size ?: 0 %}
+            {% set padding = section.settings.padding ?: 0 %}
+            {% set user_text_color = section.settings.user_text_color ?: null %}
+
+            <style>
+                @media only screen and (min-width: 992px) { 
+                    .not-grid {  
+                        padding: 0 {{ padding }}rem;
+                    } 
+
+                    .like-comments-last {
+                        margin-top: {{ padding + padding }}rem;
+                    }
+
+                    .link-border {
+                        border: solid {{ border_width }}px {{ border_color }};
+                    }
+                }
+            </style>
+
+            <div class="row justify-content-center {% if container != 'container' %}no-gutters{% endif %}" id="instagram-{{ section.id }}">
+                {% if not grid %}
+                    <div class="col-12 col-md py-5 py-md-0 my-4 my-md-0 not-grid">
+                        <a href="javascript:void(0)" rel="noreferrer" class="instagram-link d-flex align-items-center justify-content-center w-100 h-100 flex-column link-border" target="_blank">
+                            <i class="d-block icon mb-3">{{ 'img/instagram.svg' | svg }}</i>
+                            <h2 class="h2 m-0 text-center" {% if user_text_color %}style="color: {{ user_text_color }};"{% endif %}>{{ shop.name }}</h2>
+                        </a>
+                    </div>
+                    {% for i in 1 .. limit %}
+                        <div class="col-6 col-md mb-4 mb-md-0" style="padding: 0 {{ padding }}rem; {% if section.settings.show_like_comments %}padding-bottom: 36px{% endif %}">
+                            <a href="javascript:void(0)" rel="noreferrer" class="instagram-image h-100 w-100 d-block position-relative" target="_blank" style="border: solid {{ border_width }}px {{ border_color }};">
+                                <div class="instagram-icon">{{ 'img/instagram.svg' | svg }}</div>
+                                <img loading="lazy" class="img-fluid" src="{{ 'img/dumb.png' | assets_url | img_url }}" alt="Instagram">
+                                <div class="instagram-bg"></div>
+                                <div class="instagram-content text-center">
+                                    <p class="text"></p>
+
+                                    {% if not section.settings.show_like_comments %}
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <div class="instagram-likes text-center">
+                                            <i class="d-block icon">
+                                                {{ 'img/dc-icons/heart.svg' | svg }}
+                                            </i>
+
+                                            <div class="count"></div>
+                                        </div>
+
+                                        <div class="instagram-comments text-center">
+                                            <i class="d-block icon">
+                                                {{ 'img/dc-icons/comments.svg' | svg }}
+                                            </i>
+
+                                            <div class="count"></div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </a>
+
+                            {% if section.settings.show_like_comments %}
+                                <div class="d-flex align-items-center justify-content-center justify-content-md-start mt-4 px-4">
+                                    <div class="instagram-likes d-flex align-items-center mr-4">
+                                        <i class="d-block icon mr-2" style="width: 1.9rem;">
+                                            {{ 'img/dc-icons/heart.svg' | svg }}
+                                        </i>
+
+                                        <div class="count"></div>
+                                    </div>
+
+                                    <div class="instagram-comments d-flex align-items-center">
+                                        <i class="d-block icon mr-2" style="width: 1.9rem;">
+                                            {{ 'img/dc-icons/comments.svg' | svg }}
+                                        </i>
+
+                                        <div class="count"></div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="col-12 col-lg-6">
+                        <div class="row h-100 {% if container != 'container' %}no-gutters{% endif %}">
+                            <div class="col-12 col-md my-md-0" style="padding: 0 {{ padding }}rem;">
+                                <a href="javascript:void(0)" rel="noreferrer" class="instagram-link d-flex align-items-center justify-content-center w-100 h-100 flex-column py-5" target="_blank">
+                                    <i class="d-block icon mb-3">{{ 'img/instagram.svg' | svg }}</i>
+                                    <h2 class="h2 m-0 text-center">{{ shop.name }}</h2>
+                                </a>
+                            </div>
+                            <div class="col-12">
+                                <div class="row h-100 {% if container != 'container' %}no-gutters{% endif %}">
+                                    {% for i in 1 .. 2 %}
+                                        <div class="col-6 col-md mb-4 mb-md-0 {% if section.settings.show_like_comments %}slc{% endif %}" style="padding: 0 {{ padding }}rem; margin-top: {{ padding + padding }}rem;">
+                                            <a href="javascript:void(0)" rel="noreferrer" class="instagram-image h-100 w-100 d-block position-relative" target="_blank" style="border: solid {{ border_width }}px {{ border_color }};">
+                                                <div class="instagram-icon">{{ 'img/instagram.svg' | svg }}</div>
+                                                <img loading="lazy" class="img-fluid" src="{{ 'img/dumb.png' | assets_url | img_url }}" alt="Instagram">
+                                                <div class="instagram-bg"></div>
+                                                <div class="instagram-content text-center">
+                                                    <p class="text"></p>
+
+                                                    {% if not section.settings.show_like_comments %}
+                                                    <div class="d-flex align-items-center justify-content-center">
+                                                        <div class="instagram-likes text-center">
+                                                            <i class="d-block icon">
+                                                                {{ 'img/dc-icons/heart.svg' | svg }}
+                                                            </i>
+
+                                                            <div class="count"></div>
+                                                        </div>
+
+                                                        <div class="instagram-comments text-center">
+                                                            <i class="d-block icon">
+                                                                {{ 'img/dc-icons/comments.svg' | svg }}
+                                                            </i>
+
+                                                            <div class="count"></div>
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}
+                                                </div>
+                                            </a>
+
+                                            {% if section.settings.show_like_comments %}
+                                                <div class="instagram-info d-flex align-items-center justify-content-center justify-content-md-start mt-2 mt-md-4 px-4">
+                                                    <div class="instagram-likes d-flex align-items-center mr-4">
+                                                        <i class="d-block icon mr-2" style="width: 1.9rem;">
+                                                            {{ 'img/dc-icons/heart.svg' | svg }}
+                                                        </i>
+
+                                                        <div class="count"></div>
+                                                    </div>
+
+                                                    <div class="instagram-comments d-flex align-items-center">
+                                                        <i class="d-block icon mr-2" style="width: 1.9rem;">
+                                                            {{ 'img/dc-icons/comments.svg' | svg }}
+                                                        </i>
+
+                                                        <div class="count"></div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6 mt-0 mt-md-4 mt-lg-0">
+                        <div class="row h-100 {% if container != 'container' %}no-gutters{% endif %}">
+                            <div class="col-12 col-md-8 mb-4 mb-md-0 {% if section.settings.show_like_comments %}slc{% endif %}" style="padding: 0 {{ padding }}rem;">
+                                {% for i in 3 .. 3 %}
+                                    <a href="javascript:void(0)" rel="noreferrer" class="instagram-image h-100 w-100 d-block position-relative" target="_blank" style="border: solid {{ border_width }}px {{ border_color }};">
+                                        <div class="instagram-icon">{{ 'img/instagram.svg' | svg }}</div>
+                                        <img loading="lazy" class="img-fluid" src="{{ 'img/dumb.png' | assets_url | img_url }}" alt="Instagram">
+                                        <div class="instagram-bg"></div>
+                                        <div class="instagram-content text-center">
+                                            <p class="text"></p>
+
+                                            {% if not section.settings.show_like_comments %}
+                                            <div class="d-flex align-items-center justify-content-center">
+                                                <div class="instagram-likes text-center">
+                                                    <i class="d-block icon">
+                                                        {{ 'img/dc-icons/heart.svg' | svg }}
+                                                    </i>
+
+                                                    <div class="count"></div>
+                                                </div>
+
+                                                <div class="instagram-comments text-center">
+                                                    <i class="d-block icon">
+                                                        {{ 'img/dc-icons/comments.svg' | svg }}
+                                                    </i>
+
+                                                    <div class="count"></div>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </a>
+                                    {% if section.settings.show_like_comments %}
+                                        <div class="instagram-info d-flex align-items-center justify-content-center justify-content-md-start mt-2 mt-md-4 px-4">
+                                            <div class="instagram-likes d-flex align-items-center mr-4">
+                                                <i class="d-block icon mr-2" style="width: 1.9rem;">
+                                                    {{ 'img/dc-icons/heart.svg' | svg }}
+                                                </i>
+
+                                                <div class="count"></div>
+                                            </div>
+
+                                            <div class="instagram-comments d-flex align-items-center">
+                                                <i class="d-block icon mr-2" style="width: 1.9rem;">
+                                                    {{ 'img/dc-icons/comments.svg' | svg }}
+                                                </i>
+
+                                                <div class="count"></div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="row h-100 {% if container != 'container' %}no-gutters{% endif %}">
+                                    {% for i in 3 .. 4 %}
+                                        <div class="col-6 col-md-12 mb-4 mb-md-0 {% if section.settings.show_like_comments %}slc{% endif %} {% if loop.last %}like-comments-last{% endif %}" style="padding: 0 {{ padding }}rem;">
+                                            <a href="javascript:void(0)" rel="noreferrer" class="instagram-image h-100 w-100 d-block position-relative" target="_blank" style="border: solid {{ border_width }}px {{ border_color }};">
+                                                <div class="instagram-icon">{{ 'img/instagram.svg' | svg }}</div>
+                                                <img loading="lazy" class="img-fluid" src="{{ 'img/dumb.png' | assets_url | img_url }}" alt="Instagram">
+                                                <div class="instagram-bg"></div>
+                                                <div class="instagram-content text-center">
+                                                    <p class="text"></p>
+
+                                                    {% if not section.settings.show_like_comments %}
+                                                    <div class="d-flex align-items-center justify-content-center">
+                                                        <div class="instagram-likes text-center">
+                                                            <i class="d-block icon">
+                                                                {{ 'img/dc-icons/heart.svg' | svg }}
+                                                            </i>
+
+                                                            <div class="count"></div>
+                                                        </div>
+
+                                                        <div class="instagram-comments text-center">
+                                                            <i class="d-block icon">
+                                                                {{ 'img/dc-icons/comments.svg' | svg }}
+                                                            </i>
+
+                                                            <div class="count"></div>
+                                                        </div>
+                                                    </div>
+                                                    {% endif %}
+                                                </div>
+                                            </a>
+                                            {% if section.settings.show_like_comments %}
+                                                <div class="instagram-info d-flex align-items-center justify-content-center justify-content-md-start mt-2 mt-md-4 px-4">
+                                                    <div class="instagram-likes d-flex align-items-center mr-4">
+                                                        <i class="d-block icon mr-2" style="width: 1.9rem;">
+                                                            {{ 'img/dc-icons/heart.svg' | svg }}
+                                                        </i>
+
+                                                        <div class="count"></div>
+                                                    </div>
+
+                                                    <div class="instagram-comments d-flex align-items-center">
+                                                        <i class="d-block icon mr-2" style="width: 1.9rem;">
+                                                            {{ 'img/dc-icons/comments.svg' | svg }}
+                                                        </i>
+
+                                                        <div class="count"></div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %} 
+            </div>
+
+        {% include 'section-footer.twig' %}
+    </div>
+    <style>
+        .instagram .container-fluid {
+            padding: 0 {{ padding }}rem;
+        }
+    </style>
+    {% javascript %}        
+        var section = $('#instagram-{{ section.id }}');
+        var limit = '{{ limit }}';  
+        var username = '{{ username }}';
+        var cols = section.find('.mb-md-0');
+        var url = 'https://api.dooca.store/instagram/' + username; 
+        
+        var cachedData = JSON.parse(localStorage.getItem('_dc_instagram'));
+        var now = new Date();
+        var _MS_PER_DAY = 1000 * 60 * 60 * 24;
+        
+        function dateDiffInDays(a, b) {
+            const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+            const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+            return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+        }
+
+        function createTemplate(data) {            
+            res = data.edge_owner_to_timeline_media.edges;
+
+            var user = '{{ username }}';
+            var name = '@' + user;
+                
+            var url = 'https://www.instagram.com/' + user + '/';
+            var main_col = section.find('.my-md-0');
+            var main_link = main_col.find('.instagram-link');
+            var main_text = main_col.find('.h2');
+
+            main_link.attr('href', url);
+            main_text.empty();
+            main_text.append(name);
+
+            var i;
+            for (i = 0; i < cols.length; i++) {
+                var col = $(cols[i]);
+                var loader = col.find('.instagram-icon');
+                var link = col.find('.instagram-image');
+                var img = col.find('.img-fluid');
+                var main_bg = col.find('.instagram-bg');
+                var content = col.find('.instagram-content');
+                var comments = col.find('.instagram-comments');
+                var likes = col.find('.instagram-likes');
+                var text = null;
+                var itemNode = res[i].node;
+
+                if (itemNode.edge_media_to_caption.edges.length > 0) {
+                    text = itemNode.edge_media_to_caption.edges[0].node.text;
+                    var text_length = text.length;
+                        
+                    if (text_length > 100) {
+                        text = text.substring(0, 100) + '...';
+                    }
+                }
+
+                content.find('.text').append(text);
+                comments.find('.count').append(itemNode.edge_media_to_comment.count);
+                likes.find('.count').append(itemNode.edge_liked_by.count);
+                link.attr('href', 'https://www.instagram.com/p/'+ itemNode.shortcode + '/');
+                img.attr('src', itemNode.thumbnail_resources[3].src);
+
+                if (text) {
+                    img.attr('alt', text);
+                }
+
+                main_bg.css({
+                    'background-image': 'url(' + itemNode.thumbnail_resources[3].src + ')',
+                    'background-size': 'cover',
+                    'background-repeat': 'no-repeat',
+                    'position': 'absolute',
+                    'top': '0',
+                    'left': '0',
+                    'right': '0',
+                    'bottom': '0'
+                });
+                loader.fadeOut();
+            }
+        };
+
+        var cachedTimestamp = new Date();
+
+        if (cachedData) {
+            cachedTimestamp = new Date(cachedData.timestamp);
+        }
+
+        var days_diff = dateDiffInDays(cachedTimestamp, now);
+        if ((days_diff > 1 && username.length > 0) || !cachedData) {
+            $.get(url, function() {}).done(function(data) {
+                var obj = {
+                    data: data,
+                    timestamp: new Date().getTime()
+                };
+                localStorage.setItem('_dc_instagram', JSON.stringify(obj));
+                createTemplate(data);
+            }).fail(function(res) {
+                console.error(res);
+            });
+        } else if (cachedData.data) {
+            createTemplate(cachedData.data);
+        } else {
+            console.error('É necessário preencher o user para exibir o instagram.');
+        }
+    {% endjavascript %}
+{% endif %} #}

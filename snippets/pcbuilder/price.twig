@@ -1,0 +1,92 @@
+<div class="pcbuilder-total sticky-top mb-3" style="z-index: 10;">
+    <div class="row">
+        <div class="pcbuilder-total-title col-12">
+            <div class="p-4 text-center">
+                <h2 class="h2 m-0">Valor Atual</h2>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="pcbuilder-price-content p-4">
+                <div class="row">
+                    {% if meta.payments|length > 0 %}
+                        {% for payment in meta.payments %}
+                            {% if payment.active %}
+                                {% set margin = (loop.first) ? 'mt-4' : 'mt-3' %}
+                                <div class="col-12">
+                                    <div class="d-flex align-items-center {{ margin }}">
+                                        {% if payment.method == 'manual' %}
+                                            <i class="pcbuilder-price-icon mr-3">
+                                                {{ 'img/dc-icons/money.svg' | svg }}
+                                            </i>
+                                            <div class="pcbuilder-price-manual">
+                                                <div class="pcbuilder-price m-0">{{ payment.installment.total | currency }}</div>
+                                                <span class="text">pagamento manual</span>
+                                            </div>
+                                        {% endif %}
+
+                                        {% if payment.method == 'billet' %}
+                                            <i class="pcbuilder-price-icon mr-3">
+                                                {{ 'img/dc-icons/barcode.svg' | svg }}
+                                            </i>
+                                            <div class="pcbuilder-price-billet">
+                                                <div class="pcbuilder-price m-0">
+                                                    {{ payment.installment.total | currency }}
+
+                                                    <span class="text">
+                                                        {% if payment.installment.discount %}
+                                                            ({{ payment.installment.discount }} %OFF)
+                                                        {% endif %}
+                                                    </span>
+                                                </div>
+                                                <span class="text">à vista no boleto</span>
+                                            </div>
+                                        {% endif %}
+                                        
+                                        {% if payment.method == 'creditcard' %}
+                                            <i class="pcbuilder-price-icon mr-3">
+                                                {{ 'img/dc-icons/creditcard.svg' | svg }}
+                                            </i>
+                                            <div class="pcbuilder-price-creditcard">
+                                                <div class="pcbuilder-price m-0">{{ payment.installment.total | currency }}</div>
+                                                <span class="text">em até {{ payment.installment.parcel }}x no cartão</span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <div class="col-12">
+                            <div class="mt-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="pcbuilder-price-creditcard">
+                                        <div class="pcbuilder-price m-0">{{ meta.price | currency }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="pcbuilder-add-content px-4 pb-4 text-center">
+                <button class="pcbuilder-add-cart btn w-100 p-4" {% if not meta.is_valid %} disabled {% endif %}>
+                    <span>Adicionar no carrinho</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% javascript %}
+    $(function() {
+        var header_fixed = $('.header-fixed');
+        var price = $('.sticky-top');
+
+        price.css({ 
+            'top': header_fixed.height() + 22 + 'px', 
+            'z-index': 20 
+        });
+    });
+{% endjavascript %}

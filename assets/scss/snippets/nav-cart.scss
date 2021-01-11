@@ -1,0 +1,146 @@
+.nav-cart {
+    .nav-badge {
+        width: 2.3rem;
+        height: 2.3rem;
+        border-radius: 100%;
+        
+        .text {
+            font-size: 1.2rem;
+            color: $text-color-secondary !important;
+        }
+    }
+}
+
+.nav-cart:hover {
+    .nav-cart-dropdown {
+        display: block;
+        z-index: 100;
+        box-shadow: 0 0 3rem rgba(0, 0, 0, 0.15);
+
+        @include media-breakpoint-down(sm) {
+            display: none;
+        }
+    }
+}
+
+.nav-cart.show-dropdown {
+    .nav-cart-dropdown {
+        display: block;
+        position: fixed !important;
+        width: 100vw;
+        right: -100vw;
+        top: 0;
+        transition: all ease-in .25s;
+        z-index: -150;
+        opacity: 0;
+
+        &.active {
+            right: 0;
+            opacity: 1;
+            z-index: 150;
+        }
+    }
+
+    &:hover {
+        .nav-cart-dropdown {
+            @include media-breakpoint-down(md) {
+                display: block;
+            }
+        }
+    }
+}
+
+.nav-cart-dropdown {
+    display: none;
+    min-width: 29rem;
+    top: 100%;
+    right: 0;
+    border-radius: $border-radius;
+    position: absolute;
+    background: $body-bg;
+    z-index: 2;
+
+    .icon {
+        width: 3.2rem;
+        color: var(--color-secondary);
+    }
+
+    .title {
+        color: var(--color-primary);
+    }
+
+    .text {
+        color: var(--color-text);
+    }
+
+    .price-final {
+        color: $color-secondary;
+    }
+
+    .title {
+        font-family: $h1-ff;
+        font-weight: $h1-fw;
+        font-size: $h1-cs;
+        letter-spacing: $h1-cl;
+        text-transform: $h1-tt;
+    }
+
+    .btn:hover {
+        color: $text-color-secondary;
+    }
+
+    .nav-cart-close {
+        position: absolute;
+        top: 1rem;
+        right: .5rem;
+        width: 2rem;
+        height: 2rem;
+
+        &:before {
+            content: '';
+            position: absolute;
+            width: .2rem;
+            height: 2rem;
+            background: $color-secondary;
+            transform: rotate(45deg);
+        }
+
+        &:after {
+            content: '';
+            position: absolute;
+            width: .2rem;
+            height: 2rem;
+            background: $color-secondary;
+            transform: rotate(135deg);
+        }
+    }
+
+    .customized-list {
+        margin-top: .5rem;
+        margin-bottom: .8rem;
+        list-style: none;
+
+        .customized-item {
+            display: block;
+            margin: 0;
+            padding: 0;
+            line-height: 1;
+            
+            .text {
+                font-size: 1.1rem;
+            }
+        }
+    }
+}
+
+.nav-cart-thumb {
+    width: 5rem;
+    min-width: 5rem;
+}
+
+.cart-empty {
+    .icon {
+        width: 3.5rem;
+        height: 3.5rem;
+    }
+}

@@ -1,0 +1,124 @@
+<script type="text/javascript" defer>
+	$(function() {
+        $('body').delegate('.product-installments','click',function() {
+            var grid_id = $(this).data('grid-id');
+            var variation_id = $(this).data('variation-id');
+
+            var modal = $('.installment-modal-' + grid_id);
+
+            getInstallments(grid_id, variation_id);
+
+            if ($('#installment-modal-' + grid_id).length > 0) {
+                $('#installment-modal-' + grid_id).fadeIn();
+                $('body').addClass('modal-open');
+                $('body').css('overflow', 'hidden');
+            } else {
+                modal.modal();
+                modal.open();
+            }
+		});
+
+        var getInstallments = function(grid_id, variation_id) {
+            var url = "{{ 'product-installments' | action ('get') }}";
+            var xhr = _dcs.Xhr(url);
+
+            var url = new URL(window.location.href);
+           
+            var additional_price = 0;
+            var _get_addition_price = url.searchParams.get('additional_price');
+
+            if (_get_addition_price) {
+                additional_price = _get_addition_price;
+            }
+
+            var data = {
+                grid_id: grid_id,
+                variation_id: variation_id,
+                additional_price: additional_price,
+                {% if product.kit %}
+                components: getComponents(),
+                {% endif %}
+            };
+
+            xhr.get({
+                id: 'product-installments',
+                data: data
+            }).done(function(res) {
+                var html = createTemplate(res);
+                appendTemplate(grid_id, html);
+            });
+        };
+
+        var createTemplate = function(data) {
+            var html = '';
+
+            if (data.length > 0) {
+                data.forEach(function(item) { 
+                    html += '<div class="row mb-3">';
+                        html += '<div class="product-installments-title col-12 text-center p-3">';
+                            html += '<h3 class="h3 m-0">' + item.name +'</h3>';
+                        html += '</div>';
+
+                        html += '<div class="col-12 pt-3 pl-3 pr-3 border">';
+                            html += '<div class="flex-column">';
+                                item.installments.forEach(function(payment) {
+                                    var interest = (payment.interest > 0) ? 'com' : 'sem';
+            
+                                    html += '<div class="col-12 text-center mb-3">';
+
+                                        if (item.method == 'creditcard') {
+                                            html += '<span class="parcel">' + payment.parcel + 'x</span>';
+                                            html += '<span class="parcel-of"> de </span>';
+                                        }
+                                        
+                                        var price = new Intl.NumberFormat('pt-br', {
+                                            style: 'currency',
+                                            currency: 'BRL'
+                                        }).format(payment.parcel_price);
+
+                                        html += '<span class="parcel-price">' + price + '</span>';
+                                        
+                                        if (item.method == 'creditcard') {
+                                            html += '<span class="parcel-interest"> ' + interest + ' juros</span>'
+                                        }
+
+                                        if (payment.discount) {
+                                            html += '<span class="parcel-discount">';
+                                                if (item.method == 'billet') {
+                                                    html += ' à vista';
+                                                }
+
+                                                html += ' (' + Math.floor(payment.discount) + '% OFF)';
+                                            html += '</span>';
+                                        }
+                                        
+                                    html += '</div>';
+                                });
+                            html += '</div>';
+                        html += '</div>';
+                    html += '</div>';
+                });
+            }
+
+            return html;
+        };
+
+        var appendTemplate = function(grid_id, html) {
+            var modal = $('#installment-modal-' + grid_id);
+            var content = modal.find('.container');
+
+            content.empty();
+            content.append(html);
+        };
+
+        {% if product.kit %}
+            var getComponents = function() {
+                var arr = [];
+                $("input[type='radio']:checked").each(function() {
+                    arr.push($(this).val());
+                });
+                return arr.join(',').toString();
+            };
+        {% endif %}
+	});
+</script>

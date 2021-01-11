@@ -1,0 +1,14 @@
+.section-title {
+    max-width: 76rem;
+    margin: 0 auto;
+    
+    &:after {
+        content: '';
+        width: 100%;
+        max-width: 4rem;
+        height: .4rem;
+        background: $color-secondary;
+        display: inline-block;
+        margin: 1.5rem auto;
+    }
+}

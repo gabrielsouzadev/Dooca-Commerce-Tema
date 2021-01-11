@@ -1,0 +1,111 @@
+@import "../mixins/mixins";
+@import "../helpers/helpers";
+@import "../ui/ui";
+
+/**
+ * Coming soon
+ **/
+
+.comingsoon {
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    &__container {
+        @include make-container;
+        min-height: 65vh;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: space-between;
+
+        @include breakpoint('max-width: #{$bp-sm}') {
+            min-height: 90vh;
+        }
+    }
+
+    &__content,
+    &__footer {
+        padding: 2rem;
+    }
+
+    &__header {
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__title {
+        @include section-title;
+        @include breakpoint('max-width: #{$bp-sm}') {
+            font-size: 1.6rem;
+        }
+
+        .label {
+            display: block;
+            width: 100%;
+            margin-bottom: .8rem;
+        }
+
+        &::after {
+            display: block;
+            content: '';
+            width: 50%;
+            height: .2rem;
+            margin: 3rem auto 0;
+            background: $color-secondary;
+        }
+    }
+
+    &__form {
+        display: flex;
+        max-width: 60rem;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        position: relative;
+        margin-top: -2rem;
+
+        &__subtitle {
+            @include section-title(1.3rem, 300, $text-color);
+            width: 100%;
+            flex-grow: 1;
+            margin-bottom: 3rem;
+        }
+
+        .form-group {
+            flex-grow: 1;
+            padding: .5rem;
+
+            &--bt {
+                max-width: 7rem;
+            }
+
+            .input {
+                width: 100%;
+                height: 5rem;
+            }
+        }
+
+        &__success {
+            @include title(1.4rem, 500, $text-color-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: calc(100% - 1rem);
+            flex-grow: 1;
+            margin: 1rem .5rem 0;
+            padding: 2rem;
+            background: $color-success;
+            border-radius: $border-radius;
+        }
+    }
+
+    .dooca {
+        display: block;
+        max-width: 8rem;
+    }
+}

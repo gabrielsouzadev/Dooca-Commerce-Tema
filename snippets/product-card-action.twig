@@ -1,0 +1,8 @@
+{% set button_type = theme.settings.product_buy_button_type ?: null %}
+{% set button_text = theme.settings.product_buy_button_text ?: null %}
+
+<div class="product-card-action row">
+    {% if button_type %}
+        {% include 'product-card-action/' ~ button_type ~ '.twig' with { 'text': button_text } %}
+    {% endif %}
+</div>

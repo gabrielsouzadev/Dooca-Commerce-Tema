@@ -1,0 +1,66 @@
+<div class="menu-dropdown position-absolute" style="border: solid .1rem {{ color_border }};">
+    <div class="menu-dropdown-container py-3">
+        <div class="row no-gutters">    
+            {% for item in item.children %}
+                {% if item.active %}
+                    <div class="menu-dropdown-item col-12 position-relative px-3 {% if item.children %}has-dropdown{% endif %}">
+                        <a 
+                            {% if item.menu_type_link %}href="{{ item.menu_type_link }}"{% endif %} 
+                            class="
+                                menu-dropdown-link d-flex justify-content-start align-items-center p-3 
+                                {% if item.image.src %}
+                                    has-image{% endif %}
+                            "
+                            {% if shop.domain and shop.domain not in item.menu_type_link and item.menu_type != 'custom_link' %}
+                                target="_blank"
+                            {% endif %}
+                        >
+                            {% if item.image.src %}
+                                <div class="menu-dropdown-image-block">
+                                    <img loading="lazy" class="img-fluid menu-dropdown-image" src="{{ item.image.src | img_url }}" alt="{{ item.name }}">
+                                </div>
+                            {% endif %}
+                            <span class="text">{{ item.name }}</span>
+                            {% if item.children %}
+                                <i class="icon">{{-'img/arrow-right.svg' | svg }}</i>
+                            {% endif %}
+                        </a>
+                        {% if item.children %}
+                            <div class="menu-dropdown-sub position-absolute">
+                                <div class="menu-dropdown-container py-3">
+                                    <div class="row no-gutters">
+                                        {% for item in item.children %}
+                                            {% if item.active %}
+                                                <div class="menu-dropdown-item px-3 col-12">
+                                                    <a 
+                                                        {% if item.menu_type_link %}href="{{ item.menu_type_link }}"{% endif %} 
+                                                        class="
+                                                            menu-dropdown-link d-flex justify-content-start align-items-center p-3 
+                                                            {% if item.image.src %}
+                                                                has-image
+                                                            {% endif %}
+                                                        "
+                                                        {% if shop.domain and shop.domain not in item.menu_type_link and item.menu_type != 'custom_link' %}
+                                                            target="_blank"
+                                                        {% endif %}
+                                                    >
+                                                        {% if item.image.src %}
+                                                            <div class="menu-dropdown-image-block {% if section.settings.menu_color_bg %}h-mn-background{% endif %}">
+                                                                <img loading="lazy" class="img-fluid menu-dropdown-image" src="{{ item.image.src | img_url }}" alt="{{ item.name }}">
+                                                            </div>
+                                                        {% endif %}
+                                                        <span class="text">{{ item.name }}</span>
+                                                    </a>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>

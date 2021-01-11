@@ -1,0 +1,609 @@
+.smart-form {
+    max-width: 100%;
+    flex-grow: 1;
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.smart-input {
+    width: 100%;
+    height: 5rem;
+    border-width: .1rem;
+    border-style: solid;
+
+    @include media-breakpoint-down(sm) {
+        border-width: .1rem 0;
+    }
+}
+
+.smart-button {
+    // width: 5rem;
+    // height: 5rem;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: 0;
+    border: 0;
+    opacity: 1;
+    transition: all ease .15s;
+
+    &:hover {
+        opacity: .65;
+    }
+
+    img {
+        max-width: 3.5rem;
+        margin-right: .7rem;
+
+        @include media-breakpoint-down(md) {
+            max-height: 3.5rem;
+        }
+    }
+}
+
+.smart-search.slide {
+    .smart-close {
+        position: absolute;
+        left: 3rem;
+        top: 50%;
+        transform: translate(0, -50%);
+        width: 1.1rem;
+        height: 1.1rem;
+        z-index: 0;
+        opacity: 0;
+
+        &.open {
+            opacity: 1;
+            z-index: 20;
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    $input_bg: #FFFFFF;
+
+    .smart-input {
+        position: absolute;
+        top: -.5rem;
+        right: -.5rem;
+        bottom: 0;
+        height: 100%;
+        min-height: 6.4rem;
+        width: 0;
+        border-width: 0 0 .1rem 0;
+        border-style: solid;
+        transition: all ease-in-out .35s;
+        background: $input_bg;
+        padding: 0;
+
+        &.open {
+            width: 100%;
+            padding-right: 6.5rem;
+            padding-left: 6rem;
+            border-width: 0 .1rem .1rem .1rem;
+        }
+    }
+
+    .smart-button {
+        padding: .9rem;
+    }
+}
+
+.smart-search.modal-s {
+    // width: 3rem;
+    // height: 5rem;
+
+    @include media-breakpoint-down(md) {
+        height: auto;
+    }
+
+    .smart-button {
+        padding: .6rem;
+        background: 0;
+        border: 0;
+
+        @include media-breakpoint-down(md) {
+            padding: 0 .6rem !important;
+        }
+    }
+
+    .smart-form {
+        max-width: 5rem;
+    }
+
+    .smart-submit {
+        background: 0;
+        border: 0;
+    }
+
+    @include media-breakpoint-down(sm) {
+        .smart-input {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 100%;
+            width: 100%;
+            z-index: 0;
+            height: 0;
+            transition: all ease-in-out .15s;
+            z-index: 20;
+
+            &.open {
+                height: 4.5rem;
+            }
+        }
+    }
+}
+
+.smart-search-modal {
+    display: none;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 250;
+    width: 100%;
+    height: 100vh;
+    background: transparent !important;
+
+    &:before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #fff;
+        opacity: .95;
+    }
+
+    .smart-search-result .price-compare,
+    .smart-search-result .price-total,
+    .smart-search-result .title {
+        @include media-breakpoint-down(md) {
+            font-size: 1.2rem;
+        }
+    }
+
+    .smart-search-result .icon {
+        @include media-breakpoint-down(md) {
+            width: 1.5rem;
+        }
+    }
+
+    .form {
+        max-width: 64rem;
+        margin: 0 auto;
+        opacity: 0;
+        animation: fadeIn .3s ease-in both;
+        animation-delay: .5s;
+
+        @include media-breakpoint-down(md) {
+            padding: 0;
+
+            &:after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 6rem;
+                background: #000;
+                opacity: .05;
+            }
+        }
+    }
+
+    .smart-input {
+        color: $text-color;
+
+        @include media-breakpoint-down(md) {
+            font-size: 1.6rem !important;
+        }
+    }
+
+    .result-list {
+        @include media-breakpoint-down(md) {
+            padding-bottom: 2rem;
+        }
+    }
+
+    .smart-header {
+        background: $body-bg;
+        padding: 2.2rem;
+
+        .h2 {
+            color: var(--color-primary);
+        }
+    }
+
+    &.smart-opacity {
+        .smart-bg {
+            display: block;
+            opacity: .90;
+        }
+
+        .smart-input {
+            border: 0 !important;
+            box-shadow: inset 0 -1px 0 0 currentColor;
+            transition: all ease-in-out .2s;
+            background: transparent !important;
+
+            @include media-breakpoint-down(md) {
+                box-shadow: none;
+            }
+
+            &:focus {
+                box-shadow: inset 0 -4px 0 0 currentColor;
+
+                @include media-breakpoint-down(md) {
+                    box-shadow: none;
+                }
+            }
+        }
+    }
+
+    .smart-bg {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    .smart-input {
+        max-width: 64rem;
+        height: 8rem;
+        background: $body-bg;
+        color: $text-color;
+        font-size: 1.6rem;
+        padding-right: 8rem !important;
+
+        &::placeholder {
+            color: currentColor;
+        }
+    }
+
+    .smart-submit {
+        position: absolute;
+        width: 8rem;
+        height: 8rem;
+        top: 0;
+        right: 0;
+        background: 0;
+        border: 0;
+        opacity: 1;
+        transition: all ease .15s;
+        padding: 2.3rem;
+
+        @include media-breakpoint-down(xs) {
+            padding: 0;
+            width: 2.5rem;
+            height: 2.5rem;
+            top: 50%;
+            left: 1.5rem;
+            transform: translateY(-50%);
+            color: $color-primary;
+            z-index: 20;
+        }
+
+        &:hover {
+            opacity: .65;
+        }
+
+        .icon {
+            color: $color-secondary;
+
+            @include media-breakpoint-down(md) {
+                color: $color-primary;
+            }
+        }
+
+        &.dark {
+            background: $color-secondary;
+
+            .icon {
+                color: $text-color-secondary;
+            }
+        }
+    }
+
+    .smart-form {
+        position: absolute;
+        width: 100%;
+        max-width: 65rem;
+        top: 35%;
+        left: 50%;
+        transform: translate(-50%, -35%);
+
+        @include media-breakpoint-down(sm) {
+            left: 0;
+            top: 0;
+            transform: unset;
+        }
+
+        .h1 {
+            color: var(--color-primary);
+        }
+    }
+
+    .smart-message {
+        display: none;
+        background: $color-error;
+
+        .text {
+            color: #fff;
+        }
+    }
+
+    .smart-close {
+        width: 1.6rem;
+        height: 1.6rem;
+        margin: 0 auto;
+        transition: all ease-in .15s;
+        opacity: 0;
+        animation: fadeIn .3s ease-in both;
+        animation-delay: .1s;
+
+        @include media-breakpoint-down(md) {
+            margin: 0;
+            color: var(--color-secondary);
+        }
+
+        .icon {
+            span {
+                transition: all ease-in-out .3s;
+            }
+        }
+
+        &:hover {
+            cursor: pointer;
+
+            .icon {
+                span {
+                    transform: rotate(180deg);
+                }
+            }
+        }
+
+        .icon {
+            color: $color-secondary;
+        }
+    }
+
+    .smart-bg {
+        display: block;
+        opacity: .90;
+    }
+
+    .smart-input {
+        border: 0 !important;
+        box-shadow: inset 0 -1px 0 0 currentColor;
+        transition: all ease-in-out .2s;
+        background: transparent !important;
+
+        @include media-breakpoint-down(md) {
+            padding-right: 0 !important;
+            padding-left: 5.5rem !important;
+            height: 6rem;
+            color: $text-color;
+            border-bottom: solid .2rem $color-secondary !important;
+            border-radius: 0 !important;
+            box-shadow: none;
+            background: $body-bg;
+            position: relative;
+            z-index: 100;
+        }
+
+        &:focus {
+            box-shadow: inset 0 -4px 0 0 currentColor;
+
+            @include media-breakpoint-down(md) {
+                box-shadow: none;
+            }
+        }
+    }
+
+    .h1 {
+        opacity: 0;
+        animation: fadeIn .3s ease-in both;
+        animation-delay: .3s;
+
+        &:after {
+            content: '';
+            display: block;
+            width: 4rem;
+            height: .4rem;
+            background: $color-secondary;
+            margin: 1.5rem auto 0 auto;
+        }
+    }
+
+    .smart-search-result {
+        border: solid .1rem $border-color;
+
+        @include media-breakpoint-down(md) {
+            position: fixed !important;
+        }
+
+    }
+
+    .smart-search-loader {
+        position: absolute;
+        width: 8rem;
+        height: 8rem;
+        top: 0;
+        right: 0;
+        display: none;
+
+        .loader {
+            @include loader();
+
+            &:after {
+                width: 3.5rem;
+                height: 3.5rem;
+                border-top-color: rgba(224, 224, 224, 0.5);
+                border-right-color: rgba(224, 224, 224, 0.5);
+                border-bottom-color: $color-secondary;
+                border-left-color: $color-secondary;
+                top: 2.4rem;
+                left: -1.8rem;
+                bottom: 0;
+                transform: none;
+                margin: 0;
+            }
+        }
+    }
+
+    &.version {
+        .smart-header {
+            background: var(--color-primary);
+
+            .h2 {
+                color: #fff;
+            }
+        }
+
+        &:before {
+            background-color: var(--color-primary);
+        }
+
+        .smart-input,
+        .smart-form .h1 {
+            color: #ffffff;
+        }
+
+        .form {
+            @include media-breakpoint-down(md) {
+                background: $color-primary;
+
+                &:after {
+                    background: #fff;
+                    opacity: .1;
+                }
+            }
+        }
+    }
+
+    .smart-search-loader {
+        .loader:after {
+            @include media-breakpoint-down(md) {
+                width: 2.5rem;
+                height: 2.5rem;
+                top: 0;
+                left: 1.5rem;
+            }
+        }
+    }
+}
+
+.smart-search-result {
+    display: none;
+    top: 100%;
+    width: 100%;
+    background: $body-bg;
+    border: solid .1rem $border-color;
+    z-index: 60;
+    box-shadow: $dropdown-box-shadow;
+
+    .img-fluid {
+        // max-width: 7rem;
+        height: 100%;
+        max-width: 100%;
+        display: block;
+        margin: auto;
+    }
+
+    .title {
+        color: $color-primary;
+    }
+
+    .result-list {
+        padding: 0;
+        overflow-y: auto;
+        max-height: 40rem;
+
+        @include media-breakpoint-down(md) {
+            max-height: 15rem;
+        }
+    }
+
+    .result-item,
+    .result__search  {
+        border-bottom: solid .1rem $border-color;
+    }
+
+    .result-link {
+        background: $body-bg;
+        transition: all ease .15s;
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0.15);
+
+        &:hover {
+            box-shadow: 0 0 3rem rgba(0, 0, 0, 0.15);
+        }
+    }
+
+    .price-compare,
+    .price-total {
+        font-family: $h1-ff;
+        font-weight: $h1-fw;
+        font-size: 1.5rem;
+        line-height: 1;
+    }
+
+    .price-compare {
+        text-decoration: line-through;
+    }
+
+    .price-total {
+        color: $color-secondary;
+    }
+
+    .icon {
+        width: 2rem;
+        color: $color-secondary;
+    }
+
+    .smart-all-results {
+        background: 0 0;
+        border: 0;
+        text-decoration: underline;
+        color: $text-color;
+
+        &:hover {
+            color: $color-secondary !important;
+        }
+    }
+}
+
+.smart-search-term {
+    border-bottom: solid .1rem $border-color;
+
+    .text {
+        font-weight: 500;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate3d(0, -25%, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.header-1 .smart-search-result {
+    border: 0;
+}
+
+.smart-search-image {
+    width: 9rem;
+    height: 9rem;
+}

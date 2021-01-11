@@ -1,0 +1,218 @@
+{% set show_section = true %}
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+
+{% set title = section.settings.title ?: null %}
+{% set text = section.settings.text ?: null %}
+
+{% set title_color = section.settings.title_color ?: theme.settings.color_primary %}
+{% set text_color = section.settings.text_color ?: theme.settings.color_text %}
+
+{% set container = section.settings.container ?: 'container' %}
+{% set custom_class = section.settings.custom_class ?: null %}
+
+{% set border_size = section.settings.border_size ?: 0 %}
+{% set border_color = section.settings.border_color ?: theme.settings.color_border %}
+{% set margin_up = section.settings.margin_up ?: 0 %}
+{% set margin_dw = section.settings.margin_dw ?: 0 %}
+
+{% set background_color = section.settings.background_color ?: '#FFFFFF' %}
+{% set background_image = section.settings.background_image ?: null %}
+{% set background_section_color = section.settings.background_section_color ?: null %}
+
+{% set button_text = section.settings.button_text ?: null %}
+{% set button_url = section.settings.button_url ?: null %}
+{% set button_target = section.settings.button_target ?: null %}
+
+{% set align = section.settings.align ?: 'right' %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-lg-block' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-block d-lg-none' %}
+{% endif %}
+
+<style>
+    @media only screen and (min-width: 992px) {
+        .image-text-overlaid {
+            padding: {{ margin_up }}rem 0 {{ margin_dw }}rem 0;
+        }
+    }
+</style>
+
+{% if show_section %}
+    <div class="{{ s }} image-text-overlaid {{ custom_class }} position-relative"
+    style="
+        border-style: solid;
+        border-width: 0 0 {{ border_size }}px 0;
+        border-color: {{ border_color }};
+        background-color: {{ background_section_color }};
+    " id="{{ section.id }}">
+
+        {% if not background_image and not background_section_color %}
+            {% include 'placeholder-bg.twig' %}
+        {% endif %}
+
+        <div class="image-text-overlaid-bg {{ align }}" {% if background_image %}style="background-image: url('{{ background_image | img_url }}');"{% endif %}>
+            <img loading="lazy" src="{{ background_image | img_url }}" class="d-block d-lg-none img-fluid" alt="{{ background_image | img_url | get_filename }}">
+        </div>
+        <div class="container {% if align == 'right' %}d-lg-flex justify-content-lg-end{% endif %}">
+            <div class="row image-text-overlaid-main position-relative" style="background-color: {{ background_color }};">
+                {% if title %}
+                    <div class="col-12">
+                        <div class="mb-5">
+                            <h3 class="h1 m-0" style="color: {{ title_color }};">{{ title | raw }}</h3>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if text %}
+                    <div class="col-12">
+                        <div class="mb-5">
+                            <div class="text" style="color: {{ text_color }};">
+                                {{ text | raw }}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% if button_text %}
+                    <div class="col-12">
+                        <a class="btn" href="{{ button_url }}" {% if button_target %}target="_blank"{% endif %}>
+                            {{ button_text }}
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% schema %}
+{
+    "name": "Imagem com texto sobreposto",
+    "category": "Conteúdo",
+    "content_for_index": "1",
+    "settings": [
+        {
+            "type": "accordion",
+            "content": "Conteúdo",
+            "icon": "content"
+        },
+        {
+            "type": "text",
+            "label": "Título",
+            "id": "title"
+        }, {
+            "type": "textarea",
+            "label": "Texto",
+            "id": "text"
+        },
+        {
+            "type": "text",
+            "label": "Texto do botão",
+            "id": "button_text"
+        },{
+            "type": "url",
+            "label": "Link do botão",
+            "id": "button_url"
+        },{
+            "type": "checkbox",
+            "label": "abrir em nova aba",
+            "id": "button_target",
+            "default": 0
+        }, {
+            "type": "accordion",
+            "content": "Aparência",
+            "icon": "design"
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em dispositivos móveis",
+            "id": "hide_mobile",
+            "default": 0
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em desktop",
+            "id": "hide_desktop",
+            "default": 0
+        },{
+            "type": "separator"
+        },{
+			"type": "text",
+			"id": "custom_class",
+			"label": "Classe customizada para editar o css"
+		},{
+            "type": "select",
+            "id": "align",
+            "label": "Alinhamento da imagem",
+            "default": "left",
+            "options": [
+                {
+                    "value": "left",
+                    "label": "Esquerda"
+                },
+                {
+                    "value": "right",
+                    "label": "Direita"
+                }
+            ]
+        }, {
+            "type": "separator"
+        },{
+            "type": "color_picker",
+            "id": "title_color",
+            "label": "Cor do título"
+        }, {
+            "type": "color_picker",
+            "id": "text_color",
+            "label": "Cor do texto"
+        },{
+            "type": "color_picker",
+            "id": "background_section_color",
+            "label": "Cor de fundo da seção"
+        }, {
+            "type": "color_picker",
+            "id": "background_color",
+            "label": "Cor de fundo do texto"
+        }, {
+            "type": "color_picker",
+            "id": "border_color",
+            "label": "Cor da borda de seção"
+        },{
+            "type": "image_picker",
+            "id": "background_image",
+            "label": "Imagem de fundo da seção",
+            "info": "Recomendado: 1600x600px com até 250kb"
+        },{
+            "type": "checkbox",
+            "label": "Imagem fixa de fundo",
+            "id": "background_parallax"
+        }, {
+            "type": "range",
+            "id": "border_size",
+            "min": "0",
+            "max": "10",
+            "default": "1",
+            "label": "Espessura da borda de seção"
+        }, {
+            "type": "range",
+            "id": "margin_up",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de cima da seção"
+        }, {
+            "type": "range",
+            "id": "margin_dw",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de baixo da seção"
+        }
+    ],
+    "blocks": [
+    ]
+}
+{% endschema %}

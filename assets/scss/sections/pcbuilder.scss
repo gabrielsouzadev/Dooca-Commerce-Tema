@@ -1,0 +1,804 @@
+.pcbuilder-quantity-change,
+.pcbuilder-quantity-select,
+.pcbuilder-add-cart {
+    font-family: $h1-ff;
+    font-weight: $h1-fw;
+    font-size: 1.2rem;
+    text-transform: $h1-tt;
+    line-height: 1;
+}
+
+
+.pcbuilder-price {
+    font-family: $h1-ff;
+    font-weight: $h1-fw;
+    font-size: 1.6rem;
+    text-transform: $h1-tt;
+    color: $color-secondary;
+    line-height: 1;
+}
+
+.pcbuilder-page-title,
+.pcbuilder-page-subtitle {
+    color: $text-color-secondary;
+}
+
+.pcbuilder-page-title {
+    &:after {
+        content: '';
+        display: block;
+        width: 4rem;
+        height: .4rem;
+        background: $color-secondary;
+        margin: 1.5rem auto;
+    }
+}
+
+
+.pcbuilder-group-item {
+    background: $body-bg;
+    opacity: .7;
+    
+    &:hover {
+        cursor: not-allowed;
+    }
+
+    &>.row {
+        pointer-events: none;
+
+        &.invalid {
+            border: solid .2rem $color-error;
+            border-width: 0 .2rem .2rem .2rem;
+        }
+    }
+
+    &.selected-item,
+    &.selected-blank {
+        .pcbuilder-group {
+            background-color: $color-secondary;
+        }
+    }
+
+    &.is-active {
+        opacity: 1;
+
+        &:hover {
+            cursor: auto;
+        }
+
+        &>.row {
+            pointer-events: auto;
+        }
+    }
+}
+
+.pcbuilder-group {
+    background-color: $color-primary;
+    box-shadow: inset 0 0 0 .2rem $color-secondary;
+    min-height: 17rem;
+
+    @include media-breakpoint-down(md) {
+        min-height: auto;
+    }
+}
+
+.pcbuilder-icon {
+    svg {
+        max-width: 4.8rem;
+        max-height: 4.8rem;
+        margin: 0 auto;
+
+        @include media-breakpoint-down(md) {
+            max-width: 2.5rem;
+            max-height: 2.5rem;
+        }
+    }
+}
+
+.pcbuilder-icon,
+.pcbuilder-title {
+    color: $text-color-secondary;
+    font-family: $h1-ff;
+    font-weight: $h1-fw;
+    font-size: 1.3rem;
+    text-transform: $h1-tt;
+}
+
+.pcbuilder-price-icon {
+    width: 3rem;
+    height: 3rem;
+    color: $color-primary;
+}
+
+.pcbuilder-no-selected {
+    background: #f3f3f3;
+    width: 100%;
+    height: 100%;
+}
+
+.pcbuilder-no-image {
+    color: $gray;
+    opacity: .25;
+    min-height: 13rem;
+
+    svg {
+        max-width: 4rem;
+        max-height: 4rem;
+        margin: 0 auto;
+    }
+}
+
+.pcbuilder-total-title {
+    .p-4 {
+        border-bottom: solid .4rem $color-secondary;
+        background: $body-bg;
+    }
+
+    .h2 {
+        font-family: $h1-ff;
+        font-weight: $h1-fw;
+        font-size: 1.5rem;
+        text-transform: $h1-tt;
+    }
+}
+
+.pcbuilder-quantity-item {
+    &.disabled {
+        background: #f3f3f3;
+        max-width: 6rem;
+        margin: 0 auto;
+
+        @include media-breakpoint-down(md) {
+            margin: 0;
+        }
+
+        &:hover {
+            cursor: not-allowed;
+        }
+    }
+
+    .dc-quantity-button {
+        width: 30%;
+        border: 0;
+        background: $body-bg;
+
+        .icon {
+            display: block;
+            color: $color-secondary;
+            width: 1rem;
+            height: 1rem;
+        }
+    }
+
+    .input {
+        border: 0;
+    }
+
+    .icon {
+        display: inline-block;
+        color: $color-secondary;
+        max-width: 1.8rem;
+        max-height: 1.8rem;
+        pointer-events: none;
+    }
+
+    .pcbuilder-quantity-minus .icon {
+        max-height: .2rem;
+    }
+
+    .pcbuilder-quantity-value {
+        max-width: 6rem;
+        min-height: 4rem;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: textfield;
+        margin: 0 1rem;
+        text-align: center;
+        border: solid .1rem $border-color;
+    }
+
+    .pcbuilder-quantity-plus,
+    .pcbuilder-quantity-minus {
+        user-select: none;
+        width: 1.8rem;
+        height: 1.8rem;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+.pcbuilder-price-content,
+.pcbuilder-add-content {
+    background: $body-bg;
+}
+
+.pcbuilder-remove-item {
+    color: $color-secondary;
+    line-height: 1;
+}
+
+.pcbuilder-total>.row {
+    margin-left: -5.5px;
+}
+
+.pcbuilder-modal-select,
+.pcbuilder-modal-detail {
+    background: $body-bg;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    right: -100vw;
+    top: 0;
+    bottom: 0;
+    transition: all ease .35s;
+    z-index: 1500;
+    max-width: 120rem;
+    
+    @include media-breakpoint-up(md) {
+        width: 90rem;
+        right: -90rem;
+    }
+
+    &.open {
+        right: 0;
+
+        .d-none.position-fixed {
+            display: block !important;
+        }
+    }
+
+    .pcbuilder-quantity-item {
+        min-width: 12rem;
+    }
+
+    .pcbuilder-modal-title {
+        .h1 {
+            font-size: 1.6rem;
+            color: $color-primary;
+            letter-spacing: 0;
+        }
+    }
+
+    .pcbuilder-modal-icon {
+        background: $color-secondary;
+
+        .icon {
+            color: $text-color-secondary;
+            position: relative;
+            top: -.2rem;
+
+            svg {
+                width: 3.5rem;
+                height: 3.5rem;
+                margin: 0 auto;
+
+                @include media-breakpoint-down(md) {
+                    width: 2rem;
+                    height: 2rem;
+                }
+            }
+        }
+    }
+
+    .pcbuilder-modal-close {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 1.5rem;
+
+        @include media-breakpoint-down(md) {
+            width: 2rem;
+            height: 2rem;
+        }
+
+        .icon {
+            color: $color-primary;
+            transition: all ease .15s;
+
+            svg {
+                width: 3.5rem;
+                height: 3.5rem;
+
+                @include media-breakpoint-down(md) {
+                    width: 2rem;
+                    height: 2rem;
+                }
+            }
+        }
+
+        &:hover {
+            cursor: pointer;
+
+            .icon {
+                color: $color-secondary;
+            }
+        }
+    }
+
+    .pcbuilder-modal-filter {
+        border: solid .1rem $border-color;
+        border-width: .1rem 0;
+        background: #f3f3f3;
+    }
+
+    .pcbuilder-modal-selection {
+        border: solid .1rem $border-color;
+        width: 100%;
+        max-width: 50%;
+        min-height: 4rem;
+        background: $body-bg;
+    }
+
+    .pcbuilder-modal-selection {
+        position: relative;
+
+        select {
+            font-size: 1.3rem;
+            min-height: 4rem;
+            width: 100%;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background: 0;
+            border: 0;
+            padding: 0 1.5rem;
+            color: $text-color;
+            position: relative;
+            z-index: 10;
+        }
+
+        i {
+            position: absolute;
+            top: 50%;
+            right: 1rem;
+            color: $color-secondary;
+            transform: translateY(-50%);
+
+            svg {
+                width: 1.8rem;
+            }
+        }
+    }
+
+    .pcbuilder-modal-search {
+        height: 4rem;
+    
+        @include media-breakpoint-down(md) {
+            padding-left: .6rem;
+        }
+
+        .input {
+            min-height: 4.2rem;
+            padding: 0 1.8rem;
+            border: solid .1rem $border-color;
+            border-width: .1rem 0 .1rem .1rem;
+        }
+    }
+
+    .pcbuilder-search-button {
+        position: absolute;
+        top: .1rem;
+        right: 0;
+        background: $color-secondary;
+        width: 5.2rem;
+        height: 4rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 1;
+        transition: all ease .15s;
+
+        &:hover {
+            cursor: pointer;
+            opacity: .75;
+        }
+
+        i {
+            color: $text-color-secondary;
+
+            svg {
+                width: 2.8rem;
+                height: 2.8rem;
+                margin: 0 auto;
+
+                @include media-breakpoint-down(md) {
+                    width: 2rem;
+                    height: 2rem;
+                }
+            }
+        }
+    }
+
+    .pcbuilder-modal-noselect {
+        i {
+            color: $gray;
+            opacity: .25;
+
+            svg {
+                width: 3.2rem;
+                height: 3.2rem;
+            }
+        }
+    }
+
+    .pcbuilder-modal-items {
+        max-height: 100%;
+        overflow-y: scroll;
+        margin-right: -7.5px;
+        margin-left: -7.5px;
+    }
+
+    .pcbuilder-modal-item {
+        border-bottom: solid .1rem $border-color;
+        background: $body-bg;
+        transition: all ease .15s;
+        display: flex;
+        align-items: center;
+
+        @include media-breakpoint-up(md) {
+            min-height: 16rem;
+        }
+
+        &.active {
+            box-shadow: inset 0 0 0 .6rem $color-success;
+        }
+
+        &.no-component {
+            .pcbuilder-modal-item {
+                border-bottom: 0;
+            }
+        }
+
+        &:hover,
+        &.active {
+            cursor: pointer;
+
+            @include media-breakpoint-down(md) {
+                background: #f4f4f4;
+                box-shadow: inset 0 0 0 .6rem $color-success;
+                position: relative;
+
+                .m-icon {
+                    display: flex !important;
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    left: .5rem;
+                }
+            }
+        }
+
+        .m-icon {
+            display: none !important;
+            position: absolute;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 100%;
+            background-color: $color-success;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            i {
+                display: block;
+                width: 1.3rem;
+                height: 1.3rem;
+                color: #fff;
+            }
+        }
+    }
+
+    .pcbuilder-modal-radio {
+        position: relative;
+        width: 2.5rem;
+        height: 2.5rem;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        .input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+
+            &:checked~.checkmark:after {
+                display: block;
+            }
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
+            background: $body-bg;
+            border: solid .2rem $border-color;
+            border-radius: 50%;
+
+            &:after {
+                content: '';
+                position: absolute;
+                display: none;
+                top: -.2rem;
+                left: -.2rem;
+                width: 2.5rem;
+                height: 2.5rem;
+                border-radius: 50%;
+                background: $color-success;
+            }
+
+            i {
+                @include media-breakpoint-up(md) {
+                    width: 1.3rem;
+                    height: 1.3rem;
+                }
+            }
+        }
+    }
+
+    .pcbuilder-modal-price {
+        border-top: solid .1rem $border-color;
+        box-shadow: 0 -1.3rem 3.6rem -2.9rem rgba(0, 0, 0, 0.75);
+
+        @include media-breakpoint-up(md) {
+            min-height: 15.8rem;
+        }
+
+        .h2 {
+            font-family: $h1-ff;
+            font-weight: $h1-fw;
+            text-transform: $h1-tt;
+            font-size: 1.8rem;
+            color: $color-primary;
+        }
+    }
+
+    .pcbuilder-modal-button {
+        max-width: 12rem;
+        font-family: $h1-ff;
+        font-weight: $h1-fw;
+        font-size: 1.3rem;
+        text-transform: $h1-tt;
+        min-height: 4rem;
+
+        &.btn-outline {
+            background: 0;
+            border: solid .2rem $color-primary;
+            color: $color-primary;
+            max-height: 3rem;
+            min-height: 3rem;
+            padding: 0;
+        }
+    }
+}
+
+.pcbuilder-product-detail {
+    background: $body-bg;
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    right: -100vw;
+    top: 0;
+    bottom: 0;
+    transition: all ease .35s;
+    z-index: 1500;
+    padding: 0;
+    max-width: 120rem;
+
+    @include media-breakpoint-up(md) {
+        width: 90rem;
+        right: -90rem;
+    }
+
+    &.open {
+        right: 0;
+    }
+
+    .pcbuilder-detail-image {
+        max-width: 35rem;
+        margin: 0 auto;
+    }
+
+    .pcbuilder-modal-title {
+        .h1 {
+            font-family: $h2-ff;
+            font-weight: $h2-fw;
+            font-size: 1.3rem;
+            text-transform: $h2-tt;
+            letter-spacing: 0 !important;
+        }
+    }
+
+    .cms {
+        max-height: 25rem;
+        overflow-y: scroll;
+    }
+}
+
+.pc-builder-loader {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 200;
+
+    &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: .65;
+        background: $color-primary;
+    }
+
+    .loader {
+        @include loader();
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:after {
+            border-top-color: rgba(224, 224, 224, 0.5);
+            border-right-color: rgba(224, 224, 224, 0.5);
+            border-bottom-color: rgba(224, 224, 224, 1);
+            border-left-color: rgba(224, 224, 224, 1);
+        }
+    }
+}
+
+.pcbuilder-item-remove {
+    color: $color-secondary;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.pc-builder,
+.pcbuilder-modal-form {
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+}
+
+.pcbuilder-modal-form {
+    height: 100vh;
+}
+
+#pcbuilder-product-detail {
+    .modal__header {
+        display: none;
+    }
+
+    .modal__container {
+        max-width: 45rem;
+        width: 100%;
+        border-top: solid .4rem $color-secondary;
+    }
+
+    .pcbuilder-modal-close {
+        width: 3.2rem;
+        height: 3.2rem;
+        opacity: 1;
+        transition: all ease .15s;
+
+        &:hover {
+            opacity: .5;
+            cursor: pointer;
+        }
+
+        .icon {
+            color: $color-primary;
+        }
+    }
+
+    .pcbuilder-modal-title .h1 {
+        color: $color-primary;
+    }
+}
+
+.pcbuilder-group-invalid {
+    background-color: $color-error;
+    color: $text-color-secondary;
+
+    &.watts-font {
+        background-color: #424b54;
+    }
+
+    .icon {
+        display: block;
+        color: $text-color-secondary;
+        max-width: 1.8rem;
+        max-height: 1.8rem;
+    }
+}
+
+.modal.pcbuilder {
+    @include media-breakpoint-down(md) {
+        .modal__container {
+            margin: 0;
+        }
+
+        .pcbuilder-modal-filter {
+            select,
+            input {
+                font-size: 1.6rem;
+            }
+        }
+    }
+}
+
+.pcbuilder-group-title {
+    .img-fluid {
+        @include media-breakpoint-down(md) {
+            max-width: 2.5rem;
+            max-height: 2.5rem;
+        }
+    }
+}
+
+.pcbuilder-modal-bg {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #000;
+    opacity: .65;
+    z-index: 160;
+}
+
+.pcbuilder-modal-products {
+    padding-bottom: 26.5rem;
+
+    @include media-breakpoint-down(sm) {
+        padding-bottom: 19rem;
+    }
+
+    @include media-breakpoint-down(md) {
+        padding-bottom: 17rem;
+    }
+}
+
+.pcbuilder-modal-noitems {
+    width: 100%;
+}
+
+.pcbuilder-modal-back {
+    color: $color-primary !important;
+    background: transparent !important;
+    border: solid .2rem $color-primary;
+    font-family: $h1-ff;
+    font-weight: $h1-fw;
+    font-size: 1.3rem;
+    text-transform: $h1-tt;
+    min-height: 4rem;
+    max-height: 4.1rem;
+    transition: all ease .15s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 13rem;
+
+    &:hover {
+        cursor: pointer;
+        background: $color-primary !important;
+        color: #fff !important;
+    }
+}

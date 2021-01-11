@@ -1,0 +1,42 @@
+.product-installments {
+    color: $color-secondary;
+    opacity: 1;
+    transition: all ease-in-out .15s;
+
+    .icon {
+        max-width: 1.8rem;
+    }
+
+    &:hover {
+        opacity: .65;
+        cursor: pointer;
+    }
+
+    .text {
+        color: $color-primary;
+    }
+}
+
+.product-installments-title {
+    border-bottom: solid .2rem $color-secondary;
+}
+
+.product-installments-modal {
+    display: none;
+
+    .parcel-price {
+        font-family: $h1-ff;
+        font-weight: $h1-fw;
+        font-size: 1.4rem;
+        line-height: 1;
+        color: $color-primary;
+    }
+
+    [id^="installment-modal"] & {
+        display: block;
+    }
+
+    .loader {
+        @include loader();
+    }
+}

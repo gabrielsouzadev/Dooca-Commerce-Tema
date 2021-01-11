@@ -1,0 +1,41 @@
+{% set faqs = page.faq %}
+
+<div class="page-faq">
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<div class="cms mb-5">
+					{{ page.description | richtext | raw }}
+				</div>
+			</div>
+		</div>
+		<div class="row jutify-content-between align-items-center">
+			{% for faq in faqs %}
+				{% if faq.active %}
+					<div class="page-faq-item col-12">
+						<h3 class="h3 pt-3 pb-3 d-flex align-items-center justify-content-between">
+							{{ faq.question }}
+							<i class="icon mr-3"></i>
+						</h3>
+						<div class="page-faq-answer pt-3 pb-3">
+							{{ faq.answer | richtext | raw }}
+						</div>
+					</div>
+				{% endif %}
+			{% endfor %}
+		</div>
+	</div>
+</div>
+
+{% javascript %}
+	$(function(){
+		$('.page-faq-item').find('.h3').on('click', function() {
+
+			if(!$(this).parent().hasClass('is-active')){
+				$('.page-faq-item').removeClass('is-active');
+			}
+
+			$(this).parent().toggleClass('is-active');
+		});
+	});
+{% endjavascript %}

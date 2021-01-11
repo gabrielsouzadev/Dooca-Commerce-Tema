@@ -1,0 +1,175 @@
+{% if theme.settings.product_buy_button_type == 'direct' %}
+    <script>
+        'use strict';
+
+        var hasAjax = [];
+        var productCard = $('.product-card');
+        var searching = null;
+
+        // Hover images
+        var hover_card = function (element) {
+        
+            var img = $(element).find('.product-image img');
+
+            if ($(img).attr('data-src')) {
+                var temp_img = $(img).attr('data-src');
+            } else {
+                var temp_img = $(img).attr('src');
+            }
+
+            var img_replacement = $(img).attr('data-replacement');
+            var loader = $('<span></span>').addClass('loader image-loader').hide();
+            var hover = false;
+
+            img.before(loader);
+            var preloadImages = function (src, callback) {
+                var img = $('<img>');
+                img.attr('src', src);
+                img.on('load', function () {
+                    callback();
+                });
+            };
+
+            if (img_replacement) {
+                $(element).find('.product-image').hover(function (event) {
+
+                    if (img.data('src') != temp_img) {
+                        temp_img = img.attr('src');
+                    }
+
+                    if (img.attr('data-replacement') != img_replacement) {
+                        img_replacement = img.attr('data-replacement');
+                    }
+
+                    event.stopPropagation();
+                    hover = true;
+                    
+                    preloadImages(img_replacement, function () {
+                        if (hover) {
+                            img.attr('src', img_replacement);
+                        }
+                    });
+
+                }, function (event) {                    
+                    event.stopPropagation();
+                    hover = false;
+                    img.attr('src', temp_img);
+                });
+            }
+        };
+
+        // Get product ajax
+        var ajaxAppend = function(element, url, is_hover = false) {
+            var _this = $(element);
+            var xhr = _dcs.Xhr(url);
+
+            // Form
+            var cvForm = _this.find('.cv-form');
+            var cvAjax = _this.find('.cv-ajax');
+            var cvLoader = _this.find('.product-card-loader');
+            var cvLoaderBg = _this.find('.product-card-loader-bg');
+            var cardImage = _this.find('.product-image img');
+
+            function request() {
+                cvLoader.css('display', 'flex');
+                cvLoaderBg.fadeIn();
+
+                if (searching) {
+                    searching.abort();
+                }
+
+                searching = xhr.get({ id: 'direct' }).done(function(data) {   
+
+                    searching = null;
+
+                    var d = JSON.parse(data);
+
+                    var imageSrc = d.image1;
+                    var imageReplacement = d.image2;
+
+                    cardImage.attr('src', imageSrc);
+                    cardImage.attr('data-replacement', imageReplacement);
+
+                    _this.attr('data-grid-id', 'card-modal-' + d.grid_id);
+
+                    hover_card();
+
+                    hasAjax.push(url);
+
+                    cvLoader.fadeOut(); 
+                    cvLoaderBg.fadeOut();
+                });
+            }
+
+            if (is_hover) {
+                if (!hasAjax.includes(url)) {
+                    request();
+                 }
+            } else {
+                request();
+            }
+        };
+
+        // Events
+        productCard.each(function() {
+            var _this = $(this);
+            var cardUrl = _this.find('.product-link');
+            var url = cardUrl.attr('href');
+
+            var cvColors = _this.find('.cv-colors');
+
+            // Owl carousel options
+            var opts = {
+                items: 6,
+                loop: false,
+                nav: false,
+                dots: false,
+                autoplay: false,
+                autoHeight: true,
+                margin: 5,
+                touchDrag: true,
+                mouseDrag: true
+            };
+
+            if (window.is_mobile) {
+                opts.items = 2;
+            }
+
+            cvColors.owlCarousel(opts);
+
+            // Owl events
+            _this.on('click', '#col-prev', function(event) {   
+                event.preventDefault();
+                event.stopPropagation();
+
+                cvColors.trigger('prev.owl.carousel');
+            }); 
+
+            _this.on('click', '#col-next', function(event) {   
+                event.preventDefault();
+                event.stopPropagation();
+
+                cvColors.trigger('next.owl.carousel');
+            });
+
+            _this.on('click', '.cv-color', function(event) { 
+                event.preventDefault();
+                event.stopPropagation();
+
+                _this.find('.cv-color').removeClass('active');
+                $(this).addClass('active');
+                
+                var url = $(this).data('url');
+
+                cardUrl.attr('href', url);
+                _this.attr('data-product-url', url);
+
+                ajaxAppend(_this, url);
+            });
+        });
+
+        $('.product-card').each(function () {
+            hover_card(this);
+        });
+    </script>
+{% endif %}

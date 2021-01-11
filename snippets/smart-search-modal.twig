@@ -1,0 +1,126 @@
+{% set search_custom_img = (version) ? section.settings.search_custom_light : section.settings.search_custom %}
+
+<div class="smart-search modal-s">
+    <div class="row justify-content-center no-gutters">
+        <button class="smart-button" aria-label="Procurar produtos">
+            <i class="icon {% if section_highlight %}h-hl-color{% else %}h-sc-color{% endif %}">
+                {% if search_custom_img %}
+                   <img loading="lazy" src="{{ search_custom_img | img_url }}" alt="Search" class="img-fluid">
+                {% else %}
+                    <i class="material-icons md-36">search</i>
+                {% endif %}
+            </i>
+        </button>
+    </div>
+</div>
+
+<div class="smart-search-modal position-fixed {% if version %}version{% endif %}">
+    <div class="smart-bg h-pr-background"></div>
+    <div class="smart-form">
+        <div class="row justify-content-center">
+                <div class="d-block d-lg-none col-12">
+                    <div class="smart-header d-flex justify-content-between align-items-center">
+                        <div class="h2 m-0 d-block d-md-none">O que você procura ?</div>
+                        <div class="smart-close">
+                            <i class="icon">
+                                <i class="material-icons md-36">close</i>
+                            </i>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-none d-lg-block col-12 text-center mb-5">
+                    <div class="smart-close">
+                        <i class="icon">
+                            <i class="material-icons md-36">close</i>
+                        </i>
+                    </div>
+                </div>
+                <div class="col-12 text-center mb-4">
+                    <div class="h1 d-none d-md-block">O que você procura ?</div>
+                </div>
+            <div class="col-12">
+                <form class="position-relative form" method="get" action="{{ 'produtos' | url }}">
+                    <input name="q" type="text" class="smart-input pl-5 pr-5" placeholder="Buscar por produtos, categorias..." style="border: solid .1rem {{ color_border }};">
+                    <button type="submit" class="smart-submit">
+                        <div class="smart-search-loader"><span class="loader"></span></div>
+                        <i class="icon">
+                            {% if search_custom_img %}
+                                <img loading="lazy" src="{{ search_custom_img | img_url }}" alt="Search" class="img-fluid">
+                            {% else %}
+                                <i class="material-icons md-36">search</i>
+                            {% endif %}
+                        </i>
+                    </button>
+
+                    {% include 'smart-search-result.twig' %}
+                </form>
+            </div>
+            <div class="col-12 text-center">
+                <div class="smart-message p-4 rounded">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <b class="text">É necessário preencher o campo de busca</b>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% javascript %}
+    $(function() {
+        var modal = $('.smart-search-modal');
+        var main = $('.smart-search.modal-s');
+        var body = $('body, html');
+        var button = main.find('.smart-button');
+        var input = modal.find('.smart-input');
+        var form = modal.find('.form');
+        var message = modal.find('.smart-message');
+        var button_close = $('.smart-close');
+
+        var close = function () {
+            body.removeClass('no-scroll');
+            input.val('');
+            modal.fadeOut();
+            message.fadeOut();
+        };
+
+        button.click(function(e) {
+            e.preventDefault();
+            body.addClass('no-scroll');
+            modal.fadeIn();
+            input.focus();
+        });
+
+        $(document).keyup(function(e) {
+            if (e.keyCode === 27) {
+                close();
+            }
+        });
+
+        $(document).click(function(e) {
+            var modal_opened = body.hasClass('no-scroll');
+            var modal_form = $(e.target).closest('.smart-form').length;
+
+            if ($(e.target).closest('.smart-button').length === 1) return ;
+
+            if (modal_opened && (modal_form === 0)) {
+                close();
+            }
+        });
+
+        {# form.submit(function(e) {
+            var search_text = document.getElementsByClassName('smart-input')[2].value;
+
+            if (search_text.length <= 0) {
+                e.preventDefault;
+                message.fadeIn();
+                return false;
+            }
+        }); #}
+
+
+        button_close.click(function() {
+            close();
+        });
+    });
+{% endjavascript %}

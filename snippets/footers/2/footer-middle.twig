@@ -1,0 +1,20 @@
+<div class="footer-middle">
+    <div class="{{ container }}">
+        <div class="row justify-content-between align-items-start">
+            <div class="col-sm-12 col-md-auto col-lg-auto h-sc-color">
+                {% if section.settings.logo_dark or section.settings.logo_light %}
+                    <div class="mb-5">
+                        {% include 'header-logo.twig' with { 'max_height': logo_max_height, 'align': logo_align } %}
+                    </div>
+                {% endif %}
+                {% include 'footers/' ~ type ~ '/footer-social.twig' %}
+            </div>
+            <div class="col-sm-12 col-md-auto col-lg-auto">
+                {% include 'footer-navigation.twig' %}
+            </div>
+            <div class="col-sm-12 col-md-auto col-lg-auto">
+                {% include 'footer-contact.twig' %}
+            </div>
+        </div>
+    </div>
+</div>

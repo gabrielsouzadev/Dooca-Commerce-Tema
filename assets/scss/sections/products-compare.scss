@@ -1,0 +1,14 @@
+.products-compare{
+    .content{
+        min-width: 1205px;
+        padding: 6rem;
+        @include media-breakpoint-down(xs){
+            min-width: 950px;
+        }
+    }
+}
+@media (max-width: 940px){
+    .products-compare .content {
+        min-width: 615px;
+    }
+}

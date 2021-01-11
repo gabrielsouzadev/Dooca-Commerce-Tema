@@ -1,0 +1,46 @@
+{% set phrases = [
+    { text: 'Criar loja virtual com a plataforma Dooca Commerce', alt: 'criar loja virtual' },
+    { text: 'Criar loja online com a plataforma Dooca Commerce', alt: 'criar loja online' },
+    { text: 'Montar loja virtual com a plataforma Dooca Commerce', alt: 'montar loja virtual' },
+    { text: 'Plataforma de loja virtual Dooca Commerce', alt: 'plataforma de loja virtual' },
+    { text: 'Plataforma para loja online Dooca Commerce', alt: 'plataforma para loja online' },
+    { text: 'Plataforma para loja virtual Dooca Commerce', alt: 'plataforma para loja virtual' }
+] %}
+{% set phrase_id = section.settings.phrase_id ?: 0 %}
+{% set version = section.settings.version_phrases ?: null %}
+
+<div class="footer-logo py-5 {% if section.settings.version %}f-pr-background border-0 version{% endif %}">
+    <div class="{{ container }}">
+        <div class="row align-items-center">
+            <div class="col footer-logo-seo">
+                <h2 class="text h1 m-0">{{ page_title }}</h2>
+                
+                {% if section.settings.terms %}
+                    <div class="text mt-3">
+                        {{ section.settings.terms | raw }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-12 col-md-auto">
+                <div class="footer-logo-separator"></div>
+            </div>
+            <div class="col-12 col-md-auto">
+                <div class="mt-4 mt-md-0 pl-md-5 text-center {% if not section.settings.logo_partner %}d-lg-inline-flex algin-items-lg-center{% endif %}">
+                    <div class="d-flex align-items-center justify-content-around">
+                        <a class="footer-logo-link" aria-label="Criar loja virtual com a plataforma Dooca Commerce" href="https://www.dooca.com.br/?utm_source=lojavirtual&utm_medium={{ shop.name }}&utm_campaign=plataforma" rel="noreferrer" target="_blank" class="{% if section_secondary %}f-sc-color{% else %}f-hl-color{% endif %}" style="height: 3.25rem">
+                            <i class="footer-logo-dooca" style="height: 3rem;">
+                                {{ 'img/logo-dooca-commerce.svg' | svg }}
+                            </i>
+                        </a>
+                        {% if section.settings.logo_partner %}
+                            <a href="{{ section.settings.logo_partner_url }}" target="_blank">
+                                <img loading="lazy"  class="ml-3 img-fluid" src="{{ section.settings.logo_partner | img_url('70x40') }}" alt="{{ shop.name }}" style="max-height: 50px; max-width: 120px;">
+                            </a>
+                        {% endif %}
+                    </div>
+                    <p class="text footer-logo-text mb-0 {% if not section.settings.logo_partner %}my-lg-1 ml-lg-5 text-lg-left{% else %}mt-2{% endif %}">Criar loja virtual com a plataforma Dooca Commerce</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

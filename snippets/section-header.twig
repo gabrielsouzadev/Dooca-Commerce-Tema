@@ -1,0 +1,41 @@
+{% set container = section.settings.container ?: 'container' %}
+{% set border_size = section.settings.border_size ?: 0 %}
+{% set border_color = section.settings.border_color ?: theme.settings.color_border %}
+{% set margin_up = section.settings.margin_up ?: 0 %}
+{% set margin_dw = section.settings.margin_dw ?: 0 %}
+{% set background_color = section.settings.background_color ?: 'transparent' %}
+{% set background_image = section.settings.background_image ?: null %}
+{% set background_parallax = section.settings.background_parallax ?: null %}
+{% set custom_class = section.settings.custom_class ?: null %}
+
+<style>
+    #{{ section.id }} {
+        padding: {{ margin_up }}rem 0 {{ margin_dw }}rem 0;
+    }
+
+    @media only screen and (max-width: 992px) {
+        #{{ section.id }} {
+            padding: calc({{ margin_up }}rem / 2) 0 calc({{ margin_dw }}rem / 2) 0;
+        }
+    }
+</style>
+
+<div class="{{ name }} {{ custom_class }} {{ custom_show }} section-header-padding" id="{{ section.id }}"
+    style=" 
+        border-style: solid;
+        border-width: 0 0 {{ border_size }}px 0;
+        border-color: {{ border_color }};
+        background-color: {{ background_color }};
+        {% if background_image %}
+            background-image: url({{ background_image | img_url }});
+        {% endif %}
+        background-size: cover; 
+        background-position: center center;
+        {% if background_parallax %}
+          background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+        {% endif %}
+    ">
+    <div class="{{ container }}">
+        {% include 'section-title.twig' %}

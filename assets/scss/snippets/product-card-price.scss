@@ -1,0 +1,224 @@
+.product-card-price {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    position: relative;
+    font-style: $mn-st;
+
+    @include media-breakpoint-down(sm) {
+        margin-bottom: .5rem;
+    }
+
+    &.f-billet{
+        .billet {
+            .discount {
+                display: block;
+            }
+            .price {
+                font-family: $tx-ff;
+                font-weight: bold;
+                font-size: $h3-cs;
+                color: $color-primary;
+            }
+        }
+        .creditcard{
+            .product-price-final{
+                .discount{
+                    display: none;
+                }
+            }
+        }
+        .installments {
+            display: inline-block;
+        }
+    }
+    
+    &.f-billet-cc{
+        flex-direction: column-reverse;
+        .billet{
+            .creditcard,
+            .price {
+                font-family: $tx-ff;
+                font-weight: bold;
+                font-size: $h3-cs;
+                color: $color-primary;
+            }
+            .product-price-final{
+                .discount{
+                    display: none;
+                }
+            }
+        }
+    }
+
+    &.f-creditcard{
+        .billet{
+            order: 1;
+            margin-top: .5rem;
+            .price {
+                font-weight: normal;
+            }
+            .product-price-final{
+                .discount{
+                    display: none;
+                }
+            }
+        }
+        .creditcard {
+            order: 0;
+
+            .discount {
+                display: block;
+            }
+
+            .price {
+                font-family: $tx-ff;
+                font-weight: bold;
+                font-size: $h3-cs;
+                color: $color-primary;
+            }
+        }
+    }
+
+    &.m-only_creditcard {
+        .creditcard {
+            .discount {
+                display: inline-block;
+            }
+
+            .price {
+                font-family: $tx-ff;
+                font-weight: bold;
+                font-size: $h3-cs;
+                color: $color-primary;
+            }
+        }
+    }
+
+    &.m-billet {
+        .billet {
+            .discount {
+                display: block;
+            }
+
+            .price {
+                font-family: $tx-ff;
+                font-weight: bold;
+                font-size: $h3-cs;
+                color: $color-primary;
+            }
+        }
+    }
+
+    &.m-iconsmethods {
+        padding: 1.5rem 0;
+        justify-content: flex-start;
+        text-align: left;
+
+        @include media-breakpoint-down(sm) {
+            padding-top: 1rem;
+            padding-bottom: .5rem;
+            border-top: solid .1rem $border-color;
+        }
+
+        &:before {
+            content: '';
+            position: absolute;
+            background: $border-color;
+            height: .1rem;
+            left: -1.5rem;
+            right: -1.5rem;
+            top: 0;
+
+            @include media-breakpoint-down(md) {
+                display: none;
+            }
+        }
+
+        .icon {
+            display: inline-block;
+            margin-right: 1.5rem;
+        }
+
+        .billet,
+        .creditcard {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .billet {
+            margin-bottom: 1rem;
+
+            @include media-breakpoint-down(sm) {
+                margin-bottom: 0;
+            }
+        }
+
+        &.f-billet {
+            .creditcard {
+                align-items: center;
+            }
+        }
+
+        &.f-creditcard {
+            .creditcard {
+                margin-bottom: 1rem;
+            }
+
+            .billet {
+                margin: 0;
+                align-items: center;
+            }
+        }
+    }
+
+    &.m-final {
+        .price {
+            font-family: $tx-ff;
+            font-weight: $tx-fw;
+            font-size: $h3-cs;
+            color: $color-primary;
+        }
+    }
+
+    .price {
+        line-height: 2rem;
+    }
+
+    .discount {
+        display: block;
+        text-decoration: line-through;
+        opacity: .65;
+        font-family: $tx-ff;
+        font-size: $tx-fs;
+        color: $text-color;
+    }
+
+    .product-price-final {
+        color: $color-primary;
+
+        @include media-breakpoint-down(sm) {
+            line-height: 1.2;
+        }
+    }
+
+    .icon {
+        display: none;
+        color: $color-secondary;
+        min-width: 3rem;
+        width: 3rem;
+        height: 3rem;
+    }
+
+    .parcels,
+    .parcel-price {
+        font-weight: bold;
+    }
+
+    .billet,
+    .creditcard {
+        margin: .5rem 0;
+    }
+}

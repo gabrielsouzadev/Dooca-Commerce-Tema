@@ -1,0 +1,40 @@
+<div class="d-flex align-items-center w-100 text-left {% if quick_buy %}justify-content-end{% endif %}">
+    
+    <div class="row no-gutters align-items-center w-100 text-left {% if quick_buy %}justify-content-end{% endif %}">
+        {% if discount > 0 %}
+            <div class="col-auto mr-4">
+                <div class="product-price-discount">
+                    <span>{{ discount | currency }}</span>
+                </div>
+            </div>
+        {% endif %}
+        {% if creditcard %}
+            <div class="col-auto mr-2">
+                <div class="product-price-final">
+                    <span class="total">{{ creditcard.total | currency }}</span>
+                </div>
+            </div>
+            <div class="col-12 col-sm-auto">
+                <div class="product-price-final mt-2 mt-sm-0">
+                    <span class="text until">em até</span>
+                    <span class="text parcel">{{ creditcard.parcel | default(creditcard.parcels) }}x</span>
+                    <span class="text parcel-price">de {{ creditcard.parcel_price | currency }}</span>
+                    {% if not creditcard.has_interest and creditcard.interest <= 0 %}
+                        <span class="text interest">sem juros</span>
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <div class="col">
+                <div class="product-price-final">
+                    <span class="total">{{ product.price | currency }}</span>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+
+    
+
+    
+</div>

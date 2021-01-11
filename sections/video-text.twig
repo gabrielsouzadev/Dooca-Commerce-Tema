@@ -1,0 +1,236 @@
+{% set show_section = true %}
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-lg-block' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-block d-lg-none' %}
+{% endif %}
+
+{% if show_section %}
+    <div class="{{ s }}">
+        {% include 'section-header.twig' with { 'name': 'video-text' } %}
+
+        {% set items = section.blocks %}
+
+        {% for item in items %}
+            {% set title = item.settings.title ?: null %}
+            {% set align = item.settings.align ?: null %}
+            {% set video = item.settings.video.id ?: null %}
+            {% set video_align = item.settings.video_align ?: null %}
+            {% set description = item.settings.description ?: null %}
+
+            {% set hasContent = (title or description) ? true : false %}
+
+            {% if not hasContent %}
+                {% set video_align = 'justify-content-center' %}
+            {% endif %}
+
+            <div class="row {{ video_align }} align-items-center {% if section.settings.container != 'container-fluid'%}p-5{% endif %} {% if not loop.last %}mb-5 pb-5{% endif %}">
+                {% if hasContent %}
+                    <div class="col-12 col-md-6">
+                        <div class="{{ align }} w-100">
+                            <div class="p-5 video-text-box">
+                                {% if title %}
+                                    <h2 class="h1 m-0" style="color: {{ section.settings.title_color }}">{{ title }}</h2>
+                                {% endif %}
+
+                                {% if description %}
+                                    <div class="mt-5 text" style="color: {{ section.settings.description_color }};">
+                                        {{ description | richtext | raw }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="col-12 col-{% if hasContent %}md-6{% else %}sm-8{% endif %}">
+                    <div class="video-text-embed p-0 pl-md-2">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            {% if not video %}
+                                <div class="embed-responsive-item">
+                                    {% include 'placeholder.twig' with { icon: 'img/dc-placeholders/video.svg', flex: true } %}
+                                </div>
+                            {% endif %}
+
+                            {% if video %}
+                                <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ video }}?rel=0" allowfullscreen></iframe>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        {% endfor %}
+
+        {% include 'section-footer.twig' %}
+    </div>
+{% endif %}
+
+{% schema %}
+{
+    "name": "Texto com video",
+    "category": "Conteúdo",
+    "content_for_index": "1",
+    "settings": [
+        {
+            "type": "accordion",
+            "content": "Conteúdo",
+            "icon": "content"
+        },
+        {
+            "type": "text",
+            "label": "Título",
+            "id": "title"
+        }, {
+            "type": "text",
+            "label": "Subtítulo",
+            "id": "subtitle"
+        }, {
+            "type": "accordion",
+            "content": "Aparência",
+            "icon": "design"
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em dispositivos móveis",
+            "id": "hide_mobile",
+            "default": 0
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em desktop",
+            "id": "hide_desktop",
+            "default": 0
+        }, {
+            "type": "separator"
+        },{
+			"type": "text",
+			"id": "custom_class",
+			"label": "Classe customizada para editar o css"
+		},{
+            "type": "select",
+            "id": "container",
+            "label": "Estilo do conteúdo",
+            "default": "container",
+            "options": [
+                {
+                    "value": "container",
+                    "label": "Centralizado"
+                },
+                {
+                    "value": "container-fluid",
+                    "label": "Adaptável a largura da tela"
+                }
+            ]
+        },{
+            "type": "separator"
+        }, {
+            "type": "color_picker",
+            "id": "title_color",
+            "label": "Cor do título"
+        }, {
+            "type": "color_picker",
+            "id": "description_color",
+            "label": "Cor da descrição"
+        }, {
+            "type": "color_picker",
+            "id": "background_color",
+            "label": "Cor de fundo da seção"
+        }, {
+            "type": "color_picker",
+            "id": "border_color",
+            "label": "Cor da borda de seção"
+        },{
+            "type": "image_picker",
+            "id": "background_image",
+            "label": "Imagem de fundo da seção",
+            "info": "Recomendado: 1600x600px com até 250kb"
+        },{
+            "type": "checkbox",
+            "label": "Imagem fixa de fundo",
+            "id": "background_parallax"
+        }, {
+            "type": "range",
+            "id": "border_size",
+            "min": "0",
+            "max": "10",
+            "default": "1",
+            "label": "Espessura da borda de seção"
+        }, {
+            "type": "range",
+            "id": "margin_up",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de cima da seção"
+        }, {
+            "type": "range",
+            "id": "margin_dw",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de baixo da seção"
+        }
+    ],
+    "blocks": [
+        {
+	        "type": "image",
+			"name": "Blocos",
+	        "settings": [
+                {
+                    "type": "video_url",
+                    "id": "video",
+                    "label": "Link do vídeo no YouTube",
+                    "accept": ["youtube"],
+                    "tooltip": "Insira a URL do vídeo previamente cadastrado no YouTube."
+                }, {
+                    "type": "select",
+                    "id": "video_align",
+                    "label": "Alinhamento do video",
+                    "default": "",
+                    "options": [
+                        {
+                            "value": "flex-row-reverse",
+                            "label": "Esquerda"
+                        },
+                        {
+                            "value": "",
+                            "label": "Direita"
+                        }
+                    ]
+                }, {
+                    "type": "select",
+                    "id": "align",
+                    "label": "Alinhamento do texto",
+                    "default": "text-left",
+                    "options": [
+                        {
+                            "value": "text-left",
+                            "label": "Esquerda"
+                        },
+                        {
+                            "value": "text-right",
+                            "label": "Direita"
+                        },
+                        {
+                            "value": "text-center",
+                            "label": "Centro"
+                        }
+                    ]
+                },{
+                    "type": "text",
+                    "id": "title",
+                    "label": "Título"
+                }, {
+                    "type": "html",
+                    "id": "description",
+                    "label": "Descrição"
+                }
+            ]
+		}
+    ]
+}
+{% endschema %}

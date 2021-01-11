@@ -1,0 +1,47 @@
+{% javascript %}
+    $(function() {
+        var url = $('.newsletter-form').data('url');
+        var xhr = _dcs.Xhr(url);
+
+        window.getParamns = function (element) {
+            var data = element.serializeArray().reduce(function (obj, item) {
+                obj[item.name] = item.value;
+                return obj;
+            }, {});
+
+            return data || null;
+        };
+
+        var registerEmail = function(data) {
+            $('.footer-loader').fadeIn();
+
+            xhr.post({
+                id: 'email-capture',
+                data: data
+            }).done(function(response) {
+                $('.footer-success').fadeIn();
+                $('.footer-loader').fadeOut();
+
+                document.dispatchEvent(new CustomEvent('tracker.signUpNewsletter', {'detail': data}));
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                var errors = $('.footer-errors');
+
+                jqXHR.responseJSON.errors.map(function(item) {
+					errors.find('.text').empty();
+                    errors.find('.text').append(item);
+				});
+
+                errors.fadeIn();
+
+                $('.footer-loader').fadeOut();
+			});
+        };
+
+        $('.newsletter-form').on('submit', function (evt) {
+            evt.preventDefault();
+            var paramns = window.getParamns($(this));
+
+            registerEmail(paramns);
+        });
+    });
+{% endjavascript %}

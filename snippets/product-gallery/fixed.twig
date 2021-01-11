@@ -1,0 +1,161 @@
+{% set main_image = product.image | img_url (img_featured) %}
+{% set thumbs = product.images ?: null %}
+
+<div class="row align-items-start">
+    <div class="col-2 product-gallery-thumb">
+        <div class="row">
+            {% for thumb in thumbs %}
+                <div class="col-12 mb-4 thumb p-2 mb-2" data-image-id="{{ loop.index }}">
+                    <img class="img-fluid" src="{{ thumb.src | img_url () }}" alt="{{ thumb.src | img_url | get_filename }}" data-legend="{{ product.name }}">
+                </div>
+            {% endfor %}
+            {% if product.video %}
+                {% set product_video = product.video | video_url %}
+
+                <div class="col-12 mb-4 thumb p-2 mb-2" data-image-id="{{ thumbs|length + 1 }}">
+                    <img class="img-fluid" src="https://img.youtube.com/vi/{{ product_video.id }}/hqdefault.jpg" alt="{{ product.name }}" data-legend="{{ product.name }}">
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-10">
+        <div class="row">
+            {% for thumb in thumbs %}
+                <div class="col-12 mb-4" id="image{{ loop.index }}">
+                    <figure 
+                        class="product-gallery-main fixed w-100 position-relative"
+                        data-featured="{{ image.src | img_url (img_featured) }}"
+                        data-zoom="{{ image.src | img_url (img_zoom) }}"
+                        data-legend="{{ product.name }}"
+                    >
+                        <img class="img-fluid" src="{{ thumb.src | img_url (img_featured) }}" alt="{{ thumb.src | img_url | get_filename }}" data-legend="{{ product.name }}">
+
+                        {% if loop.first %}
+                            {% include 'product-tags.twig' %}
+                            {% app 'custom-badge' %}
+                        {% endif %}
+                    </figure>
+                </div>
+            {% endfor %}
+            {% if product.video %}
+                {% set product_video = product.video | video_url %}
+
+                <div class="col-12 mb-4" id="image{{ thumbs|length + 1 }}">
+                    <div class="product-video fixed">
+                        <div class="product-gallery-video position-relative">
+                            <div class="icon-play">
+                                <svg viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M0 34C0 15.232 15.232 0 34 0C52.768 0 68 15.232 68 34C68 52.768 52.768 68 34 68C15.232 68 0 52.768 0 34ZM47.6 34L27.2 18.7V49.3L47.6 34Z" fill="currentColor"/>
+                                </svg>
+                            </div>
+                            <img class="img-fluid" src="https://img.youtube.com/vi/{{ product_video.id }}/sddefault.jpg" alt="{{ product.name }}" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-modal">
+                    <div class="container">
+                        <div class="row align-items-center justify-content-center">
+                            <div class="col-12">
+                                <div class="video-close">
+                                    <i class="icon">{{ 'img/close.svg' | svg }}</i>
+                                </div>
+                            </div>
+                            
+                            <div class="col-8">
+                                <div class="embed-responsive embed-responsive-16by9">
+                                    <iframe allowfullscreen class="mt-5 embed-responsive-item" frameborder="0" src="https://www.youtube-nocookie.com/embed/{{ product_video.id }}?wmode=transparent&loop=1&rel=0&showinfo=0" allow="autoplay"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% javascript %}
+    $(function() {
+        var product_gallery = $('.product-gallery-thumb');
+        var product_info = $('.product-info-content');
+        var header_fixed = $('.header-fixed');
+
+        if ($('.styleheader').length > 0) {
+            header_fixed = $('.header-box');
+        }
+
+        product_info.css({
+            'position': 'sticky',
+            'top': (30 + header_fixed.height()) + 'px',
+        });
+
+        product_gallery.css({
+            'position': 'sticky',
+            'top': header_fixed.height() + 28 + 'px',
+        });
+
+        var thumbs = $('.product-gallery-main');
+
+        thumbs.gallery_p({
+            only_zoom: true
+        });
+
+        $('.thumb').click(function() {
+            $('html, body').animate({
+                scrollTop: $('#image' + $(this).data('image-id')).offset().top - 70
+            }, 1250);
+        });
+
+        var section = $('.product-gallery');
+        var modal = section.find('.video-modal').modal();
+        var close = $('.video-modal').find('.video-close');
+
+        $('body').delegate('.product-gallery-video', 'click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            modal.open();
+
+            setTimeout(function() {
+                var video = $('.video-modal');
+                var iframe = video.find('iframe');
+                var url = '';
+
+                url = new URL(iframe.attr('src'));
+                url.searchParams.set('autoplay', '1');
+
+                iframe.attr('src', url);
+                iframe.attr( 'src', function ( i, val ) { return val; });
+            }, 0);
+        });
+
+        var stopVideo = function() {
+            var video = $('.video-modal');
+            var iframe = video.find('iframe');
+            var url = '';
+
+            url = new URL(iframe.attr('src'));
+            url.searchParams.set('autoplay', '0');
+
+            iframe.attr('src', url);
+            iframe.attr( 'src', function ( i, val ) { return val; });
+        };
+
+        close.on('click', function() {
+            modal.close();
+            stopVideo();
+        });
+
+        $('.modal__container').on('click', function() {
+            modal.close();
+            stopVideo();
+        });
+        
+        $(document).keyup(function(e) {
+            if (e.key === "Escape") {
+                stopVideo();
+            }
+        });
+    });
+{% endjavascript %}

@@ -1,0 +1,206 @@
+{% set show_section = true %}
+
+{% set border_size = section.settings.border_size ?: 0 %}
+{% set border_color = section.settings.border_color ?: theme.settings.color_border %}
+{% set margin_up = section.settings.margin_up ?: 0 %}
+{% set margin_dw = section.settings.margin_dw ?: 0 %}
+{% set background_color = section.settings.background_color ?: 'transparent' %}
+{% set background_image = section.settings.background_image ?: null %}
+
+{% set button_text = section.settings.button_text ?: null %}
+{% set button_size = section.settings.button_size ?: null %}
+{% set button_url = section.settings.button_url ?: 'javascript:void(0)' %}
+{% set button_blank = section.settings.button_blank ?: '_self' %}
+{% set button_bg_color = section.settings.button_bg_color ?: theme.settings.color_primary %}
+{% set button_text_color = section.settings.button_text_color ?: '#FFFFFF' %}
+{% set custom_class = section.settings.custom_class ?: null %}
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-lg-block' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-block d-lg-none' %}
+{% endif %}
+
+{% if show_section %}
+    <div class="{{ s }} action-button {{ custom_class }}" id="{{ section.id }}"
+        style="
+            padding: {{ margin_up }}rem 0 {{ margin_dw }}rem 0;
+            border-style: solid;
+            border-width: 0 0 {{ border_size }}px 0;
+            border-color: {{ border_color }};
+            background-color: {{ background_color }};
+            {% if background_image %}
+                background-image: url({{ background_image | img_url }});
+            {% endif %}
+            background-size: cover;
+            background-position: center center;
+        ">
+        <div class="container-fluid">
+            {% include 'section-title.twig' %}
+
+            <div class="row {% if section.settings.title or section.settings.subtitle %}mt-5{% endif %}">
+                {% for item in section.blocks %}
+                    {% if item.settings.button_text %}
+                        <div class="col-12 col-md-4 col-lg text-center mt-3 mt-md-5 mt-lg-0">
+                            <a class="btn btn-{{ item.settings.button_size }}" href="{{ item.settings.button_url }}" target="{{ item.settings.button_blank }}" aria-label="{{ item.settings.button_text }}" role="button" style="background: {{ button_bg_color }}; color: {{ button_text_color }};">
+                                {{ item.settings.button_text }}
+                            </a>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% schema %}
+{
+    "name": "Botão com ação",
+    "category": "Conteúdo",
+    "content_for_index": "1",
+    "max_blocks": 6,
+    "settings": [
+        {
+            "type": "accordion",
+            "content": "Conteúdo",
+            "icon": "content"
+        },
+        {
+            "type": "text",
+            "label": "Título",
+            "id": "title"
+        }, {
+            "type": "text",
+            "label": "Subtítulo",
+            "id": "subtitle"
+        },
+        {
+            "type": "accordion",
+            "content": "Aparência",
+            "icon": "design"
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em dispositivos móveis",
+            "id": "hide_mobile",
+            "default": 0
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em desktop",
+            "id": "hide_desktop",
+            "default": 0
+        },{
+            "type": "separator"
+        },
+        {
+			"type": "text",
+			"id": "custom_class",
+			"label": "Classe customizada para editar o css"
+		},{
+            "type": "select",
+            "id": "button_size",
+            "label": "Tamanho do botão",
+            "tooltip": "Você poderá definir o tamanho que será exibido o botão",
+            "default": "",
+            "options": [{
+                    "value": "",
+                    "label": "Normal"
+                },
+                {
+                    "value": "sm",
+                    "label": "Pequeno"
+                },
+                {
+                    "value": "lg",
+                    "label": "Grande"
+                }
+            ]
+        }, {
+            "type": "separator"
+        },{
+            "type": "color_picker",
+            "id": "title_color",
+            "label": "Cor do título"
+        }, {
+            "type": "color_picker",
+            "id": "subtitle_color",
+            "label": "Cor do subtítulo"
+        }, {
+            "type": "color_picker",
+            "id": "background_color",
+            "label": "Cor de fundo da seção"
+        }, {
+            "type": "color_picker",
+            "id": "border_color",
+            "label": "Cor da borda de seção"
+        },
+        {
+            "type": "color_picker",
+            "id": "button_bg_color",
+            "label": "Cor de fundo do botão"
+        },
+        {
+            "type": "color_picker",
+            "id": "button_text_color",
+            "label": "Cor de texto do botão",
+            "default": "#FFFFFF"
+        },{
+            "type": "image_picker",
+            "id": "background_image",
+            "label": "Imagem de fundo da seção",
+            "info": "Recomendado: 1600x600px com até 250kb"
+        },{
+            "type": "checkbox",
+            "label": "Imagem fixa de fundo",
+            "id": "background_parallax"
+        }, {
+            "type": "range",
+            "id": "border_size",
+            "min": "0",
+            "max": "10",
+            "default": "1",
+            "label": "Espessura da borda de seção"
+        }, {
+            "type": "range",
+            "id": "margin_up",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de cima da seção"
+        }, {
+            "type": "range",
+            "id": "margin_dw",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de baixo da seção"
+        }
+    ],
+    "blocks": [
+        {
+            "type": "block",
+            "name": "Botão",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "button_text",
+                    "label": "Texto do botão"
+                },
+                {
+                    "type": "url",
+                    "id": "button_url",
+                    "label": "Link do botão"
+                },{
+                    "type": "checkbox",
+                    "label": "abrir em nova aba",
+                    "id": "button_blank",
+                    "default": 0
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

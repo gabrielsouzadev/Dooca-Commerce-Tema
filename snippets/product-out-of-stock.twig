@@ -1,0 +1,7 @@
+{% set msg = 'Infelizmente o estoque deste item acabou' %}
+
+<div class="product-out-of-stock text-center">
+    <button class="product-outsotck-button btn w-100 no-stock">
+        {{ theme.settings.product_buy_button_outofstock_text | default('Detalhes') }}
+    </button>
+</div>

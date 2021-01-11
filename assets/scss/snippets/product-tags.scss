@@ -1,0 +1,36 @@
+.product-tags {
+    top: 1.5rem;
+    left: 1.5rem;
+    z-index: 10;
+    font-family: $h1-ff;
+    font-weight: $h1-fw;
+}
+
+.tag-offer {
+    .tag-offer-bg {
+        line-height: 1;
+        padding: .85rem;
+        min-width: 4.6rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &.radius {
+        .tag-offer-bg {
+            border-radius: 100%;
+            min-height: 4.6rem;
+        }
+    }
+}
+
+.tag-offer,
+.tag-launch,
+.tag-shipping {
+    text-transform: uppercase;
+}
+
+.tag-pre-sale {
+    border-radius: $border-radius;
+}

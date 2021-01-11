@@ -1,0 +1,56 @@
+.product-shipping {
+    .input {
+        height: 4rem;
+        border: solid .1rem $border-color;
+    }
+
+    .btn {
+        background: $color-secondary;
+        color: $text-color-secondary;
+        height: 4rem;
+        min-width: 10rem;
+        padding: 0;
+    }
+}
+
+.product-shipping-table {
+    .h2 {
+        color: $color-primary;
+    }
+
+    tr {
+        border-bottom: solid .1rem $border-color;
+    }
+
+    tr:first-of-type {
+        th {
+            border-bottom: solid .2rem $color-secondary;
+        }
+    }
+
+    .discount {
+        text-decoration: line-through;
+        font-size: 1.3rem
+    }
+}
+
+.product-shipping-modal {
+    display: none;
+    width: 100%;
+
+    @include media-breakpoint-up(md) {
+        width: 60rem;
+    }
+
+    .modal & {
+        display: block;
+    }
+}
+
+.product-shipping-loader {
+    display: none;
+    
+    .loader {
+        @include loader();
+    }
+}

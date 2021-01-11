@@ -1,0 +1,96 @@
+{% set version = section.settings.version ?: null %}
+{% set version_fixed = section.settings.version_fixed ?: null %}
+{% set fixed_style = section.settings.fixed_type ?: null %}
+{% set menu_main = navigation[theme.sections.header.settings.menu_main] %}
+
+<div class="header-fixed {{ fixed_style }} {% if version_fixed %}version{% endif %} {% if not section_primary and version %}h-hl-background{% elseif section_primary %}h-pr-background{% endif %}">
+    <div class="{{ container }}">
+        <div class="row justify-content-between align-items-center">
+            {% if fixed_style == 'minimalist' %}
+                {% if menu_main %}
+                    <div class="col {% if shop.catalog %}col-auto{% endif %}">
+                        <a class="nav-menu d-flex align-items-center {% if section_secondary %}h-sc-color{% else %}h-pr-color{% endif %}" href="javascript:void(0)">
+                            <i class="menu-icon mr-3">
+                                <i class="{% if section_highlight %}h-hl-color{% else %}h-sc-color{% endif %} material-icons md-36">menu</i>
+                            </i>
+                            <span>MENU</span>
+                        </a>
+                    </div>
+                    <div class="col h-sc-color">
+                        {% include 'header-logo.twig' with { 'max_height': logo_max_height_fixed, 'fixed': true } %}
+                    </div>
+                {% endif %}
+
+                {% if not menu_main %}
+                    <div class="col offset-4 h-sc-color">
+                        {% include 'header-logo.twig' with { 'max_height': logo_max_height_fixed, 'fixed': true } %}
+                    </div>
+                {% endif %}
+                
+                {% if not shop.catalog %}
+                    <div class="col">
+                        <div class="d-flex align-items-center justify-content-end">
+                            {% if show_smartsearch %}
+                                <div class="mx-2">
+                                    {% include 'smart-search-modal.twig' with { 'version' : version_fixed } %}
+                                </div>
+                            {% endif %}
+                                <div class="mx-2">
+                                    {% include 'nav-user.twig' with { 'version' : version_fixed } %}
+                                </div>
+                                <div class="mx-2">
+                                    {% include 'nav-cart.twig' with { 'version' : version_fixed } %}
+                                </div>
+                        </div>
+                    </div>                
+                {% endif %}
+            {% else %}
+                {% if menu_main %}
+                    <div class="col-auto">
+                        <a class="nav-menu d-flex align-items-center {% if section_secondary %}h-sc-color{% elseif section_primary %}h-sc-color{% else %}h-pr-color{% endif %}" href="javascript:void(0)">
+                            <i class="menu-icon mr-3">
+                                <i class="{% if section_highlight %}h-hl-color{% else %}h-sc-color{% endif %} material-icons md-36">menu</i>
+                            </i>
+                            <span>MENU</span>
+                        </a>
+                    </div>
+                {% endif %}
+                {% if show_smartsearch %}
+                    <div class="col-auto h-sc-color">
+                        {% include 'header-logo.twig' with { 'max_height': logo_max_height_fixed, 'fixed': true } %}
+                    </div>
+                    <div class="col col-smartsearch">
+                        {% include 'smart-search.twig' %}
+                    </div>
+                {% else %}
+                    <div class="col {% if not menu_main %}offset-3{% endif %} h-sc-color">
+                        {% include 'header-logo.twig' with { 'max_height': logo_max_height_fixed, 'fixed': true } %}
+                    </div>
+                {% endif %}
+                {% if not shop.catalog %}
+                    <div class="col-auto">
+                        {% include 'nav-user.twig' with { 'version' : version_fixed } %}
+                    </div>
+                    <div class="col-auto">
+                        {% include 'nav-cart.twig' with { 'version' : version_fixed } %}
+                    </div>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% javascript %}
+    $(function() {
+        var header = $('.header');
+        var header_fixed = $('.header-fixed');
+
+        $(window).scroll(function() {
+            if($(this).scrollTop() > header.height()) {
+                header_fixed.addClass('is-fixed');
+            } else {
+                header_fixed.removeClass('is-fixed');
+            }
+        });
+    });
+{% endjavascript %}

@@ -1,0 +1,221 @@
+{% set brands = [] %}
+
+{% for item in components.data.showcase %}
+    {% if item.brand.name not in brands %}
+        {% set brands = brands|merge([item.brand.name]) %}
+    {% endif %}
+{% endfor %}
+
+<form class="pcbuilder-modal-form">
+    <div class="d-flex flex-column justify-content-between h-100">
+        <div class="">
+            <div class="pcbuilder-modal-title row align-items-center justify-content-start position-relative">
+                <div class="pcbuilder-modal-icon col-auto">
+                    <div class="py-3 px-2">
+                        {% if components.data.image.src %}
+                            <img src="{{ components.data.image.src }}" class="img-fluid d-block mr-4 mb-0 mb-md-4 mr-md-0" alt="{{ item.name }}">
+                        {% else %}
+                            {% set icon = 'img/dc-pc-builder/' ~ components.data.slug ~ '.svg'  %}
+                            <i class="icon">{{ icon | svg }}</i>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="col-auto">
+                    <div class="p-3">
+                        <h2 class="h1 m-0">{{ components.data.name }}</h2>
+                    </div>
+                </div>
+
+                <div class="pcbuilder-modal-close" data-modal-id="pcbuilder-group-{{ components.data.id }}">
+                    <i class="icon">{{ 'img/dc-icons/close.svg' | svg }}</i>
+                </div>
+            </div>
+            <div class="w-100">
+                <div class="pcbuilder-modal-filter row">
+                    <div class="col-12 col-md-6 p-0 pr-2">
+                        <div class="d-flex align-items-center">
+                            <div class="pcbuilder-modal-selection m-2">
+                                <select class="filter-quantity">
+                                    <option selected value="">Exibir todos</option>
+                                    {# <option value="low-price">Menor preço</option>
+                                    <option value="higher-price">Maior preço</option> #}
+                                </select>
+                                <i>{{ 'img/dc-icons/angle-down.svg' | svg }}</i>
+                            </div>
+                            <div class="pcbuilder-modal-selection my-2">
+                                <select class="filter-brands">
+                                    <option selected value="">Marcas</option>
+                                    {% for brkey, value in brands %}
+                                        <option value="{{ value }}">{{ value }}</option>
+                                    {% endfor %}
+                                </select>
+                                <i>{{ 'img/dc-icons/angle-down.svg' | svg }}</i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6 p-0">
+                        <div class="pcbuilder-modal-search position-relative mt-0 mt-md-2 mb-2 mr-2">
+                            <input class="filter-search input w-100" placeholder="Buscar por nome do produto" type="text">
+                            <div class="pcbuilder-search-button">
+                                <i><i class="material-icons md-36">search</i></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="pcbuilder-modal-products h-100">
+            <div class="pcbuilder-modal-items h-100">
+                <div class="{% if components.data.showcase|length == 0 %}d-block{% else %}d-none{% endif %} pcbuilder-modal-noitems p-5 text-center">
+                    <h2 class="h2">Ops!</h2>
+                    <p class-"text">Não encontramos nenhum produto com os filtros selecionados.</p>
+                </div>
+                {% if components.data.optional %}
+                    <div class="pcbuilder-modal-item col-12 no-component p-0 m-0">
+                        <div class="pcbuilder-modal-item py-2 py-md-4 row align-items-center w-100 no-gutters">
+                            <div class="col-1 d-none d-md-block">
+                                <div class="p-3">
+                                    <div class="d-flex align-items-center justify-content-center h-100">
+                                        <label class="pcbuilder-modal-radio m-0">
+                                            <input name="{{ components.data.slug }}" class="input" type="radio" value="{{ components.data.id }}:no-component">
+                                            <span class="checkmark">
+                                                <i>{{ 'img/dc-icons/check-bold.svg' | svg }}</i>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="row align-items-center justify-content-start h-100">
+                                    <div class="col-3">
+                                        <div class="p-3 pcbuilder-modal-noselect d-flex align-items-center justify-content-center">
+                                            <i>{{ 'img/dc-icons/ban.svg' | svg }}</i>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="p-3">
+                                            <h2 class="h2 m-0">Não selecionar componente</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2"></div>
+                        </div>
+                    </div>
+                {% endif %}
+                {% for item in components.data.showcase %}
+                    {% if item.balance > 0 and item.price > 0 %}
+                        {% set value = components.data.id ~ ':' ~ item.pc_builder_product_id ~ ':' ~ item.id ~ ':' ~ item.variation.id ~ ':1' %}
+                        <div class="pcbuilder-modal-item col-12 py-2 py-md-4 {% if item.selected %}active{% endif %}" data-brand="{{ item.brand.name }}" data-price="{{ item.price }}" data-name="{{ item.name }}">
+                            <div class="row h-100 w-100">
+                                <div class="col-1 d-none d-md-block">
+                                    <div class="d-flex align-items-center justify-content-center h-100">
+                                        <label class="pcbuilder-modal-radio m-0">
+                                            <input class="input" type="radio" name="{{ components.data.slug }}" value="{{ value }}" {% if item.selected %}checked{% endif %}>
+                                            <span class="checkmark">
+                                                <i>{{ 'img/dc-icons/check-bold.svg' | svg }}</i>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                                {% set quantity = null %}
+
+                                {% if item.selected %}
+                                    {% set quantity = components.data.quantity %}
+                                {% endif %}
+
+                                {% include 'pcbuilder/groups/selected-item.twig' with { is_modal: true, max_quantity: components.data.max_quantity, quantity: quantity } %}
+                                {% include 'pcbuilder/modals/detail.twig' with { id: item.id } %}
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="d-none position-fixed d-lg-block position-lg-absolute" style="left: 0; right: 0; bottom: 0; width: 100%; background: #fff;">
+            <div class="pcbuilder-modal-price row no-gutters align-items-center p-4 p-md-5">
+                <div class="col-12 col-md-9">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2 class="text h2">Valor Atual</h2>
+                        </div>
+                        <div class="col-12">
+                            <div class="row my-3 my-md-4">
+                                {% if components.meta.payments %}
+                                    {% for payment in components.meta.payments %}
+                                        {% if payment.method != 'manual' %}
+                                            {% if payment.method == 'billet' %}
+                                                <div class="col-6 col-md-4">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="pcbuilder-price-icon mr-3">
+                                                            {{ 'img/dc-icons/barcode.svg' | svg }}
+                                                        </i>
+
+                                                        <div class="pcbuilder-price-billet">
+                                                            <div class="pcbuilder-price m-0">
+                                                                {{ payment.installment.total | currency }}
+                                                            </div>
+                                                            <span class="text">à vista no boleto</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+
+                                            {% if payment.method == 'creditcard' %}
+                                                <div class="col-6 col-md-4">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="pcbuilder-price-icon mr-3">
+                                                            {{ 'img/dc-icons/creditcard.svg' | svg }}
+                                                        </i>
+                                                        <div class="pcbuilder-price-creditcard">
+                                                            <div class="pcbuilder-price m-0">{{ payment.installment.total | currency }}</div>
+                                                            <span class="text">em até {{ payment.installment.parcel }}x no cartão</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="col-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="pcbuilder-price-billet">
+                                                <div class="pcbuilder-price m-0">{{ components.meta.price | currency }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-3">
+                    <div class="row">
+                        <div class="col-12 text-right">
+                            <div class="d-flex align-items-center w-100 {% if components.data.position != 1 %}justify-content-between{% else %}justify-content-end{% endif %}">
+                                {% if components.data.position != 1 %}
+                                    <div class="btn w-100 pcbuilder-modal-back mr-3" data-modal-id="pcbuilder-group-{{ components.data.id }}" data-step="{{ components.data.id }}" data-optional="{% if components.data.optional %}true{% else %}false{% endif %}" data-position="{{ components.data.position }}">
+                                        <span>Voltar</span>
+                                    </div>
+                                {% endif %}
+
+                                <button class="btn w-100 pcbuilder-modal-button" type="submit" data-modal-id="pcbuilder-group-{{ components.data.id }}" data-step="{{ components.data.id }}" data-optional="{% if components.data.optional %}true{% else %}false{% endif %}" data-position="{{ components.data.position }}">
+                                    <span>Avançar</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        {% if components.data.optional %}
+                            <div class="col-12 text-right mt-3">
+                                <button class="btn btn-outline w-100 pcbuilder-modal-button mw-100" type="submit" data-modal-id="pcbuilder-group-{{ components.data.id }}" data-step="{{ components.data.id }}" data-optional="{% if components.data.optional %}true{% else %}false{% endif %}">
+                                    <span>Pular</span>
+                                </button>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

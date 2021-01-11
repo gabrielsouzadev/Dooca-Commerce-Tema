@@ -1,0 +1,18 @@
+{% set menu_footer = navigation[section.settings.menu_footer] %}
+{% set menus = menu_footer.values %}
+
+{% if menus %}
+    <div class="footer-navigation">
+        <div class="row flex-column">
+            {% for item in menus %}
+                {% if item.active %}
+                    <div class="col-auto">
+                        <a class="d-flex justify-content-center text-center d-lg-block text-lg-left {% if section_secondary %}f-sc-color{% else %}f-tx-color{% endif %}" href="{{ item.menu_type_link }}" aria-label="{{ item.name }}">
+                            <span class="text">{{ item.name }}</span>
+                        </a>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,68 @@
+{# Styles #}
+{% set style = ( not section.version ) ? 'light' : 'dark' %}
+{% set styleFixed = ( not section.version_fixed ) ? (section.version ? 'dark' : 'light') : 'dark' %}
+{% set styleMenu = ( not section.version_menu ) ? 'light' : 'dark' %}
+{% set menuBG = ( not section.menu_color_bg and styleMenu == 'light' and style == 'dark' ) ? true : false %}
+
+{# Colors  #}
+{% 
+    set colors = {
+        header: {
+            light: {
+                background: section.primary_color ?: 'white',
+                icons: section.highlight_color ?: theme.color_secondary,
+                cart: section.secondary_color ?: theme.color_highlight,
+                text: theme.color_text,
+            },
+            dark: {
+                background: section.secondary_color ?: theme.color_primary,
+                icons: section.highlight_color ?: (theme.color_secondary ?: 'white'),
+                cart: section.primary_color ?: ((section.primary_color or section.secondary_color) ? 'white' : 'white'),
+                text: section.primary_color ?: ((section.primary_color or section.secondary_color) ? 'white' : 'white')
+            }
+        },
+        menu: {
+            light: {
+                background: (menuBG) ? (section.secondary_color ?: theme.color_primary) : (section.menu_color_bg ?: (section.primary_color ?: 'white')),
+                items: (menuBG) ? (section.menu_color_bg ?: (section.primary_color ?: 'white')) : (section.menu_color ?: theme.color_primary)
+            },
+            dark: {
+                background: section.menu_color ?: theme.color_primary,
+                items: section.menu_color_bg ?: (section.primary_color ?: 'white')
+            }
+        },
+        utils: {
+            border: {
+                color: section.border_color ?: theme.color_border,
+                opacity: section.border_opacity ?: 0
+            }
+        }
+    }
+%}
+
+{# Assigns #}
+{% set headerColors = colors.header[style] %}
+{% set headerFixedcolors = colors.header[styleFixed] %}
+{% set menuColors = colors.menu[styleMenu] %}
+{% set borderColors = colors.utils['border'] %}
+
+{# Variables #}
+<style>
+    :root {
+        --header-background: {{ headerColors.background }};
+        --header-icons: {{ headerColors.icons }};
+        --header-cart: {{ headerColors.cart }};
+        --header-text: {{ headerColors.text }};
+
+        --header-fixed-background: {{ headerFixedcolors.background }};
+        --header-fixed-icons: {{ headerFixedcolors.icons }};
+        --header-fixed-cart: {{ headerFixedcolors.cart }};
+        --header-fixed-text: {{ headerFixedcolors.text }};
+
+        --menu-background: {{ menuColors.background }};
+        --menu-items: {{ menuColors.items }};
+
+        --border-color: {{ borderColors.color }};
+        --border-opacity: {{ (borderColors.opacity == 10) ? 1 : '0.' ~ borderColors.opacity}};
+    }
+</style>

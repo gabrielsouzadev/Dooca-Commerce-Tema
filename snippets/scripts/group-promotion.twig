@@ -1,0 +1,46 @@
+{% set groups = _getCustomerGroups(0)['data'] %}
+{% set customerGroup = _getCustomerGroup(customer.customer_group_id) %}
+{% set defaultGroup = [] %}
+{% set promotion = 0 %}
+
+{% for group in groups %}
+	{% if group.is_default %}
+		{% set defaultGroup = _getCustomerGroup(group.id) %}
+	{% endif %}
+{% endfor %}
+
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
+{% if (customerGroup.markup < defaultGroup.markup or customerGroup.markup > defaultGroup.markup) and not customerGroup.is_default %}
+	{% set promotion = (defaultGroup.markup - customerGroup.markup) * 100 %}
+	
+	<script defer>
+        var seal_group_discount = {{ (theme.settings.seal_group_discount) ? 'true' : 'false' }};
+        var seal_group_discount_mobile = {{ (theme.settings.seal_group_discount_mobile) ? 'true' : 'false' }};
+        var is_mobile = window.is_mobile;
+
+        if ((seal_group_discount && !is_mobile) || (seal_group_discount_mobile && is_mobile)) {
+            var promotion = {{ promotion }};
+            var group = '{{ customerGroup.name }}';
+            var product_card = $('.product-card');
+            var type = 'Desconto';
+
+            if (promotion < 0) {
+                type = 'Acréscimo'
+            }
+
+            if (promotion != 0) {
+                promotion = Math.abs(promotion);
+
+                var product_price = product_card.find('.product-card-price');
+                var html = '';
+
+                html += '<div class="product-card-group" style="background-color: {{ theme.settings.seal_group_background }};">';
+                    html += '<span style="color: {{ theme.settings.seal_group_fontcolor }};">' + type + ' de ' + promotion + '% aplicado • ' + group + '</span>';
+                html += '</div>';
+
+                product_price.append(html);
+            }
+        }
+    </script>
+{% endif %}

@@ -1,0 +1,54 @@
+.page-navigation {
+    .row {
+        transition: all .5s linear;
+
+        &.open {
+            max-height: 20rem !important;
+            overflow-y: scroll !important;
+
+            .page-navigation-icon {
+                transform: rotate(180deg);
+            }
+        }
+
+        @include media-breakpoint-down(md) {
+            border: solid .1rem $border-color;
+            border-width: .1rem .1rem 0 .1rem;
+        }
+
+        .col-12.active .page-navigation-link {
+            color: $color-secondary;
+        }
+    }
+}
+
+.page-navigation-link {
+    color: $color-primary;
+    font-family: $h2-ff;
+    font-weight: $h2-fw;
+    font-size: $h2-cs;
+    letter-spacing: $h2-cl;
+    text-transform: $h2-tt;
+    opacity: 1;
+    transition: all ease .25s;
+
+    .icon {
+        width: 1.4rem;
+
+        @include media-breakpoint-down(md) {
+            width: .9rem;
+        }
+    }
+
+    &:hover {
+        color: $color-secondary;
+    }
+}
+
+.page-navigation-icon {
+    width: 2.2rem;
+    color: $color-secondary;
+    top: 1rem;
+    right: 1.5rem;
+    transition: all .15s ease;
+}

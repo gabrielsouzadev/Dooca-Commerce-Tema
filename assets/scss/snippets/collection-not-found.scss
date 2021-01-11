@@ -1,0 +1,15 @@
+.collection-not-found {
+    @include media-breakpoint-up(md) {
+        padding: 10rem 0 !important;
+    }
+
+    .h1 {
+        letter-spacing: 0;
+        color: $color-primary;
+    }
+
+    .icon {
+        max-width: 9.4rem;
+        color: $color-secondary;
+    }
+}

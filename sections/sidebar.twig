@@ -1,0 +1,45 @@
+{% schema %}
+    {
+        "name": "Filtros de produtos",
+        "settings": [
+            {
+                "type": "header",
+                "content": "Posicionamento"
+            },
+            {
+                "type": "select",
+                "id": "filter_position",
+                "label": "Posicionamento do filtro de produtos",
+                "default":  "left",
+                "options": [
+                    {
+                        "value": "left",
+                        "label": "Esquerda"
+                    },
+                    {
+                        "value": "right",
+                        "label": "Direita"
+                    },
+                    {
+                        "value":  "top",
+                        "label": "Superior"
+                    }
+                ]
+            },
+            {
+                "type": "header",
+                "content": "Filtros de produtos"
+            }, 
+            {
+				"type": "checkbox",
+				"label": "Utilizar filtro de produto customizado",
+				"id": "sidebar_custom",
+				"default": 0
+			},
+            {
+                "type": "sidebar",
+                "id": "sidebar_ids"                
+            }
+        ]
+    }
+{% endschema %}

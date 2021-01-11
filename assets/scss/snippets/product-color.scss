@@ -1,0 +1,82 @@
+.product-color {
+    .h4 {
+        font-family: $h1-ff;
+        font-weight: $h1-fw;
+        text-transform: $h1-tt;
+        letter-spacing: $h1-cl;
+        color: $color-secondary;
+    }
+
+    .col-auto {
+        transition: all ease-in-out .25s;
+        opacity: 1;
+
+        &:hover {
+            opacity: .65;
+
+            .icon {
+                box-shadow: inset 0 0 0 .1rem $color-secondary;
+            }
+        }
+
+        &.active {
+            .icon {
+                box-shadow: inset 0 0 0 .1rem $color-secondary;
+            }
+        }
+    }
+
+    .icon {
+        padding: 2rem;
+        border-radius: $border-radius;
+        transition: all ease .15s;
+        box-shadow: inset 0 0 0 .1rem $border-color;
+    }
+
+    .owl-theme {
+        padding: 0 5rem;
+    }
+
+    .next,
+    .prev {
+        position: absolute;
+        top: 50%;
+        opacity: 1;
+        z-index: 10;
+        transition: all ease .15s;
+        margin-top: .5rem;
+
+        .nav-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 2rem;
+            height: 2rem;
+            color: $color-secondary;
+        }
+
+        &:hover {
+            cursor: pointer;
+            opacity: 0.65;
+        }
+    }
+
+    .next {
+        right: 1.5rem;
+    }
+
+    .prev {
+        left: 1.5rem;
+    }
+
+    .product-color-slider {
+        .col-12 {
+            opacity: 1;
+            transition: all ease .15s;
+
+            &:hover {
+                opacity: 0.65;
+            }
+        }
+    }
+}

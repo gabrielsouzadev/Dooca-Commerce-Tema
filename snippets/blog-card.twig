@@ -1,0 +1,32 @@
+{% set url = 'post' | url (post) %}
+{% set post_image = post.image ?: null %}
+
+<div class="blog-card" style="background-color: {{ post_background_color | default('transparent') }};">
+    <a class="d-flex" href="{{ url }}">
+        <div class="blog-card-img">
+            {% if post_image %}
+                <div class="banner position-relative d-flex align-items-center justify-content-center "> 
+                    <div class="banner-bg position-absolute" style="background-image: url({{ post_image | img_url() }});"></div> 
+                    <img loading="lazy"  src="{{ post_image | img_url('650x650+fill_ffffff') }}" alt=""> 
+                </div>
+            {% else %}
+                {% include 'placeholder.twig' with { flex: true } %}
+            {% endif %}
+        </div>
+        
+        <div class="blog-card-content">
+            <div class="blog-card-title">
+                <h3 class="h3 m-0" style="color: {{ section.settings.title_color }};">
+                    {{ post.name }}
+                </h3>
+            </div>
+
+            <div class="blog-card-separator"></div>
+
+            <div class="blog-card-footer">
+                <span class="text">Ler mais</span>
+                <span class="date">{{ post.updated_at | date('d/m/Y') }}</span>
+            </div>
+        </div>
+    </a>    
+</div>

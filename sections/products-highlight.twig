@@ -1,0 +1,255 @@
+{% set show_section = true %}
+
+{% set title = section.settings.title ?: null %}
+{% set subtitle = section.settings.subtitle ?: null %}
+
+{% set title_color = section.settings.title_color ?: theme.settings.color_primary %}
+{% set subtitle_color = section.settings.subtitle_color ?: theme.settings.color_text %}
+
+{% set background_image = section.settings.background_image ?: null %}
+{% set background_color = section.settings.background_color ?: null %}
+{% set background_product = section.settings.product_background_color ?: null %}
+
+{% set align = section.settings.align ?: 'start' %}
+
+{% set border_size = section.settings.border_size ?: 0 %}
+{% set border_color = section.settings.border_color ?: theme.settings.color_border %}
+{% set margin_section = section.settings.margin_section ?: 0 %}
+
+{% set custom_class = section.settings.custom_class ?: null %}
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-lg-block' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-block d-lg-none' %}
+{% endif %}
+
+<style>
+    @media only screen and (min-width: 921px) {
+        .products-highlight-container {
+            padding: {{ margin_section }}rem;
+        }
+    }
+
+    @media only screen and (max-width: 920) {
+        .products-highlight-container > .row {
+            padding: 1.5rem !important;
+        }
+    }
+</style>
+
+{% if show_section %}
+    <div class="{{ s }} products-highlight position-relative {{ custom_class }}" id="{{ section.id }}" style="
+        background-color: {{ background_color }};
+        border-style: solid;
+        border-width: 0 0 {{ border_size }}px 0;
+        border-color: {{ border_color }};
+    ">
+        <div class="products-highlight-background position-lg-absolute {{ align }}" {% if background_image %}style="background-image: url({{ background_image | img_url () }});"{% endif %}>
+        </div>
+
+        {% if _get.preview and not background_image and not background_color %}
+            {% include 'placeholder-bg.twig' %}
+        {% endif %}
+
+        <div class="container products-highlight-container">
+            <div class="row justify-content-center justify-content-lg-{{ align }} align-items-center">
+                <div class="products-highlight-main col-auto text-center" style="background-color: {{ background_product }};">
+                    {% if title %}
+                        <h2 class="h1" style="color: {{ title_color }};">{{ title | raw }}</h2>
+                    {% endif %}
+                    
+                    {% if subtitle %}
+                        <h3 class="h3" style="color: {{ subtitle_color }};">{{ subtitle | raw }}</h2>
+                    {% endif %}
+                    
+                    {% set section_products = section.settings.products %}
+
+                    {# {% if _get.preview and section_products|length == 1 %}
+                        {% set section_products = [{}, {}, {}, {}] %}
+                    {% endif %} #}
+
+                    {% if section_products|length >= 1 %}
+                        <div class="products-highlight-slider {% if section_products|length > 1 %}owl-carousel owl-theme{% endif %} justify-content-center">
+                            {% for product_id in section.settings.products %}
+                                {% if product_id %}
+                                    {% set product = products[product_id] %}
+                                {% endif %}
+                                
+                                {% if product or _get.preview %}
+                                    <div class="col-auto">
+                                        {% include 'product-card.twig' %}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% javascript %}
+        $(function() {
+            {% if section_products|length > 1 %}
+                const options = {
+                    autoplay: true,
+                    autoheight: true,
+                    autoplayHoverPause: true,
+                    dots: true,
+                    loop: true,
+                    items: 1
+                };
+
+                $('.products-highlight-slider').owlCarousel(options);
+            {% endif %}
+
+                var _align = '{{ align }}';
+
+                if (_align != 'center' && !window.is_mobile) {
+                    var calcDistance = function (dir) {
+                        var 
+                            section = $('#{{ section.id }}'),
+                            main = section.find('.products-highlight-main'),
+                            background = section.find('.products-highlight-background'),
+                            padding = {{ margin_section }}0,
+                            offset = main.offset().left,
+                            distance = 0,
+                            calc = '';
+
+                        if (dir == 'end') {
+                            offset = ($(window).width() + $(window).scrollLeft()) - (main.offset().left + main.outerWidth(true));
+                        }
+
+                        distance = offset + main.width() - (main.width()/2) + padding/2;
+                        calc = 'calc(100% - ' + distance + 'px)';
+
+                        background.css('width', calc);
+                    };
+
+                    $(document).ready(function() {
+                        calcDistance('{{ align }}');
+                        
+                        $(window).resize(function() {
+                            calcDistance('{{ align }}');
+                        });
+                    });
+            }
+        });
+    {% endjavascript %}
+{% endif %}
+
+{% schema %}
+{
+    "name": "Produtos com imagem de fundo",
+    "category": "Produtos",
+    "content_for_index": "1",
+    "settings": [{
+        "type": "accordion",
+        "content": "Conteúdo",
+        "icon": "content"
+    },{
+        "type": "text",
+        "label": "Título",
+        "id": "title"
+    }, {
+        "type": "text",
+        "label": "Subtítulo",
+        "id": "subtitle"
+    }, {
+        "type": "product",
+        "max": 4,
+        "id": "products",
+        "label": "Produtos"
+    }, {
+        "type": "accordion",
+        "content": "Aparência",
+        "icon": "design"
+    },{
+        "type": "checkbox",
+        "label": "Não exibir em dispositivos móveis",
+        "id": "hide_mobile",
+        "default": 0
+    },{
+        "type": "checkbox",
+        "label": "Não exibir em desktop",
+        "id": "hide_desktop",
+        "default": 0
+    },{
+        "type": "separator"
+    },{
+		"type": "text",
+		"id": "custom_class",
+		"label": "Classe customizada para editar o css"
+	}, {
+        "type": "select",
+        "label": "Alinhamento do produto",
+        "id": "align",
+        "default": "start",
+        "options": [
+            {
+                "value": "start",
+                "label": "Esquerda"
+            },
+            {
+                "value": "center",
+                "label": "Centro"
+            },
+            {
+                "value": "end",
+                "label": "Direita"
+            }
+        ]
+    }, {
+        "type": "separator"
+    },{
+        "type": "color_picker",
+        "id": "title_color",
+        "label": "Cor do título"
+    }, {
+        "type": "color_picker",
+        "id": "subtitle_color",
+        "label": "Cor do subtítulo"
+    }, {
+        "type": "color_picker",
+        "id": "background_color",
+        "label": "Cor de fundo da seção"
+    }, {
+        "type": "color_picker",
+        "id": "product_background_color",
+        "label": "Cor de fundo do produto"
+    }, {
+        "type": "color_picker",
+        "id": "border_color",
+        "label": "Cor da borda de seção"
+    },{
+        "type": "image_picker",
+        "id": "background_image",
+        "label": "Imagem de fundo da seção",
+        "info": "Recomendado: 1600x600px com até 250kb"
+    },{
+        "type": "checkbox",
+        "label": "Imagem fixa de fundo",
+        "id": "background_parallax"
+    }, {
+        "type": "range",
+        "id": "border_size",
+        "min": "0",
+        "max": "10",
+        "default": "1",
+        "label": "Espessura da borda de seção"
+    }, {
+        "type": "range",
+        "id": "margin_section",
+        "min": "0",
+        "max": "10",
+        "default": "10",
+        "label": "Margem da seção"
+    }],
+    "blocks": []
+}
+{% endschema %}

@@ -1,0 +1,14 @@
+{% set color = color ?: '#808080' %}
+{% set bg_color = background ?: '#F8F8F8' %}
+
+{% set placeholder_bg = [
+    'img/dc-placeholders-bg/bg01.svg',
+    'img/dc-placeholders-bg/bg02.svg',
+    'img/dc-placeholders-bg/bg03.svg',
+] %}
+
+<div class="placeholder-bg position-absolute" style="background-color: {{ bg_color }}; color: {{ color }};">
+    <div class="svg" style="opacity: 0.1">
+        {{ random(placeholder_bg) | svg }}
+    </div>
+</div>

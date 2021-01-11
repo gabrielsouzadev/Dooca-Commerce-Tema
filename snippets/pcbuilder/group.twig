@@ -1,0 +1,87 @@
+<div class="pcbuilder-group-item col-12 mb-2 mb-md-3 {{ type }} {% if item.is_active or loop.first %}is-active{% endif %} {% if item.is_selected %}selected-item{% endif %}" data-id="{{ item.id }}">
+    {% if item.invalid_reason|length > 0 %}
+
+        {% set reason = null %}
+
+        {% if item.invalid_reason[0] == 'COMPATIBILITY_RULE_NOT_MET' %}
+            {% set reason = 'Este componente é incompatível com as outras peças' %}
+        {% endif %}        
+        
+        {% if item.invalid_reason[0] == 'QUANTITY_RULE_NOT_MET' %}
+            {% set reason = 'A quantidade deste componente está incorreta' %}
+        {% endif %}        
+        
+        {% if item.invalid_reason[0] == 'SUM_RULE_NOT_MET' %}
+            {% set reason = 'A soma deste componente está incorreta' %}
+        {% endif %}        
+        
+        {% if item.invalid_reason[0] == 'PRODUCT_OUT_OF_STOCK' %}
+            {% set reason = 'Este componente se encontra sem estoque' %}
+        {% endif %}        
+        
+        {% if item.invalid_reason[0] == 'QUANTITY_GREATER_THAN_BALANCE' %}
+            {% set reason = 'A quantidade do componente é maior do que seu estoque' %}
+        {% endif %}
+        
+        <div class="row pcbuilder-group-invalid align-items-center">
+            <div class="col-auto">
+                <i class="icon m-3">
+                    {{ 'img/dc-icons/warning.svg' | svg }}
+                </i>
+            </div>
+            <div class="col text-center">
+                <div class="h2 m-0">
+                    {{ reason }}
+                </div>
+            </div>
+            <div class="col-auto">
+                <i class="icon m-3">
+                    {{ 'img/dc-icons/warning.svg' | svg }}
+                </i>
+            </div>
+        </div>
+    {% endif %}
+    {% if item.sum_rules[0].value > 0 %}
+        <div class="row pcbuilder-group-invalid watts-font align-items-center">
+            <div class="col-auto">
+                <i class="icon m-3">
+                    {{ 'img/dc-icons/bolt.svg' | svg }}
+                </i>
+            </div>
+            <div class="col text-center">
+                <div class="h2 m-0">
+                    Recomendamos uma fonte com {{ item.sum_rules[0].value }}W ou superior.
+                </div>
+            </div>
+            <div class="col-auto">
+                <i class="icon m-3">
+                    {{ 'img/dc-icons/bolt.svg' | svg }}
+                </i>
+            </div>
+        </div>
+    {% endif %}
+    <div class="row {% if item.invalid_reason|length > 0 %}invalid{% endif %}">
+        <div class="pcbuilder-group col-12 col-md-2 p-3 p-md-4">
+            <div class="h-100 d-flex align-items-center justify-content-center">
+                <div class="pcbuilder-group-title w-100 d-flex align-items-center d-md-block">
+                    {% if item.image.src %}
+                        <img src="{{ item.image.src }}" class="img-fluid d-block mr-4 mb-0 mb-md-4 mr-md-0" alt="{{ item.name }}">
+                    {% else %}
+                        <i class="pcbuilder-icon d-block mr-4 mb-0 mb-md-4 mr-md-0">
+                            {% set icon = 'img/dc-pc-builder/' ~ item.slug ~ '.svg' %}
+                            {{ icon | svg }}
+                        </i>
+                    {% endif %}
+                    <h3 class="pcbuilder-title m-0 text-center">{{ item.name }}</h3>
+                </div>
+            </div>
+        </div>
+        {% if item.product %}
+            {% include 'pcbuilder/groups/selected-item.twig' with { item: item.product, max_quantity: item.max_quantity, component_id: item.id , quantity: item.quantity, component_position: item.position } %}
+        {% else %}
+            {% include 'pcbuilder/groups/select.twig' with { id: item.id } %}
+        {% endif %}
+    </div>
+</div>
+
+{% include 'pcbuilder/modals/select.twig' with { id: item.id } %}

@@ -1,0 +1,21 @@
+<aside class="collection-sidebar pt-0 pt-md-4 mb-4 pr-0 pr-md-5 {% if filter_position == 'top' %}top{% endif %}">
+    <div class="{% if filter_position == 'top' %}d-block{% else %}d-block d-lg-none{% endif %} collection-sidebar__header">
+        <h2 class="h2 m-0">Filtros</h2>
+    </div>
+
+    {% if collection.banner %}
+        {% include 'filters/filter-seo.twig' %}
+    {% endif %}
+
+    {% if sidebar.active %}
+        {% include 'filters/filter-active-filters.twig' %}
+    {% endif %}
+
+    {% include 'filters/filter-categories.twig' %}
+
+    {% for key, filter in sidebar.filters %}
+        {% include 'filters/filter-' ~ key ~ '.twig' %}
+    {% endfor %}
+</aside>
+
+<span class="collection-sidebar-close"></span>

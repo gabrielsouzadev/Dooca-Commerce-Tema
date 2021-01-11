@@ -1,0 +1,43 @@
+{% set sidebarSettings = theme.sections.sidebar.settings ?: null %}
+{% set sidebarCustom = sidebarSettings.sidebar_custom ?: null %}
+{% set sidebarCustomIds = null %}
+
+{% if sidebarSettings.sidebar_ids %}
+    {% set sidebarCustomIds = sidebarSettings.sidebar_ids|split(',') %}
+{% endif %}
+
+{% set attributes = sidebar.filters.attributes %}
+
+{% if sidebarCustom and sidebarCustomIds|length > 0 %}
+    {% set attributes = [] %}
+    {% for attribute in sidebar.filters.attributes %}
+        {% if attribute.id not in sidebarCustomIds %}
+            {% set attributes = attributes|merge([attribute]) %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+{% if attributes|length >= 1 %}
+    {% for attribute in attributes %}
+        {% if attribute.values|length > 1 or attribute.filter_active %}
+        <div class="sidebar-block sidebar-block--grade sidebar-block--attributes sidebar--{{ attribute.slug }} {% if attribute.filter_active %}is-active{% endif %}">
+            <div class="sidebar-block__header">
+                <span class="close"></span>
+                <h2 class="h2 m-0">{{ attribute.name }}</h2>
+            </div>
+            <div class="sidebar-block__content" dc-scroll>
+                <ul class="sidebar-block__list">
+                    {% for item in attribute.values %}
+                        <li class="sidebar-block__item {% if item.filter_active %}is-active{% endif %}">
+                            <a href="{{ item.id | url_params ('attribute','append') }}" class="link" rel="nofollow">
+                                <span class="icon"><i>{{ 'img/dc-icons/check-bold.svg' | svg }}</i></span>
+                                <span class="text">{{ item.name }}</span>
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}

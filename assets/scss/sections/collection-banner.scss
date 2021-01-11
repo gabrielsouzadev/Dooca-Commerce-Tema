@@ -1,0 +1,27 @@
+.collection-banner {
+    border-bottom: solid .1rem $border-color;
+    
+    .text {
+        p:last-of-type {
+            margin-bottom: 0;
+        }
+    }
+
+    .h1 {
+        color: $color-primary;
+        font-size: $h1-fs;
+        
+        @include media-breakpoint-up(sm) {
+            min-width: 30rem;
+            max-width: 30rem; 
+        }
+    }
+
+    .img-fluid {
+        opacity: 0;
+    }
+}
+
+.collection-logo {
+    border: solid .1rem $border-color;
+}

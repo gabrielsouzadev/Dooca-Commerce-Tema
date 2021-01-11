@@ -1,0 +1,635 @@
+{% set type = section.settings.type ?: '1' %}
+{% set type_mobile = section.settings.type_mobile ?: '1' %}
+{% set type_cart = '1' %}
+
+{% set show_smartsearch = section.settings.show_smartsearch ?: null %}
+{% set show_header_fixed = section.settings.show_header_fixed ?: null %}
+
+{# theme variables #}
+{% set theme_border = theme.settings.color_border ?: null %}
+{% set theme_primary = theme.settings.color_primary ?: null %}
+{% set theme_secondary = theme.settings.color_secondary ?: null %}
+{% set theme_highlight = theme.settings.color_highlight ?: null %}
+{% set theme_textcolor = theme.settings.color_text ?: null %}
+
+{# section color variables #}
+{% set section_menu = section.settings.menu_color ?: null %}
+{% set section_border = section.settings.border_color ?: null %}
+{% set section_primary = section.settings.primary_color ?: null %}
+{% set section_secondary = section.settings.secondary_color ?: null %}
+{% set section_highlight = section.settings.highlight_color ?: null %}
+
+{# style color variables #}
+{% set color_primary = section_primary ?: null %}
+{% set color_secondary = section_secondary ?: null %}
+{% set color_menu = section_menu ?: null %}
+{% set color_highlight = section_highlight ?: null %}
+{% set color_border = section_border ?: theme_border %}
+{% set color_text = theme_textcolor %}
+
+{% set container = section.settings.container ?: 'container' %}
+{% set background = color_primary ?: '#FFFFFF' %}
+
+{% set version = section.settings.version ?: null %}
+{% set version_menu = section.settings.version_menu ?: null %}
+
+{% set opacity = section.settings.opacity ?: 0 %}
+{% set opacity_css = (opacity <= 9) ? '.' ~ opacity : '0' %}
+
+{% set border_opacity = section.settings.border_opacity ?: 0 %}
+{% set border_opacity_js = (border_opacity <= 9) ? '0.' ~ border_opacity : '1' %}
+
+{% set logo_max_height = section.settings.logo_maxheight ?: 150 %}
+{% set logo_max_height_mobile = section.settings.logo_maxheight_mobile ?: 50 %}
+{% set logo_max_height_fixed = section.settings.logo_maxheight_fixed ?: logo_max_height %}
+
+{% if version %}
+	{% set aux = '' %}
+	{% set aux = color_primary %}
+	{% set color_primary = color_secondary %}
+	{% set color_secondary = aux %}
+{% endif %}
+
+{% set background_menu = section.settings.menu_color_bg ?: color_primary %}
+
+{% if version_menu %}
+	{% set aux = '' %}
+	{% set aux = color_menu %}
+	{% set color_menu = background_menu %}
+	{% set background_menu = aux %}
+{% endif %}
+
+{% include 'style/header.twig' with { 'section': section.settings, 'theme': theme.settings } %}
+
+{% include 'side-menu.twig' with { 'button_class': 'nav-menu' } %}
+
+<style>
+
+	:root {
+		--color-primary:  {{ theme.settings.color_primary }};
+		--color-secondary: {{ theme.settings.color_secondary }};
+		--color-border: {{ theme.settings.color_border }};
+		--color-highlight: {{ theme.settings.color_highlight }};
+		--color-buy-button: {{ theme.settings.color_button_buy }};
+		--color-buy-button-text: {{ theme.settings.color_button_buy_text }};
+		--color-text: {{ theme.settings.color_text }};
+	}
+
+	{% set version = (section.settings.version) ? 'inverted-colors' : null %}
+
+	{% set mn_ff = (theme.settings.font_family_mn | raw) | str_to_array(true) %}
+	{% set h1_ff = (theme.settings.font_family_h1 | raw) | str_to_array(true) %}
+	{% set h2_ff = (theme.settings.font_family_h2 | raw) | str_to_array(true) %}
+	{% set h3_ff = (theme.settings.font_family_h3 | raw) | str_to_array(true) %}
+	{% set tx_ff = (theme.settings.font_family_tx | raw) | str_to_array(true) %}
+
+	{% set font_h1 = theme.settings.font_h1 %}
+	{% set font_h2 = theme.settings.font_h2 %}
+	{% set font_h3 = theme.settings.font_h3 %}
+	{% set font_menu = theme.settings.font_menu %}
+	{% set font_texts = theme.settings.font_texts %}
+
+	:root {
+		--m-ff: {{ font_menu.family ?: mn_ff.css | raw }};
+		--m-fs: {{ font_menu.font_size | default(theme.settings.mn_fs) ~ 'px'}};
+		--m-fw: {{ font_menu.font_weight | default(theme.settings.mn_fw) | replace({ 'italic': '' }) }};
+		--m-ls: {{ font_menu.letter_spacing | default(theme.settings.mn_ls) ~ 'px' }};
+		--m-tt: {{ font_menu.text_transform | default(theme.settings.mn_tt) }};
+
+		--h1-ff: {{ font_h1.family ?: h1_ff.css | raw }};
+		--h1-fs: {{ font_h1.font_size | default(theme.settings.h1_fs) ~ 'px'}};
+		--h1-fw: {{ font_h1.font_weight | default(theme.settings.h1_fw) | replace({ 'italic': '' }) }};
+		--h1-ls: {{ font_h1.letter_spacing | default(theme.settings.h1_ls) ~ 'px' }};
+		--h1-tt: {{ font_h1.text_transform | default(theme.settings.h1_tt) }};
+
+		--h2-ff: {{ font_h2.family ?: h2_ff.css | raw }};
+		--h2-fs: {{ font_h2.font_size | default(theme.settings.h2_fs) ~ 'px'}};
+		--h2-fw: {{ font_h2.font_weight | default(theme.settings.h2_fw) | replace({ 'italic': '' }) }};
+		--h2-ls: {{ font_h2.letter_spacing | default(theme.settings.h2_ls) ~ 'px' }};
+		--h2-tt: {{ font_h2.text_transform | default(theme.settings.h2_tt) }};
+
+		--h3-ff: {{ font_h3.family ?: h3_ff.css | raw }};
+		--h3-fs: {{ font_h3.font_size | default(theme.settings.h3_fs) ~ 'px'}};
+		--h3-fw: {{ font_h3.font_weight | default(theme.settings.h3_fw) | replace({ 'italic': '' }) }};
+		--h3-ls: {{ font_h3.letter_spacing | default(theme.settings.h3_ls) ~ 'px' }};
+		--h3-tt: {{ font_h3.text_transform | default(theme.settings.h3_tt) }};
+
+		--tx-ff: {{ font_texts.family ?: tx_ff.css | raw }};
+		--tx-fs: {{ font_texts.font_size | default(theme.settings.tx_fs) ~ 'px'}};
+		--tx-fw: {{ font_texts.font_weight | default(theme.settings.tx_fw) | replace({ 'italic': '' }) }};
+		--tx-ls: {{ font_texts.letter_spacing | default(theme.settings.tx_ls) ~ 'px' }};
+		--tx-tt: {{ font_texts.text_transform | default(theme.settings.tx_tt) }};
+	}
+</style>
+
+<header 
+	class="header header-{{ type }} {{ section.settings.fixed_type }} {% if show_header_fixed %}is-fixed-mobile{% endif %} {% if version %}version{% endif %} {% if not section_primary and version and not opacity %}h-hl-background{% elseif section_primary and not opacity %}h-pr-background{% endif %} {% if template != 'index' and opacity and version %}h-pr-background{% endif %}" 
+	id="{{ section.id }}"
+	{% if section.settings.header_bg %}
+		style="
+			background-image: url({{ section.settings.header_bg | img_url() }}) !important; 
+			background-repeat: no-repeat !important; 
+			background-size: cover !important;
+			background-position: center center !important;
+		"
+	{% endif %}
+>
+	<div class="d-block d-xl-none">
+		{% include 'headers-mobile/' ~ type_mobile ~'.twig' %}
+	</div>
+	
+		<div class="d-none d-xl-block">
+			{% if section.settings.fixed_type != 'styleheader' %}
+				<div class="d-none d-xl-block">
+					{% include 'header-fixed.twig' %}
+				</div>
+			{% endif %}
+
+			{% include 'header-text-top.twig' %}
+			{% include 'headers/' ~ type ~ '/header-top.twig' %}
+
+			<div class="header-box {% if version %}version{% endif %} {% if not section_primary and version and not opacity %}h-hl-background{% elseif section_primary and not opacity %}h-pr-background{% endif %} {% if template != 'index' and opacity and version %}h-pr-background{% endif %}"
+			{% if section.settings.header_bg %}
+				style="
+					background: transparent;
+				"
+			{% endif %}
+			>
+				{% include 'headers/' ~ type ~ '/header-middle.twig' %}
+				{% include 'headers/' ~ type ~ '/header-bottom.twig' %}
+			</div>
+		</div>
+</header>
+
+{% javascript %}
+	var show_header_fixed = {{ (show_header_fixed) ? 'true' : 'false' }};
+
+	if (show_header_fixed && window.is_mobile) {
+		$(function() {
+			var header_height = $('.header').height();
+			var main = $('.main-content');
+			
+			main.css('margin-top', header_height);
+		});
+	}
+
+	$(function() {
+		var header = $('.header');
+		var main = $('.main-content');
+		{# var border_color = '{{ color_border }}'; #}
+		{# var separator = $('.navigation-separator'); #}
+		{# var header_partials = $('.header-top, .header-middle, .header-bottom, .header-mobile, .header-fixed, .side-user'); #}
+		{# var header_elements = $('.nav-cart-dropdown, .menu-dropdown, .menu-dropdown-banner'); #}
+
+		{# border_color = convertHex(border_color, {{ border_opacity_js }}); #}
+		{# separator.css('color', border_color); #}
+
+		{# header_partials.css('border-bottom', 'solid .1rem ' + border_color); #}
+		{# header_elements.css('border', 'solid .1rem ' + border_color); #}
+
+		{% if opacity > 0 and template == 'index' %}
+			main.find('.section').each(function(i, e) {
+				if ((i == 0) && ($(this).hasClass('section--banners-carousel'))) {
+					
+					var section_settings_header_bg = {{ (section.settings.header_bg) ? 'true' : 'false' }};
+
+					if (window.is_mobile && section_settings_header_bg) {
+
+					} else {
+						header.addClass('header-opacity');
+					}
+
+					if (!window.is_mobile) {
+						$(this).find('.carousel-caption').css({
+							'top': header.height() + 'px',
+							'transform': 'translate(-50%, 0)'
+						});
+					}
+
+					var top = header.height() + (($(this).height() - header.height())/2);
+
+					if (!window.is_mobile) {
+						$(this).find('.carousel-control-prev').css('margin-top', top + 'px');
+						$(this).find('.carousel-control-next').css('margin-top', top + 'px');
+					}
+				}
+			});
+		{% endif %}
+
+		{# function convertHex(hex,opacity) {
+			hex = hex.replace('#','');
+			r = parseInt(hex.substring(0,2), 16);
+			g = parseInt(hex.substring(2,4), 16);
+			b = parseInt(hex.substring(4,6), 16);
+
+			result = 'rgba('+r+','+g+','+b+','+opacity+')';
+			return result;
+		}; #}
+
+		var section_settings_fixed_type = '{{ section.settings.fixed_type }}';
+
+		if (section_settings_fixed_type == 'styleheader' && !window.is_mobile) {
+			var bd = $('body');
+			var hb = $('.header-box');
+			var hb_height = parseInt(hb.height());
+			var hb_offset = parseInt(hb.offset().top);
+
+			if (hb_offset == 0) {
+				hb.addClass('is-fixed');
+				hb.addClass('h-pr-background');
+
+				{% if not opacity == 10 %}
+					bd.css('padding-top', hb_height + 'px');
+				{% endif %}
+			} else {
+				$(window).scroll(function() {
+					var scrolled = $(this).scrollTop();
+
+					if (scrolled >= (hb_offset)) {
+						hb.addClass('is-fixed');
+						hb.addClass('h-pr-background');
+
+						{% if not opacity == 10 %}
+							bd.css('padding-top', hb_height + 'px');
+						{% endif %}
+					} else {
+						hb.removeClass('is-fixed');
+						hb.removeClass('h-pr-background');
+
+						{% if not opacity == 10 %}
+							bd.css('padding-top', '0px');
+						{% endif %}
+					}
+				});
+			}
+		}
+
+		var section_settings_show_dropdowncart = {{ (section.settings.show_dropdowncart) ? 'true' : 'false' }};
+
+		if (section_settings_show_dropdowncart && window.is_mobile) {
+			var nav_cart = $('.nav-cart');
+			var nav_icon = nav_cart.find('a.d-flex');
+			var nav_drop = nav_cart.find('.nav-cart-dropdown');
+
+			nav_drop.append('<div class="nav-cart-close"></div>');
+			nav_cart.addClass('show-dropdown');
+
+			var nav_close = nav_drop.find('.nav-cart-close');
+
+			nav_icon.on('click', function(e) {
+				e.preventDefault();
+				e.stopPropagation();
+
+				nav_drop.addClass('active');
+			});
+
+			nav_close.on('click', function() {
+				nav_drop.removeClass('active');
+			});
+
+			$(document).on('click', function(e) {
+				if ($(e.target).closest('.nav-cart-dropdown').length === 0) {
+					nav_drop.removeClass('active');
+				}
+			});
+		}
+	});
+{% endjavascript %}
+
+{% if theme.settings.product_cart_add_redirect == 'not_redirect' %}
+	{% include 'cart-redirect-modal.twig' %}
+{% endif %}
+
+{% schema %}
+	{
+		"name": "Cabeçalho",
+		"settings": [
+			{
+				"type": "accordion",
+				"content": "Aparência",
+				"icon": "design"
+			},
+			{
+				"type": "select",
+				"id": "container",
+				"label": "Estilo do conteúdo",
+				"tooltip": "Você poderá definir o se o conteúdo da seção é centralizado ou adaptável a largura da tela.",
+				"default": "container",
+				"options": [
+					{
+						"value": "container",
+						"label": "Centralizado"
+					},
+					{
+						"value": "container-fluid",
+						"label": "Adaptável a largura da tela"
+					}
+				]
+			}, {
+				"type": "select",
+				"id": "type",
+				"label": "Estilo do cabeçalho",
+				"default": "1",
+				"options": [
+					{
+						"value": "1",
+						"label": "Logo na esquerda / menu abaixo"
+					},
+					{
+						"value": "2",
+						"label": "Logo centralizado / menu abaixo"
+					},
+					{
+						"value": "3",
+						"label": "Logo na esquerda / menu ao lado"
+					},
+					{
+						"value": "4",
+						"label": "Logo centralizado / menu escondido"
+					}
+				]
+			}, {
+				"type": "checkbox",
+				"label": "Inverter cores",
+				"id": "version",
+				"default": 0
+			}, {
+				"type": "checkbox",
+				"label": "Exibir a busca de produtos",
+				"id": "show_smartsearch",
+				"default": 1
+			}, {
+				"type": "range",
+				"id": "opacity",
+				"min": "0",
+				"max": "10",
+				"default": "0",
+				"label": "Transparência do cabeçalho"
+			}, {
+				"type": "range",
+				"id": "border_opacity",
+				"min": "0",
+				"max": "10",
+				"default": "0",
+				"label": "Intensidade da borda"
+			}, {
+				"type": "image_picker",
+				"id": "header_bg",
+				"label": "Imagem de fundo do cabeçalho"
+			}, {
+				"type": "color_picker",
+				"id": "primary_color",
+				"label": "Cor de fundo"
+			}, {
+				"type": "color_picker",
+				"id": "secondary_color",
+				"label": "Cor primária"
+			}, {
+				"type": "color_picker",
+				"id": "highlight_color",
+				"label": "Cor de destaque"
+			}, {
+				"type": "color_picker",
+				"id": "border_color",
+				"label": "Cor de borda"
+			}, {
+				"type": "accordion",
+				"content": "Cabeçalho mobile",
+				"icon": "mobile"
+			}, {
+				"type": "select",
+				"id": "type_mobile",
+				"label": "Estilo do cabeçalho mobile",
+				"default": "1",
+				"options": [
+					{
+						"value": "1",
+						"label": "Busca em tela cheia"
+					},
+					{
+						"value": "2",
+						"label": "Busca sempre visível"
+					}
+				]
+			}, {
+				"type": "checkbox",
+				"label": "Exibir dropdown de carrinho",
+				"id": "show_dropdowncart",
+				"default": 0
+			}, {
+				"type": "checkbox",
+				"label": "Exibir cabeçalho fixo",
+				"id": "show_header_fixed",
+				"default": 0
+			}, {
+				"type": "accordion",
+				"content": "Cabeçalho fixo",
+				"icon": "te-header"
+			}, {
+				"type": "text",
+				"id": "logo_maxheight_fixed",
+				"info": "Exemplo 150",
+				"label": "Tamanho máximo do logo do cabeçalho fixo em px",
+				"default": "80"
+			},{
+				"type": "select",
+				"id": "fixed_type",
+				"label": "Estilo do cabeçalho fixo",
+				"default": "complete",
+				"options": [
+					{
+						"value": "complete",
+						"label": "Simplificada"
+					},
+					{
+						"value": "minimalist",
+						"label": "Minimalista"
+					},
+					{
+						"value": "styleheader",
+						"label": "Estilo do cabeçalho"
+					}
+				]
+			},{
+				"type": "checkbox",
+				"label": "Inverter cores do cabeçalho fixo",
+				"id": "version_fixed",
+				"default": 0
+			}, {
+				"type": "image_picker",
+				"id": "logo_dark_fixed",
+				"label": "Logo aplicado em fundo claro",
+				"info": "Recomendamos a inserção de arquivos em vetor para web na extensão .SVG ou imagem com até 200x400px"
+			}, {
+				"type": "image_picker",
+				"id": "logo_light_fixed",
+				"label": "Logo aplicado em fundo escuro",
+				"info": "Recomendamos a inserção de arquivos em vetor para web na extensão .SVG ou imagem com até 200x400px"
+			},{
+				"type": "accordion",
+				"content": "Logos",
+				"icon": "image"
+			}, {
+				"type": "image_picker",
+				"id": "logo_dark",
+				"label": "Logo aplicado em fundo claro",
+				"info": "Recomendamos a inserção de arquivos em vetor para web na extensão .SVG ou imagem com até 200x400px"
+			}, {
+				"type": "image_picker",
+				"id": "logo_light",
+				"label": "Logo aplicado em fundo escuro",
+				"info": "Recomendamos a inserção de arquivos em vetor para web na extensão .SVG ou imagem com até 200x400px"
+			}, {
+				"type": "image_picker",
+				"id": "logo_mobile",
+				"label": "Logo mobile",
+				"info": "Recomendamos a inserção de arquivos em vetor para web na extensão .SVG ou imagem com até 200x400px"
+			}, {
+				"type": "text",
+				"id": "logo_maxheight",
+				"info": "Exemplo 150",
+				"label": "Tamanho máximo do logo em px",
+				"default": "80"
+			}, {
+				"type": "text",
+				"id": "logo_maxheight_mobile",
+				"info": "Exemplo 50",
+				"label": "Tamanho máximo do logo mobile em px",
+				"default": "50"
+			}, {
+				"type": "accordion",
+				"content": "Ícones customizados",
+				"icon": "image"
+			}, {
+				"type": "image_picker",
+				"id": "cart_custom",
+				"label": "Ícone de carrinho escuro",
+				"info": "Recomendamos a inserção de arquivos em vetor para web na extensão .SVG ou imagem com até 35x35px"
+			}, {
+				"type": "image_picker",
+				"id": "cart_custom_light",
+				"label": "Ícone de carrinho claro",
+				"info": "Recomendamos a inserção de arquivos em vetor para web na extensão .SVG ou imagem com até 35x35px"
+			}, {
+				"type": "image_picker",
+				"id": "user_custom",
+				"label": "Ícone de usuário escuro",
+				"info": "Recomendamos a inserção de arquivos em vetor para web na extensão .SVG ou imagem com até 35x35px"
+			}, {
+				"type": "image_picker",
+				"id": "user_custom_light",
+				"label": "Ícone de usuário claro",
+				"info": "Recomendamos a inserção de arquivos em vetor para web na extensão .SVG ou imagem com até 35x35px"
+			}, {
+				"type": "image_picker",
+				"id": "search_custom",
+				"label": "Ícone de busca escuro",
+				"info": "Recomendamos a inserção de arquivos em vetor para web na extensão .SVG ou imagem com até 35x35px"
+			}, {
+				"type": "image_picker",
+				"id": "search_custom_light",
+				"label": "Ícone de busca claro",
+				"info": "Recomendamos a inserção de arquivos em vetor para web na extensão .SVG ou imagem com até 35x35px"
+			}, {
+				"type": "accordion",
+				"content": "Texto de alerta",
+				"icon": "info"
+			}, {
+				"type": "checkbox",
+				"label": "Exibir texto",
+				"id": "top",
+				"default": 1
+			}, {
+				"type": "html",
+				"label": "Texto de alerta",
+				"id": "top_text",
+				"default": "Este é o módulo de aviso, com opção de <b>Bold</b>, <i>Italic</i>. <a href='' aria-label=''>Clique aqui para saber mais</a>"
+			}, {
+				"type": "color_picker",
+				"id": "top_bg",
+				"label": "Cor de fundo"
+			}, {
+				"type": "color_picker",
+				"id": "top_color",
+				"label": "Cor de texto"
+			}, {
+				"type": "accordion",
+				"content": "Menus",
+				"icon": "menu"
+			}, {
+				"type": "navigation",
+				"id": "menu_top",
+				"label": "Menu topo"
+			}, {
+				"type": "navigation",
+				"id": "menu_main",
+				"label": "Menu principal"
+			}, {
+				"type": "navigation",
+				"id": "menu_departments",
+				"label": "Menu departamentos"
+			}, {
+				"type": "checkbox",
+				"label": "Inverter cores",
+				"id": "version_menu",
+				"default": 0
+			}, {
+				"type": "checkbox",
+				"label": "Exibir o dropdown de menu em lista",
+				"id": "menu_list",
+				"default": 0
+			}, {
+				"type": "color_picker",
+				"id": "menu_color_bg",
+				"label": "Fundo do menu"
+			}, {
+				"type": "color_picker",
+				"id": "menu_color",
+				"label": "Cor do menu"
+			}, {
+				"type": "color_picker",
+				"id": "menu_color_bg_dp",
+				"label": "Fundo de departamento"
+			}, {
+				"type": "color_picker",
+				"id": "menu_color_dp",
+				"label": "Cor de departamento"
+			}
+		],
+		"blocks": [{
+	        "type": "text",
+			"name": "Informações de contato",
+	        "settings": [{
+                "type": "select",
+                "id": "type",
+                "label": "Tipo de atendimento",
+                "default": "phone",
+                "options": [{
+                        "value": "phone",
+                        "label": "Telefone"
+                    },
+                    {
+                        "value": "whatsapp",
+                        "label": "Whatsapp"
+                    },
+                    {
+                        "value": "skype",
+                        "label": "Skype"
+                    },
+                    {
+                        "value": "email",
+                        "label": "E-mail"
+                    },
+                    {
+                        "value": "schedule",
+                        "label": "Horário"
+                    }
+                ]
+            },{
+				"type": "text",
+				"id": "value",
+				"label": "Contato/Informação"
+			}]
+		}]
+	}
+{% endschema %}

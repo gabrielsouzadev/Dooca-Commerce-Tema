@@ -1,0 +1,64 @@
+.product-share {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: solid .1rem $border-color;
+
+    .h4 {
+        font-family: $h1-ff;
+        font-weight: $h1-fw;
+        text-transform: $h1-tt;
+        letter-spacing: $h1-cl;
+        color: $color-secondary;
+    }
+
+    .product-share-icon {
+        margin-top: 1.5rem;
+        width: 5.2rem;
+        height: 5.2rem;
+        border-radius: 100%;
+        border: solid .2rem transparent;
+        color: $color-primary;
+        transition: all ease .15s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &:hover {
+            border-color: $border-color;
+            cursor: pointer;
+        }
+
+        svg {
+            width: 2rem;
+            height: 2rem;
+        }
+    }
+
+    &.colors {
+        .product-share-icon {
+            color: $body-bg;
+            opacity: 1;
+            
+            &.whatsapp {
+                background-color: #35c556;
+            }
+
+            &.facebook {
+                background-color: #47639b;
+            }
+
+            &.twitter {
+                background-color: #32b2f0;
+            }
+
+            &.pinterest {
+                background-color: #d03438;
+            }
+
+            &:hover {
+                opacity: 0.75;
+                border-color: transparent;
+            }
+        }
+    }
+}

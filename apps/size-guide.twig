@@ -1,0 +1,14 @@
+{% if app.active != 0 %}
+
+    <div class="app-size-guide">
+        <div class="app-size-guide__link" data-grid-id="{{ product.grid_id }}">
+            Guia de tamanhos
+        </div>
+    </div>
+
+    <div class="size-guide-modal-{{ product.grid_id }} app-size-guide__modal" data-modal-title="{{ app.name }}">
+        <div class="app-size-guide__modal__image">
+            <img loading="lazy" class="img-fluid" src="{{ app.image | img_url }}" alt="{{ app.name }}">
+        </div>
+    </div>
+{% endif %}

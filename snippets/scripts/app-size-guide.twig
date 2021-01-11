@@ -1,0 +1,17 @@
+<script type="text/javascript" defer>
+	$(function() {
+        $('body').delegate('.app-size-guide__link','click',function() {
+            var grid_id = $(this).data('grid-id');
+            var modal = $('.size-guide-modal-' + grid_id);
+
+            if ($('#size-guide-modal-' + grid_id).length > 0) {
+                $('#size-guide-modal-' + grid_id).fadeIn();
+                $('body').addClass('modal-open');
+                $('body').css('overflow', 'hidden')
+            } else {
+                modal.modal();
+                modal.open();
+            }
+		});
+	});
+</script>

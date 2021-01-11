@@ -1,0 +1,12 @@
+.collection-seo {
+    border: solid .1rem $border-color;
+    border-width: .1rem 0;
+    
+    p:last-of-type {
+        margin-bottom: 0;
+    }
+
+&.top {
+        border-width: 0 0 .1rem;
+    }
+}

@@ -1,0 +1,50 @@
+{% if section.settings.share_product %}
+    <div class="product-share {% if section.settings.share_product_colors %}colors{% endif %}">
+        <div class="row">
+            <div class="col">
+                <div class="h4 m-0">Compartilhe este produto</div>
+            </div>
+        </div>
+        <div class="row align-items-center justify-content-start">
+            {% if section.settings.share_whatsapp %}
+                <div class="col-auto">
+                    <a href="https://api.whatsapp.com/send?text=Encontrei este produto na {{ shop.name }}: {{ product.url }}" data-action="share/whatsapp/share" target="_blank">
+                        <div class="product-share-icon whatsapp">
+                            <i>{{ 'img/ftw-whatsapp.svg' | svg }}</i>
+                        </div>
+                    </a>
+                </div>
+            {% endif %}
+
+            {% if section.settings.share_facebook %}
+                <div class="col-auto">
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ product.url }}" target="_blank">
+                        <div class="product-share-icon facebook">
+                            <i>{{ 'img/ftw-facebook.svg' | svg }}</i>
+                        </div>
+                    </a>
+                </div>
+            {% endif %}
+
+            {% if section.settings.share_twitter %}
+                <div class="col-auto">
+                    <a href="https://twitter.com/share?url={{ product.url }}" target="_blank">
+                        <div class="product-share-icon twitter">
+                            <i>{{ 'img/ftw-twitter.svg' | svg }}</i>
+                        </div>
+                    </a>
+                </div>
+            {% endif %}
+
+            {% if section.settings.share_pinterest %}
+                <div class="col-auto">
+                    <a href="http://pinterest.com/pin/create/button/?url={{ product.url }}&media={{ product.images[0].src }}" target="_blank">
+                        <div class="product-share-icon pinterest">
+                            <i>{{ 'img/ftw-pinterest.svg' | svg }}</i>
+                        </div>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}

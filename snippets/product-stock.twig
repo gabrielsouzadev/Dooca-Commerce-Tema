@@ -1,0 +1,10 @@
+{% set product_quantity = section.settings.product_quantity ?: null %}
+{% set text = (product.selling_out_of_stock) ? 'venda ilimitada.' : 'apenas <b>' ~ product.balance ~ '</b> unidades disponíveis em estoque.' %}
+
+{% if product_quantity %}
+    <div class="product-stock mt-3 p-3 text-center">
+        <span class="text">
+            Este produto possui {{ text | raw }}
+        </span>
+    </div>
+{% endif %}

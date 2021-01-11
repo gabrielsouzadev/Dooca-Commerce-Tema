@@ -1,0 +1,11 @@
+{% set page_type = page.template ?: 'page' %}
+
+{% if page.template == 'refund_policy' or page.template == 'privacy_policy'%}
+    {% set page_type = 'page' %}
+{% endif %}
+
+<article class="page-article w-100">
+    <div class="page-article-content">
+        {% include 'page/' ~ page_type ~ '.twig' %}
+    </div>
+</article>

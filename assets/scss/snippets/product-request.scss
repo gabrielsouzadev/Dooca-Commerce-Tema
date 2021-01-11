@@ -1,0 +1,44 @@
+.product-request-info {
+    border: solid .1rem $border-color;
+}
+
+[class^="product-request-modal"] {
+    display: none;
+
+    [id^="product-request-modal"] & {
+        display: block;
+    }
+
+    .form {
+        .input {
+            border: solid .1rem $border-color;
+            border-radius: $border-radius;
+        }
+
+        .btn,
+        .input {
+            height: 4rem;
+        }
+    }
+}
+
+[id^="product-request-modal"] {
+    .modal__title {
+        font-family:    $h3-ff;
+        font-weight:    $h3-fw;
+        font-size:      $h3-cs;
+        letter-spacing: $h3-cl;
+        text-transform: $h3-tt;
+    }
+}
+
+.product-request-info-kit {
+    text-decoration: underline;
+    opacity: 1;
+    transition: all ease .15s;
+
+    &:hover {
+        opacity: 0.65;
+        cursor: pointer;
+    }
+}

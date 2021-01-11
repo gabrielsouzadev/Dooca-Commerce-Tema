@@ -1,0 +1,39 @@
+<div class="breadcrumb p-3 position-relative">
+    <div class="container">
+        <div class="row justify-content-center align-items-center no-gutters">
+            <div class="col-auto">
+                <a href="{{ 'home' | url }}" class="breadcrumb-link">Página Inicial</a>
+            </div>
+            <div class="col-auto">
+                <div class="breadcrumb-arrow ml-1 mr-2">
+                    {{ 'img/arrow-right.svg' | svg }}
+                </div>
+            </div>
+            <div class="col-auto">
+                <a href="{{ 'home' | url }}/produtos" class="breadcrumb-link">Produtos</a>
+            </div>
+            <div class="col-auto">
+                <div class="breadcrumb-arrow ml-1 mr-2">
+                    {{ 'img/arrow-right.svg' | svg }}
+                </div>
+            </div>
+            {% if breadcrumb %}
+                {% for item in breadcrumb %}
+                    <div class="col-auto">
+                        <a href="{{ 'category' | url (item) }}" class="breadcrumb-link">
+                            {{ item.name }}
+                        </a>
+                    </div>
+                    <div class="col-auto">
+                        <div class="breadcrumb-arrow ml-1 mr-2">
+                            {{ 'img/arrow-right.svg' | svg }}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="col-auto">
+                <a href="{{ 'product' | url (product) }}" class="breadcrumb-link">{{ product.name }}</a>
+            </div>
+        </div>
+    </div>
+</div>

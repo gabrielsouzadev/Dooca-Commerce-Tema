@@ -1,0 +1,125 @@
+{% set email = shop.notifications['marketing.contact-form'].receivers[0] ?: shop.email %}
+
+<div class="page-contact">
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<div class="cms">
+					{{ page.description | richtext | raw }}
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-12 pt-4 pb-4 text-center">
+				<h2 class="h1 m-0 page-contact-title">Atendimento por e-mail</h2>
+			</div>
+
+			<div class="col-12 text-center">
+				<div class="cms">
+					<p>Se preferir, entre em contato direto através do e-mail
+						<a href="mailto:{{ email }}">{{ email }}</a>
+					</p>
+				</div>
+			</div>
+
+			<div class="col-12">
+				<form class="page-contact-form mt-4 position-relative" data-url="{{ 'contact' | action ('add') }}">
+					<input type="hidden" name="form_type" value="contact">
+					<input type="text" name="empty" style="display: none;">
+
+					<div class="page-contact-form-data row">
+						<div class="col-12 p-3">
+							<label class="label">Nome</label>
+							<input type="text" class="input w-100 pl-3 pr-3" name="name" required="required">
+						</div>
+						
+						<div class="col-12 p-3">
+							<label class="label">E-mail</label>
+							<input type="email" class="input w-100 pl-3 pr-3" name="email" required="required">
+						</div>
+						
+						<div class="col-12 col-md-4 p-3">
+							<label class="label">Telefone</label>
+							<input type="tel" class="input w-100 pl-3 pr-3" name="phone" data-mask="(00) 00000-0009" required="required">
+						</div>
+						
+						<div class="col-12 col-md-4 p-3">
+							<label class="label">Cidade</label>
+							<input type="text" class="input w-100 pl-3 pr-3" name="extra[Cidade]">
+						</div>
+						
+						<div class="col-12 col-md-4 p-3">
+							<label class="label">Estado</label>
+							<input type="text" class="input w-100 pl-3 pr-3" name="extra[Estado]">
+						</div>
+						
+						<div class="col-12 p-3">
+							<label class="label">Mensagem</label>
+							<textarea name="extra[Mensagem]" class="textarea w-100" required="required"></textarea>
+						</div>
+						
+						<div class="col-12 p-3">
+							<button type="submit" class="btn w-100">Enviar</button>
+						</div>
+					</div>
+
+					<div class="col-12 px-3 page-contact-form-success text-center mt-4">
+						<div class="text p-3">E-mail de contato enviado com sucesso.</div>
+					</div>
+
+					<div class="col-12 px-3 page-contact-form-errors text-center mt-4">
+						<div class="text p-3"></div>
+					</div>
+
+					<div class="page-contact-form-loader position-absolute">
+						<div class="loader"></div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+{{ 'js/lib/jquery.mask.min.js' | dc_assets_url | script_append }}
+
+{% javascript %}
+	$(function() {
+		var contact_form = $('.page-contact-form');
+		var contact_url = contact_form.data('url');
+		var xhr = _dcs.Xhr(contact_url);
+
+		contact_form.on('submit', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+
+			var data = $(this).serializeArray();
+			var loader = $(this).find('.page-contact-form-loader');
+			var errors = $(this).find('.page-contact-form-errors');
+			var success = $(this).find('.page-contact-form-success');
+
+			loader.fadeIn();
+
+			xhr.post({
+				id: 'contact',
+				data: data
+			}).done(function(res) {
+				$('.page-contact-form-data').fadeOut();
+				success.fadeIn();
+				loader.fadeOut();
+			}).fail(function(jqXHR, textStatus, errorThrown) {
+				errors.find('.text').empty();
+
+				jqXHR.responseJSON.errors.map(function(item) {
+					errors.find('.text').append(item);
+				});
+				
+				errors.fadeIn();
+
+				loader.fadeOut();
+			});
+
+			return null;
+		});
+	});
+{% endjavascript %}

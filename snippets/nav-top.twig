@@ -1,0 +1,20 @@
+{% if section.settings.menu_top %}
+    {% set menu_top = navigation[section.settings.menu_top] %}
+
+    <div class="nav-top mt-3 mb-3">
+        <div class="d-flex align-items-strech">
+            {% for item in menu_top.values %}
+                {% if item.active %}
+                    <div class="ml-4">
+                        <a class="d-flex align-items-center" href="{{ item.menu_type_link }}" class="{% if section_secondary %}h-sc-color{% else %}h-pr-color{% endif %}" title="{{ item.name }}">
+                            {% if item.image %}
+                                <i class="icon mr-3"><img loading="lazy" class="img-fluid" src="{{ item.image | img_url }}" alt="{{ item.name }}"></i>
+                            {% endif %}
+                            <span class="text h-sc-color">{{ item.name }}</span>
+                        </a>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,26 @@
+.product-badge-list{
+    background-color: white;
+    @include media-breakpoint-down(xs){
+        .col-auto{
+            width: 50%;
+            text-align: center !important;
+        }
+    }
+    .custom-badge{
+        align-items: unset !important;
+        display: none;
+        flex-direction:  unset !important;
+        position: unset;
+        max-width: 100%;
+        &.custom-badge-show{
+            align-items: center !important;
+            display: inline-flex !important;
+        }
+        .custom-badge-item{
+            margin:1rem !important;
+        }
+        .custom-badge-more{
+            display: none;
+        }
+    }
+}

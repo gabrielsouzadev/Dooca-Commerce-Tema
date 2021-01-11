@@ -1,0 +1,55 @@
+.brands {
+    .owl-theme {
+        .owl-dots {
+            margin-top: 5rem !important;
+
+            @include media-breakpoint-down(md) {
+                margin-top: 2rem !important;
+            }
+
+            .owl-dot.active span,
+            .owl-dot span {
+                background: $color-primary;
+            }
+
+            .owl-dot span {
+                opacity: .45;
+                transition: all ease .15s;
+
+                @include media-breakpoint-down(md) {
+                    width: 6px;
+                    height: 6px;
+                }
+            }
+
+            .owl-dot.active span {
+                opacity: 1;
+            }
+        }
+    }
+
+    .container,
+    .contaier-fluid {
+        @include media-breakpoint-up(md) {
+            padding: 0 8rem;
+        }
+    }
+}
+
+.brands-link {
+    opacity: 1;
+    transition: all ease .15s;
+    padding: 2rem;
+    
+    &:hover {
+        opacity: .65;
+        text-decoration: none;
+    }
+}
+
+.brands-slider {
+    .owl-stage {
+        display: flex;
+        align-items: center;
+    }
+}

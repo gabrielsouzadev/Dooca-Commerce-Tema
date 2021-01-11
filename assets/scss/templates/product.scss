@@ -1,0 +1,7 @@
+.product {
+    .container {
+        @include media-breakpoint-down(md) {
+            padding: 0 2rem;
+        }
+    }
+}

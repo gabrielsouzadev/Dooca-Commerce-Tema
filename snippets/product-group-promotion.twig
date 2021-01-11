@@ -1,0 +1,36 @@
+{% set groups = _getCustomerGroups(0)['data'] %}
+{% set customerGroup = _getCustomerGroup(customer.customer_group_id) %}
+{% set defaultGroup = [] %}
+{% set promotion = 0 %}
+
+{% for group in groups %}
+	{% if group.is_default %}
+		{% set defaultGroup = _getCustomerGroup(group.id) %}
+	{% endif %}
+{% endfor %}
+
+<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
+{% if theme.settings.seal_group_discount and theme.settings.seal_group_discount_mobile %}
+    {% set c = 'd-inline-flex' %}
+{% elseif theme.settings.seal_group_discount %}
+    {% set c = 'd-none d-lg-inline-flex' %}
+{% elseif theme.settings.seal_group_discount_mobile %}
+    {% set c = 'd-inline-flex d-lg-none' %}
+{% endif %}
+
+{% if (customerGroup.markup < defaultGroup.markup or customerGroup.markup > defaultGroup.markup) and not customerGroup.is_default %}
+	{% set promotion = (defaultGroup.markup - customerGroup.markup) * 100 %}
+    
+    {% set type = 'Desconto' %}
+
+    {% if promotion < 0 %}
+        {% set type = 'Acréscimo' %}
+    {% endif %}
+
+    {% if promotion != 0 %}
+        <div class="{{ c }} product-card-group mb-5 w-100 mt-0 p-4 d-flex mw-100" style="background-color: {{ theme.settings.seal_group_background }}; font-size: 1.4rem">
+            <span style="color: {{ theme.settings.seal_group_fontcolor }};">{{ type }} de {{ promotion|abs }}% aplicado • {{ customerGroup.name }}</span>
+        </div>
+    {% endif %}
+{% endif %}

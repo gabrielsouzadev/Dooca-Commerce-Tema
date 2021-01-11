@@ -1,0 +1,399 @@
+{% set show_section = true %}
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-lg-block' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-block d-lg-none' %}
+{% endif %}
+
+{% set review_background = section.settings.review_background ?: null %}
+{% set review_color = section.settings.review_color ?: null %}
+{% set review_client_color = section.settings.review_client_color ?: null %}
+{% set review_star_color = section.settings.review_star_color ?: theme.settings.color_secondary %}
+{% set prev_next_color = section.settings.prev_next_color ?: null %}
+
+{% if show_section %}
+    <div class="{{ s }}">
+        {% include 'section-header.twig' with { 'name': 'reviews-' ~ section.id } %}
+
+            {% set items = section.blocks %}
+
+            {% set rpl = section.settings.rpl ?: 1 %}
+            {% set rpl_mobile = section.settings.rpl_mobile ?: 1 %}
+
+            {% set blocks = section.blocks|length %}
+            {% set carousel = (items|length > 1) ? true : null %}
+            
+            {% set show_quotes = (rpl == 1) ? true : null %}
+
+            <div class="row no-gutters align-items-center justify-content-center mt-5">
+                {% if carousel %}
+                    <div class="col-1 d-none d-md-block">
+                        <div class="reviews-prev" style="color: {{ prev_next_color }};">
+                            <i>{{ 'img/reviews/arrow-left.svg' | svg }}</i>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="{% if carousel %}col-10{% else %}col-12{% endif %}">
+                    <div class="reviews-slider owl-carousel owl-theme" id="reviews-content-{{ section.id }}">
+                        {% for item in items %}
+                            {% set image = item.settings.image ?: null %}
+                            {% set client = item.settings.client ?: null %}
+                            {% set description = item.settings.description ?: null %}                        
+                            {% set star_rating = item.settings.star_rating ?: '6' %}
+
+                            {% if not client %}
+                                {% set client = 'Nome do Cliente' %}
+                            {% endif %}
+
+                            {% if not description %}
+                                {% set description = '<p>Essa loja virtual é fantástica</p><p>Ótimo atendimento e entrega no prazo, muito bom!</p><p>Recomendo!</p>' %}
+                            {% endif %}
+
+                            <div class="review text-center w-100 px-0 px-xl-4">
+                                <div class="review-content {% if not image %}mt-0{% endif %} px-3 px-xl-5" style="background-color: {{ review_background }};color: {{ review_color }};">
+                                    <div class="row no-gutters">
+                                        
+                                        {% if show_quotes %}
+                                            <div class="d-none d-lg-block col-1">
+                                                <div class="d-flex w-100 h-100 justify-content-center align-items-start pt-5">
+                                                    <div class="review-quote">
+                                                        <i class="icon d-block" style="color: {{ section.settings.quote_color }}">{{ 'img/reviews/quote-left.svg' | svg }}</i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        
+                                        <div class="{% if show_quotes %}col-10{% else %}col-12{% endif %}">
+                                            <div class="p-5">
+                                                {% if image %}
+                                                    <div class="review-image cover d-inline-block rounded-circle mb-5" style="background-image:url('{{ image | img_url ('200x200') }}');"></div>
+                                                {% endif %}
+                                                {% if star_rating > 1 %}
+                                                    <div class="review-stars mb-5">
+                                                        <div class="row no-gutters justify-content-center">
+                                                            {% for i in 1 .. 5 %}
+                                                                {% set star = (star_rating >= i + 1 ? "img/dc-icons/star-fill.svg" : "img/dc-icons/star.svg") %}
+                                                                
+                                                                <div class="col-auto mx-2">
+                                                                    <i class="icon icon-star d-flex" style="color: {{ review_star_color }};">{{ star | svg }}</i>
+                                                                </div>
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                <div class="review-description mb-5">{{ description | richtext | raw }}</div>
+                                                <div class="review-client"><h3 class="h3 mb-0" style="color: {{ review_client_color }};"><b>{{ client }}</b></h3></div>
+                                            </div>
+                                        </div>
+
+                                        {% if show_quotes %}
+                                            <div class="d-none d-lg-block col-1">
+                                                <div class="d-flex w-100 h-100 justify-content-center align-items-end pb-5">
+                                                    <div class="review-quote">
+                                                        <i class="icon d-block" style="color: {{ section.settings.quote_color }}">{{ 'img/reviews/quote-right.svg' | svg }}</i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% endfor %}
+                    </div>
+                </div>
+                {% if carousel %}
+                    <div class="col-1 d-none d-md-block">
+                        <div class="reviews-next" style="color: {{ prev_next_color }};">
+                            <i>{{ 'img/reviews/arrow-right.svg' | svg }}</i>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <style>
+                .review .review-content{
+                    margin-top: 100px;
+                }
+                .review .review-image{
+                    height: 200px;
+                    width: 200px;
+                    margin-top: -130px;
+                }
+                .review .review-stars .icon.icon-star svg{
+                    height: 1.8rem;
+                    width: 1.8rem;
+                }
+                .review .review-description * {
+                    line-height: 2;
+                    margin: 0;
+                }
+                .review .review-quote .icon{
+                    color: #ccc;
+                }
+                .cover{
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                }
+            </style>
+
+        {% include 'section-footer.twig' %}
+    </div>
+
+    {% javascript %}
+        $(function() {
+            var section = $('#reviews-content-{{ section.id }}');
+            var prev = $('.reviews-{{ section.id }}').find('.reviews-prev');
+            var next = $('.reviews-{{ section.id }}').find('.reviews-next');
+
+            var items = {{ rpl }};
+            var dots = false;
+
+            if (window.is_mobile) {
+                items = {{ rpl_mobile }};
+                dots = true;
+            }
+
+            var owl = section.owlCarousel({
+                autoheight: true,
+                dots: false,
+                items: items,
+                {% if carousel %}
+                    loop: true,
+                {% endif %}
+                    dots: dots,
+                responsive : {
+                    0 : {
+                        items: 1
+                    },
+                    480 : {
+                        items: {{ rpl_mobile }}
+                    },
+                    769 : {
+                        items: {{ rpl }}
+                    }
+                }
+            });
+
+            prev.click(function() {
+                owl.trigger('prev.owl.carousel', [300]);
+            });
+
+            next.click(function() {
+                owl.trigger('next.owl.carousel', [300]);
+            });
+        });
+    {% endjavascript %}
+
+{% endif %}
+
+{% schema %}
+    {
+        "name": "Depoimentos",
+        "category": "Conteúdo",
+        "content_for_index": "1",
+        "settings": [
+            {
+                "type": "accordion",
+                "content": "Conteúdo",
+                "icon": "content"
+            },
+            {
+                "type": "text",
+                "label": "Título",
+                "id": "title"
+            }, {
+                "type": "text",
+                "label": "Subtítulo",
+                "id": "subtitle"
+            }, {
+                "type": "accordion",
+                "content": "Aparência",
+                "icon": "design"
+            },{
+                "type": "checkbox",
+                "label": "Não exibir em dispositivos móveis",
+                "id": "hide_mobile",
+                "default": 0
+            },{
+                "type": "checkbox",
+                "label": "Não exibir em desktop",
+                "id": "hide_desktop",
+                "default": 0
+            }, {
+                "type": "separator"
+            },{
+                "type": "text",
+                "id": "custom_class",
+                "label": "Classe customizada para editar o css"
+            }, {
+                "type": "select",
+                "id": "container",
+                "label": "Estilo do conteúdo",
+                "default": "container",
+                "options": [
+                    {
+                        "value": "container",
+                        "label": "Centralizado"
+                    },
+                    {
+                        "value": "container-fluid",
+                        "label": "Adaptável a largura da tela"
+                    }
+                ]
+            },
+            {
+                "type": "range",
+                "id": "rpl",
+                "min": "1",
+                "max": "3",
+                "default": "1",
+                "label": "Quantidade máxima de depoimentos por linha"
+            },
+            {
+                "type": "range",
+                "id": "rpl_mobile",
+                "min": "1",
+                "max": "2",
+                "default": "1",
+                "label": "Quantidade máxima de depoimentos por linha no mobile"
+            },
+            {
+                "type": "separator"
+            },{
+                "type": "color_picker",
+                "id": "title_color",
+                "label": "Cor do título"
+            }, {
+                "type": "color_picker",
+                "id": "subtitle_color",
+                "label": "Cor da descrição"
+            }, {
+                "type": "color_picker",
+                "id": "quote_color",
+                "label": "Cor de quote"
+            }, {
+                "type": "color_picker",
+                "id": "background_color",
+                "label": "Cor de fundo da seção"
+            }, {
+                "type": "color_picker",
+                "id": "border_color",
+                "label": "Cor da borda de seção"
+            },{
+                "type": "color_picker",
+                "id": "review_background",
+                "label": "Cor de fundo do depoimento"
+            },{
+                "type": "color_picker",
+                "id": "review_color",
+                "label": "Cor de texto do depoimento"
+            },{
+                "type": "color_picker",
+                "id": "review_client_color",
+                "label": "Cor de texto do cliente"
+            },{
+                "type": "color_picker",
+                "id": "review_star_color",
+                "label": "Cor da estrela"
+            },{
+                "type": "color_picker",
+                "id": "prev_next_color",
+                "label": "Cores das setas"
+            },{
+                "type": "image_picker",
+                "id": "background_image",
+                "label": "Imagem de fundo da seção",
+                "info": "Recomendado: 1600x600px com até 250kb"
+            },{
+                "type": "checkbox",
+                "label": "Imagem fixa de fundo",
+                "id": "background_parallax"
+            }, {
+                "type": "range",
+                "id": "border_size",
+                "min": "0",
+                "max": "10",
+                "default": "1",
+                "label": "Espessura da borda de seção"
+            }, {
+                "type": "range",
+                "id": "margin_up",
+                "min": "0",
+                "max": "10",
+                "default": "10",
+                "label": "Margem de cima da seção"
+            }, {
+                "type": "range",
+                "id": "margin_dw",
+                "min": "0",
+                "max": "10",
+                "default": "10",
+                "label": "Margem de baixo da seção"
+            }
+        ],
+        "blocks": [
+            {
+                "type": "image",
+                "name": "Blocos",
+                "settings": [
+                    {
+                        "type": "image_picker",
+                        "id": "image",
+                        "label": "Imagem",
+                        "info": "Recomendado: 200x200px"
+                    },
+                    {
+                        "type": "select",
+                        "id": "star_rating",
+                        "label": "Relevância",
+                        "default": "6",
+                        "options": [
+                            {
+                                "value": "1",
+                                "label": "Não exibir"
+                            },
+                            {
+                                "value": "2",
+                                "label": "Uma estrela"
+                            },
+                            {
+                                "value": "3",
+                                "label": "Duas estrelas"
+                            },
+                            {
+                                "value": "4",
+                                "label": "Três estrelas"
+                            },
+                            {
+                                "value": "5",
+                                "label": "Quatro estrelas"
+                            },
+                            {
+                                "value": "6",
+                                "label": "Cinco estrelas"
+                            }
+                        ]
+                    },
+                    {
+                        "type": "html",
+                        "id": "description",
+                        "label": "Depoimento"
+                    },
+                    {
+                        "type": "text",
+                        "id": "client",
+                        "label": "Nome do cliente/Empresa"
+                    }
+                ]
+            }
+        ]
+    }
+{% endschema %}

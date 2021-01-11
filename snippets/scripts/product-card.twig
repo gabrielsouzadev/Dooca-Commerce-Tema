@@ -1,0 +1,56 @@
+{% javascript %}
+    $(function () {
+        'use strict';
+
+        var hover_card = function (element) {
+        
+            var img = $(element).find('.product-image img');
+
+            if ($(img).attr('data-src')) {
+                var temp_img = $(img).attr('data-src');
+            } else {
+                var temp_img = $(img).attr('src');
+            }
+            
+            var img_replacement = $(img).data('replacement');
+            var loader = $('<span></span>').addClass('loader image-loader').hide();
+            var hover = false;
+
+            img.before(loader);
+            var preloadImages = function (src, callback) {
+                var img = $('<img>');
+                img.attr('src', src);
+                img.on('load', function () {
+                    callback();
+                });
+            };
+
+            if (img_replacement) {
+                $(element).find('.product-image').hover(function (event) {
+
+                    event.stopPropagation();
+                    hover = true;
+                    
+                    preloadImages(img_replacement, function () {
+                        if (hover) {
+                            img.attr('src', img_replacement);
+                        }
+                    });
+
+                }, function (event) {
+                    event.stopPropagation();
+                    hover = false;
+                    img.attr('src', temp_img);
+                });
+            }
+        };
+
+        $('.product-card').each(function () {
+            hover_card(this);
+        });
+
+        $('.product-card .dc-quantity-button, .product-card .input').on('click', function (e) {
+            e.preventDefault();
+        });
+    });
+{% endjavascript %}

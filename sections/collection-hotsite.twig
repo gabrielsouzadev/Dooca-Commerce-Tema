@@ -1,0 +1,23 @@
+{% schema %}
+    {
+        "name": "Hotsite",
+        "settings": [
+			{
+				"type": "select",
+				"id": "hotsite_align",
+				"label": "Exibição do hotsite",
+                "default": "down",
+				"options": [
+					{
+						"value": "top",
+						"label": "Exibir após o título de categoria"
+					},
+					{
+						"value": "down",
+						"label": "Exibir após a listagem de produtos"
+					}
+				]
+			}
+        ]
+    }
+{% endschema %}

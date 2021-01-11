@@ -1,0 +1,123 @@
+header{
+    &.header{
+        // background-color: #fff;
+        // position: relative;
+        z-index: 21;
+    }
+}
+.header {
+    
+    // Removed style from links without href
+    .navigation,
+    .menu-dropdown-banner,
+    .menu-dropdown {
+        a:not([href]) {
+            cursor: initial;
+
+            &:hover {
+                cursor: initial;
+            }
+        }
+    }
+
+    &.is-fixed {
+        // background: $body-bg;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 100;
+        box-shadow: 0 0 4rem 0 rgba(0, 0, 0, 0.15);
+    }
+
+    &.is-fixed-mobile {
+        @include media-breakpoint-down(lg) {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            box-shadow: 0 0 4rem 0 rgba(0, 0, 0, 0.15);  
+        }
+    }
+    
+    a {
+        transition: opacity ease-in-out .15s;
+        opacity: 1;
+        cursor: pointer;
+
+        .icon,
+        svg {
+            opacity: 1;
+        }
+
+        &:hover {
+            opacity: .75;
+
+            .icon,
+            svg {
+                opacity: .75;
+            }
+        }
+    }
+
+    .menu-icon,
+    .icon {
+        display: flex;
+        max-height: 100%;
+    }
+
+    .nav-custom {
+        height: 100%;
+        max-width: 3.5rem;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+        @include media-breakpoint-down(md) {
+            margin: 0 auto !important;
+        }
+    }
+
+    .header-box {
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.15);
+        transition: all ease .45s;
+
+        &.is-fixed {
+            // background: $body-bg;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            box-shadow: 0 0 4rem 0 rgba(0, 0, 0, 0.15);
+        }
+    }
+}
+
+.header-bg {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transition: all ease-in-out .15s;
+}
+
+.header-opacity {
+    position: absolute;
+    width: 100%;
+    z-index: 100;
+    transition: none !important;
+    background: transparent !important;
+
+    .header-bg {
+        display: block;
+        // bottom: -1px;
+    }
+
+    &.is-fixed {
+        .header-bg {
+            opacity: 1 !important;
+        }
+    }
+}

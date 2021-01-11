@@ -1,0 +1,18 @@
+.video-text-embed {
+    width: 100%;
+    max-width: 100%; 
+}
+
+.video-text-box {
+    @include media-breakpoint-down(md) {
+        text-align: center;
+    }
+}
+
+.container-fluid {
+    .video-text-box {
+         @include media-breakpoint-up(md) {
+            padding: 0 20% !important;
+        }
+    }
+}

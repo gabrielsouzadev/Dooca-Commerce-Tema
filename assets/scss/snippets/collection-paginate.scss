@@ -1,0 +1,80 @@
+.collection-paginate {
+    &.header {
+        @include media-breakpoint-down(sm) {
+            .collection-paginate-pagination,
+            .collection-paginate-limit,
+            .collection-paginate-grid {
+                display: none !important;
+            }
+
+            .d-flex,
+            .collection-paginate-sort  {
+                width: 100%;
+            }
+        }
+    }
+
+    &.footer {
+        @include media-breakpoint-down(sm) {
+            .collection-paginate-grid,
+            .collection-paginate-sort,
+            .collection-paginate-filter {
+                display: none !important;
+            }
+        }
+    }
+}
+
+.top-filters {
+    background: $color-secondary;
+    height: 4.2rem;
+    padding: 0 .5rem;
+    min-width: 27rem;
+    opacity: 1;
+    transition: all ease .15s;
+
+    .btn {
+        color: $text-color-secondary;
+
+        .h3 {
+            font-size: 1.4rem;
+        }
+    }
+
+    .active-filters {
+        width: 2.8rem;
+        height: 2.8rem;
+        border-radius: 100%;
+        color: $text-color;
+        background: $text-color-secondary;
+        margin-right: .5rem;
+
+        &>div {
+            line-height: 0;
+        }
+    }
+
+    &:hover {
+        cursor: pointer;
+        opacity: .95;
+    }
+}
+
+.collection-paginate-filter {
+    background: $color-secondary;
+    color: $text-color-secondary;
+    max-width: 8rem;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.collection-paginate-filter {
+    .text {
+        font-weight: $h1-fw;
+        font-size: $h1-cs;
+        font-size: 1.4rem;
+        text-transform: $h1-tt;
+    }
+}

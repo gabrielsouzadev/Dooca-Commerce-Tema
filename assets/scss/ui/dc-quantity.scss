@@ -1,0 +1,48 @@
+.dc-quantity {
+    .dc-decrease,
+    .dc-increase {
+        width: 20%;
+        top: 0;
+        height: 4rem;
+        border: solid .1rem $border-color;
+        border-radius: $border-radius;
+        background: 0;
+        transition: all ease-in .15s;
+        z-index: 15;
+
+        &:focus {
+            outline: 0;
+        }
+
+        &:hover {
+            background: $color-secondary;
+            border-color: $color-secondary;
+            
+            .icon {
+                color: $text-color-secondary;
+            }
+        }
+    }
+
+    .dc-decrease {
+        left: 0;
+    }
+
+    .dc-increase {
+        right: 0;
+    }
+
+    .input {
+        border: solid .1rem $border-color;
+        height: 4rem;
+
+        &:focus {
+            border-color: $border-color;
+        }
+    }
+
+    .icon {
+        width: 2rem;
+        height: 2rem;
+    }
+}

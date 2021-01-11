@@ -1,0 +1,40 @@
+.app-fab {
+    position: fixed;
+    bottom: 0;
+    z-index: 1000;
+
+    &--left {
+        left: 0; 
+    }
+
+    &--right {
+        right: 0;
+    }
+
+    &__container {
+        display: flex;
+        padding: 10px;
+
+        &--vertical {
+            flex-direction: column;
+        }
+
+        &--horizontal {
+            flex-direction: row;
+        }
+    }
+
+    &__item {
+        width: 50px;
+        margin: 5px;
+        cursor: pointer;
+
+        .link {
+            display: block;
+        }
+
+        .img {
+            max-width: 100%;
+        }
+    }
+}

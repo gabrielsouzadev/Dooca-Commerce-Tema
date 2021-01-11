@@ -1,0 +1,248 @@
+{% if theme.settings.product_buy_button_type == 'color-variation' %}
+    <style>
+        @media (min-width: 1200px) {  
+            /* Todo: fazer alguma gambiarra para deixar o overflow-y visible no owl */
+            .products-tabs-slider .owl-stage-outer,
+            .products-showcase .owl-stage-outer,
+            .products-counter .owl-stage-outer,
+            .products-highlight .owl-stage-outer {
+                padding-bottom: 18.5rem !important;
+                margin-bottom: -18.5rem !important;
+            }
+            .products-tabs-slider .owl-dots,
+            .products-showcase .owl-dots,
+            .products-counter .owl-dots,
+            .products-highlight .owl-dots {
+                display: none !important;
+            }
+        }
+    </style>
+    <!-- color variation -->
+    <script async>
+        if (!window.is_mobile) {
+            'use strict';
+
+            var hasAjax = [];
+            var productCard = $('.product-card');
+            var searching = null;
+
+            // Hover images
+            var hover_card = function (element) {
+            
+                var img = $(element).find('.product-image img');
+
+                if ($(img).attr('data-src')) {
+                    var temp_img = $(img).attr('data-src');
+                } else {
+                    var temp_img = $(img).attr('src');
+                }
+
+                var img_replacement = $(img).data('replacement');
+                var loader = $('<span></span>').addClass('loader image-loader').hide();
+                var hover = false;
+
+                img.before(loader);
+                var preloadImages = function (src, callback) {
+                    var img = $('<img>');
+                    img.attr('src', src);
+                    img.on('load', function () {
+                        callback();
+                    });
+                };
+
+                if (img_replacement) {
+                    $(element).find('.product-image').hover(function (event) {
+
+                        if (img.data('src') != temp_img) {
+                            temp_img = img.attr('src');
+                        }
+
+                        if (img.data('replacement') != img_replacement) {
+                            img_replacement = img.data('replacement');
+                        }
+
+                        event.stopPropagation();
+                        hover = true;
+                        
+                        preloadImages(img_replacement, function () {
+                            if (hover) {
+                                img.attr('src', img_replacement);
+                            }
+                        });
+
+                    }, function (event) {                    
+                        event.stopPropagation();
+                        hover = false;
+                        img.attr('src', temp_img);
+                    });
+                }
+            };
+
+            // Get product ajax
+            var ajaxAppend = function(element, url, is_hover = false) {
+                var _this = $(element);
+                var xhr = _dcs.Xhr(url);
+
+                // Form
+                var cvForm = _this.find('.cv-form');
+                var cvAjax = _this.find('.cv-ajax');
+                var cvLoader = cvForm.find('.product-card-loader');
+
+                // Owl carousel options
+                var opts = {
+                    items: 5,
+                    loop: false,
+                    nav: false,
+                    dots: false,
+                    autoplay: false,
+                    autoHeight: true,
+                    margin: 0,
+                    touchDrag: true,
+                    mouseDrag: true
+                };
+
+                function request() {
+                    cvLoader.css('display', 'flex');
+
+                    if (searching) {
+                        searching.abort();
+                    }
+
+                    searching = xhr.get({ id: 'product' }).done(function(data) { 
+                        cvAjax.empty();
+                        cvAjax.append(data);
+
+                        var cvColors = _this.find('.cv-colors');
+                        var cvVariations = _this.find('.cv-variations');
+
+                        opts.items = 6;
+                        cvColors.owlCarousel(opts);
+
+                        opts.items = 4;
+                        opts.margin = 0;
+                        cvVariations.owlCarousel(opts);
+
+                        // Owl events
+                        _this.on('click', '#col-prev', function() {   
+                            cvColors.trigger('prev.owl.carousel');
+                        }); 
+
+                        _this.on('click', '#col-next', function() {   
+                            cvColors.trigger('next.owl.carousel');
+                        });  
+
+                        _this.on('click', '#var-prev', function() {   
+                            cvVariations.trigger('prev.owl.carousel');
+                        });  
+
+                        _this.on('click', '#var-next', function() {   
+                            cvVariations.trigger('next.owl.carousel');
+                        });   
+
+                        cvLoader.fadeOut(); 
+
+                        searching = null;
+
+                        hasAjax.push(url);
+                    });
+                }
+
+                if (is_hover) {
+                    if (!hasAjax.includes(url)) {
+                        request();
+                    }
+                } else {
+                    request();
+                }
+            };
+
+            var sT;
+
+            productCard.mouseover(function() {
+                var _this = $(this);
+                var url = _this.data('product-url');
+
+                clearTimeout(sT);
+
+                sT = setTimeout(function() {
+                    ajaxAppend(_this, url, true);
+                }, 150);        
+            });
+            
+            var findVariation = function(element, attr1, attr2, url) {
+                if (attr1 && attr2) {
+                    var appendUrl = url + '?attr1=' + attr1 + '&attr2=' + attr2;
+                    ajaxAppend(element, appendUrl);
+                }
+            };
+
+        // Events
+        productCard.each(function() {
+            var _this = $(this);
+            var cardImage = _this.find('.product-image img');
+            var cardUrl = _this.find('.product-link');
+            var url = cardUrl.attr('href');
+
+            _this.on('click', '.cv-color', function() {        
+                var url = $(this).data('url');
+                
+                ajaxAppend(_this, url);
+                
+                var imageSrc = $(this).data('img-src');
+                var imageReplacement = $(this).data('img-rpt');
+                
+                cardImage.attr('src', imageSrc);
+                cardUrl.attr('href', url);
+                
+                cardImage.data('replacement', imageReplacement);
+            });
+
+                _this.on('click', '.pab', function() {
+                    if (!$(this).hasClass('disabled')) {
+                        _this.find('.pab').each(function() { $(this).removeClass('active') });
+                        $(this).addClass('active');
+
+                        var buyButton = _this.find('.product-buy-button');
+                        buyButton.prop('disabled', false);
+                    }
+                });
+
+                var s_attr1;
+                var s_attr2;
+
+                _this.on('change', 'select[name="attr-1"]', function() {
+                    var url = _this.find('.product-link').attr('href');
+                    s_attr1 = $(this).val();
+
+                    _this.find('.product-attribute').css('display', 'block');
+
+                    if ($('select[name="attr-2"]').val() != '') {
+                        s_attr1 = $(this).val();
+                        s_attr2 = $('select[name="attr-2"]').val();
+
+                        findVariation(_this, s_attr1, s_attr2, url);
+                    }
+                });
+
+                _this.on('change', 'select[name="attr-2"]', function() {
+                    var url = _this.find('.product-link').attr('href');
+                    s_attr1 = $('select[name="attr-1"]').val();
+                    s_attr2 = $(this).val();
+                
+                    findVariation(_this, s_attr1, s_attr2, url);
+                });
+
+                _this.on('change', 'select[name="variation_id"]', function() {
+                    var buyButton = _this.find('.product-buy-button');
+                    console.log(buyButton);
+                    buyButton.prop('disabled', false);
+                });
+            });
+
+            $('.product-card').each(function () {
+                hover_card(this);
+            });
+        }
+    </script>
+    <!-- end color variation -->
+{% endif %}

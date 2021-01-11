@@ -1,0 +1,9 @@
+.page-article-content {
+    border: solid .1rem $border-color;
+    border-width: 0 .1rem .1rem .1rem;
+    padding: 5rem;
+
+    @include media-breakpoint-down(md) {
+        padding: 2.5rem;
+    }
+}

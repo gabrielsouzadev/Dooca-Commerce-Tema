@@ -1,0 +1,88 @@
+{% set buy_button_text = theme.settings.product_buy_button_text ?: 'Comprar' %}
+
+{% if section.settings.quick_buy and product.balance > 0 %}
+    <div class="quick-buy position-fixed py-3">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-4 d-none d-md-block">
+                    <div class="d-flex align-items-center pr-5">
+                        <img loading="lazy" src="{{ product.image.src }}" alt="{{ product.name }}" class="img-fluid mr-4">
+                        <h2 class="m-0 quick-buy-title">{{ product.name }}</h2>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="row align-items-center">
+                        <div class="col-8 d-none d-md-block">
+                            {% include 'product-action-price.twig' with { 'quick_buy': true } %}
+                        </div>
+                        <div class="col-12 col-md-4">
+                            <button class="btn col text-center py-3 px-5 position-relative quick-buy-action" style="background-color: {{ theme.settings.color_button_buy }}; color: {{ theme.settings.color_button_buy_text }};">
+                                <div class="product-action-buy-loader">
+                                    <div class="loader"></div>
+                                </div>
+                                <span>{{ buy_button_text }}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% javascript %}
+        $(function() {
+            var qb_height = $('.quick-buy').outerHeight();
+            var qb_footer = $('.page--product .footer');
+
+            qb_footer.css('margin-bottom', qb_height);
+
+            $(window).on('scroll', function() {
+                var button_buy = $('.product-buy');
+                var quick_buy = $('.quick-buy');
+                var header_fixed = $('.header-fixed');
+                var apps = $('.app-fab');
+
+                if (header_fixed.length <= 0) {
+                    header_fixed = $('.header-box.is-fixed');
+                }
+
+                var size = button_buy.offset().top + button_buy.height();
+                if (!window.is_mobile) {
+                    size = size - header_fixed.outerHeight();
+                }
+
+                if ($(window).scrollTop() > size) {
+                    quick_buy.addClass('is-visible');
+                    apps.css({ 'bottom': quick_buy.outerHeight() + 'px' });
+                } else {
+                    quick_buy.removeClass('is-visible');
+                    apps.css({ 'bottom': '0px' });
+                }
+            });
+
+            var quick_button = $('.quick-buy-action');
+            var product_action = $('.product-action');
+
+            // Product rules
+            var has_attributes = product_action.find('.product-attribute').length;
+            var has_quantity = product_action.find('.dc-quantity').length;
+            var has_customize = product_action.find('.personalize-product').length;
+
+            quick_button.on('click', function() {
+                if (has_attributes > 0 || has_quantity > 0 || has_customize > 0) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    // open loader
+                    $(this).find('span').fadeOut();
+                    $(this).find('.product-action-buy-loader').fadeIn();
+
+                    product_action.find('.product-action-buy').trigger('click');
+
+                    // close loader after trigger
+                    $(this).find('span').fadeIn();
+                    $(this).find('.product-action-buy-loader').fadeOut();
+                }
+            });
+        });
+    {% endjavascript %}
+{% endif %}

@@ -1,0 +1,202 @@
+.personalize-product {
+    margin-bottom: 2.5rem;
+
+    &__title {
+        @include title(1.2rem);
+        text-transform: uppercase;
+        border-bottom: solid .3rem $color-secondary;
+        background: transparent;
+        padding: 1.5rem 2rem;
+        position: relative;
+
+        .h2 {
+            letter-spacing: 0;
+            color: $color-primary;
+        }
+
+        .icon {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center; 
+            justify-content: flex-end;
+            user-select: none;
+
+            &.opened {
+                svg {
+                    transform: rotate(180deg);
+                }
+            }
+
+            &:hover {
+                cursor: pointer;
+            }
+
+            svg {
+                margin-right: 2rem;
+                width: auto;
+                transition: all ease .25s;
+
+                path {
+                    fill: $color-primary;
+                }
+            }
+        }
+    }
+
+    &__content {
+        padding: 2rem;
+        border: solid .1rem $border-color;
+        border-width: 0 .1rem .1rem .1rem;
+    }
+
+    &__group {
+        margin-bottom: 1.3rem;
+
+        &:last-of-type {
+            margin-bottom: 1rem;
+        }
+
+        .input {
+            appearance: none;
+            border-radius: $border-radius;
+            border: solid .1rem $border-color;
+            height: 3.5rem;
+            padding: 0 1.5rem;
+            width: 100%;
+            color: $color-primary;
+            font-size: $font-size-base;
+
+            // @include placeholder() {
+            //     color: $text-color;
+            // }
+        }
+
+        .select {
+            border: solid .1rem $border-color;
+            padding: 0 1rem;
+            position: relative;
+
+            @include breakpoint('max-width: #{$bp-md}') {
+                width: 100%;
+            }
+
+            select {
+                width: 100%;
+                min-width: 100%;
+                height: 3.5rem;
+                border: 0;
+                background: $body-bg;
+                font-size: $font-size-base;
+                color: $text-color;
+                appearance: none;
+
+                @include breakpoint('max-width: #{$bp-md}') {
+                    min-width: 100%;
+                    font-size: 1.6rem;
+                }
+
+                &:focus {
+                    outline: 0;
+                }
+            }
+
+            &:after {
+                content: '';
+                position: absolute;
+                top: 56%;
+                right: 1.2rem;
+                transform: translateY(-50%);
+                border: solid .4rem;
+                border-color: $color-primary transparent transparent transparent;
+                pointer-events: none;
+            }
+        }
+
+        .radio {
+            display: block;
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            user-select: none;
+
+            input {
+                position: absolute;
+                opacity: 0;
+                cursor: pointer;
+            }
+
+            .checkmark {
+                position: absolute;
+                top: .1rem;
+                left: 0;
+                height: 2rem;
+                width: 2rem;
+                border: solid .1rem $border-color;
+                border-radius: 50%;
+                transition: all ease .15s;
+                transform: unset;
+
+                &:before {
+                    content: '';
+                    position: absolute;
+                    opacity: 0;
+                    top: .2rem;
+                    left: .2rem;
+                    width: 1.4rem;
+                    height: 1.4rem;
+                    border-radius: 50%;
+                    background: $color-secondary;
+                    transition: all ease .15s;
+                }
+            }
+
+            &:hover {
+                color: $color-secondary;
+
+                input~.checkmark {
+                    border-color: $color-secondary;
+
+                    &:before {
+                        opacity: 1;
+                    }
+                }
+            }
+
+            input:checked~.checkmark {
+                border-color: $color-secondary;
+                &:before {
+                    opacity: 1;
+                }
+            }
+
+            input:checked~.checkmark:after {
+                opacity: 1;
+            }
+        }
+    }
+
+    &__label {
+        margin-bottom: .5rem;
+        color: $color-primary;
+        font-size: 1.4rem;
+
+        .price {
+            font-size: 1.2rem;
+            color: $text-color;
+        }
+    }
+
+    &__price {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1.4rem;
+        color: $color-primary;
+        margin-top: 2.5rem;
+    }
+}

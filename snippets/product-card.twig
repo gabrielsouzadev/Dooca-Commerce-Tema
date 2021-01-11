@@ -1,0 +1,139 @@
+{% set product_image_crop = theme.settings.product_image_crop ?: true %}
+{% set crop = (product_image_crop == 'square') ? '495x495+fill_ffffff+crop_center' : '450x600+fill_ffffff+crop_center' %}
+{% set show_product_price_without_stock = theme.settings.show_product_price_without_stock ?: null %}
+
+{% set image_hover = theme.settings.product_image_hover ?: null %}
+
+{% set buy_button = theme.settings.product_buy_button ?: null %}
+{% set buy_onclick = theme.settings.product_buy_onclick ?: null %}
+
+{% set color_name = theme.settings.product_color_name ?: null %}
+
+{% set has_price = ((product.balance > 0 or show_product_price_without_stock) and product.price > 0 and (product.balance >= product.min_quantity or show_product_price_without_stock)) ? true : false %}
+
+{% set img_lazy = lazy ?: 'true' %}
+
+{% set title_color = theme.settings.color_primary ?: null %}
+
+{% if theme.settings.product_card_custom_crop %}
+    {% set crop = theme.settings.product_card_custom_crop ~ '+fill_ffffff+crop_center' %}
+{% endif %}
+
+<div class="product-card p-3 p-md-4 d-flex flex-column align-items-strech h-100 position-relative {{ theme.settings.product_price_type }} {% if product.kit %}kit{% endif %}" data-product-name="{{ product.name }}" data-grid-id="card-modal-{{ product.grid_id }}" data-product-url="{{ product.url }}" style="
+    {% if bg %}background-color: {{ bg }};{% endif %}
+">
+    <a
+        href="{{ 'product' | url (product) }}"
+        aria-label="{{ product.name }}"
+        class="d-flex flex-column justify-content-between w-100 h-100 product-link position-relative"
+        style="{% if padding %}padding: {{ padding }};{% endif %}"
+    >
+        <figure class="product-image position-relative text-center mb-4">
+            {% if product.images and product.image %}
+                {% set image_main = product.image | img_url(crop) %}
+                {% set image_replacement = product.images[1].src | img_url(crop) ?: null %}
+
+                {% if image_main %}
+                    <img 
+                        loading="lazy" 
+                        class="img-fluid" 
+                        src="{{ image_main }}" 
+                        alt="{{ product.image | img_url | get_filename }}"
+                        
+                        {% if image_hover and image_replacement %}
+                            data-replacement="{{ image_replacement }}"
+                        {% endif %}
+                    >
+                {% endif %}
+
+                {% include 'product-tags.twig' %}
+            {% endif %}
+
+        </figure>
+
+        
+        {% app 'custom-badge' %}
+
+        <div class="yv-review-quickreview text-center" value="{{ product.id }}"></div>
+        
+        {% if theme.settings.product_buy_button_type == 'color-variation' and product.colors|length > 0 %}
+            <div class="d-block d-lg-none text text-center mb-4">
+                {% set colors_length = product.colors|length %}
+                <span>{{ colors_length }} {{ colors_length | pluralize ('cor', 'cores', false) }}</span>
+            </div>
+        {% endif %}
+        
+        {% if product.name %}
+            <div class="product-title text-center mb-4">
+                <h2 class="text" {% if title_color %}style="color: {{ title_color }}"{% endif %}>
+                    {{ product.name }}
+
+                    {% if color_name and product.color.name and theme.settings.product_buy_button_type != 'color-variation' and product.colors|length >= 1 %}
+                        {% if theme.settings.product_color_group != 'product' %}
+                            {{ product.color.name }}
+                        {% endif %}
+                    {% endif %}
+                </h2>
+            </div>
+        {% endif %}
+        {% if product.is_pre_sale %}
+            <div class="product-out-of-stock text-center">
+                <button class="product-outsotck-button btn w-100 no-stock">
+                    {{ theme.sections['product-info'].settings.pre_sale_button | default('Avise-me no lançamento') }}
+                </button>
+            </div>
+        {% elseif not shop.catalog %}
+            {% if has_price %}
+                {% if theme.sections['product-info'].settings.variation_cheap_message and product.has_price_range and theme.settings.product_buy_button_type != 'color-variation' %}
+                    <div class="product-card-price m-billet f-billet">
+                        <div class="billet">
+                            {% if product.price_compare > 0 %}
+                                <div class="discount">{{ product.price_compare | currency }}</div>
+                            {% endif %}
+                            <div class="product-price-final">
+                                <span class="text">A partir de</span>
+                                <span class="price total">
+                                    {% if product.min_price_range > 0 %}
+                                        {{ product.min_price_range | currency }}
+                                    {% else %}
+                                        {{ product.price | currency }}
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    {% include 'product-card-price.twig' %}
+                {% endif %}
+                {% if product.balance > 0 or product.balance >= product.min_quantity or show_product_price_without_stock %}
+                    {% if theme.settings.product_buy_button_type != 'color-variation' %}
+                        {% include 'product-card-action.twig' %}
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                {% if product.price > 0 %}
+                    {% include 'product-out-of-stock.twig' %}
+                {% else %}
+                    {% include 'product-out-of-price.twig' %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    </a>
+    <a href="#" class="btn-wishlist product-card__wishlist" aria-label="Adicionar produto como favorito">
+        <i class="wishlist__icon"></i>
+    </a>
+
+    {% if theme.settings.product_buy_button_type == 'color-variation' and product.price > 0 %}
+        {% if product.balance > 0 or product.balance >= product.min_quantity or show_product_price_without_stock %}
+            <form class="cv-form p-4" action="{{ 'cart' | action ('add') }}" method="post">
+                <input type="hidden" name="redirect" value="cart">
+                
+                <div class="product-card-loader" style="display: flex;">
+                    <div class="loader"></div>
+                </div>
+
+                <div class="cv-ajax"></div>
+            </form>
+        {% endif %}
+    {% endif %}
+</div>

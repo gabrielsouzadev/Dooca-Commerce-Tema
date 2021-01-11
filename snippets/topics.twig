@@ -1,0 +1,53 @@
+<div class="mt-5 col-md-12 col-lg-3 d-flex align-items-center justify-content-center">
+    <div class="row flex-column">
+
+        {% set topics = (type) ? section.blocks[2:] : section.blocks[:2] %}
+        {% set title_color = section.settings.title_color ?: theme.settings.color_primary %}
+
+        {% for topic in topics %}
+
+            {% set mt = (loop.index == 1) ? 'm-0' : 'mt-3' %}
+
+            {% set topic_image = topic.settings.image ?: null %}
+            {% set topic_title = topic.settings.title ?: null %}
+            {% set topic_text = topic.settings.text ?: null %}
+            {% set topic_background = section.settings.topic_background_color ?: 'transparent' %}
+            {% set button_text = topic.settings.button_text ?: null %}
+            {% set button_url = topic.settings.button_url ?: 'javascript:void(0)' %}
+            {% set button_blank = topic.settings.button_blank ?: '_self' %}
+            {% set button_bg_color = topic.settings.button_bg_color ?: theme.settings.color_primary %}
+            {% set button_text_color = topic.settings.button_text_color ?: '#FFFFFF' %}
+
+            <div class="topic {{ mt }} col text-center p-0 p-md-5"
+                style="background-color: {{ topic_background }};">
+
+                {% if not topic_image and _get.preview %}
+                    {% include 'placeholder.twig' %}
+                {% endif %}
+
+                {% if topic_image %}
+                    <img loading="lazy" class="img-fluid" src="{{ topic_image | img_url }}" alt="{{ topic_image | img_url | get_filename }}">
+                {% endif %}
+
+                {% if topic_title or topic_text %}
+                    <div class="topic-title">
+                        {% if topic_title %}
+                            <h2 class="mt-3 h2" style="color: {{ title_color }};">{{ topic_title }}</h2>
+                        {% endif %}
+
+                        {% if topic_text %}
+                            <p class="mb-0">{{ topic_text }}</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                {% if button_text %}
+                    <a class="btn" href="{{ button_url }}" target="{{ button_blank }}" role="button"
+                        style="background: {{ button_bg_color }}; color: {{ button_text_color }};">
+                            {{ button_text }}
+                    </a>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</div>

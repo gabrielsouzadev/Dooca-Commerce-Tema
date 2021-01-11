@@ -1,0 +1,60 @@
+.footer-4 {
+    .footer-top {
+        border-bottom: solid .4rem $color-secondary;
+    }
+
+    .newsletter-icon {
+        max-width: 6rem;
+
+        @include media-breakpoint-down(md) {
+            margin: 0 auto 1.5rem auto !important;
+        }
+    }
+
+    .footer-newsletter .footer-input,
+    .footer-newsletter .footer-submit {
+        height: 5rem;
+    }
+
+    .footer-newsletter .footer-submit {
+        width: 100%;
+        max-width: 30rem;
+
+        @include media-breakpoint-up(md) {
+            width: auto;
+            min-width: 12rem;
+        }
+
+        right: unset;
+    }
+
+    .footer-contact b.phone,
+    .footer-contact b.whatsapp {
+        font-size: 1.8rem;
+    }
+
+    .footer-contact .icon {
+        width: 2.3rem;
+    }
+
+    .footer-social .icon {
+        width: 2.9rem;
+        height: 2.9rem;
+    }
+
+    @include media-breakpoint-down(md) {
+        .footer-payment .icon {
+            margin: .5rem !important;
+        }
+    }
+
+    &.version {
+        .logo {
+            .logo-link {
+                .h1 {
+                    color: #fff;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,74 @@
+{% set id_erp = section.settings.id_erp ?: null %}
+{% set reference = section.settings.product_reference ?: null %}
+{% set product_brand = section.settings.product_brand ?: null %}
+{% set product_features = section.settings.product_features ?: null %}
+
+{% if product.name %}
+    <div class="product-title mt-3 d-flex {% if center %}justify-content-center mb-0 mb-md-5 center flex-column{% else %}justify-content-start{% endif %} align-items-center">
+        {% if product.brand and product_brand %}
+            <div class="product-brand {% if center %}mb-5{% else %}mr-5{% endif %}">
+                <a href="{{ 'brand' | url (product.brand) }}" class="d-flex justify-content-center align-items-center text-center h-100">
+                    {% if product.brand.image %}
+                        <img loading="lazy" class="img-fluid" src="{{ product.brand.image | img_url }}" alt="{{ product.brand.name }}">
+                    {% else %}
+                        <h3 class="h3 m-0">{{ product.brand.name }}</h2>
+                    {% endif %}
+                </a>
+            </div>
+        {% endif %}
+
+        <div class="position-relative">
+            <h1 class="h1 m-0 {% if center %}text-center{% endif %}">
+                {{ product.name }}
+                {% if product.color and theme.settings.product_color_name %}
+                    <span>{{ product.color.name }}</span>
+                {% endif %}
+            </h1>
+
+            {% if product_features|length > 0 %}
+                <div class="product-features mt-2">
+                    <div class="d-flex align-items-center flex-wrap {% if center %}justify-content-center{% else %}justify-content-start{% endif %}">
+                        {% for feature in product.features %}
+                            {% if feature.id in product_features %}
+                                <a class="link" data-id="{{ feature.values[0].id }}">
+                                    <h3 class="h3 {% if center %} mr-4 {% else %} mr-3 mb-3 {% endif %}">{{ feature.values[0].name }}</h2>
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {% javascript %}
+                    $(function() {
+                        var features = $('.product-features');
+                        var feature_link = features.find('.link');
+                        var uri = new URL(window.location.origin + '/produtos');
+
+                        feature_link.each(function() {
+                            var id = $(this).data('id');
+                            uri.searchParams.set('feature', id);
+
+                            $(this).attr('href', uri);
+                        });
+                    });
+                {% endjavascript %}
+            {% endif %}
+
+            {% if product.variation.reference and reference %}
+                <div class="product-reference mt-2 mr-2 {% if center %}text-center{% endif %}">
+                    <span class="text">REF: {{ product.variation.reference }}</span>
+                </div>
+            {% endif %}
+
+            {% ajax 'product-id-erp' %}
+                {% if id_erp and product.variation.external_id %}
+                    <div class="product-reference mt-2 {% if center %}text-center{% endif %}">
+                        <span class="text">ID ERP: {{ product.variation.external_id }}</span>
+                    </div>
+                {% endif %}
+            {% endajax %}
+        </div>
+    </div>
+
+    <div id="yv-review-quickreview"></div>
+{% endif %}

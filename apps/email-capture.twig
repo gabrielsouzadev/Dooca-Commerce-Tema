@@ -1,0 +1,131 @@
+{% if app.active != 0 %}
+	<div class="email-capture-modal">
+		<div class="container p-0">
+			<div class="email-capture-close position-absolute">
+				<i class="icon">{{ 'img/close.svg' | svg }}</i>
+			</div>
+			<div class="row no-gutters">
+				{% if app.image %}
+					<div class="col-12 col-md">
+						{% set params = { 'banner': app.image, 'crop': null, 'lazyoff': true }  %}
+						{% include 'banner.twig' with params %}
+					</div>
+				{% endif %}
+
+				<div class="col-12 col-md">
+					<div class="d-flex align-items-center justify-content-center h-100 p-5" style="padding: 4rem 6rem;">
+						<div class="text-center">
+							{% if app.title %}
+								<div class="h1 w-100 mb-4">{{ app.title }}</div>
+							{% endif %}
+
+							{% if app.text %}
+								<p class="text w-100 mb-4">{{ app.text }}</p>
+							{% endif %}
+
+							<form class="email-capture-form" action="#formulariocadastro">
+								<input type="hidden" name="form_type" value="email_capture">
+								<input type="text" name="empty" style="display: none;">
+
+								<div class="form-group mb-3">
+									<input class="form-control w-100" type="text" name="name" placeholder="Digite seu nome" minlength="3" required>
+								</div>
+
+								<div class="form-group mb-3">
+									<input class="form-control w-100" type="email" name="email" placeholder="Digite seu e-mail" required>
+								</div>
+
+								<button class="btn btn-lg" type="submit" name="button">
+									{{ app.text_button | default('OK') }}
+								</button>
+
+								<div class="email-capture-success align-items-center justify-content-center p-5">
+									<span class="text">
+										{{ app.text_success | default('Obrigado por se cadastrar.') }}
+									</span>
+								</div>
+
+								<div class="email-capture-errors mt-4 p-3">
+									<span class="text"></span>
+								</div>
+
+								<div class="email-capture-loader">
+									<div class="loader"></div>
+								</div>
+							</form>
+
+							<div class="email-capture-close" style="width: 100%; height: auto; margin-top: 1.5rem; font-size: 1.2rem; text-decoration: underline;">
+								Acessar a loja
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	{% javascript %}
+		$(function() {
+			var xhr = _dcs.Xhr('{{ 'newsletter' | action ('add') }}');
+			var timing = {{ app.show_timing | default(0) }};
+			var cookie = new _dcs.Cookies();
+
+			var modal = $('.email-capture-modal').modal({
+				class: 'modal--flat',
+				onClose: function() {
+					view();
+				}
+			});
+
+			var view = function() {
+				cookie.set('_dc_app_email_capture', 1);
+			};
+
+			$('.email-capture-close').click(function() {
+				modal.close();
+				view();
+			});
+
+			$('.email-capture-form').submit(function(e) {
+				e.preventDefault();
+				e.stopPropagation();
+
+				var form = $(this);
+
+				form.find('.email-capture-loader').fadeIn();
+
+				xhr.post({
+					id: 'email-capture',
+					data: form.serialize()
+				}).done(function(res) {
+					var errors = $('.email-capture-errors');
+					$('.email-capture-success').fadeIn();
+					$('.email-capture-success').addClass('d-flex');
+					form.addClass('has-response');
+					view();
+					errors.fadeOut();
+					form.find('.email-capture-loader').fadeOut();
+				}).fail(function(jqXHR, textStatus, errorThrown) {
+					var errors = $('.email-capture-errors');
+					errors.find('.text').empty();
+
+					jqXHR.responseJSON.errors.map(function(item) {
+						errors.find('.text').append(item);
+					});
+
+					errors.fadeIn();
+					form.find('.email-capture-loader').fadeOut();
+				});
+
+				return false;
+			});
+
+			if (!cookie.get('_dc_app_email_capture') && $('.email-capture-modal').length > 0) {
+				setTimeout(function() {
+					$('#email-capture-modal').show();
+					modal.open();
+				}, timing);
+			}
+		});
+	{% endjavascript %}
+{% endif %}

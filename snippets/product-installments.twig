@@ -1,0 +1,21 @@
+{% set product_payment = section.settings.product_payment ?: null %}
+{% set type = theme.settings.product_price_type ?: null %}
+{% set text = (theme.settings.product_price_type != 'iconsmethods') ? 'Formas de pagamento' : 'Ver todas as formas de pagamento' %}
+
+{% if product_payment %}
+    <div class="product-installments d-flex align-items-center {% if type != 'iconsmethods' %} justify-content-start {% else %} justify-content-center {% endif %} mt-3" data-grid-id="{{ product.grid_id }}" data-variation-id="{{ product.variation.id }}">
+        {% if type != 'iconsmethods' %}
+            <span class="icon mr-3">{{ 'img/dc-icons/creditcard.svg' | svg }}</span>
+        {% endif %}
+
+        <span class="text">{{ text|default('Formas de pagamento') }}</span>
+    </div>
+
+    <div class="installment-modal-{{ product.grid_id }} product-installments-modal pl-5 pr-5 pb-5" data-modal-title="Formas de pagamento">
+        <div class="container">  
+            <div class="d-flex justify-content-center align-items-center">
+                <div class="loader"></div>
+            </div>
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,392 @@
+{% set data = [] %}
+
+{% for item in section.blocks  %}
+    {% set data = data|merge([item.settings]) %}
+{% endfor %}
+
+{% set show_section = true %}
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+{% set filter_type = section.settings.filter_type ?: null %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-lg-block' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-block d-lg-none' %}
+{% endif %}
+
+{% set states = [] %}
+
+{% for item in section.blocks %}
+    {% if item.settings.state not in states %}
+        {% set states = states|merge([item.settings.state]) %}
+    {% endif %}
+{% endfor %}
+
+{% if show_section %}
+    {% include 'section-header.twig' with { 'name': 'products-showcase' }  %}
+        <div class="{{ s }} row where-find">
+            <div class="col-12 text-left d-flex justify-content-center align-items-center filters">
+                <div class="mr-5 select-block">
+                    <div class="text title">
+                        Filtre por estado
+                    </div>
+                    <div class="position-relative">
+                        <select class="select" id="states">
+                            {% if filter_type != 'show_after_filter' %}
+                                <option selected value="">Todos</option>
+                            {% else %}
+                                <option selected disabled>Selecione</option>
+                            {% endif %}
+                            {% for item in states %}
+                                <option value="{{ item }}">{{ item }}</option>
+                            {% endfor %}
+                        </select>
+                        <i class="icon position-absolute">
+                            {{ 'img/arrow-down.svg' | svg }}
+                        </i>
+                    </div>
+                </div>
+                <div class="select-block cities-block" {% if filter_type == 'show_all' %}style="display: none;"{% endif %}>
+                    <div class="text title">
+                        Filtre por cidade
+                    </div>
+                    <div class="position-relative">
+                        <select class="select" id="cities">
+                            <option selected disabled>Selecione</option>
+                        </select>
+                        <i class="icon position-absolute">
+                            {{ 'img/arrow-down.svg' | svg }}
+                        </i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-start where-find-data {% if filter_type == 'show_after_filter' %}d-none{% endif %}">
+            {% set stateTitles = [] %}
+            {% for item in section.blocks %}
+                {% if item.settings.state not in stateTitles %}
+                    {% set stateTitles = stateTitles|merge([item.settings.state]) %}
+                    <div class="where-find-item col-12 state-title pb-3 my-5" data-state="{{ item.settings.state }}">
+                        <div class="h1">
+                            {{ item.settings.state }}
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="where-find-item col-12 col-md-4 col-lg-3 mb-5" data-state="{{ item.settings.state }}" data-city="{{ item.settings.city }}">
+                    <div class="d-flex justify-content-start flex-column">
+                        <div class="h2 title">{{ item.settings.name }}</div>
+
+                        {% if item.settings.city %}
+                            <div class="text address">{{ item.settings.city }}</div>
+                        {% endif %}
+
+                        {% if item.settings.address %}
+                            <div class="text address">{{ item.settings.address }}</div>
+                        {% endif %}
+
+                        {% if item.settings.schedule %}
+                            <div class="text addess">{{ item.settings.schedule }}</div>
+                        {% endif %}
+
+                        {% if item.settings.phone %}
+                            <a href="tel:{{ item.settings.phone | phone_link }}" class="text phone d-flex align-items-center justify-content-start">
+                                <i class="icon mr-2">{{ 'img/phone.svg' | svg }}</i>
+                                {{ item.settings.phone }}
+                            </a>
+                        {% endif %}
+
+                        {% if item.settings.whatsapp %}
+                            <a href="{{ item.settings.whatsapp | phone_link ('whatsapp') }}" class="text whatts d-flex align-items-center justify-content-start">
+                                <i class="icon mr-2">{{ 'img/whatsapp.svg' | svg }}</i>
+                                {{ item.settings.whatsapp }}
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% include 'section-footer.twig' %}
+
+    {% javascript %}
+        $(function() {
+            var data = {{ data | json_encode | raw }};
+            var _cities = [];
+
+            var states = $('#states');
+            var cities = $('#cities');
+
+            var filterType = '{{ filter_type }}';
+
+            states.on('change', function() {
+                var val = $(this).val();
+                _cities = [];
+
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].state.includes(val) && !_cities.includes(data[i].city)) {
+                        if (data[i].city) {
+                            _cities.push(data[i].city);
+                        }
+                    }
+                }
+                
+                if (_cities[0] === undefined || _cities[0] === null) {
+                    $('.cities-block').hide();
+                } else {
+                    if (val.length > 0) {
+                        $('.cities-block').show();
+                    } else {
+                        $('.cities-block').hide();
+                    }
+                }
+                
+                updateCities(_cities);
+            });
+
+            var updateCities = function(arr) {
+                var output = [];
+                
+                {% if filter_type != 'show_after_filter' %}
+                    output.push('<option value="">Todos</option>');
+                {% else %}
+                    output.push('<option value="">Selecione</option>');
+                {% endif %}
+
+                $.each(arr, function(key, value) {
+                    output.push('<option value="'+ value +'">'+ value +'</option>');
+                });
+
+                cities.empty();
+                cities.html(output.join(''));
+            };
+
+            $('#states, #cities').change(function() {
+                var state = states.val();
+                var city = cities.val();
+
+                if (filterType == 'show_after_filter') {
+                    if ((state.length > 0 && city.length > 0) || (state.length > 0 && city.length <= 0)) {
+                        $('.where-find-data').removeClass('d-none');
+
+                        $('.where-find-item').each(function() {
+                            $(this).show();
+                        });
+                        
+                        filterStores(state, city);
+                    } else {
+                        $('.where-find-data').addClass('d-none');
+                    }
+                } else {
+                    $('.where-find-item').each(function() {
+                        $(this).show();
+                    });
+                    
+                    filterStores(state, city);
+                }
+            });
+
+            var filterStores = function(state, city) {
+                $('.where-find-item').each(function() {
+                    var _this = $(this);
+
+                    if (state.length > 0) {
+                        if (_this.data('state') !== state) {
+                            _this.hide();
+                        }
+                    }
+
+                    if (city.length > 0) {
+                        if (_this.data('city') !== city) {
+                            _this.hide();
+                        }
+                    }
+                    
+                    if (_this.hasClass('state-title') && _this.data('state') == state) {
+                       _this.show();
+                    }
+                });
+            };
+
+            var optionValues =[];
+            $('#states option').each(function(){
+               if($.inArray(this.value, optionValues) >-1){
+                  $(this).remove()
+               }else{
+                  optionValues.push(this.value);
+               }
+            });
+        });
+    {% endjavascript %}
+{% endif %}
+
+{% schema %}
+    {
+        "name": "Onde encontrar",
+        "category": "Conteúdo",
+        "content_for_index": "1",
+        "settings": [
+            {
+                "type": "accordion",
+                "content": "Conteúdo",
+                "icon": "content"
+            },
+            {
+                "type": "text",
+                "label": "Título",
+                "id": "title"
+            }, {
+                "type": "text",
+                "label": "Subtítulo",
+                "id": "subtitle"
+            }, {
+                "type": "select",
+                "id": "filter_type",
+                "label": "Estilo do filtro",
+                "default": "show_all",
+                "options": [
+                    {
+                        "value": "show_all",
+                        "label": "Exibir todas as informações"
+                    },
+                    {
+                        "value": "show_after_filter",
+                        "label": "Exibir informações apenas após filtragem"
+                    }
+                ]
+            }, {
+                "type": "accordion",
+                "content": "Aparência",
+                "icon": "design"
+            },{
+                "type": "checkbox",
+                "label": "Não exibir em dispositivos móveis",
+                "id": "hide_mobile",
+                "default": 0
+            },{
+                "type": "checkbox",
+                "label": "Não exibir em desktop",
+                "id": "hide_desktop",
+                "default": 0
+            }, {
+                "type": "separator"
+            },{
+                "type": "text",
+                "id": "custom_class",
+                "label": "Classe customizada para editar o css"
+            }, {
+                "type": "select",
+                "id": "container",
+                "label": "Estilo do conteúdo",
+                "default": "container",
+                "options": [
+                    {
+                        "value": "container",
+                        "label": "Centralizado"
+                    },
+                    {
+                        "value": "container-fluid",
+                        "label": "Adaptável a largura da tela"
+                    }
+                ]
+            },{
+                "type": "separator"
+            },{
+                "type": "color_picker",
+                "id": "title_color",
+                "label": "Cor do título"
+            }, {
+                "type": "color_picker",
+                "id": "subtitle_color",
+                "label": "Cor da descrição"
+            }, {
+                "type": "color_picker",
+                "id": "quote_color",
+                "label": "Cor de quote"
+            }, {
+                "type": "color_picker",
+                "id": "background_color",
+                "label": "Cor de fundo da seção"
+            }, {
+                "type": "color_picker",
+                "id": "border_color",
+                "label": "Cor da borda de seção"
+            },{
+                "type": "image_picker",
+                "id": "background_image",
+                "label": "Imagem de fundo da seção",
+                "info": "Recomendado: 1600x600px com até 250kb"
+            },{
+                "type": "checkbox",
+                "label": "Imagem fixa de fundo",
+                "id": "background_parallax"
+            }, {
+                "type": "range",
+                "id": "border_size",
+                "min": "0",
+                "max": "10",
+                "default": "1",
+                "label": "Espessura da borda de seção"
+            }, {
+                "type": "range",
+                "id": "margin_up",
+                "min": "0",
+                "max": "10",
+                "default": "10",
+                "label": "Margem de cima da seção"
+            }, {
+                "type": "range",
+                "id": "margin_dw",
+                "min": "0",
+                "max": "10",
+                "default": "10",
+                "label": "Margem de baixo da seção"
+            }
+        ],
+        "blocks": [
+            {
+                "type": "block",
+                "name": "Loja",
+                "settings": [
+                    {
+                        "type": "text",
+                        "id": "state",
+                        "label": "Estado"
+                    },
+                    {
+                        "type": "text",
+                        "id": "city",
+                        "label": "Cidade"
+                    },
+                    {
+                        "type": "text",
+                        "id": "name",
+                        "label": "Loja / Representante"
+                    },
+                    {
+                        "type": "textarea",
+                        "id": "address",
+                        "label": "Endereço"
+                    },
+                    {
+                        "type": "textarea",
+                        "id": "schedule",
+                        "label": "Horário"
+                    },
+                    {
+                        "type": "text",
+                        "id": "phone",
+                        "label": "Telefone"
+                    },
+                    {
+                        "type": "text",
+                        "id": "whatsapp",
+                        "label": "Whatsapp"
+                    }
+                ]
+            }
+        ]
+    }
+{% endschema %}

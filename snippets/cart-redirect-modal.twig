@@ -1,0 +1,42 @@
+{% set icon = (section.settings.type == '1') ? 'img/cart-magazine.svg' : 'img/cart.svg' %}
+
+<div class="cart-redirect-modal">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="text-center p-5">
+                    {% if section.settings.cart_custom %}
+                        <i class="icon nav-custom">
+							<img loading="lazy" class="img-fluid" src="{{ section.settings.cart_custom | img_url }}" alt="Carrinho">
+						</i>
+                    {% else %}
+                        <i class="icon">
+                            <i class="material-icons md-36">shopping_cart</i>
+                        </i>
+                    {% endif %}
+                    <h2 class="h2 mb-0 mt-4">Produto adicionado ao carrinho!</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="text-center p-5">
+                    <div class="text">O que você deseja fazer agora?</div>
+
+                    <div class="mt-4 w-100">
+                        <button class="btn cart-redirect-continue">
+                            <span>Continuar comprando</span>
+                        </button>
+                    </div>
+
+                    <div class="mt-3 w-100">
+                        <button class="btn cart-redirect-checkout">
+                            <span>Ir para o carrinho</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

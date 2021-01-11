@@ -1,0 +1,16 @@
+{% set attribute_type = section.settings.product_atribute_type | default('button') %}
+{% set attribute_name = product.attribute.name ?: 'Atributos' %}
+{% set variations = product.variations %}
+
+<div class="product-attribute mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-1">
+        <h2 class="h2 m-0">{{ attribute_name }}</h2>
+        {% app 'size-guide' %}
+    </div>
+    
+    {% include 'product-attributes/' ~ attribute_type ~ '.twig' %}
+</div>
+
+<div class="product-attribute-loader">
+    <span class="loader"></span>
+</div>

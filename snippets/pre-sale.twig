@@ -1,0 +1,61 @@
+<div class="pre-sale mt-5">
+    <div class="pre-sale-text">
+        <div class="text">
+            {{ section.settings.pre_sale_text | raw | default('Seja o primeiro a comprar este produto. Insira seus dados abaixo para ser notificado no seu lançamento.')}}
+        </div>
+    </div>
+    <div class="pre-sale-button" data-grid-id="{{ product.grid_id }}">
+        <button class="btn col text-center">
+            {{ section.settings.pre_sale_button | default('Avise-me no lançamento') }}
+        </button>
+    </div>
+</div>
+
+<div class="product-request-modal-{{ product.grid_id }}" data-modal-title="Insira seus dados e receba uma notificação quando este produto for lançando">
+	<form 
+		class="form form-request-product" 
+		action="{{ 'product-request' | action ('add') }}" 
+		method="post"
+	>
+        <input type="hidden" name="pre_sale" value="1">
+		<input type="hidden" name="form_type" value="product_request">
+		<input type="hidden" name="variation_id" value="{{ product.variation.id }}">
+				
+		<div class="w-100 d-flex flex-wrap">
+			<label class="label w-100 text">Nome</label>
+			<input type="text" name="name" class="pl-2 pr-2 input w-100" value="{{ customer.name }}" required>
+		</div>
+				
+		<div class="w-100 d-flex flex-wrap mt-4">
+			<label class="label w-100 text">E-mail</label>
+			<input type="email" name="email" class="pl-2 pr-2 input w-100" value="{{ customer.email }}" required>
+		</div>
+				
+		<div class="w-100 d-flex flex-wrap mt-4">
+			<label class="label w-100 text">Whatsapp</label>
+			<input id="phone" type="tel" name="phone" class="pl-2 pr-2 input w-100" value="" required maxlength="15">
+		</div>
+
+		<div class="w-100 mt-4">
+			<button class="btn w-100" style="height: auto;">{{ section.settings.pre_sale_button | default('Avise-me no lançamento') }}</button>
+		</div>
+	</form>
+
+	<div class="d-none text-center p-3" id="request-success">
+		<span class="text">Você será notificado através do e-mail ou número de WhatsApp inserido, assim que o produto estiver disponível para venda ;)</span>
+	</div>
+</div>
+
+{% javascript %}
+	$(function() {
+		$('body').delegate('#phone', 'keydown', function(e) {
+			var input = $(e.target);
+			var x = input.val();
+
+			if (input.val().length <= 15) {
+				x = x.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
+				input.val(!x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : ''));
+			}
+		});
+	});
+{% endjavascript %}

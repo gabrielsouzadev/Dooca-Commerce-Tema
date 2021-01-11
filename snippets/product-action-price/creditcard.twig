@@ -1,0 +1,38 @@
+<div class="row no-gutters {% if quick_buy %}justify-content-end{% endif %}">
+    <div class="col-12">
+        <div class="d-flex w-100 text-left align-items-center {% if quick_buy %}justify-content-end{% endif %}">
+            {% if discount > 0 %}
+                <div class="product-price-discount mr-4">
+                    {{ discount | currency }}
+                </div>
+            {% endif %}
+
+            {% if billet %}
+                <div class="product-price-final">
+                    <span class="total">{{ billet.total | currency }}</span>
+                    <span class="text">no boleto</span>
+                </div>
+            {% else %}
+                <div class="product-price-final">
+                    <span class="total">{{ product.price | currency }}</span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if creditcard %}
+        <div class="col-12">
+            <div class="product-price-installments mt-2 {% if quick_buy %}text-right{% endif %}">
+                <div class="text">
+                    <span class="total">{{ creditcard.total | currency }}</span>
+                    <span class="until">em até</span>
+                    <span class="parcel">{{ creditcard.parcel | default(creditcard.parcels) }}x</span>
+                    <span class="parcel-price">de {{ creditcard.parcel_price | currency }}</span>
+                    {% if not creditcard.has_interest and creditcard.interest <= 0 %}
+                        <span class="interest">sem juros</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>

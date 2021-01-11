@@ -1,0 +1,246 @@
+{% set show_section = true %}
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-lg-flex' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-flex d-lg-none' %}
+{% endif %}
+
+{% if show_section %}
+    {% include 'section-header.twig' with { 'name':'banners-commercial', 'custom_show': s } %}
+
+        {% set columns_mobile = section.settings.bpl_mobile ?: 'col-12' %}
+        {% set banners = section.blocks %}
+        {% set align = section.settings.align ?: 'top' %}
+        {% set title_color = section.settings.title_color ?: theme.settings.color_primary %}
+        {% set description_color = section.settings.description_color ?: theme.settings.color_text %}
+
+        {% if banners|length <= 1 %}
+            {% if not section.blocks[0].settings.title and not section.blocks[0].settings.description and not section.blocks[0].settings.image %}
+                {% set banners = [{
+                        "type": "image",
+                        "settings": {
+                            "title": "Pague parcelado",
+                            "description": "no cartão de crédito"
+                        }
+                    },
+                    {
+                        "type": "image",
+                        "settings": {
+                            "title": "Compre e receba",
+                            "description": "em casa, em qualquer lugar do Brasil"
+                        }
+                    },
+                    {
+                        "type": "image",
+                        "settings": {
+                            "title": "Loja 100% segura",
+                            "description": "seus dados protegidos"
+                        }
+                    }] %}
+            {% endif %}
+        {% endif %}
+
+        {% if banners|length > 0 %}
+            <div class="row justify-content-between align-items-lg-center">
+                {% for banner in banners %}
+
+                    {% set image = banner.settings.image ?: null %}
+                    {% set title = banner.settings.title ?: null %}
+                    {% set description = banner.settings.description ?: null %}
+
+                    {% set url = banner.settings.url ?: null %}
+                    {% set target = banner.settings.target ?: null %}
+
+                    <div class="{{ columns_mobile }} col-lg text-center mb-3 mt-3">
+                        <{% if url %}a{% else %}div{% endif %} class="d-flex align-items-center {% if align == 'top' %} flex-wrap {% endif %} {% if align == 'side' %}justify-content-between justify-content-lg-center{% else %}justify-content-center{% endif %} w-100" href="{{ url }}" {% if target %}target="_blank"{% endif %}>
+                            {% if image %}
+                                <img loading="lazy" class="img-fluid {% if align == 'top' %} mb-3 {% endif %}" src="{{ image | img_url }}" alt="{{ image | img_url | get_filename }}">
+                            {% endif %}
+
+                            <div class="{% if align == 'side' %}text-lg-left ml-lg-4{% else %}text-center w-100{% endif %}">
+                                {% if title %}
+                                    <h3 class="h2" style="color: {{ title_color }};">{{ title | raw }}</h3>
+                                {% endif %}
+
+                                {% if description %}
+                                    <p class="text m-0" style="color: {{ description_color }};">{{ description | raw }}</p>
+                                {% endif %}
+                            </div>
+                        </{% if url %}a{% else %}div{% endif %}>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+    {% include 'section-footer.twig' %}
+{% endif %}
+{% schema %}
+{
+    "name": "Mini banner com texto",
+    "category": "Imagens",
+    "content_for_index": "1",
+    "max_blocks": 12,
+    "settings": [
+        {
+            "type": "accordion",
+            "content": "Aparência",
+            "icon": "design"
+        },{
+            "type": "text",
+            "label": "Título",
+            "id": "title"
+        }, {
+            "type": "text",
+            "label": "Subtítulo",
+            "id": "subtitle"
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em dispositivos móveis",
+            "id": "hide_mobile",
+            "default": 0
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em desktop",
+            "id": "hide_desktop",
+            "default": 0
+        },{
+            "type": "separator"
+        },{
+			"type": "text",
+			"id": "custom_class",
+			"label": "Classe customizada para editar o css"
+		}, {
+            "type": "select",
+            "id": "container",
+            "label": "Estilo do conteúdo",
+            "default": "container",
+            "options": [
+                {
+                    "value": "container",
+                    "label": "Centralizado"
+                },
+                {
+                    "value": "container-fluid",
+                    "label": "Adaptável a largura da tela"
+                }
+            ]
+        }, {
+            "type": "select",
+            "id": "bpl_mobile",
+            "label": "Quantidade de banners por linha no mobile",
+            "default": "col-12",
+            "options": [{
+                    "value": "col-12",
+                    "label": "1"
+                },
+                {
+                    "value": "col-6",
+                    "label": "2"
+                }
+            ]
+        }, {
+            "type": "select",
+            "id": "align",
+            "label": "Alinhamento da imagem",
+            "default": "top",
+            "options": [
+                {
+                    "value": "top",
+                    "label": "Imagem sob o texto"
+                },
+                {
+                    "value": "side",
+                    "label": "Imagem ao lado do texto"
+                }
+            ]
+        }, {
+            "type": "separator"
+        },{
+            "type": "color_picker",
+            "id": "title_color",
+            "label": "Cor do título"
+        }, {
+            "type": "color_picker",
+            "id": "description_color",
+            "label": "Cor da descrição"
+        }, {
+            "type": "color_picker",
+            "id": "background_color",
+            "label": "Cor de fundo da seção"
+        }, {
+            "type": "color_picker",
+            "id": "border_color",
+            "label": "Cor da borda de seção"
+        },{
+            "type": "image_picker",
+            "id": "background_image",
+            "label": "Imagem de fundo da seção",
+            "info": "Recomendado: 1600x600px com até 250kb"
+        },{
+            "type": "checkbox",
+            "label": "Imagem fixa de fundo",
+            "id": "background_parallax"
+        },{
+            "type": "range",
+            "id": "border_size",
+            "min": "0",
+            "max": "10",
+            "default": "1",
+            "label": "Espessura da borda de seção"
+        }, {
+            "type": "range",
+            "id": "margin_up",
+            "min": "0",
+            "max": "10",
+            "default": "2",
+            "label": "Margem de cima da seção"
+        }, {
+            "type": "range",
+            "id": "margin_dw",
+            "min": "0",
+            "max": "10",
+            "default": "2",
+            "label": "Margem de baixo da seção"
+        }
+    ],
+    "blocks": [
+        {
+	        "type": "image",
+			"name": "Banners",
+	        "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "image",
+                    "label": "Imagem",
+                    "info": "Recomendado: 60x60px"
+                },
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Título"
+                }, {
+                    "type": "textarea",
+                    "id": "description",
+                    "label": "Descrição"
+                },
+                {
+                    "type": "url",
+                    "id": "url",
+                    "label": "Link do banner"
+                },
+                {
+                    "type": "checkbox",
+                    "label": "abrir em nova aba",
+                    "id": "target",
+                    "default": 0
+                }
+            ]
+		}
+    ]
+}
+{% endschema %}

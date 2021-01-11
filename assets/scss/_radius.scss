@@ -1,0 +1,44 @@
+/*!
+    {% set radius = theme.settings.radius_size %}
+    {% set r = 0 %}
+
+    {% if radius == 'light_rounded' %}
+        {% set r = '.25rem' %}
+    {% elseif radius == 'rounded' %}
+        {% set r = '5rem' %}
+    {% else %}
+        {% set r = 0 %}
+    {% endif %}
+*/
+
+/*!
+    {% set radius_textarea = theme.settings.radius_size %}
+    {% set r_textarea = 0 %}
+
+    {% if radius_textarea == 'light_rounded' %}
+        {% set r_textarea = '.25rem' %}
+    {% elseif radius_textarea == 'rounded' %}
+        {% set r_textarea = '.25rem' %}
+    {% else %}
+        {% set r_textarea = 0 %}
+    {% endif %}
+*/
+
+// Variables
+$border-radius: "{{ r }}";
+$border-radius_textarea: "{{ r_textarea }}";
+
+// Components
+input,
+button,
+select,
+input.rounded,
+button.rounded,
+select.rounded,
+.product-attribute-button,
+.form-group--select .select {
+    border-radius: $border-radius !important;
+}
+textarea{
+    border-radius: $border-radius_textarea !important;
+}

@@ -1,0 +1,37 @@
+{% set title = section.settings.security_title ?: null %}
+{% set color = section.settings.security_color ?: null %}
+
+{% if section.settings.seal_security %}
+    <div class="footer-security">
+        {% include 'footer-title.twig' with { 'title' : title } %}
+
+        <div class="row">
+            {% if section.settings.seal_security_ssl %}
+                <div class="col-auto">
+                    {% if color %}
+                        <div class="icon">
+                            <img src="{{ ('img/dc-security/ssl-color.svg') | assets_url | img_url }}" style="max-width: 81px;"/>
+                        </div>
+                    {% else %}
+                        <div class="icon {% if section_secondary %} f-sc-color {% else %} f-hl-color {% endif %}">
+                            <span class="icon-dc-ssl"></span>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+            {% if section.settings.seal_security_googlesafe %}
+                <div class="col-auto d-flex align-items-center">
+                    {% if color %}
+                        <div class="icon">
+                            <img src="{{ ('img/dc-security/googlesafe-color.svg') | assets_url | img_url }}" style="max-width: 80px;" />
+                        </div>
+                    {% else %}
+                        <div class="icon {% if section_secondary %} f-sc-color {% else %} f-hl-color {% endif %}">
+                            <span class="icon-dc-googlesf"></span>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}

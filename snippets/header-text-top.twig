@@ -1,0 +1,17 @@
+{% if section.settings.top and section.settings.top_text %}
+
+    {% set background = section.settings.top_bg ?: theme.settings.color_primary %}
+    {% set color = section.settings.top_color ?: '#FFFFFF' %}
+    
+    <div class="text-top" style="background-color: {{ background }}; color: {{ color }};">
+        <div class="{{ container }}">
+            <div class="row no-gutters">
+                <div class="col-12 text-center">
+                    <div class="p-3">
+                        {{ section.settings.top_text | raw }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

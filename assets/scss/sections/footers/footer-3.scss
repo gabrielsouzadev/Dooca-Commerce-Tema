@@ -1,0 +1,58 @@
+.footer-3 {
+    .footer-newsletter {
+        max-width: 30rem;
+
+        @include media-breakpoint-down(md) {
+            margin: 0 auto;
+        }
+
+        .no-gutters .col-auto:last-of-type .footer-input {
+            border-top: 0;
+        }
+
+        .footer-input {
+            min-width: 100%;
+        }
+
+        .footer-submit {
+            position: unset;
+            right: unset;
+            border: 0;
+
+            .text {
+                color: $text-color-secondary !important;
+            }
+        }
+    }
+
+    .text.f-pr-color p,
+    .dooca-icon {
+        color: #fff;
+    }
+
+    @include media-breakpoint-down(sm) {
+        .footer-newsletter {
+            .flex-column>.col-auto,
+            .no-gutters>.col-auto {
+                width: 100%;
+                min-width: 100%;
+            }
+
+            .footer-input {
+                max-width: 100%;
+            }
+        }
+    }
+
+    .footer-top {
+        .logo .logo-link .img-fluid {
+            margin: 0 0 1.5rem;
+        }
+    }
+
+    .footer-social {
+        a {
+            color: #fff !important;
+        }
+    }
+}

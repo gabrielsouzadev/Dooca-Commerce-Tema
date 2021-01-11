@@ -1,0 +1,29 @@
+{% if collection_grid == 2 %} {% set col = '6' %} {% endif %}
+{% if collection_grid == 3 %} {% set col = '4' %} {% endif %}
+{% if collection_grid == 4 %} {% set col = '3' %} {% endif %}
+
+<section class="flex-grow-1 mw-100">
+    <div class="container-fluid mb-4">
+
+        <div class="row mt-4">
+            <div class="col-12">
+                {% include 'collection-paginate.twig' with {'type': 'header'} %}
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            {% for product in products %}
+                <div class="col-6 col-sm-6 col-md-4 col-lg-{{ col }} mb-4">
+                    {% set params = { 'col': col } %}
+                    {% include 'product-card.twig' with params %}
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-12">
+                {% include 'collection-paginate.twig' with {'type': 'footer'} %}
+            </div>
+        </div>
+    </div>
+</section>

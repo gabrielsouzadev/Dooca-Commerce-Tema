@@ -1,0 +1,31 @@
+{% set crop = '120x120+fill_ffffff+crop_center' %}
+
+<div class="brands">
+    <div class="container">
+        <div class="my-5 row justify-content-center">
+            {% if brands|length > 0 %}
+                <div class="mb-5 col-12 text-center">
+                    <h2 class="h1 m-0">Marcas</h2>
+                </div>
+
+                {% for brand in brands %}
+                    <div class="col-6 col-md-4 col-lg-2 mb-3 mb-md-2">
+                        <a class="link d-flex w-100 h-100 align-items-center justify-content-center" aria-label="{{ brand.name }}" href="{{ 'brand' | url (brand) }}">
+                            {% if brand.image %}
+                                <img src="{{ brand.image | img_url(crop) }}" alt="{{ brand.name }}" class="img-fluid">
+                            {% else %}
+                                <h3 class="h3 m-0">{{ brand.name }}</h3>
+                            {% endif %}
+                        </a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12 text-center">
+                    <div class="h3">
+                        Não há marcas cadastradas.
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

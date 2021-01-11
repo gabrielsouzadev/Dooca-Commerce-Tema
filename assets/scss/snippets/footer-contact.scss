@@ -1,0 +1,19 @@
+.footer-contact {
+    .icon {
+        width: 1.9rem;
+        height: 1.9rem;
+        max-width: 100%;
+    }
+
+    @include media-breakpoint-up(sm) {
+        .text {
+            max-width: 30rem;
+            width: 100%;
+        }
+    }
+
+    b.phone,
+    b.whatsapp {
+        font-size: 1.6rem;
+    }
+}

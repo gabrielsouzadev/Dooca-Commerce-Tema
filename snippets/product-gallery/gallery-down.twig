@@ -1,0 +1,172 @@
+{% set main_image = product.image | img_url (img_featured) %}
+{% set thumbs = product.images ?: null %}
+
+<div class="row justify-content-center w-100">
+    {% if main_image %}
+        <div class="col-12">
+            <figure class="product-gallery-main w-100 text-center position-relative">
+                <img class="img-fluid" src="{{ main_image }}" alt="{{ product.image | img_url | get_filename }}" data-legend="{{ product.image | img_url | get_filename }}">
+                {% include 'product-tags.twig' %}
+            </figure>
+            
+            {% app 'custom-badge' %}
+        </div>
+    {% endif %}
+    {% if thumbs %}
+        <div class="col-12 d-flex align-items-center justify-content-center">
+            <div class="thumbs-arrow left">
+            	<i>{{ 'img/arrow-left.svg' | svg }}</i>
+            </div>
+            <div class="thumbs d-flex flex-wrap justify-content-center center" style="max-width: 49rem;">
+                {% for thumb in thumbs %}
+                    <div 
+                        class="thumb d-flex justify-content-center w-100 p-2 m-2 {% if loop.index is same as(1) %}is-active{% endif %}"
+                        data-featured="{{ thumb.src | img_url (img_featured) }}"
+                        data-zoom="{{ thumb.src | img_url (img_zoom) }}"
+                        data-legend="{{ thumb.src | img_url | get_filename }}"
+                    >
+                        <img class="img-fluid" src="{{ thumb.src | img_url (img_featured) }}" alt="{{ thumb.src | img_url | get_filename }}" data-legend="{{ product.name }}">
+                    </div>
+                {% endfor %}
+                {% if product.video %}
+                    {% set product_video = product.video | video_url %}
+                    <div
+                        class="thumb w-100 p-2 d-flex align-items-center justify-content-center"
+                        data-featured 
+                        data-video-type="{{ product_video.type }}" 
+                        data-video="{{ product_video.id }}"
+                        data-legend="{{ product.name }}"
+                    >
+                        <img class="img-fluid" src="https://img.youtube.com/vi/{{ product_video.id }}/hqdefault.jpg" alt="{{ product.name }}" data-legend="{{ product.name }}">
+                    </div>
+                {% endif %}
+            </div>
+            <div class="thumbs-arrow right">
+            	<i>{{ 'img/arrow-right.svg' | svg }}</i>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+{% if product.video %}
+    {% set product_video = product.video | video_url %}
+    
+    <div class="video-modal">
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-12">
+                    <div class="video-close">
+                        <i class="icon">{{ 'img/close.svg' | svg }}</i>
+                    </div>
+                </div>
+                
+                <div class="col-8">
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe allowfullscreen class="mt-5 embed-responsive-item" frameborder="0" src="https://www.youtube-nocookie.com/embed/{{ product_video.id }}?wmode=transparent&loop=1&rel=0&showinfo=0" allow="autoplay"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>     
+{% endif %}
+
+{% javascript %}
+    $(function() {
+        var image = $('.product-gallery-main');
+        var thumbs = $('.thumbs');
+
+        {# $(window).on('load', function() {
+            thumbs.css('max-height', image.height() + 'px');
+        }); #}
+
+        thumbs.gallery_p({
+            target_featured: '.product-gallery-main',
+            onChangeFeature: function(data) {
+                $('.product-gallery-main').zoom({
+                    url: data.src_zoom,
+                    magnify: {% if section.settings.product_main_image_zoom %}0{% else %}0.8{% endif %}
+                });
+            }
+        });
+
+        var min_height = function() {
+            var main = $('.product-gallery-main');
+            var img_height = main.find('.img-fluid').height();
+
+            main.css('min-height', img_height + 'px');
+        };
+
+        min_height();
+
+        $(window).resize(function() {
+            min_height();
+        });
+
+        var section = $('.product-gallery');
+        var modal = section.find('.video-modal').modal();
+        var close = $('.video-modal').find('.video-close');
+
+        $('body').delegate('.product-gallery-video', 'click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            modal.open();
+
+            setTimeout(function() {
+                var video = $('.video-modal');
+                var iframe = video.find('iframe');
+                var url = '';
+
+                url = new URL(iframe.attr('src'));
+                url.searchParams.set('autoplay', '1');
+
+                iframe.attr('src', url);
+                iframe.attr( 'src', function ( i, val ) { return val; });
+            }, 0);
+        });
+
+        var stopVideo = function() {
+            var video = $('.video-modal');
+            var iframe = video.find('iframe');
+            var url = '';
+
+            url = new URL(iframe.attr('src'));
+            url.searchParams.set('autoplay', '0');
+
+            iframe.attr('src', url);
+            iframe.attr( 'src', function ( i, val ) { return val; });
+        };
+
+        close.on('click', function() {
+            modal.close();
+            stopVideo();
+        });
+
+        $('.modal__container').on('click', function() {
+            modal.close();
+            stopVideo();
+        });
+        
+        $(document).keyup(function(e) {
+            if (e.key === "Escape") {
+                stopVideo();
+            }
+        });
+
+        var all = $('.thumb').addClass("is-active");
+        var i = -1;
+
+        $('.thumbs-arrow.left').click(function() {
+            ctrlKunder( i = !i ? all.length - 1 : --i );
+        });
+        $('.thumbs-arrow.right').click(function() {
+            ctrlKunder( i = ++i % all.length );
+        }).click();
+
+        function ctrlKunder(ele) {
+            all.removeClass("is-active");
+            all.eq(ele).addClass("is-active");
+            all.eq(ele).trigger("click");
+        }
+    });
+{% endjavascript %}

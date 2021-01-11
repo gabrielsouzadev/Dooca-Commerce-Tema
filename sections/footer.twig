@@ -1,0 +1,474 @@
+{% set type = section.settings.type ?: 1 %}
+
+{# theme variables #}
+{% set theme_border = theme.settings.color_border %}
+{% set theme_primary = theme.settings.color_primary %}
+{% set theme_secondary = theme.settings.color_secondary %}
+{% set theme_highlight = theme.settings.color_highlight %}
+{% set theme_textcolor = theme.settings.color_text %}
+
+{# section color variables #}
+{% set section_menu = section.settings.menu_color %}
+{% set section_border = section.settings.border_color %}
+{% set section_primary = section.settings.primary_color %}
+{% set section_secondary = section.settings.secondary_color %}
+{% set section_highglight = section.settings.highlight_color %}
+
+{# style color variables #}
+{% set color_primary = section_primary ?: null %}
+{% set color_secondary = section_secondary ?: null %}
+{% set color_menu = section_menu ?: null %}
+{% set color_highlight = section_highglight ?: null %}
+{% set color_border = section_border ?: theme_border %}
+{% set color_text = null %}
+
+{% set container = section.settings.container ?: 'container' %}
+{% set background = color_primary ?: null %}
+
+{% set margin_up = section.settings.margin_up ?: null %}
+{% set margin_dw = section.settings.margin_dw ?: null %}
+
+{% set version = section.settings.version ?: null %}
+
+{% set logo_max_height = section.settings.logo_maxheight ?: 80 %}
+{% set logo_max_height_mobile = section.settings.logo_maxheight_mobile ?: 50 %}
+
+{% if version %}
+    {% set aux = '' %}
+    {% set aux = color_primary %}
+    {% set color_primary = color_secondary %}
+    {% set color_secondary = aux %}
+	{% set color_text = aux %}
+{% endif %}
+
+{% include 'style/footer.twig' %}
+
+<footer 
+	class="footer footer-{{ type }} {% if version %}version{% endif %} {% if not section_primary and version %}f-hl-background{% elseif section_primary %}f-pr-background{% endif %}" 
+	id="{{ section.id }}"
+	{% if section.settings.footer_bg %}
+		style="
+			background-image: url({{ section.settings.footer_bg | img_url() }});
+			background-repeat: no-repeat; 
+			background-size: cover;
+			background-position: center center;
+		"
+	{% endif %}
+>
+	{% include 'footers/' ~ type ~ '/footer-top.twig' %}
+	{% include 'footers/' ~ type ~ '/footer-middle.twig' %}
+	{% include 'footers/' ~ type ~ '/footer-bottom.twig' %}
+	{% include 'footer-logo.twig' %}
+</footer>
+
+{% schema %}
+	{
+		"name": "Rodapé",
+		"settings": [
+			{
+				"type": "accordion",
+				"content": "Aparência",
+				"icon": "design"
+			},{
+				"type": "select",
+				"id": "container",
+				"label": "Estilo do conteúdo",
+				"tooltip": "Você poderá definir o se o conteúdo da seção é centralizado ou adaptável a largura da tela.",
+				"default": "container",
+				"options": [{
+						"value": "container",
+						"label": "Centralizado"
+					},
+					{
+						"value": "container-fluid",
+						"label": "Adaptável a largura da tela"
+					}
+				]
+			}, {
+				"type": "select",
+				"id": "type",
+				"label": "Estilo do rodapé",
+				"default": "3",
+				"options": [
+					{
+						"value": "1",
+						"label": "3 seções com 3 menus"
+					},
+					{
+						"value": "2",
+						"label": "3 seções com 1 menu"
+					},
+					{
+						"value": "3",
+						"label": "2 seções com 1 menu"
+					},
+					{
+						"value": "4",
+						"label": "1 seção com 1 menu"
+					}
+				]
+			}, {
+				"type": "checkbox",
+				"label": "Inverter cores",
+				"id": "version",
+				"default": 0
+			}, {
+				"type": "image_picker",
+				"id": "footer_bg",
+				"label": "Imagem de fundo do rodapé"
+			}, {
+				"type": "color_picker",
+				"id": "primary_color",
+				"label": "Cor de fundo"
+			}, {
+				"type": "color_picker",
+				"id": "secondary_color",
+				"label": "Cor primária"
+			}, {
+				"type": "color_picker",
+				"id": "highlight_color",
+				"label": "Cor secundária"
+			}, {
+				"type": "color_picker",
+				"id": "border_color",
+				"label": "Cor de borda"
+			}, {
+                "type": "range",
+                "id": "border_opacity",
+				"min": "0",
+				"max": "10",
+				"default": "10",
+				"label": "Intensidade da borda"
+            }, {
+                "type": "range",
+                "id": "margin_up",
+                "min": "0",
+                "max": "10",
+                "default": "10",
+                "label": "Margem de cima de cada seção"
+            }, {
+                "type": "range",
+                "id": "margin_dw",
+                "min": "0",
+                "max": "10",
+                "default": "10",
+                "label": "Margem de baixo de cada seção"
+            },
+			{
+				"type": "accordion",
+				"content": "Logos",
+				"icon": "image"
+			}, {
+				"type": "image_picker",
+				"id": "logo_dark",
+				"label": "Logo aplicado em fundo claro",
+				"info": "Recomendamos a inserção de arquivos em vetor para web na extensão .SVG ou imagem com até 200x400px"
+			}, {
+				"type": "image_picker",
+				"id": "logo_light",
+				"label": "Logo aplicado em fundo escuro",
+				"info": "Recomendamos a inserção de arquivos em vetor para web na extensão .SVG ou imagem com até 200x400px"
+			}, {
+				"type": "image_picker",
+				"id": "logo_mobile",
+				"label": "Logo mobile",
+				"info": "Recomendamos a inserção de arquivos em vetor para web na extensão .SVG ou imagem com até 200x400px"
+			},{
+				"type": "text",
+				"id": "logo_maxheight",
+				"info": "Exemplo 150",
+				"label": "Tamanho máximo do logo em px",
+				"default": "150"
+			},{
+				"type": "text",
+				"id": "logo_maxheight_mobile",
+				"info": "Exemplo 50",
+				"label": "Tamanho máximo do logo mobile em px",
+				"default": "50"
+			}, {
+				"type": "accordion",
+				"content": "Menus",
+				"icon": "menu"
+			},{
+				"type": "header",
+				"content": "Selecione os menus de acordo com o estilo de rodapé selecionado"
+			}, {
+				"type": "navigation",
+				"id": "menu_footer_1",
+				"label": "Estilo com 3 menus - menu 01"
+			}, {
+				"type": "navigation",
+				"id": "menu_footer_2",
+				"label": "Estilo com 3 menus - menu 02"
+			}, {
+				"type": "navigation",
+				"id": "menu_footer_3",
+				"label": "Estilo com 3 menus - menu 03"
+			}, {
+				"type": "navigation",
+				"id": "menu_footer",
+				"label": "Estilo com 1 menu"
+			}, {
+				"type": "accordion",
+				"content": "Títulos",
+				"icon": "pencil"
+			},{
+				"type": "text",
+				"id": "newsletter_title",
+				"label": "Título de newsletter",
+				"default": "Receba novidades e promoções"
+			},{
+				"type": "text",
+				"id": "contact_title",
+				"label": "Título de atendimento",
+				"default": "Central de atendimento"
+			},{
+				"type": "text",
+				"id": "payment_title",
+				"label": "Título de pagamento",
+				"default": "Pagamento"
+			},{
+				"type": "text",
+				"id": "security_title",
+				"label": "Título de segurança",
+				"default": "Segurança"
+			},{
+				"type": "text",
+				"id": "certificate_title",
+				"label": "Título de certificado",
+				"default": "Certificados"
+			},{
+				"type": "accordion",
+				"content": "Bandeiras de pagamento",
+				"icon": "wallet"
+			},{
+				"type": "checkbox",
+				"id": "seal_payment",
+				"default": "1",
+				"label": "Exibir bandeiras de pagamento"
+			},{
+				"type": "checkbox",
+				"id": "payment_color",
+				"default": "0",
+				"label": "Exibir bandeiras com cor"
+			},{
+				"type": "separator"
+			},{
+				"type": "checkbox",
+				"id": "seal_payment_amex",
+				"default": "1",
+				"label": "Amex"
+			},{
+				"type": "checkbox",
+				"id": "seal_payment_aura",
+				"default": "1",
+				"label": "Aura"
+			},{
+				"type": "checkbox",
+				"id": "seal_payment_bancointer",
+				"default": "1",
+				"label": "Banco inter"
+			},{
+				"type": "checkbox",
+				"id": "seal_payment_diners",
+				"default": "1",
+				"label": "Diners"
+			},{
+				"type": "checkbox",
+				"id": "seal_payment_discover",
+				"default": "1",
+				"label": "Discover"
+			},{
+				"type": "checkbox",
+				"id": "seal_payment_elo",
+				"default": "1",
+				"label": "Elo"
+			},{
+				"type": "checkbox",
+				"id": "seal_payment_hiper",
+				"default": "1",
+				"label": "Hiper"
+			},{
+				"type": "checkbox",
+				"id": "seal_payment_hipercard",
+				"default": "1",
+				"label": "Hipercard"
+			},{
+				"type": "checkbox",
+				"id": "seal_payment_jcb",
+				"default": "1",
+				"label": "JCB"
+			},{
+				"type": "checkbox",
+				"id": "seal_payment_master",
+				"default": "1",
+				"label": "Mastercard"
+			},{
+				"type": "checkbox",
+				"id": "seal_payment_visa",
+				"default": "1",
+				"label": "Visa"
+			},{
+				"type": "checkbox",
+				"id": "seal_payment_paypal",
+				"default": "1",
+				"label": "PayPal"
+			},{
+				"type": "checkbox",
+				"id": "seal_payment_billet",
+				"default": "1",
+				"label": "Boleto"
+			},{
+				"type": "checkbox",
+				"id": "seal_payment_itau",
+				"default": "1",
+				"label": "Itaú"
+			},{
+				"type": "checkbox",
+				"id": "seal_payment_mercadopago",
+				"default": "1",
+				"label": "Mercado pago"
+			},{
+				"type": "checkbox",
+				"id": "seal_payment_picpay",
+				"default": "1",
+				"label": "Picpay"
+			},{
+				"type": "checkbox",
+				"id": "seal_payment_ame",
+				"default": "1",
+				"label": "Ame"
+			},{
+				"type": "accordion",
+				"content": "Selos de segurança",
+				"icon": "lock"
+			},{
+				"type": "checkbox",
+				"id": "seal_security",
+				"default": "1",
+				"label": "Exibir selos de segurança"
+			},{
+				"type": "checkbox",
+				"id": "security_color",
+				"default": "0",
+				"label": "Exibir selos com cor"
+			},{
+				"type": "separator"
+			},{
+				"type": "checkbox",
+				"id": "seal_security_googlesafe",
+				"default": "1",
+				"label": "Google Safe Browsing"
+			},{
+				"type": "checkbox",
+				"id": "seal_security_ssl",
+				"default": "1",
+				"label": "SSL - site seguro"
+			},{
+				"type": "accordion",
+				"content": "Certificados",
+				"icon": "user-group"
+			},{
+                "type": "html",
+                "id": "seal_certificate",
+                "label": "Insira aqui o código dos certificados"
+            }, {
+				"type": "accordion",
+				"content": "Termos",
+				"icon": "legal"
+			}, {
+				"type": "html",
+				"id": "terms",
+				"label": "Texto de termos e condições"
+			},{
+				"type": "select",
+				"id": "phrase_id",
+				"label": "Frases da assinatura",
+				"default": "0",
+				"options": [
+					{
+						"value": 0,
+						"label": "Frase 1"
+					},
+					{
+						"value": 1,
+						"label": "Frase 2"
+					},
+					{
+						"value": 2,
+						"label": "Frase 3"
+					},
+					{
+						"value": 3,
+						"label": "Frase 4"
+					},
+					{
+						"value": 4,
+						"label": "Frase 5"
+					},
+					{
+						"value": 5,
+						"label": "Frase 6"
+					}
+				]
+			}, {
+				"type": "checkbox",
+				"label": "Inverter cores",
+				"id": "version_phrases",
+				"default": 0
+			},{
+				"type": "accordion",
+				"content": "Logo de parceiro",
+				"icon": "image"
+			},{
+				"type": "image_picker",
+				"id": "logo_partner",
+				"label": "Logo de parceiro",
+				"info": "Recomendamos a inserção de arquivos em vetor para web na extensão .SVG ou imagem com até 200x400px"
+			},{
+				"type": "url",
+				"id": "logo_partner_url",
+				"label": "Link do site do parceiro"
+			}
+		],
+		"blocks": [{
+	        "type": "text",
+			"name": "Atendimento",
+	        "settings": [{
+                "type": "select",
+                "id": "type",
+                "label": "Tipo de atendimento",
+                "default": "phone",
+                "options": [{
+                        "value": "phone",
+                        "label": "Telefone"
+                    },
+                    {
+                        "value": "whatsapp",
+                        "label": "Whatsapp"
+                    },
+                    {
+                        "value": "skype",
+                        "label": "Skype"
+                    },
+                    {
+                        "value": "email",
+                        "label": "E-mail"
+                    },
+                    {
+                        "value": "schedule",
+                        "label": "Horário/Texto"
+                    },
+					{
+						"value": "address",
+						"label": "Endereço"
+					}
+                ]
+            },{
+				"type": "text",
+				"id": "value",
+				"label": "Contato/Informação"
+			}]
+		}]
+	}
+{% endschema %}

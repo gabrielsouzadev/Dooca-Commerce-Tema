@@ -1,0 +1,119 @@
+{% set modalTime = theme.settings.modal_time | default(0) %}
+{% set modalType = theme.settings.modal_type | default(1) %}
+
+<div class="theme-custom-modal">
+	<div class="container p-0">
+		<div class="theme-custom-modal-close position-absolute">
+			<i class="icon">{{ 'img/close-modal.svg' | svg }}</i>
+		</div>
+		<div class="row no-gutters flex-column">
+			<div class="col">
+				{% set params = { 'banner': theme.settings.modal_image }  %}
+				{% include 'banner.twig' with params %}
+			</div>
+			{% if theme.settings.modal_title or theme.settings.modal_message or theme.settings.modal_button %}
+				<div class="col text-center p-5">
+					{% if theme.settings.modal_title %}
+						<h2 class="h2">{{ theme.settings.modal_title }}</h2>
+					{% endif %}
+
+					{% if theme.settings.modal_message %}
+						<p class="text">{{ theme.settings.modal_message }}</p>
+					{% endif %}
+
+					{% if theme.settings.modal_button %}
+						<a {% if theme.settings.modal_button_url %} href="{{ theme.settings.modal_button_url }}" {% endif %} {% if theme.settings.modal_button_url_target %}target="_blank"{% endif %} class="btn btn-lg theme-custom-modal-btn" name="button">
+							{{ theme.settings.modal_button }}
+						</a>
+					{% endif %}
+				</div>
+			{% endif %}
+		</div>
+	</div>
+</div>
+
+{% javascript %}
+	$(function() {
+		/**
+		 * Popup modal de aviso
+		 */
+		
+		// Configurações do editor
+		var timing = {{ modalTime }};
+		var modal_type = {{ modalType }};
+		var cookie = new _dcs.Cookies();
+		
+		// Opções da modal
+		var opts = {
+			class: 'modal--flat',
+			onClose: function() {
+				// Setar o item para exibir apenas 1 vez ao dia
+				if (modal_type == 1) {
+					setWithExpiry('_dc_modal_theme', 1);
+				}
+
+				// Abrir a modal de email capture caso exista
+				if (!cookie.get('_dc_app_email_capture') && $('.email-capture-modal').length > 0) {
+					$('#email-capture-modal').show();
+				}
+			}
+		};
+
+		if ($('.theme-custom-modal').length > 0) {
+			var modal = $('.theme-custom-modal').modal(opts);
+
+			if (modal_type == 1) {  
+				var hasExpired = hasExpired();
+
+				if (hasExpired) {
+					openModal();
+				}
+			} else { 
+				openModal();
+			}
+		}
+
+		/**
+		 * Storage utils
+		 */
+
+		function setWithExpiry(key, value) {
+			const now = new Date();
+			const item = {
+				value: value,
+				expire: now.getTime() + 1*24*60*60*1000,
+			};
+
+			localStorage.setItem(key, JSON.stringify(item));
+		};
+
+		function hasExpired() {
+			const itemStr = localStorage.getItem('_dc_modal_theme');
+			
+			if (!itemStr) {
+				return true;
+			}
+
+			const item = JSON.parse(itemStr);
+			const now = new Date();
+
+			if (now.getTime() > item.expiry) {
+				return true;
+			}
+
+			return false;
+		};
+
+		/**
+		 * Modal utils
+		 */
+		function openModal() {
+			setTimeout(function() { modal.open(); }, timing); 
+		};
+
+		$('.theme-custom-modal-close, .theme-custom-modal-btn').click(function() {
+			modal.close();
+			$('#theme-custom-modal').fadeOut();
+		});
+	});
+{% endjavascript %}

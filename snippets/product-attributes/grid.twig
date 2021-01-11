@@ -1,0 +1,89 @@
+<div class="container">
+    <div class="row">
+        {% for variation in variations %}
+            {% set stock = (variation.balance <= 0) ? 'out-of-stock' : '' %}
+            <div class="product-attribute-grid col-12 {{ stock }} mb-3 pb-3">
+                <div class="d-flex flex-wrap align-items-center no-gutters">
+                    <div class="col-12 col-md-6">
+                        <div class="d-flex align-items-center">
+                            <input type="hidden" name="items[{{ loop.index0 }}][variation_id]" value="{{ variation.id }}">
+                            <h2 class="h2 m-0">{{ variation.attribute.name }}</h2>
+                            <i class="ml-3 mr-3">-</i>
+                            <span class="price">{{ variation.price | currency }}</span>
+                            {% if stock is same as('out-of-stock') %}
+                                <span class="text">- Indisponível</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div
+                            class="dc-quantity position-relative w-100"
+                            dc-quantity="dc-quantity"
+                            data-min="0"
+                            data-max="{{ (product.max_quantity > 0) ? product.max_quantity : variation.balance }}"
+                        >
+                            <button
+                                aria-label="dc-decrease"
+                                dc-quantity-decrease="dc-quantity-decrease"
+                                type="button"
+                                class="dc-decrease position-absolute d-flex justify-content-center align-items-center p-0"
+                            >
+                                <i class="icon">{{ 'img/dc-icons/minus.svg' | svg }}</i>
+                            </button>
+                            <div class="form-group form-group--input quantity__input">
+                                <input
+                                    dc-quantity-input="dc-quantity-input"
+                                    type="number"
+                                    class="input w-100 text-center dc-input"
+                                    name="items[{{ loop.index0 }}][quantity]"
+                                    value="0"
+                                    max="{{ (product.max_quantity > 0) ? product.max_quantity : variation.balance }}"
+                                >
+                            </div>
+                            <button
+                                aria-label="dc-increase"
+                                dc-quantity-increase="dc-quantity-increase"
+                                type="button"
+                                class="dc-increase position-absolute d-flex justify-content-center align-items-center p-0"
+                            >
+                                <i class="icon">{{ 'img/dc-icons/plus.svg' | svg }}</i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="row product-attribute-message">
+        <div class="col-12 p-3">
+            <span class="text d-flex align-items-center">
+                <i class="icon mr-3">{{ 'img/dc-icons/warning.svg' | svg }}</i>
+                <b>Insira ao menos uma quantidade para adicionar ao carrinho.</b>
+            </span>
+        </div>
+    </div>
+</div>
+
+{% javascript %}
+    $('.product-action').each(function() {
+        var action = $(this);
+        var grid = action.find('.product-attribute-grid');
+        var form = action.find('#form-add-cart');
+        var is_valid = false;
+
+        form.submit(function() {
+            grid.find('.dc-input').each(function() {
+                if ($(this).val() != 0) {
+                    is_valid = true;
+                }
+            });
+
+            if (is_valid != true) {
+                action.find('.product-attribute-message').fadeIn();
+                return false;
+            } else {
+                return true;
+            }
+        });
+    });
+{% endjavascript %}

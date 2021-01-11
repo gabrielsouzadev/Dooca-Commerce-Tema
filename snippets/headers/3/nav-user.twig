@@ -1,0 +1,7 @@
+{% set text = customer.first_name ?: 'Entrar / Cadastrar' %}
+
+<div class="nav-user">
+    <a href="{{ 'account' | url }}" class="d-flex align-items-center">
+        <span class="text {% if section_secondary %}h-sc-color{% endif %}">{{ text }}</span>
+    </a>
+</div>

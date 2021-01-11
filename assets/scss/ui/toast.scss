@@ -1,0 +1,7 @@
+.toast {
+	border-radius: $border-radius;
+
+	&--success {
+		background: $color-success;
+	}
+}

@@ -1,0 +1,17 @@
+<div class="pc-builder" style="
+    {% if app.image.src %}background-image: url({{ app.image.src }});{% endif %}
+    background-position: top center;
+    background-repeat: no-repeat;
+    background-color: {{ theme.settings.color_primary }};
+">
+    {% section 'pc-builder' %}
+    
+    <div class="pc-builder-loader">
+        <div class="d-flex align-items-center justify-content-center position-fixed" style="width: 100vw; height: 100vh;">
+            <div class="loader"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@beta/dist/js.cookie.min.js"></script>
+{% include 'scripts/pc-builder.twig' with { data: pcbuilder.data } %}

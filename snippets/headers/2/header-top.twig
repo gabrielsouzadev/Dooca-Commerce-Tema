@@ -1,0 +1,18 @@
+{% if section.blocks or (theme.settings.social_facebook_link or theme.settings.social_twitter_link or theme.settings.social_instagram_link or theme.settings.social_pinterest_link or theme.settings.social_youtube_link or theme.settings.social_linkedin_link) %}
+    <div class="header-top position-relative">
+        <div class="header-bg h-pr-background" style="opacity: {{ opacity_css }};"></div>
+        <div class="{{ container }}">
+            <div class="row no-gutters align-items-center">
+                <div class="col">
+                    {% include 'nav-contact.twig' %}
+                </div>
+
+                <div class="col-md-auto">
+                    <div class="d-flex align-items-center">
+                        {% include 'nav-social.twig' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

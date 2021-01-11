@@ -1,0 +1,34 @@
+{% set menus = pages.data %}
+{% set icons = 'img/dc-icons/angle-down.svg' %}
+
+{% if menus|length > 0 %}
+    <div class="navigation-mobile p-2 mt-3">
+        <ul class="navigation-mobile-list d-flex flex-column">
+            {% for item in menus %}
+                {% if item.active %}
+                    {% set active = (item.id == page.id) ? 'active order-0' : 'order-1' %}
+                    <li class="navigation-mobile-item {{ active }}">
+                        <a href="{{ 'page' | url (item) }}" class="link d-flex align-items-center justify-content-between p-3">
+                            <span class="text">{{ item.name }}</span>
+                            <i class="icon">{{ icons | svg }}</i>
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+
+    {% javascript %}
+        $(function() {
+            var navigation = $('.navigation-mobile');
+            var navigation_item = $('.navigation-mobile-item.active');
+
+            navigation_item.click(function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                navigation.toggleClass('open');
+            });
+        });
+    {% endjavascript %}
+{% endif %}
+

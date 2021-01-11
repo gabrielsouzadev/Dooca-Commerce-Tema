@@ -1,0 +1,173 @@
+.subscription-plans {
+    .row {
+        margin-top: 3.5rem;
+
+        @include media-breakpoint-down(sm) {
+            margin-top: 1.5rem;
+        }
+    }
+
+    .plan {
+        width: 100%;
+        height: 100%;
+        max-width: 52rem;
+        margin: 0 auto;
+        text-align: center;
+        padding: 3rem;
+        border-radius: .5rem;
+        box-shadow: 0 0 1.3rem 0 rgba(0, 0, 0, 0.15);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+    }
+
+    .plan-sell {
+        position: absolute;
+        left: 50%;
+        top: 0;
+        transform: translateX(-50%);
+        color: $text-color;
+        padding: .3rem .8rem;
+        background: $warning;
+        border-radius: .5rem;
+        font-family: $h2-ff;
+        margin-top: -1.2rem;
+        max-width: 32rem;
+
+        @include media-breakpoint-down(sm) {
+            max-width: 22rem;
+        }
+    }
+
+    .plan-name {
+        color: $color-primary;
+    }
+
+    .plan-description {
+        color: $text-color;
+    }
+
+    .plan-image {
+        position: relative;
+        max-width: 24rem;
+        padding: 0 2rem;
+        margin: 0 auto;
+
+        .plan-image-src {
+            width: 100%;
+            padding: 0;
+        }
+    }
+
+    .plan-price {
+        .price-compare {
+            text-decoration: line-through;
+        }
+
+        .price {
+            color: $color-primary;
+            font-family: $tx-ff;
+            font-weight: $h2-fw;
+            font-size: $h2-cs;
+            letter-spacing: $tx-cl;
+            text-transform: $tx-tt;
+            font-style: $tx-st;
+        }
+    }
+
+    .plan-name,
+    .plan-description,
+    .plan-image,
+    .plan-price {
+        line-height: 1.2;
+        margin-bottom: 2rem;
+    }
+
+    // Owl
+    .owl-carousel,
+    .owl-stage {
+        display: flex;
+
+        .col-12 {
+            height: 100%;
+            padding: 1.5rem;
+        }
+
+        .owl-item {
+            padding: 1.5rem 0;
+        }
+    }
+
+    .owl-theme {
+        .owl-dots {
+            .owl-dot {
+                &.active,
+                &:hover {
+                    span {
+                        border-color: $color-secondary;
+                        background: $color-secondary;
+                        opacity: 1;
+                    }
+                }
+
+                span {
+                    border-color: $text-color;
+                    background: $text-color;
+                    opacity: 0.3;
+                    transition: all ease .15s;
+                }
+            }
+        }
+    }
+
+    // Arrows
+    .has-arrows {
+        @include media-breakpoint-up(md) {
+            padding: 0 10rem;
+
+            .subscription-arrow {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 4.5rem;
+                height: 4.5rem;
+                opacity: 1;
+                transition: all ease .15s;
+
+                &#prev {
+                    left: 2.5rem;
+                }
+
+                &#next {
+                    right: 2.5rem;
+                }
+
+                .icon {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    height: 100%;   
+                    color: $color-secondary;
+
+                    svg {
+                        width: 3rem;
+                        height: 3rem;
+                    }
+                }
+
+                &:hover {
+                    cursor: pointer;
+                    opacity: 0.65;
+                }
+            }
+        }
+    }
+
+    .subscription-arrow {
+        @include media-breakpoint-down(sm) {
+            display: none;
+        }
+    }
+}

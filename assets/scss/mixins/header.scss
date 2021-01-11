@@ -1,0 +1,96 @@
+/*
+* Header Simple
+*
+* Params:
+*
+* $type (string) -> 'clean', 'dark'
+*
+*/
+
+@mixin header-simple($type) {
+
+    $white: #FFFFFF;
+    $black: #1e1e1e;
+    $color: $black;
+
+    @if $type == 'white' or $type == 'clean' {
+        $color: $white;
+    }
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    border: 0;
+    width: 100%;
+
+    @include transition;
+
+    .header__top {
+        background: $body-bg;
+        border-bottom: solid .1rem $border-color;
+        
+        @include transition;
+
+        .smart-search__link,
+        .nav-user__link .icon,
+        .nav-cart__link .icon,
+        .nav-cart__link .badge,
+        .navigation__link {
+            color: $color;
+            @include transition;
+
+            &:hover {
+                color: $text-color;
+            }
+        }
+
+        &__nav {
+            display: none;
+
+            &--mobile {
+                display: block;
+            }
+        }
+    }
+
+    .header__bottom {
+        display: none;
+    }
+
+    .header__top__logo {
+        .logo__link {
+            position: relative;
+        }
+
+        .logo__img {
+            &--black {
+                position: absolute;
+                top: 0;
+                opacity: 0;
+                z-index: 5;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        @if $type == 'dark' {
+            .logo__img--black {
+                opacity: 1;
+            }
+
+            .logo__img--white {
+                opacity: 0;
+            }
+        }
+    }
+
+    @if $type == 'clean' {
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0) 100%);
+
+        .header__top {
+            background: 0;
+            border: 0;
+        }
+    }
+}

@@ -1,0 +1,24 @@
+.product-grouper {
+    .h4 {
+        font-family: $h1-ff;
+        font-weight: $h1-fw;
+        text-transform: $h1-tt;
+        letter-spacing: $h1-cl;
+        color: $color-secondary;
+    }
+
+    .col-auto {
+        transition: all ease-in-out .25s;
+        opacity: 1;
+        border: solid .1rem $border-color;
+        padding: .5rem;
+        
+        &:hover {
+            opacity: .65;
+
+            .icon {
+                box-shadow: inset 0 0 0 .1rem $color-secondary;
+            }
+        }
+    }
+}

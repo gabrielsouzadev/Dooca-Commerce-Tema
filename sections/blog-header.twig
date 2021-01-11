@@ -1,0 +1,55 @@
+{% set blog_title = section.settings.title %}
+{% if post_categories|length > 0 %}
+    {% for item in post_categories %}
+        {% if post_category_id == item.id %}
+            {% set blog_title = item.name %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<div class="blog-header">
+    <a href="/blog" class="m-0">
+        {% if search %}
+            <div class="h1 m-0">“{{ search }}”</div>
+        {% else %}
+            {% set elm = (template == "blog") ? 'h1' : 'div' %}
+            <{{ elm }} class="h1 m-0">{{ blog_title|default('Blog') }}</{{ elm }}>
+        {% endif %}
+    </a>
+
+    {% if search %}
+        <div class="h2 mt-2">
+            {{ paginate.total }} 
+            {{ paginate.total | pluralize ('resultado', 'resultados', false) }}
+            {{ paginate.total | pluralize ('encontrado', 'encontrados', false) }}
+        </div>
+    {% elseif section.settings.subtitle %}
+        <div class="h2 mt-2">
+            {{ section.settings.subtitle | raw }}
+        </div>
+    {% endif %}
+</div>
+
+{% schema %}
+{
+    "name": "Cabeçalho do blog",
+    "settings": [
+        {
+            "type": "header",
+            "content": "Aparência"
+        },
+        {
+            "type": "text",
+            "id": "title",
+            "label": "Título",
+            "default": "Blog"
+        },
+        {
+            "type": "text",
+            "id": "subtitle",
+            "label": "Subtítulo",
+            "default": ""
+        }
+    ]
+}
+{% endschema %}

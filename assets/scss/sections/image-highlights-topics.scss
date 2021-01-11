@@ -1,0 +1,26 @@
+.image-highlights-topics {
+    .topic-title {
+        &:after {
+            content: '';
+            width: 100%;
+            max-width: 4rem;
+            height: .4rem;
+            background: $color-secondary;
+            display: inline-block;
+            margin: 1.5rem auto;
+        }
+    }
+
+    @media (min-width: 1200px) { 
+        .container {
+             max-width: 1000px;
+        }
+    }
+
+    .topic {
+        .placeholder {
+            max-width: 10rem;
+            margin: 0 auto;
+        }
+    }
+}

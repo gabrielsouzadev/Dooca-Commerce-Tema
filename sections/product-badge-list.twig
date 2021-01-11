@@ -1,0 +1,90 @@
+{% set title = section.settings.title ?: null %}
+{% set title_color = section.settings.title_color ?: theme.settings.color_primary %}
+
+{% set margin_section = section.settings.margin_section ?: 0 %}
+
+{% set border_color = section.settings.border_color ?: '#ffffff' %}
+{% set border_size = section.settings.border_size ?: 0 %}
+{% set hide_seals = section.settings.hidde_seals ?: null %}
+
+{% if not hide_seals %}
+    <div class="product-badge-list"
+        style="
+            padding: {{ margin_section }}rem 0;
+            border-style: solid;
+            border-width: 0px 0px {{ border_size }}px 0px;
+            border-color: {{ border_color }};
+        ">
+        <div class="container">
+            <div class="row section-title">
+                <div class="col-12 text-center">
+                    <h2 class="h1 mb-0" style="color: {{ title_color }};">{{ title | raw }}</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-center mt-5">
+                    {% app 'custom-badge' %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% schema %}
+    {
+        "name": "Selos customizados",
+        "settings": [
+            {
+                "type": "checkbox",
+                "label": "Ocultar listagem de selos customizados",
+                "id": "hidde_seals",
+                "default": "0"
+            },
+            {
+                "type": "text",
+                "label": "Título",
+                "id": "title",
+                "default": "Selos customizados"
+            },
+            {
+				"type": "separator"
+			},
+            {
+                "type": "range",
+                "id": "margin_section",
+                "min": "0",
+                "max": "10",
+                "default": "10",
+                "label": "Margem da seção"
+            },
+            {
+				"type": "separator"
+			},
+            {
+                "type": "color_picker",
+                "id": "border_color",
+                "label": "Cor da borda de seção"
+            },
+            {
+                "type": "range",
+                "id": "border_size",
+                "min": "0",
+                "max": "10",
+                "default": "1",
+                "label": "Espessura da borda de seção"
+            }
+        ]
+    }
+{% endschema %}
+
+{% javascript %}
+    $(function() {
+        var custom_badge_empty = $('.custom-badge:not(:has(*))');
+        var custom_badge_list = $('.custom-badge');
+        var product_badge_list = $('.product-badge-list');
+
+        if (custom_badge_empty.length == custom_badge_list.length){
+            product_badge_list.addClass('d-none');
+        }
+    });
+{% endjavascript %}

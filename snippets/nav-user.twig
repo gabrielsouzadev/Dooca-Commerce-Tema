@@ -1,0 +1,25 @@
+{% set text = customer.first_name ?: 'Minha conta' %}
+{% set user_custom_img = (version) ? section.settings.user_custom_light : section.settings.user_custom %}
+
+{% if shop.catalog %}
+    {% set text = 'Menu' %}
+{% endif %}
+
+<div class="nav-user">
+    <a {% if not shop.catalog %}href="{{ 'account' | url }}"{% endif %} class="nav-link d-flex align-items-center">
+        {% if not shop.catalog %}
+            {% if user_custom_img %}
+                <i class="nav-icon nav-custom">
+                    <img loading="lazy" class="img-fluid" src="{{ user_custom_img | img_url}}" alt="{{ text }}">
+                </i>
+            {% else %}
+                <i class="nav-icon {% if section_highlight %}h-hl-color{% else %}h-sc-color{% endif %}">
+                    <i class="material-icons md-36">person</i>
+                </i>
+            {% endif %}
+        {% endif %}
+        {% if not no_text %}
+            <span class="{% if section_highlight %}h-hl-color{% else %}h-sc-color{% endif %} {% if not shop.catalog %}ml-3{% endif %}">{{ text }}</span>
+        {% endif %}
+    </a>
+</div>

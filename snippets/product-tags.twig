@@ -1,0 +1,81 @@
+{# promotion #}
+{% set pr = theme.settings.seal_promotion ?: null %}
+{% set pr_type = theme.settings.seal_promotion_type ?: 'radius' %}
+{% set pr_font_size = theme.settings.seal_promotion_fontsize ?: 12 %}
+{% set pr_text_color = theme.settings.seal_promotion_fontcolor ?: '#FFFFFF' %}
+{% set pr_billet_discount = theme.settings.seal_promotion_billet_discount ?: null %}
+{% set pr_background_color = theme.settings.seal_promotion_background ?: theme.settings.color_primary %}
+
+{% set discount = product.discount %}
+
+{# launch #}
+{% set pl = theme.settings.seal_launch ?: null %}
+{% set pl_date = theme.settings.seal_launch_time | default(0) %}
+{% set pl_font_size = theme.settings.seal_launch_fontsize ?: 12 %}
+{% set pl_text_color = theme.settings.seal_launch_fontcolor ?: '#FFFFFF' %}
+{% set pl_background_color = theme.settings.seal_launch_background ?: theme.settings.color_primary %}
+
+{# free shipping #}
+{% set ps = theme.settings.seal_free_shipping ?: null %}
+{% set ps_font_size = theme.settings.seal_free_shipping_fontsize ?: 12 %}
+{% set ps_text_color = theme.settings.seal_free_shipping_fontcolor ?: '#FFFFFF' %}
+{% set ps_background_color = theme.settings.seal_free_shipping_background ?: theme.settings.color_primary %}
+
+{# pre sale #}
+{% set psl = product.is_pre_sale ?: null %}
+{% set psl_font_size = theme.settings.seal_pre_sale_fontsize ?: 12 %}
+{% set psl_text_color = theme.settings.seal_pre_sale_fontcolor ?: '#FFFFFF' %}
+{% set psl_background_color = theme.settings.seal_pre_sale_background ?: theme.settings.color_primary %}
+
+{% if not shop.catalog %}
+    <div class="product-tags position-absolute d-flex align-items-start justify-content-between flex-column">
+        
+        {% if pr and product.discount %}
+            <div class="tag-offer mb-2 {% if pr_type == 'radius' %}radius{% endif %}">
+                <div
+                    class="tag-offer-bg d-flex justify-content-center align-items-center flex-column text-center {% if pr_type != 'radius'%}d-flex{% endif %}"
+                    style="
+                        background-color: {{ pr_background_color }};
+                        font-size: {{ pr_font_size }}px;
+                        color: {{ pr_text_color }};
+                    "
+                >
+                    <div class="discount {% if pr_type != 'radius' %}mr-2{% endif %}">{{ discount | round }}%</div>
+                    <div class="off">OFF</div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if pl and (pl_date > 0) %}
+            {% if date(product.created_at) > date('-' ~ pl_date ~ 'days') %}
+                <div class="tag-launch pt-2 pb-2 pl-3 pr-3 mb-2" style="
+                    background-color: {{ pl_background_color }};
+                    font-size: {{ pl_font_size }}px;
+                    color: {{ pl_text_color }};
+                ">
+                    <span>Lançamento</span>
+                </div>
+            {% endif %}
+        {% endif %}
+
+        {% if ps and product.shipping %}
+            <div class="tag-shipping pt-2 pb-2 pl-3 pr-3 mb-2" style="
+                background-color: {{ ps_background_color }};
+                font-size: {{ ps_font_size }}px;
+                color: {{ ps_text_color }};
+            ">
+                <span>Frete Grátis</span>
+            </div>
+        {% endif %}
+
+        {% if psl and product.is_pre_sale %}
+            <div class="tag-pre-sale pt-2 pb-2 pl-3 pr-3 mb-2" style="
+                background-color: {{ psl_background_color }};
+                font-size: {{ psl_font_size }}px;
+                color: {{ psl_text_color }};
+            ">
+                <span class="text">Pré-venda</span>
+            </div>
+        {% endif %}
+    </div>
+{% endif %}

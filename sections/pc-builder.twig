@@ -1,0 +1,40 @@
+<div class="pc-builder-section">
+    <div class="container">
+        <div class="row p-0 py-md-4">
+            <div class="col-12">
+                <div class="my-0 my-md-5 p-5 text-center">
+                    <h1 class="pcbuilder-page-title h1">{{ app.title | default('Monte seu computador') }}</h1>
+                    <h3 class="pcbuilder-page-subtitle h3">{{ app.short_description | default('Escolha cada componente e monte o pc perfeito para você!') | raw }}</h3>
+                </div>
+            </div>
+        </div>
+        <form class="pcbuilder-form p-2 p-md-0">
+            {% ajax 'pcbuilder' %}
+                {% set data = pcbuilder.data ?: null %}
+                {% set meta = pcbuilder.meta ?: null %}
+
+                <div class="row">
+                    <div class="col-12 col-md-9">
+                        <div class="row">
+                            {% if data %}
+                                {% for item in data %}
+                                    {% include 'pcbuilder/group.twig' %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="col-12 col-md-3">
+                        {% include 'pcbuilder/price.twig' %}
+                    </div>
+                </div>
+            {% endajax %}
+        </form>
+    </div>
+</div>
+
+{% ajax 'modal' hidden %}
+    {% include 'pcbuilder/ajax/modal.twig' %}
+{% endajax %}
+
+<div class="pcbuilder-modal-bg"></div>

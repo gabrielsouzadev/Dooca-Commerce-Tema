@@ -1,0 +1,32 @@
+.lgpd {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    border-radius: .4rem;
+    padding: 2rem calc(2rem - .75rem);
+    background-color: #fff;
+    box-shadow: 0px 0px 40px 0px rgba(0,0,0,0.15);
+    z-index: 1000;
+    max-width: 50%;
+    margin: 0 auto;
+
+    @include media-breakpoint-down(md) {
+        bottom: .5rem;
+        left: .5rem;
+        right: .5rem;
+        padding: 1.5rem calc(1.5rem - .75rem);
+
+        .product-buy-button {
+            width: 100%;
+        }
+    }
+
+    .text {
+        color: $color-primary;
+
+        a {
+            text-decoration: underline;
+        }
+    }
+}

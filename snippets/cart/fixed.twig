@@ -1,0 +1,247 @@
+{% ajax 'badge-items' hidden %}
+    {{ cart.quantity | default(0) }}
+{% endajax %}
+
+{% set cart_custom_img = section.settings.cart_custom %}
+{% set icon = (section.settings.type == '1') ? 'img/cart-magazine.svg' : 'img/cart.svg' %}
+
+<div class="side-buy d-none d-md-block position-fixed h-100">
+    <div class="side-buy-ajax position-relative h-100 w-100">
+        {% ajax 'side-buy' %}
+            <i class="sb-close icon icon-close position-absolute">{{ 'img/close.svg' | svg }}</i>
+            {% if cart.quantity > 0 %}
+                    <div class="row no-gutters h-100">
+                        <form id="form-fixed-cart" name="form_add_cart" class="position-relative w-100 h-100" method="post" action="{{ 'cart' | action ('add') }}" dc-quantity>
+                            <input type="hidden" name="redirect" value="cart">
+                            <div class="sb-header col-12 d-flex align-items-center p-5">
+                                {% if cart_custom_img %}
+                                    <i class="icon icon-cart mr-4"><img class="img-fluid" src="{{ cart_custom_img | img_url }}" alt="Carrinho"></i>
+                                {% else %}
+                                    <i class="icon icon-cart mr-4"><i class="material-icons md-36">shopping_cart</i></i>
+                                {% endif %}
+                                <span class="h2 mb-0">Seu carrinho</span>
+                            </div>
+                            <div class="sb-main col-12 p-0">
+                                <div class="items overflow-auto p-5">
+                                    {% for item in cart.items %}
+                                        <input type="hidden" name="items[{{ loop.index0 }}][variation_id]" value="{{ item.variation_id }}">
+                                        <div class="item d-flex border-bottom mb-4 pb-4">
+                                            <picture class="mr-4">
+                                                <img loading="lazy" alt="{{ item.name }}" class="img-fluid" src="{{ item.image | img_url ('70x70') }}" style="max-width: 70px;" />
+                                            </picture>
+                                            <div class="content w-100 position-relative">
+                                                <div class="remove-card-item" ><i class="icon icon-remove position-absolute" data-url="{{ 'cart' | url }}?item={{ item.id }}&remove=1">{{ 'img/garbage.svg' | svg }}</i></div>
+                                                <b class="name d-flex mb-3 pr-5">{{ item.name }}</b>
+                                                {% if item.variation %}
+                                                    <span class="d-flex mb-3" style="line-height: 1">{{ item.variation }}</span>
+                                                {% endif %}
+
+                                                {% if item.customize %}
+                                                    <div class="customized">
+                                                        <ul class="customized-list">
+                                                            {% for customize in item.customize.content %}
+                                                                <li class="customized-item">
+                                                                    <b class="text">{{ customize.field }}:</b>
+                                                                    <span class="text">
+                                                                        {{ customize.value }}
+                                                                        {% if customize.price > 0 %}
+                                                                            - <b>{{ customize.price | currency }}</b>
+                                                                        {% endif %}
+                                                                    </span>
+                                                                </li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
+                                                {% endif %}
+
+                                                <div class="row no-gutters align-items-center">
+                                                    <div class="col-6">
+                                                        <div class="dc-inputs w-100 position-relative text-center">
+                                                            <div class="dc-quantity dc-quantity-card position-relative w-100 align-items-center" data-min="0" data-max="999">
+                                                                <button aria-label="dc-decrease" type="button" class="dc-quantity-button dc-decrease position-absolute d-flex justify-content-center align-items-center p-0">
+                                                                    <i class="icon">{{ 'img/dc-icons/minus.svg' | svg }}</i>
+                                                                </button>
+
+                                                                <div class="form-group form-group--input quantity__input">
+                                                                    <input dc-quantity-input="dc-quantity-input" type="number" class="input w-100 text-center dc-input" name="items[{{ loop.index0 }}][quantity]" value="{{ item.quantity }}" max="999">
+                                                                </div>
+
+                                                                <button aria-label="dc-increase" type="button" class="dc-quantity-button dc-increase position-absolute d-flex justify-content-center align-items-center p-0">
+                                                                    <i class="icon">{{ 'img/dc-icons/plus.svg' | svg }}</i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col text-right">
+                                                        {% if item.price_compare > 0 %}
+                                                            <span class="discount d-block">{{ item.price_compare | currency }}</span>
+                                                        {% endif %}
+                                                        <b class="price d-block">{{ item.price | currency }}</b>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="sb-footer col-12 p-5 position-absolute" style="bottom: 0;">
+                                <div class="row no-gutters align-items-end mb-3">
+                                    <div class="col">
+                                        <b class="text-uppercase">Subtotal</b>
+                                    </div>
+                                    <div class="col-auto">
+                                        <b>{{ cart.total | currency }}</b>
+                                    </div>
+                                </div>
+                                <div class="row no-gutters">
+                                    <div class="col-12">
+                                        <button type="submit" class="btn w-100" dc-quantity-submit>Finalizar compra</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+            {% else %}
+                <div class="d-flex position-absolute align-items-center p-5 w-100" style="top: 0;">
+                    {% if cart_custom_img %}
+                        <i class="icon icon-cart mr-4"><img class="img-fluid" src="{{ cart_custom_img | img_url }}" alt="Carrinho"></i>
+                    {% else %}
+                        <i class="icon icon-cart mr-4"><i class="material-icons md-36">shopping_cart</i></i>
+                    {% endif %}
+                    <span class="h2 mb-0">Seu carrinho</span>
+                </div>
+                <div class="d-flex align-items-center justify-content-center h-100 p-5">
+                    <div class="d-flex justify-content-center align-items-center flex-wrap">
+                        {% if cart_custom_img %}
+                            <i class="icon icon-cart-empty mr-4"><img class="img-fluid" src="{{ cart_custom_img | img_url }}" alt="Carrinho"></i>
+                        {% else %}
+                            <i class="icon icon-cart-empty mr-4"><i class="material-icons md-36">shopping_cart</i></i>
+                        {% endif %}
+                        <h2 class="h2 m-0 title">Ops!</h3>
+                        <p class="text w-100 mt-3 mb-0 text-center">Seu carrinho de compras está vazio!</p>
+                    </div>
+                </div>
+            {% endif %}
+        {% endajax %}
+    </div>
+
+    <div class="sb-loader">
+        <div class="loader"></div>
+    </div>
+</div>
+
+    {% javascript %}
+        $(function(){
+            if (!window.is_mobile) {
+                // Side-buy vars
+                var sb = $('.side-buy');
+                var sb_bg = $('.side-buy-bg');
+                var sb_loader = $('.sb-loader');
+                var sb_ajax = $('.side-buy-ajax');
+                var sb_items = $('.side-buy .items');
+                var sb_close = $('.sb-close, .side-buy-bg');
+
+                // Side-buy height
+                var sb_height = $('.side-buy').height();
+                var sb_header_height = $('.sb-header').outerHeight();
+                var sb_footer_height = $('.sb-footer').outerHeight();
+                var sb_max_height = sb_height - sb_header_height - sb_footer_height;
+
+                sb_items.css('max-height', sb_max_height + 'px');
+
+                // Cart vars
+                var nav_cart_style = $('.cart-style-2');
+                
+                // Open side-buy
+                nav_cart_style.click(function(e){
+                    e.stopPropagation();
+                    
+                    sb.addClass('is-visible');
+                    sb_bg.fadeIn();
+                });
+
+                // Atualizar quantidade de items no carrinho
+                var reloadCartItems = function() {
+                    var nav_badge = $('.nav-badge');
+                    var qtd = nav_badge.find('.text');
+
+                    // ajax
+                    var id = 'badge-items';
+                    var xhr = _dcs.Xhr(window.location.href);
+
+                    xhr.get({ id: id }).done(function(items) {
+                        qtd.empty();
+                        qtd.append(items);
+                    });
+                };
+
+                // Ajax retorna o carrinho
+                var getCart = function(element) {
+                    sb_loader.fadeIn();
+
+                    // Elemento
+                    var el = $(element);
+                    var el_url = el.data('url');
+
+                    // Ajax
+                    var xhr = _dcs.Xhr(window.location.href);
+                    var xhr_id = 'side-buy';
+                    
+                    function ajax() {
+                        xhr.get({ id: xhr_id }).done(function(html) {
+                            sb_ajax.empty();
+                            sb_ajax.append(html);
+
+                            reloadCartItems();
+                                
+                            sb_items.css('max-height', sb_max_height + 'px');
+
+                            sb_loader.fadeOut();
+                        });
+                    };
+
+                    if (el_url) {
+                        $.get(el_url, function() {
+                            ajax();
+                        });
+                    } else {
+                        $("#form-fixed-cart").submit(function(event) {
+                            event.stopPropagation();
+                            event.preventDefault();
+
+                            $.ajax({
+                                method: 'POST',
+                                url: '{{ 'cart' | action ('add') }}',
+                                data: $('#form-fixed-cart').serialize(),
+                                success: function(data) {
+                                    ajax();
+                                }
+                            });
+                        });
+
+                        setTimeout(function() { 
+                            $('#form-fixed-cart').trigger('submit');
+                        }, 1000);
+                    }
+                };
+
+                // Watch click function
+                $('body').delegate('.icon-remove, .dc-quantity-button', 'click', function(event) {
+                    var _this = $(this);
+                    getCart(_this);
+                });
+
+                // Watch for input change
+                $('body').delegate('.dc-input', 'change', function(event) {
+                    var _this = $(this);
+                    getCart(_this);
+                });
+
+                // Close
+                $('body').delegate('.sb-close, .side-buy-bg', 'click', function(event) {
+                    sb.removeClass('is-visible');
+                    sb_bg.fadeOut();
+                });
+            }
+        });
+    {% endjavascript %}

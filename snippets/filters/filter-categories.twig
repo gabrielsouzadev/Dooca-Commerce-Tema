@@ -1,0 +1,41 @@
+{% if categories %}
+<div class="sidebar-block sidebar-block--category">
+    <div class="sidebar-block__header">
+        <span class="close"></span>
+        <h2 class="h2 m-0">Categorias</h2>
+    </div>
+    <div class="sidebar-block__content">
+        <ul class="sidebar-block__list">
+            {% for item in categories %}
+                <li class="sidebar-block__item mb-2 {% if item.filter_active %}is-active{% endif %}">
+                    <a href="{{ 'collection' | url (item) }}" class="link" rel="nofollow">
+                        <h3 class="text">{{ item.name }}</h3>
+                    </a>
+                    {% if item.filter_active and item.children %}
+                        <ul class="subcategory mt-2">
+                            {% for sub in item.children %}
+                            <li class="subcategory__item mb-2 {% if sub.filter_active %}is-active{% endif %}">
+                                <a href="{{ 'collection' | url (sub) }}" class="link" rel="nofollow">
+                                    <h3 class="text">{{ sub.name }}</h3>
+                                </a>
+                                {% if sub.filter_active and sub.children %}
+                                    <ul class="subcategory mt-2">
+                                        {% for subsub in sub.children %}
+                                        <li class="subcategory__item mb-2 {% if subsub.filter_active %}is-active{% endif %}">
+                                            <a href="{{ 'collection' | url (subsub) }}" class="link" rel="nofollow">
+                                                <h3 class="text">{{ subsub.name }}</h3>
+                                            </a>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endif %}

@@ -1,0 +1,74 @@
+.where-find {
+    margin-top: 3rem;
+
+    .filters {
+        border: solid .1rem $border-color;
+        border-width: .1rem 0;
+        margin-bottom: 4rem;
+        padding: 4rem 0;
+
+        @include media-breakpoint-down(md) {
+            padding: 2.5rem 2rem;
+        }
+    }
+    
+    .select {
+        display: block;
+        appearance: none;
+        padding: 1.2rem;
+        border: solid .1rem $border-color;
+        border-radius: 0;
+        background: transparent;
+        padding-right: 3rem;
+        width: 100%;
+    }
+
+    .title {
+        color: $color-primary;
+        margin-bottom: 1rem;
+    }
+
+    .icon {
+        right: 1.2rem;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .select-block {
+        width: 100%;
+        max-width: 30rem;
+    }
+}
+
+.where-find-item {
+    .title {
+        letter-spacing: 0;
+        text-indent: 0;
+    }
+
+    .address {
+        margin: .5rem 0;
+    }
+
+    .phone,
+    .whatts {
+        color: $color-primary;
+    }
+
+    .icon {
+        width: 1.3rem;
+    }
+
+    &.state-title {
+        border-bottom: solid .1rem $border-color;
+
+        .h1 {
+            letter-spacing: 0;
+            text-indent: 0;
+        }
+    }
+}
+
+.where-find-data {
+    padding: 0 4rem;
+}

@@ -1,0 +1,112 @@
+.email-capture-modal,
+.theme-custom-modal {
+    max-width: 80rem;
+    margin: 0 auto;
+    display: none;
+
+    &.theme-custom-modal {
+        -webkit-box-shadow: 0px 20px 20px 0px rgba(0,0,0,0.15);
+        -moz-box-shadow: 0px 20px 20px 0px rgba(0,0,0,0.15);
+        box-shadow: 0px 20px 20px 0px rgba(0,0,0,0.15);
+        max-width: 800px;
+        max-height: 800px;
+
+        .theme-custom-modal-close {
+            width: auto;
+            height: auto;
+        }
+    }
+
+    @include media-breakpoint-down(md) {
+        max-width: 100%;
+    }
+
+    .modal & {
+        display: block;
+    }
+
+    .form-control {
+        height: 4rem;
+        padding: 0 1.2rem;
+        border: solid .1rem $border-color;
+    }
+    
+    .email-capture-success,
+    .email-capture-errors {
+        display: none;
+
+        .text {
+            color: #fff;
+        }
+    }
+
+    .banner:hover .banner-bg {
+        transform: unset;
+    }
+
+    .email-capture-errors {
+        background: $color-error;
+    }
+
+    .email-capture-success {
+        background: $color-success;
+    }
+
+    .email-capture-close,
+    .theme-custom-modal-close {
+        right: 1rem;
+        top: 1rem;
+        width: 2rem;
+        height: 2rem;
+        opacity: 1;
+        transition: all ease .15s;
+        z-index: 50;
+
+        .icon {
+            color: $color-primary;
+        }
+
+        &:hover {
+            cursor: pointer;
+            opacity: .5;
+        }
+    }
+
+    .row .col-12:first-of-type {
+        // @include media-breakpoint-down(sm) {
+        //     max-height: 32vh;
+        // }
+    }
+
+    .btn {
+        padding: .9rem 1.6rem;
+        line-height: normal;
+    }
+}
+
+
+@media only screen and (max-width: 600px) {
+    div#email-capture-modal,
+    div#theme-custom-modal {
+        .modal__container {
+            margin: 2rem !important;
+        }
+    }
+
+    div#email-capture-modal {
+        .email-capture-close {
+            background: #fff;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 100%;
+            padding: .7rem;
+        }
+    }
+}
+
+.theme-custom-modal {
+    a.btn,
+    a.btn:hover {
+        color: $text-color-secondary;
+    }
+}

@@ -1,0 +1,1424 @@
+{% set border_size = section.settings.border_size ?: 0 %}
+{% set border_color = section.settings.border_color ?: theme.settings.color_border %}
+{% set margin_up = section.settings.margin_up ?: 0 %}
+{% set margin_dw = section.settings.margin_dw ?: 0 %}
+{% set background_color = section.settings.background_color ?: 'transparent' %}
+{% set background_image = section.settings.background_image ?: null %}
+
+{% set show_section = true %}
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-lg-block' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-block d-lg-none' %}
+{% endif %}
+
+<style>
+    @media only screen and (min-width: 992px) {
+        .product-counter-individual-block {
+            max-width: 20rem;
+        }
+    }
+</style>
+
+{% if show_section %}
+    <div class="{{ s }} product-counter-individual {{ section.settings.custom_class }}"
+    style="
+        padding: {{ margin_up }}rem 0 {{ margin_dw }}rem 0;
+        border-style: solid;
+        border-width: 0 0 {{ border_size }}px 0;
+        border-color: {{ border_color }};
+        background-color: {{ background_color }};
+        {% if background_image %}
+            background-image: url({{ background_image | img_url }});
+        {% endif %}
+        background-size: cover;
+        background-position: center center;
+    " id="{{ section.id }}">
+        <div class="container">
+            {% include 'section-title.twig' %}
+        </div>
+
+        <div class="container-fluid position-relative p-0">
+            <div class="product-counter-individual-bg position-absolute" style="background-color: {{ section.settings.color_1 }};"></div>
+            <div class="product-counter-individual-bg position-absolute" style="background-color: {{ section.settings.color_2 }};"></div>
+
+            {% for item in section.blocks %}
+
+                {% if item.settings.product[0] %}
+                    {% set product = products[item.settings.product[0]] %}
+                {% endif %}
+
+                {% if not item.settings.product[0] %}
+                    {% set product = {
+                        "id": 23521,
+                        "grid_id": "23521-654",
+                        "external_id": "C15",
+                        "category_default_id": 1111,
+                        "brand_id": 1071,
+                        "color_id": 654,
+                        "hotsite_id": 24,
+                        "name": "Nome do produto",
+                        "slug": "cinto-masculino-de-couro-legitimo-sergio",
+                        "url": "",
+                        "description": "<p>Cinto masculino fabricado em couro legítimo bovino, pela marca Vira Vento. É o modelo perfeito para os homens que buscam o básico, e não modelos muito diferenciados.Este cinto masculino possui a fivela pequena, que não chama muito atenção. Possui o lado de fora em preto e o lado de dentro em nude, com a gravação da marca.<br></p>\n<table><thead><tr><th>Tamanhos</th><th>Comprimento</th><th>Cintura máxima</th><th>Cintura mínima</th><th>Largura</th></tr></thead><tbody><tr><td>Tam. 110</td><td>1,29 m</td><td>1,18 m</td><td>1,05 cm</td><td>3,3 cm</td></tr></tbody></table>\n<p><strong><br></strong></p>\n<p><strong><br></strong></p>\n<p><strong>Como escolher o tamanho certo?</strong>&nbsp;Confira abaixo a&nbsp;comparação do tamanho da calça com o tamanho do cinto, e escolha o tamanho mais adequado.</p>\n<table><thead><tr><th>Tamanho da calça</th><th>Tamanho do cinto</th><th>Tamanho</th></tr></thead><tbody><tr><td>38, 40 (ou menor)</td><td>85, 90 (ou menor)</td><td>P</td></tr><tr><td>42, 44</td><td>95, 100</td><td>M</td></tr><tr><td>46, 48</td><td>105, 110</td><td>G</td></tr><tr><td>50 (ou maior)</td><td>115&nbsp;(ou maior)</td><td>GG</td></tr></tbody></table>",
+                        "short_description": "<p>Nullam mattis torquent per conubia laoreet magna, sed eleifend urna.</p>\n<p>Nunc vestibulum, nulla sed venenatis dictum, urna odio faucibus tortor, in vestibulum urna libero iaculis arcu. Fusce placerat convallis quam in faucibus.</p>",
+                        "relevance": 1,
+                        "tags": "cinto masculino,cinto simples,C15,cinto de couro",
+                        "min_quantity": 1,
+                        "sell_in_kit_only": false,
+                        "meta_title": null,
+                        "meta_description": null,
+                        "meta_keywords": null,
+                        "kit": false,
+                        "kit_markup": 1,
+                        "images": null,
+                        "image": null,
+                        "attachments": [],
+                        "video": null,
+                        "weight": "0.300",
+                        "depth": "13.00",
+                        "width": "5.00",
+                        "height": "22.00",
+                        "sell_out_of_stock": false,
+                        "price_out_of_stock": null,
+                        "additional_time_out_of_stock": null,
+                        "balance": 1,
+                        "selling_out_of_stock": false,
+                        "price": "40.00",
+                        "price_compare": null,
+                        "discount": "60.00",
+                        "billet_discount": null,
+                        "payments": {
+                            "billet": {
+                                "name": "Boleto bancário",
+                                "method": "billet",
+                                "discount": "5.00",
+                                "parcels": 1,
+                                "total": "38.00",
+                                "parcel_price": "38.00",
+                                "has_interest": false
+                            },
+                            "creditcard": {
+                                "name": "Cartão de crédito",
+                                "method": "creditcard",
+                                "discount": 0,
+                                "parcels": 12,
+                                "total": "40.00",
+                                "parcel_price": "3.33",
+                                "has_interest": false
+                            }
+                        },
+                        "payments_reason": null,
+                        "warranty": "0",
+                        "model": null,
+                        "gender": "male",
+                        "age_group": "adult",
+                        "st": 0,
+                        "ncm": 42033000,
+                        "ipi": null,
+                        "active": true,
+                        "created_at": "2019-08-02 09:50:50",
+                        "updated_at": "2019-09-19 10:54:03",
+                        "brand": {
+                            "id": 1071,
+                            "external_id": null,
+                            "name": "VV Cintos",
+                            "slug": "vv-cintos",
+                            "description": null,
+                            "short_description": null,
+                            "image": {
+                                "src": "https://cdn.dooca.store/3/brands/vv-cintos.png?v=1564753175",
+                                "mime": null,
+                                "alt": null,
+                                "size": null
+                            },
+                            "banner": null,
+                            "meta_title": null,
+                            "meta_keywords": null,
+                            "meta_description": null,
+                            "position": 4,
+                            "url": "https://www.enluaze.com.br/vv-cintos",
+                            "active": true,
+                            "created_at": "2019-08-02 09:41:33",
+                            "updated_at": "2019-08-02 10:39:35"
+                        },
+                        "category": {
+                            "id": 1111,
+                            "external_id": null,
+                            "parent_id": 1104,
+                            "name": "Cintos",
+                            "slug": "cintos-masculinos",
+                            "description": "<p>Os cintos masculinos&nbsp;são itens de vestuário presentes no guarda-roupa de todos os homens. Por serem usados diariamente, eles precisam ser fortes, de qualidade e resistentes. Por isso, os cintos feitos de couro legítimo são bastante procurados. Além de terem qualidade, possuem também modelos diferenciados para as mais diversas ocasiões. Confira os modelos disponíveis nesta página!</p>",
+                            "banner": null,
+                            "image": null,
+                            "position": 11,
+                            "depth": 2,
+                            "breadcrumb": "Masculino > Cintos",
+                            "google_taxonomy_id": 167,
+                            "meta_title": "Cintos masculinos de couro legítimo",
+                            "meta_keywords": null,
+                            "meta_description": "Cintos masculinos fabricados em couro legítimo em diversos modelos e cores. Confira as opções e compre agora o seu!",
+                            "url": "https://www.enluaze.com.br/cintos-masculinos",
+                            "active": true,
+                            "created_at": "2019-08-06 16:42:47",
+                            "updated_at": "2019-08-06 18:04:29"
+                        },
+                        "categories": [
+                            {
+                                "id": 1104,
+                                "external_id": null,
+                                "parent_id": null,
+                                "name": "Masculino",
+                                "slug": "masculino",
+                                "description": "<p>Produtos masculinos fabricados em couro legítimo, com qualidade, garantia de fábrica e modelos exclusivos. Confira nessa página todas as opções que separamos pra você.</p>",
+                                "banner": null,
+                                "image": null,
+                                "position": 3,
+                                "depth": 1,
+                                "breadcrumb": "Masculino",
+                                "google_taxonomy_id": 5181,
+                                "meta_title": "Produtos masculinos de couro legítimo",
+                                "meta_keywords": null,
+                                "meta_description": "Bolsas, pastas, mochilas, carteiras e acessórios masculinos feitos em couro legítimo. Confira! Pagamento em até 12x sem juros.",
+                                "url": "https://www.enluaze.com.br/masculino",
+                                "active": true,
+                                "created_at": "2019-08-06 16:42:45",
+                                "updated_at": "2019-08-06 18:00:28"
+                            },
+                            {
+                                "id": 1111,
+                                "external_id": null,
+                                "parent_id": 1104,
+                                "name": "Cintos",
+                                "slug": "cintos-masculinos",
+                                "description": "<p>Os cintos masculinos&nbsp;são itens de vestuário presentes no guarda-roupa de todos os homens. Por serem usados diariamente, eles precisam ser fortes, de qualidade e resistentes. Por isso, os cintos feitos de couro legítimo são bastante procurados. Além de terem qualidade, possuem também modelos diferenciados para as mais diversas ocasiões. Confira os modelos disponíveis nesta página!</p>",
+                                "banner": null,
+                                "image": null,
+                                "position": 11,
+                                "depth": 2,
+                                "breadcrumb": "Masculino > Cintos",
+                                "google_taxonomy_id": 167,
+                                "meta_title": "Cintos masculinos de couro legítimo",
+                                "meta_keywords": null,
+                                "meta_description": "Cintos masculinos fabricados em couro legítimo em diversos modelos e cores. Confira as opções e compre agora o seu!",
+                                "url": "https://www.enluaze.com.br/cintos-masculinos",
+                                "active": true,
+                                "created_at": "2019-08-06 16:42:47",
+                                "updated_at": "2019-08-06 18:04:29"
+                            }
+                        ],
+                        "color": {
+                            "id": 654,
+                            "external_id": null,
+                            "name": "Preto",
+                            "slug": "preto",
+                            "hexadecimal": "#202223",
+                            "image": null,
+                            "product_images": [
+                                {
+                                    "id": 105162,
+                                    "product_id": 23521,
+                                    "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-0.jpg?v=1568129028",
+                                    "alt": "",
+                                    "position": 1,
+                                    "color_ids": [],
+                                    "created_at": "2019-09-10 12:23:48",
+                                    "updated_at": "2019-09-10 12:23:48"
+                                },
+                                {
+                                    "id": 105159,
+                                    "product_id": 23521,
+                                    "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-02.jpg?v=1568129028",
+                                    "alt": "",
+                                    "position": 2,
+                                    "color_ids": [],
+                                    "created_at": "2019-09-10 12:23:48",
+                                    "updated_at": "2019-09-10 12:23:48"
+                                },
+                                {
+                                    "id": 105160,
+                                    "product_id": 23521,
+                                    "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-03.jpg?v=1568129028",
+                                    "alt": "",
+                                    "position": 3,
+                                    "color_ids": [],
+                                    "created_at": "2019-09-10 12:23:48",
+                                    "updated_at": "2019-09-10 12:23:48"
+                                },
+                                {
+                                    "id": 105161,
+                                    "product_id": 23521,
+                                    "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-04.jpg?v=1568129028",
+                                    "alt": "",
+                                    "position": 4,
+                                    "color_ids": [],
+                                    "created_at": "2019-09-10 12:23:48",
+                                    "updated_at": "2019-09-10 12:23:48"
+                                }
+                            ],
+                            "position": null,
+                            "active": true,
+                            "url": "https://www.enluaze.com.br/cinto-masculino-de-couro-legitimo-sergio/preto"
+                        },
+                        "colors": [
+                            {
+                                "id": 654,
+                                "external_id": null,
+                                "name": "Preto",
+                                "slug": "preto",
+                                "hexadecimal": "#202223",
+                                "image": null,
+                                "product_images": [
+                                    {
+                                        "id": 105162,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-0.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 1,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    },
+                                    {
+                                        "id": 105159,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-02.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 2,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    },
+                                    {
+                                        "id": 105160,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-03.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 3,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    },
+                                    {
+                                        "id": 105161,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-04.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 4,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    }
+                                ],
+                                "position": null,
+                                "active": true,
+                                "url": "https://www.enluaze.com.br/cinto-masculino-de-couro-legitimo-sergio/preto"
+                            }
+                        ],
+                        "attribute": {
+                            "id": 52,
+                            "external_id": null,
+                            "name": "Curabitur porttitor",
+                            "slug": "tamanho",
+                            "active": true,
+                            "values": [
+                                {
+                                    "id": 858,
+                                    "attribute_id": 52,
+                                    "external_id": null,
+                                    "name": "90",
+                                    "slug": "90",
+                                    "position": 1,
+                                    "active": true,
+                                    "created_at": "2019-08-02 09:41:33",
+                                    "updated_at": "2019-08-02 09:41:33"
+                                },
+                                {
+                                    "id": 859,
+                                    "attribute_id": 52,
+                                    "external_id": null,
+                                    "name": "95",
+                                    "slug": "95",
+                                    "position": 2,
+                                    "active": true,
+                                    "created_at": "2019-08-02 09:41:33",
+                                    "updated_at": "2019-08-02 09:41:33"
+                                },
+                                {
+                                    "id": 860,
+                                    "attribute_id": 52,
+                                    "external_id": null,
+                                    "name": "100",
+                                    "slug": "100",
+                                    "position": 3,
+                                    "active": true,
+                                    "created_at": "2019-08-02 09:41:33",
+                                    "updated_at": "2019-08-02 09:41:33"
+                                },
+                                {
+                                    "id": 861,
+                                    "attribute_id": 52,
+                                    "external_id": null,
+                                    "name": "105",
+                                    "slug": "105",
+                                    "position": 4,
+                                    "active": true,
+                                    "created_at": "2019-08-02 09:41:33",
+                                    "updated_at": "2019-08-02 09:41:33"
+                                },
+                                {
+                                    "id": 862,
+                                    "attribute_id": 52,
+                                    "external_id": null,
+                                    "name": "110",
+                                    "slug": "110",
+                                    "position": 5,
+                                    "active": true,
+                                    "created_at": "2019-08-02 09:41:33",
+                                    "updated_at": "2019-08-02 09:41:33"
+                                },
+                                {
+                                    "id": 863,
+                                    "attribute_id": 52,
+                                    "external_id": null,
+                                    "name": "115",
+                                    "slug": "115",
+                                    "position": 6,
+                                    "active": true,
+                                    "created_at": "2019-08-02 09:41:33",
+                                    "updated_at": "2019-08-02 09:41:33"
+                                }
+                            ],
+                            "created_at": "2019-08-02 09:41:33",
+                            "updated_at": "2019-08-02 09:41:33"
+                        },
+                        "features": [
+                            {
+                                "id": 132,
+                                "external_id": "000001",
+                                "name": "Material externo",
+                                "slug": "material-externo",
+                                "image": null,
+                                "active": true,
+                                "created_at": "2019-08-02 10:37:54",
+                                "updated_at": "2019-09-17 19:52:04",
+                                "values": [
+                                    {
+                                        "id": 1094,
+                                        "feature_id": 132,
+                                        "external_id": "000001",
+                                        "name": "Couro legítimo",
+                                        "slug": "couro-legitimo",
+                                        "image": null,
+                                        "position": 3,
+                                        "active": true,
+                                        "created_at": "2019-08-02 10:37:54",
+                                        "updated_at": "2019-08-02 10:37:54"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": 134,
+                                "external_id": "000003",
+                                "name": "Gênero",
+                                "slug": "genero",
+                                "image": null,
+                                "active": true,
+                                "created_at": "2019-08-02 10:37:55",
+                                "updated_at": "2019-08-02 10:37:55",
+                                "values": [
+                                    {
+                                        "id": 1102,
+                                        "feature_id": 134,
+                                        "external_id": "000010",
+                                        "name": "Masculino",
+                                        "slug": "masculino",
+                                        "image": null,
+                                        "position": 1,
+                                        "active": true,
+                                        "created_at": "2019-08-02 10:37:55",
+                                        "updated_at": "2019-08-02 10:37:55"
+                                    }
+                                ]
+                            },
+                            {
+                                "id": 194,
+                                "external_id": null,
+                                "name": "Couro",
+                                "slug": "couro",
+                                "image": null,
+                                "active": false,
+                                "created_at": "2019-08-16 12:15:45",
+                                "updated_at": "2019-08-16 12:18:04",
+                                "values": [
+                                    {
+                                        "id": 2063,
+                                        "feature_id": 194,
+                                        "external_id": null,
+                                        "name": "Devido à origem do couro, o produto pode apresentar pequenas marcas na pele ou divergências sutis de tonalidade, o que é normal e não caracteriza defeito do produto.",
+                                        "slug": "devido-a-origem-do-couro-o-produto-pode-apresentar-pequenas-marcas-na-pele-ou-divergencias-sutis-de-tonalidade-o-que-e-normal-e-nao-caracteriza-defeito-do-produto",
+                                        "image": null,
+                                        "position": 1,
+                                        "active": true,
+                                        "created_at": "2019-08-16 12:15:45",
+                                        "updated_at": "2019-08-16 12:15:45"
+                                    }
+                                ]
+                            }
+                        ],
+                        "variation": {
+                            "id": 47431,
+                            "product_id": 23521,
+                            "color_id": 654,
+                            "grid_id": "23521-654",
+                            "color_secondary_id": null,
+                            "attribute_value_id": 858,
+                            "external_id": "C15090-PR",
+                            "slug": "preto",
+                            "reference": "C15090-PR",
+                            "sku": "C15090-PR",
+                            "gtin": "7899948604554",
+                            "mpn": "R$ 2,83",
+                            "price": "40.00",
+                            "price_compare": null,
+                            "additional_shipping_time": null,
+                            "images": [
+                                {
+                                    "id": 105162,
+                                    "product_id": 23521,
+                                    "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-0.jpg?v=1568129028",
+                                    "alt": "",
+                                    "position": 1,
+                                    "color_ids": [],
+                                    "created_at": "2019-09-10 12:23:48",
+                                    "updated_at": "2019-09-10 12:23:48"
+                                },
+                                {
+                                    "id": 105159,
+                                    "product_id": 23521,
+                                    "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-02.jpg?v=1568129028",
+                                    "alt": "",
+                                    "position": 2,
+                                    "color_ids": [],
+                                    "created_at": "2019-09-10 12:23:48",
+                                    "updated_at": "2019-09-10 12:23:48"
+                                },
+                                {
+                                    "id": 105160,
+                                    "product_id": 23521,
+                                    "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-03.jpg?v=1568129028",
+                                    "alt": "",
+                                    "position": 3,
+                                    "color_ids": [],
+                                    "created_at": "2019-09-10 12:23:48",
+                                    "updated_at": "2019-09-10 12:23:48"
+                                },
+                                {
+                                    "id": 105161,
+                                    "product_id": 23521,
+                                    "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-04.jpg?v=1568129028",
+                                    "alt": "",
+                                    "position": 4,
+                                    "color_ids": [],
+                                    "created_at": "2019-09-10 12:23:48",
+                                    "updated_at": "2019-09-10 12:23:48"
+                                }
+                            ],
+                            "position": null,
+                            "created_at": "2019-08-02 09:50:50",
+                            "updated_at": "2019-09-19 10:54:03",
+                            "active": true,
+                            "balance": 0,
+                            "selling_out_of_stock": false,
+                            "color": {
+                                "id": 654,
+                                "external_id": null,
+                                "name": "Preto",
+                                "slug": "preto",
+                                "hexadecimal": "#202223",
+                                "image": null,
+                                "position": null,
+                                "active": true,
+                                "created_at": "2019-08-02 09:41:32",
+                                "updated_at": "2019-08-02 09:41:32"
+                            },
+                            "attribute": {
+                                "id": 858,
+                                "attribute_id": 52,
+                                "external_id": null,
+                                "name": "90",
+                                "slug": "90",
+                                "position": 1,
+                                "active": true,
+                                "created_at": "2019-08-02 09:41:33",
+                                "updated_at": "2019-08-02 09:41:33"
+                            }
+                        },
+                        "variations": [
+                            {
+                                "id": 47431,
+                                "product_id": 23521,
+                                "color_id": 654,
+                                "grid_id": "23521-654",
+                                "color_secondary_id": null,
+                                "attribute_value_id": 858,
+                                "external_id": "C15090-PR",
+                                "slug": "preto",
+                                "reference": "C15090-PR",
+                                "sku": "C15090-PR",
+                                "gtin": "7899948604554",
+                                "mpn": "R$ 2,83",
+                                "price": "40.00",
+                                "price_compare": null,
+                                "additional_shipping_time": null,
+                                "images": [
+                                    {
+                                        "id": 105162,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-0.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 1,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    },
+                                    {
+                                        "id": 105159,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-02.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 2,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    },
+                                    {
+                                        "id": 105160,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-03.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 3,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    },
+                                    {
+                                        "id": 105161,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-04.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 4,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    }
+                                ],
+                                "position": null,
+                                "created_at": "2019-08-02 09:50:50",
+                                "updated_at": "2019-09-19 10:54:03",
+                                "active": true,
+                                "balance": 0,
+                                "selling_out_of_stock": false,
+                                "color": {
+                                    "id": 654,
+                                    "external_id": null,
+                                    "name": "Preto",
+                                    "slug": "preto",
+                                    "hexadecimal": "#202223",
+                                    "image": null,
+                                    "position": null,
+                                    "active": true,
+                                    "created_at": "2019-08-02 09:41:32",
+                                    "updated_at": "2019-08-02 09:41:32"
+                                },
+                                "attribute": {
+                                    "id": 858,
+                                    "attribute_id": 52,
+                                    "external_id": null,
+                                    "name": "90",
+                                    "slug": "90",
+                                    "position": 1,
+                                    "active": true,
+                                    "created_at": "2019-08-02 09:41:33",
+                                    "updated_at": "2019-08-02 09:41:33"
+                                }
+                            },
+                            {
+                                "id": 47432,
+                                "product_id": 23521,
+                                "color_id": 654,
+                                "grid_id": "23521-654",
+                                "color_secondary_id": null,
+                                "attribute_value_id": 859,
+                                "external_id": "C15095-PR",
+                                "slug": "preto",
+                                "reference": "C15095-PR",
+                                "sku": "C15095-PR",
+                                "gtin": "7899948604561",
+                                "mpn": "R$ 2,83",
+                                "price": "40.00",
+                                "price_compare": null,
+                                "additional_shipping_time": null,
+                                "images": [
+                                    {
+                                        "id": 105162,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-0.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 1,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    },
+                                    {
+                                        "id": 105159,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-02.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 2,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    },
+                                    {
+                                        "id": 105160,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-03.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 3,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    },
+                                    {
+                                        "id": 105161,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-04.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 4,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    }
+                                ],
+                                "position": null,
+                                "created_at": "2019-08-02 09:50:50",
+                                "updated_at": "2019-09-19 10:54:03",
+                                "active": true,
+                                "balance": 0,
+                                "selling_out_of_stock": false,
+                                "color": {
+                                    "id": 654,
+                                    "external_id": null,
+                                    "name": "Preto",
+                                    "slug": "preto",
+                                    "hexadecimal": "#202223",
+                                    "image": null,
+                                    "position": null,
+                                    "active": true,
+                                    "created_at": "2019-08-02 09:41:32",
+                                    "updated_at": "2019-08-02 09:41:32"
+                                },
+                                "attribute": {
+                                    "id": 859,
+                                    "attribute_id": 52,
+                                    "external_id": null,
+                                    "name": "95",
+                                    "slug": "95",
+                                    "position": 2,
+                                    "active": true,
+                                    "created_at": "2019-08-02 09:41:33",
+                                    "updated_at": "2019-08-02 09:41:33"
+                                }
+                            },
+                            {
+                                "id": 47433,
+                                "product_id": 23521,
+                                "color_id": 654,
+                                "grid_id": "23521-654",
+                                "color_secondary_id": null,
+                                "attribute_value_id": 860,
+                                "external_id": "C15100-PR",
+                                "slug": "preto",
+                                "reference": "C15100-PR",
+                                "sku": "C15100-PR",
+                                "gtin": "7899948604578",
+                                "mpn": "R$ 2,83",
+                                "price": "40.00",
+                                "price_compare": null,
+                                "additional_shipping_time": null,
+                                "images": [
+                                    {
+                                        "id": 105162,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-0.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 1,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    },
+                                    {
+                                        "id": 105159,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-02.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 2,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    },
+                                    {
+                                        "id": 105160,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-03.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 3,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    },
+                                    {
+                                        "id": 105161,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-04.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 4,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    }
+                                ],
+                                "position": null,
+                                "created_at": "2019-08-02 09:50:50",
+                                "updated_at": "2019-09-19 10:54:03",
+                                "active": true,
+                                "balance": 0,
+                                "selling_out_of_stock": false,
+                                "color": {
+                                    "id": 654,
+                                    "external_id": null,
+                                    "name": "Preto",
+                                    "slug": "preto",
+                                    "hexadecimal": "#202223",
+                                    "image": null,
+                                    "position": null,
+                                    "active": true,
+                                    "created_at": "2019-08-02 09:41:32",
+                                    "updated_at": "2019-08-02 09:41:32"
+                                },
+                                "attribute": {
+                                    "id": 860,
+                                    "attribute_id": 52,
+                                    "external_id": null,
+                                    "name": "100",
+                                    "slug": "100",
+                                    "position": 3,
+                                    "active": true,
+                                    "created_at": "2019-08-02 09:41:33",
+                                    "updated_at": "2019-08-02 09:41:33"
+                                }
+                            },
+                            {
+                                "id": 47434,
+                                "product_id": 23521,
+                                "color_id": 654,
+                                "grid_id": "23521-654",
+                                "color_secondary_id": null,
+                                "attribute_value_id": 861,
+                                "external_id": "C15105-PR",
+                                "slug": "preto",
+                                "reference": "C15105-PR",
+                                "sku": "C15105-PR",
+                                "gtin": "7899948604585",
+                                "mpn": "R$ 2,83",
+                                "price": "40.00",
+                                "price_compare": null,
+                                "additional_shipping_time": null,
+                                "images": [
+                                    {
+                                        "id": 105162,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-0.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 1,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    },
+                                    {
+                                        "id": 105159,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-02.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 2,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    },
+                                    {
+                                        "id": 105160,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-03.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 3,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    },
+                                    {
+                                        "id": 105161,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-04.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 4,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    }
+                                ],
+                                "position": null,
+                                "created_at": "2019-08-02 09:50:50",
+                                "updated_at": "2019-09-19 10:54:03",
+                                "active": true,
+                                "balance": 0,
+                                "selling_out_of_stock": false,
+                                "color": {
+                                    "id": 654,
+                                    "external_id": null,
+                                    "name": "Preto",
+                                    "slug": "preto",
+                                    "hexadecimal": "#202223",
+                                    "image": null,
+                                    "position": null,
+                                    "active": true,
+                                    "created_at": "2019-08-02 09:41:32",
+                                    "updated_at": "2019-08-02 09:41:32"
+                                },
+                                "attribute": {
+                                    "id": 861,
+                                    "attribute_id": 52,
+                                    "external_id": null,
+                                    "name": "105",
+                                    "slug": "105",
+                                    "position": 4,
+                                    "active": true,
+                                    "created_at": "2019-08-02 09:41:33",
+                                    "updated_at": "2019-08-02 09:41:33"
+                                }
+                            },
+                            {
+                                "id": 47435,
+                                "product_id": 23521,
+                                "color_id": 654,
+                                "grid_id": "23521-654",
+                                "color_secondary_id": null,
+                                "attribute_value_id": 862,
+                                "external_id": "C15110-PR",
+                                "slug": "preto",
+                                "reference": "C15110-PR",
+                                "sku": "C15110-PR",
+                                "gtin": "7899948604592",
+                                "mpn": "R$ 2,83",
+                                "price": "40.00",
+                                "price_compare": null,
+                                "additional_shipping_time": null,
+                                "images": [
+                                    {
+                                        "id": 105162,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-0.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 1,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    },
+                                    {
+                                        "id": 105159,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-02.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 2,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    },
+                                    {
+                                        "id": 105160,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-03.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 3,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    },
+                                    {
+                                        "id": 105161,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-04.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 4,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    }
+                                ],
+                                "position": null,
+                                "created_at": "2019-08-02 09:50:50",
+                                "updated_at": "2019-09-19 10:54:03",
+                                "active": true,
+                                "balance": 1,
+                                "selling_out_of_stock": false,
+                                "color": {
+                                    "id": 654,
+                                    "external_id": null,
+                                    "name": "Preto",
+                                    "slug": "preto",
+                                    "hexadecimal": "#202223",
+                                    "image": null,
+                                    "position": null,
+                                    "active": true,
+                                    "created_at": "2019-08-02 09:41:32",
+                                    "updated_at": "2019-08-02 09:41:32"
+                                },
+                                "attribute": {
+                                    "id": 862,
+                                    "attribute_id": 52,
+                                    "external_id": null,
+                                    "name": "110",
+                                    "slug": "110",
+                                    "position": 5,
+                                    "active": true,
+                                    "created_at": "2019-08-02 09:41:33",
+                                    "updated_at": "2019-08-02 09:41:33"
+                                }
+                            },
+                            {
+                                "id": 47436,
+                                "product_id": 23521,
+                                "color_id": 654,
+                                "grid_id": "23521-654",
+                                "color_secondary_id": null,
+                                "attribute_value_id": 863,
+                                "external_id": "C15115-PR",
+                                "slug": "preto",
+                                "reference": "C15115-PR",
+                                "sku": "C15115-PR",
+                                "gtin": "7899948604608",
+                                "mpn": "R$ 2,83",
+                                "price": "40.00",
+                                "price_compare": null,
+                                "additional_shipping_time": null,
+                                "images": [
+                                    {
+                                        "id": 105162,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-0.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 1,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    },
+                                    {
+                                        "id": 105159,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-02.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 2,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    },
+                                    {
+                                        "id": 105160,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-03.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 3,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    },
+                                    {
+                                        "id": 105161,
+                                        "product_id": 23521,
+                                        "src": "https://cdn.dooca.store/3/products/15-pr-cinto-masculino-de-couro-04.jpg?v=1568129028",
+                                        "alt": "",
+                                        "position": 4,
+                                        "color_ids": [],
+                                        "created_at": "2019-09-10 12:23:48",
+                                        "updated_at": "2019-09-10 12:23:48"
+                                    }
+                                ],
+                                "position": null,
+                                "created_at": "2019-08-02 09:50:50",
+                                "updated_at": "2019-09-19 10:54:03",
+                                "active": true,
+                                "balance": 0,
+                                "selling_out_of_stock": false,
+                                "color": {
+                                    "id": 654,
+                                    "external_id": null,
+                                    "name": "Preto",
+                                    "slug": "preto",
+                                    "hexadecimal": "#202223",
+                                    "image": null,
+                                    "position": null,
+                                    "active": true,
+                                    "created_at": "2019-08-02 09:41:32",
+                                    "updated_at": "2019-08-02 09:41:32"
+                                },
+                                "attribute": {
+                                    "id": 863,
+                                    "attribute_id": 52,
+                                    "external_id": null,
+                                    "name": "115",
+                                    "slug": "115",
+                                    "position": 6,
+                                    "active": true,
+                                    "created_at": "2019-08-02 09:41:33",
+                                    "updated_at": "2019-08-02 09:41:33"
+                                }
+                            }
+                        ],
+                        "components": [],
+                        "component_groups": []
+                    } %}
+                {% endif %}
+
+                <div class="product-counter-individual-row position-relative border-top-row">
+                    <div class="before" style="border-top: solid .1rem {{ section.settings.border_color ?: theme.settings.border_color }};"></div>
+                    <div class="{{ section.settings.container }}">
+                        <div class="row justify-content-center">
+                            <div class="col-12 col-lg-8 product-counter-individual-counter" style="background-color: {{ section.settings.color_1 }}; border-top: solid .1rem {{ section.settings.border_color ?: theme.settings.border_color }};">
+                                <div class="row h-100">
+                                    <div class="col-12 col-lg">
+                                        <a href="{{ product.url }}" class="d-flex align-items-center justify-content-center h-100 p-0 p-lg-5">
+                                            {% if product.discount %}
+                                                <div class="d-none d-md-flex product-counter-individual-discount mr-3 align-items-center justify-content-center flex-column">
+                                                    <div class="h2 m-0">{{ product.discount | round }}%</div>
+                                                    <div class="h2 m-0">OFF</div>
+                                                </div>
+                                            {% endif %}
+                                            <figure class="product-image position-relative text-center">
+                                                {% if product.image %}
+                                                    <img loading="lazy" class="product-counter-individual-img img-fluid" src="{{ product.image | img_url('250x250+fill_ffffff') }}" alt="{{ product.title }}">
+                                                {% else %}
+                                                    <div class="product-counter-individual-img">
+                                                        {% include "placeholder.twig" with { flex: true } %}
+                                                    </div>
+                                                {% endif %}
+
+                                                <div class="d-block d-md-none">
+                                                    {% include "product-tags.twig" %}
+                                                    {% app 'custom-badge' %}
+                                                </div>
+                                            </figure>
+                                        </a>
+                                    </div>
+                                    <div class="col-12 col-lg">
+                                        <div class="d-flex flex-column align-items-center justify-content-center h-100 pt-0 pb-5 p-lg-5">
+                                            {% if product.name %}
+                                                <div class="product-counter-individual-title mb-4 w-100 text-left">
+                                                    <h3 class="h3 m-0 text-center" style="color: {{ section.settings.title_color }};">{{ product.name }}</h3>
+                                                </div>
+                                            {% endif %}
+
+                                            {% set billet = product.payments.billet %}
+                                            {% set creditcard = product.payments.creditcard %}
+
+                                            {% if product.price_compare > 0 %}
+                                                <div class="text product-counter-individual-pricediscount">
+                                                    De {{ product.price_compare | currency }}
+                                                </div>
+
+                                                <div class="py-2 px-5 product-counter-individual-only">
+                                                    <h1 class="h1 m-0">Por Apenas</h1>
+                                                </div>
+                                            {% endif %}
+
+                                            <h2 class="h1 m-0 product-counter-individual-pricefinal text-uppercase">
+                                                {% if billet.total %}
+                                                    {{ billet.total | currency }}
+                                                {% elseif creditcard.total %}
+                                                    {{ creditcard.total | currency }}
+                                                {% else %}
+                                                    {{ product.price | currency }}
+                                                {% endif %}
+                                            </h2>
+
+                                            <h2 class="h1 m-0 in-cash">À VISTA</h2>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-lg product-counter-individual-block" style="background: #F8F8F8;">
+                                        <div class="d-flex flex-column align-items-center justify-content-center h-100 p-5">
+                                            {% if product.balance > 0 %}
+                                                <h3 class="h1 text-center product-balance-text" style="color: {{ section.settings.title_color }};">Restam apenas</h3>
+                                                <h2 class="h1 text-center product-final-stock">{{ product.balance }}</h2>
+                                                <h2 class="h1 text-center product-balance-text mb-0" style="color: {{ section.settings.title_color }};">Unidades em estoque</h2>
+                                            {% else %}
+                                                <h2 class="h1 text-center product-final-stock">Sem estoque</h2>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-4 product-counter-individual-countdown" style="border-top: solid .2rem {{ section.settings.countdown_bg_color ?: theme.settings.color_secondary }};">
+                                <div class="py-5 d-flex flex-column justify-content-center align-items-center h-100">
+                                    <div class="product-indiviual-title text-center">
+                                        <h1 class="h1 title m-0">Aproveite!</h1>
+                                        <h1 class="h1 subtitle">Esta promoção acaba em</h1>
+                                    </div>
+
+                                    {% set countdown_date = item.settings.countdown %}
+
+                                    {% if not countdown_date %}
+                                        {% set countdown_date = "preview" %}
+                                    {% endif %}
+
+                                    <div class="countdown row no-gutters align-items-center mt-3" date="{{ countdown_date }}">
+                                        <div class="col text-center position-relative d-flex">
+                                            <span class="h1 m-1 d-inline-flex align-items-center justify-content-center" data-days-d style="background-color: {{ section.settings.countdown_bg_color ?: theme.settings.color_secondary }}; letter-spacing 0 !important; text-indent: 0 !important; color: {{ section.settings.countdown_text_color ?: '#FFFFFF' }};"></span>
+                                            <span class="h1 m-1 d-inline-flex align-items-center justify-content-center" data-days-u style="background-color: {{ section.settings.countdown_bg_color ?: theme.settings.color_secondary }}; letter-spacing 0 !important; text-indent: 0 !important; color: {{ section.settings.countdown_text_color ?: '#FFFFFF' }};"></span>
+                                            <p class="countdown-time position-absolute" style="color: {{ section.settings.countdown_text_color ?: '#FFFFFF' }};">Dias</p>
+                                        </div>
+                                        <div class="countdown-separator mx-2 position-relative" style="color: {{ section.settings.countdown_text_color ?: '#FFFFFF' }};">:</div>
+                                        <div class="col text-center position-relative d-flex">
+                                            <span class="h1 m-1 d-inline-flex align-items-center justify-content-center" data-hours-d style="background-color: {{ section.settings.countdown_bg_color ?: theme.settings.color_secondary }}; letter-spacing 0 !important; text-indent: 0 !important; color: {{ section.settings.countdown_text_color ?: '#FFFFFF' }};"></span>
+                                            <span class="h1 m-1 d-inline-flex align-items-center justify-content-center" data-hours-u style="background-color: {{ section.settings.countdown_bg_color ?: theme.settings.color_secondary }}; letter-spacing 0 !important; text-indent: 0 !important; color: {{ section.settings.countdown_text_color ?: '#FFFFFF' }};"></span>
+                                            <p class="countdown-time position-absolute" style="color: {{ section.settings.countdown_text_color ?: '#FFFFFF' }};">Horas</p>
+                                        </div>
+                                        <div class="countdown-separator mx-2 position-relative" style="color: {{ section.settings.countdown_text_color ?: '#FFFFFF' }};">:</div>
+                                        <div class="col text-center position-relative d-flex">
+                                            <span class="h1 m-1 d-inline-flex align-items-center justify-content-center" data-minutes-d style="background-color: {{ section.settings.countdown_bg_color ?: theme.settings.color_secondary }}; letter-spacing 0 !important; text-indent: 0 !important; color: {{ section.settings.countdown_text_color ?: '#FFFFFF' }};"></span>
+                                            <span class="h1 m-1 d-inline-flex align-items-center justify-content-center" data-minutes-u style="background-color: {{ section.settings.countdown_bg_color ?: theme.settings.color_secondary }}; letter-spacing 0 !important; text-indent: 0 !important; color: {{ section.settings.countdown_text_color ?: '#FFFFFF' }};"></span>
+                                            <p class="countdown-time position-absolute" style="color: {{ section.settings.countdown_text_color ?: '#FFFFFF' }};">Minutos</p>
+                                        </div>
+                                        <div class="countdown-separator mx-2 position-relative" style="color: {{ section.settings.countdown_text_color ?: '#FFFFFF' }};">:</div>
+                                        <div class="col text-center position-relative d-flex">
+                                            <span class="h1 m-1 d-inline-flex align-items-center justify-content-center" data-seconds-d style="background-color: {{ section.settings.countdown_bg_color ?: theme.settings.color_secondary }}; letter-spacing 0 !important; text-indent: 0 !important; color: {{ section.settings.countdown_text_color ?: '#FFFFFF' }};"></span>
+                                            <span class="h1 m-1 d-inline-flex align-items-center justify-content-center" data-seconds-u style="background-color: {{ section.settings.countdown_bg_color ?: theme.settings.color_secondary }}; letter-spacing 0 !important; text-indent: 0 !important; color: {{ section.settings.countdown_text_color ?: '#FFFFFF' }};"></span>
+                                            <p class="countdown-time position-absolute" style="color: {{ section.settings.countdown_text_color ?: '#FFFFFF' }};">Segundos</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-center mt-4">
+                                        <a class="btn px-4" href="{{ product.url }}" style="background-color: {{ section.settings.button_bg_color }}; border-color: {{ section.settings.button_bg_color }};">
+                                            <span class="countdown-btn" style="color: {{ section.settings.button_text_color }};">Compre agora</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="after" style="border-top: solid .2rem {{ section.settings.countdown_bg_color ?: theme.settings.color_secondary }};"></div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% javascript %}
+        $(function() {
+            $('.countdown').each(function() {
+                var date_end = new Date($(this).attr('date'));
+                var preview = {% if not countdown_date %}'preview'{% else %}null{% endif %};
+
+                if (preview && $(this).attr('date') == 'preview') {
+                    var today = new Date();
+                    date_end = new Date();
+                    date_end.setDate(today.getDate()+2);
+                }
+
+                $(this).countdown(date_end, function(event) {
+                    var day = event.strftime('%D');
+    				var hours = event.strftime('%H');
+    				var minutes = event.strftime('%M');
+    				var seconds = event.strftime('%S');
+
+    				$('[data-days]', this).html(day);
+    				$('[data-days-d]', this).html(day[0]);
+    				$('[data-days-u]', this).html(day[1]);
+
+    				$('[data-hours]', this).html(hours);
+    				$('[data-hours-d]', this).html(hours[0]);
+    				$('[data-hours-u]', this).html(hours[1]);
+
+    				$('[data-minutes]', this).html(minutes);
+    				$('[data-minutes-d]', this).html(minutes[0]);
+    				$('[data-minutes-u]', this).html(minutes[1]);
+
+    				$('[data-seconds]', this).html(seconds);
+    				$('[data-seconds-d]', this).html(seconds[0]);
+    				$('[data-seconds-u]', this).html(seconds[1]);
+
+    				if (day <= 0) {
+    					$(this).addClass('days-finished');
+    				}
+
+                }).on('finish.countdown', function () {
+    				$(this).addClass('is-finished');
+    			});
+            });
+        });
+    {% endjavascript %}
+{% endif %}
+
+{% schema %}
+{
+    "name": "Vitrine com contador lateral",
+    "category": "Produtos",
+    "content_for_index": "1",
+    "max_blocks": 6,
+    "settings": [
+        {
+            "type": "accordion",
+            "content": "Conteúdo",
+            "icon": "content"
+        },
+        {
+            "type": "text",
+            "label": "Título",
+            "id": "title"
+        }, {
+            "type": "text",
+            "label": "Subtítulo",
+            "id": "subtitle"
+        }, {
+            "type": "accordion",
+            "content": "Aparência",
+            "icon": "design"
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em dispositivos móveis",
+            "id": "hide_mobile",
+            "default": 0
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em desktop",
+            "id": "hide_desktop",
+            "default": 0
+        },{
+            "type": "separator"
+        },{
+			"type": "text",
+			"id": "custom_class",
+			"label": "Classe customizada para editar o css"
+		},{
+            "type": "select",
+            "id": "container",
+            "label": "Estilo do conteúdo",
+            "tooltip": "Você poderá definir o se o conteúdo da seção é centralizado ou adaptável a largura da tela.",
+            "default": "container-fluid",
+            "options": [{
+                    "value": "container",
+                    "label": "Centralizado"
+                },
+                {
+                    "value": "container-fluid",
+                    "label": "Adaptável a largura da tela"
+                }
+            ]
+        }, {
+            "type": "separator"
+        },{
+            "type": "color_picker",
+            "id": "color_1",
+            "label": "Cor de fundo 01"
+        },{
+            "type": "color_picker",
+            "id": "color_2",
+            "label": "Cor de fundo 02"
+        },{
+            "type": "color_picker",
+            "id": "countdown_bg_color",
+            "label": "Cor de fundo do contador"
+        },{
+            "type": "color_picker",
+            "id": "countdown_text_color",
+            "label": "Cor do texto do contador"
+        },{
+            "type": "color_picker",
+            "id": "button_text_color",
+            "label": "Cor de texto do botão"
+        },{
+            "type": "color_picker",
+            "id": "button_bg_color",
+            "label": "Cor de fundo do botão"
+        },{
+            "type": "color_picker",
+            "id": "title_color",
+            "label": "Cor do título"
+        }, {
+            "type": "color_picker",
+            "id": "subtitle_color",
+            "label": "Cor do subtítulo"
+        }, {
+            "type": "color_picker",
+            "id": "background_color",
+            "label": "Cor de fundo da seção"
+        }, {
+            "type": "color_picker",
+            "id": "border_color",
+            "label": "Cor da borda de seção"
+        },{
+            "type": "image_picker",
+            "id": "background_image",
+            "label": "Imagem de fundo da seção",
+            "info": "Recomendado: 1600x600px com até 250kb"
+        },{
+            "type": "checkbox",
+            "label": "Imagem fixa de fundo",
+            "id": "background_parallax"
+        }, {
+            "type": "range",
+            "id": "border_size",
+            "min": "0",
+            "max": "10",
+            "default": "1",
+            "label": "Espessura da borda de seção"
+        }, {
+            "type": "range",
+            "id": "margin_up",
+            "min": "0",
+            "max": "10",
+            "default": "0",
+            "label": "Margem de cima da seção"
+        }, {
+            "type": "range",
+            "id": "margin_dw",
+            "min": "0",
+            "max": "10",
+            "default": "0",
+            "label": "Margem de baixo da seção"
+        }
+    ],
+	"blocks": [
+        {
+            "type": "image",
+            "name": "Produtos",
+            "settings": [
+                {
+                    "type": "date_picker",
+                    "id": "countdown",
+                    "label": "Data de término do contador",
+                    "info": "<i>O contador termina às 00:00:00 da data selecionada</i>"
+                },
+                {
+                    "type": "product",
+                    "max": "1",
+                    "id": "product",
+                    "label": "Produto"
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

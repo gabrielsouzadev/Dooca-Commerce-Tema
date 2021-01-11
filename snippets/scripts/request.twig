@@ -1,0 +1,52 @@
+<script type="text/javascript" defer>
+    $(function() {
+        var m;
+
+        var createModalReq = function (btn, target) {
+            $('body').delegate(btn,'click',function() {
+                var grid = $(btn).data('grid-id');
+                var m_class = target + grid;
+                var id = m_class.replace('.', '#');
+
+                if ($(id).length > 0) {
+                    $(id).fadeIn();
+                    $('body').addClass('modal-open');
+                    $('body').css('overflow', 'hidden');
+                } else {
+                    var modal = $(m_class);
+                    m = modal.modal();
+                    m.open();
+                }
+            });
+        };
+
+        createModalReq('.product-request-btn', '.product-request-modal-');
+        createModalReq('.pre-sale-button', '.product-request-modal-');
+        createModalReq('.product-price-request-btn', '.product-price-request-modal-');
+
+        $('body').delegate('.form-request-product', 'submit', function(e) {
+            e.preventDefault();
+			e.stopPropagation();
+
+			var url = "{{ 'product-request' | action ('add') }}";
+			var xhr = _dcs.Xhr(url);
+            var vm = $(this);
+            
+			xhr.post({ 
+                data: $( this ).serializeArray()
+            }).done(function() {
+                vm.hide();
+                $('#request-success').removeClass('d-none');
+            });
+
+			return false;
+        });
+
+        $('.form-request-product input').keydown(function (e) {
+            if (e.keyCode == 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    });
+</script>

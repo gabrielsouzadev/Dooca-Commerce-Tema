@@ -1,0 +1,50 @@
+{% set product_shipping = section.settings.product_shipping ?: null %}
+
+{% if not shop.catalog %}
+    {% if product_shipping and product.balance > 0 %}
+        <div class="product-shipping d-flex align-items-center justify-content-between mt-3 no-gutters flex-wrap">
+            <div class="col-auto">
+                <div class="mr-4">
+                    <div class="h4 m-0">Frete e prazo</div>
+                </div>
+            </div>
+            <div class="col-12 col-md mt-3 m-md-0">
+                <form class="product-shipping-form row no-gutters align-items-center justify-content-between" data-url="{{ product.url_rewrite | url }}">
+                    <input type="hidden" name="variation_id" value="{{ product.variation.id }}">
+                    <input type="hidden" name="ncm" value="{{ product.ncm }}">
+                    <input type="text" type="text" name="zipcode" data-mask="00000-000" class="input col mr-4 pl-3 pr-3" placeholder="Insira seu CEP">
+                    <button class="btn col-auto" type="submit">calcular</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="product-shipping-modal pl-5 pb-5 pr-5" data-modal-title="Frete e prazo">
+            <table class="product-shipping-table w-100" border="0">
+                <thead>
+                    <tr>
+                        <th class="p-2">
+                            <h2 class="h2 m-0">Forma de envio</h2>
+                        </th>
+                        <th class="p-2">
+                            <h2 class="h2 m-0">Valor</h2>
+                        </th>
+                        <th class="p-2">
+                            <h2 class="h2 m-0">Prazo</h2>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="product-shipping-result"></tbody>
+            </table>
+
+            <div class="product-shipping-taxes"></div>
+            <div class="product-shipping-message"></div>
+            <div class="product-shipping-loader text-center p-5">
+                <span class="loader"></span>
+            </div>
+        </div>
+
+        {% include 'scripts/product-shipping.twig' %}
+
+        {{ 'js/lib/jquery.mask.min.js' | dc_assets_url | script_append }}
+    {% endif %}
+{% endif %}

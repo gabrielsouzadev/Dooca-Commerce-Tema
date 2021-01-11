@@ -1,0 +1,213 @@
+// colors
+$colors: (
+    header: (
+        background: var(--header-background),
+        icons: var(--header-icons),
+        cart: var(--header-cart),
+        text: var(--header-text)
+    ),
+    header-fixed: (
+        background: var(--header-fixed-background),
+        icons: var(--header-fixed-icons),
+        cart: var(--header-fixed-cart),
+        text: var(--header-fixed-text)
+    ),
+    menu: (
+        background: var(--menu-background),
+        items: var(--menu-items)
+    ),
+    border: (
+        color: var(--border-color),
+        opacity: var(--border-opacity)
+    )
+);
+
+// Retorna a cor
+@function color($type, $obj) {
+    $color: map-get(map-get($colors, $type), $obj);
+    @return $color;
+}
+
+$type: 'header';
+.header {
+    background-color: color($type, 'background');
+
+    .header-box {
+        background-color: color($type, 'background');
+    }
+
+    .header-top {
+        .text,
+        .nav-contact a {
+            color: color($type, 'text');
+        }
+    }
+
+    .header-box,
+    .header-top {
+        .nav-menu,
+        .nav-top .text {
+            color: color($type, 'text');
+        }
+
+        .nav-cart .nav-icon {
+            color: color($type, 'cart');
+        }
+
+        .smart-button .icon,
+        .nav-user .nav-icon,
+        .nav-user .nav-link,
+        .nav-contact .icon,
+        .nav-social .icon,
+        .logo-link {
+            color: color($type, 'icons');
+        }
+        .nav-badge {
+            background-color: color($type, 'icons');
+        }
+
+        .nav-menu {
+            i {
+                color: color($type, 'cart');
+            }
+        }
+    }
+
+    &.header-opacity {
+        .header-box {
+            background-color: transparent;
+
+            &.is-fixed {
+                background-color: color($type, 'background');
+            }
+        }
+
+        .header-bg {
+            background-color: color($type, 'background');
+        }
+    }
+}
+
+.header-mobile {
+    .nav-menu,
+    .nav-top .text {
+        color: color($type, 'text');
+    }
+
+    .nav-cart .nav-icon {
+        color: color($type, 'cart');
+    }
+
+    .smart-button .icon,
+    .nav-user .nav-icon,
+    .nav-user .nav-link,
+    .nav-contact .icon,
+    .nav-social .icon,
+    .logo-link {
+        color: color($type, 'icons');
+    }
+    .nav-badge {
+        background-color: color($type, 'icons');
+    }
+
+    .nav-menu {
+        i {
+            color: color($type, 'cart');
+        }
+    }
+}
+
+.side-user {
+    background-color: color($type, 'background') !important; // Fix custom css
+
+    .nav-user .nav-icon,
+    .nav-user .nav-link,
+    .close-side .icon {
+        color: color($type, 'icons') !important; // Fix custom css
+    }
+}
+
+$type: 'menu';
+.header {
+    &.header-1,
+    &.header-2 {
+        .header-bottom {
+            background-color: color($type, 'background');
+        }
+    }
+
+    .navigation-link {
+        color: color($type, 'items');        
+    }
+
+    &.header-opacity {
+        &.header-1,
+        &.header-2 {
+            .header-bottom {
+                background-color: transparent;
+
+                .header-bg {
+                    background-color: color($type, 'background');
+                }
+            }
+        }
+    }
+}
+
+.side-navigation,
+.side-dropdown {
+    background-color: color($type, 'background');
+
+    .side-link,
+    .icon {
+        color: color($type, 'items');
+    }
+}
+
+$type: 'header-fixed';
+.header-fixed {
+    padding: 1.5rem 0 ;
+    background-color: color($type, 'background');
+
+    .nav-cart .nav-icon {
+        color: color($type, 'cart');
+    }
+
+    .smart-button .icon,
+    .nav-user .nav-icon,
+    .nav-user .nav-link,
+    .nav-contact .icon,
+    .nav-social .icon,
+    .logo-link,
+    .menu-icon  {
+        color: color($type, 'icons');
+    }
+    .nav-badge {
+        background-color: color($type, 'icons');
+    }
+
+    .nav-menu {
+        color: color($type, 'text');
+    }
+}
+
+$type: 'border';
+.header-top,
+.header-middle,
+.header-bottom {
+    &:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: .1rem;
+        background-color: color($type, 'color');
+        opacity: color($type, 'opacity');
+    }
+}
+
+.navigation-separator {
+    opacity: color($type, 'opacity');
+}

@@ -1,0 +1,15 @@
+{% set discount = product.price_compare %}
+    
+{% set billet = product.payments.billet %}
+{% set creditcard = product.payments.creditcard %}
+    
+{% set type = theme.settings.product_price_type ?: 'billet' %}
+{% set parcel = theme.settings.price_parcel ?: false %}
+
+{% if parcel %}
+    {% set creditcard = product.payments.creditcard.max_installment %}
+{% endif %}
+
+<div class="product-action-price {{ type }} my-5">
+    {% include 'product-action-price/' ~ type ~ '.twig' %}
+</div>

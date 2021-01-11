@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html
+	lang="pt-BR"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:fb="http://www.facebook.com/2008/fbml"
+	xmlns:og="http://opengraphprotocol.org/schema/"
+>
+	<head prefix="og: http://ogp.me/ns#">
+
+		<meta charset="utf-8">
+		<meta name="description" content="{{ page_description }}" />
+		<meta name="keywords" content="{{ page_keywords }}" />
+
+		<title>{{ page_title }}</title>
+
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta property="og:type" content="website" />
+  		<meta property="og:title" content="{{ page_title }}" />
+  		<meta property="og:description" content="{{ page_description }}" />
+		<meta property="og:site_name" content="{{ shop.meta_title }}">
+
+		{% if template != 'product' and theme.settings.img_share %}
+			{% set img_share = theme.settings.img_share %}
+		{% else %}
+			{% set img_share = product.image %}
+		{% endif %}
+
+		<meta property="og:image" content="{{ img_share | img_url }}" />
+
+  		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		{% if theme.settings.favicon %}
+			<link rel="icon" href="{{ theme.settings.favicon | img_url ('96x96') }}" />
+		{% endif %}
+
+		<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700" rel="stylesheet">
+
+		{{ 'partials/comingsoon.css.compile' | assets_url | stylesheet_tag }}
+
+	</head>
+
+	<body class="page page--comingsoon theme--{{ theme.settings.layout_type }}">
+
+
+		<main class="wrapper main-content" role="main">
+				<section class="comingsoon">
+					<div class="comingsoon__container">
+						<div class="comingsoon__header">
+							<h1 class="comingsoon__title">
+								<span class="label">Em breve</span>
+								<b>{{ shop.meta_title }}</b>
+							</h1>
+						</div>
+						<div class="comingsoon__content">
+							<form class="comingsoon__form" action="{{ 'newsletter' | action ('add') }}" method="post">
+								<p class="comingsoon__form__subtitle">Cadastre-se e receba novidades</p>
+								<div class="form-group form-group--input">
+									<input class="input input--lg" type="text" name="name" placeholder="Digite seu nome" minlength="3" required>
+								</div>
+								<div class="form-group form-group--input">
+									<input class="input" type="email" name="email" placeholder="Digite seu e-mail" required>
+								</div>
+								<div class="form-group form-group--bt">
+									<button class="bt bt--lg bt--full" type="submit" name="button">
+										<span class="text">OK</span>
+									</button>
+								</div>
+								{% if ('email_capture' | flashdata) == 'success' %}
+									<div class="comingsoon__form__success">
+										<span class="text">E-mail cadastradado</span>
+									</div>
+								{% endif %}
+							</form>
+						</div>
+						<div class="comingsoon__footer">
+							<a href="https://www.dooca.com.br" target="blank" class="dooca">
+								{{ 'img/dc-icons/logo-dooca-commerce.svg' | svg }}
+							</a>
+						</div>
+					</div>
+				</section>
+
+		</main>
+
+	</body>
+</html>

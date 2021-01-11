@@ -1,0 +1,7 @@
+{% if product.short_description %}
+    <div class="product-description-short my-5">
+        <div class="cms">
+            {{ product.short_description | richtext | raw }}
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,64 @@
+{% set container = section.settings.container ?: 'container' %}
+{% set align = section.settings.seo_align ?: 'down' %}
+
+{% if collection.description %}
+	<div class="collection-seo {{ align }}">
+		<div class="{{ container }}">
+			<div class="row">
+				<div class="col-12">
+					<div class="text text-center p-5">{{ collection.description | raw }}</div> 
+				</div>
+			</div>
+		</div>
+	</div>
+{% endif %}
+
+{% if align == 'top' %}
+	<script>
+		var content = document.getElementsByClassName('collection-seo')[0];
+		var parent = document.getElementsByClassName('collection-content')[0];
+		
+		if (content) {
+			parent.insertBefore(content, parent.firstChild);
+		}
+	</script>
+{% endif %}
+
+{% schema %}
+    {
+        "name": "Descrição da categoria",
+        "settings": [
+			{
+				"type": "select",
+				"id": "container",
+				"label": "Estilo do conteúdo",
+                "default": "container-fluid",
+				"options": [{
+						"value": "container",
+						"label": "Centralizado"
+					},
+					{
+						"value": "container-fluid",
+						"label": "Adaptável a largura da tela"
+					}
+				]
+			},
+			{
+				"type": "select",
+				"id": "seo_align",
+				"label": "Alinhamento de SEO",
+                "default": "down",
+				"options": [
+					{
+						"value": "top",
+						"label": "Exibir após o título de categoria (acima)"
+					},
+					{
+						"value": "down",
+						"label": "Exibir após os produtos da listagem (abaixo)"
+					}
+				]
+			}
+        ]
+    }
+{% endschema %}

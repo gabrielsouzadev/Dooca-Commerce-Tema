@@ -1,0 +1,25 @@
+{% if section.settings.seal_payment or section.settings.seal_security or section.settings.seal_certificate %}
+    <div class="footer-middle">
+        <div class="{{ container }}">
+            <div class="row justify-content-between align-items-start">
+                {% if section.settings.seal_payment %}
+                    <div class="col">
+                        {% include 'footer-payment.twig' %}
+                    </div>
+                {% endif %}
+
+                {% if section.settings.seal_security %}
+                    <div class="col-sm-12 col-md-auto col-lg-auto px-5">
+                        {% include 'footer-security.twig' %}
+                    </div>
+                {% endif %}
+
+                {% if section.settings.seal_certificate %}
+                    <div class="col-sm-12 col-md-auto col-lg-auto px-5">
+                        {% include 'footer-certificate.twig' %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endif %}

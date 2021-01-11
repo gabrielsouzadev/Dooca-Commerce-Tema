@@ -1,0 +1,212 @@
+.banners-carousel {
+    .container-fluid {
+        padding: 0;
+    }
+
+    .container {
+        @include media-breakpoint-down(sm) {
+            padding: 0 !important;
+        }
+    }
+
+    .glide {
+        width: unset;
+    }
+
+    .owl-dots {
+        bottom: 1.5rem;
+        position: absolute;
+        width: 100%;
+
+        @include media-breakpoint-down(md) {
+            bottom: 0;
+        }
+
+        .owl-dot {
+            min-width: 1.2rem;
+            min-height: 1.2rem;
+            transition: all ease .15s;
+            opacity: 35%;
+            margin: 0 .3rem !important;
+
+            span {
+                background: $body-bg !important;
+                border-radius: 100%;
+                width: 1.2rem;
+                height: 1.2rem;
+                opacity: 1;
+                transition: all ease-in .15s;
+                margin: 0 auto;
+                border: solid .2rem $color-secondary !important;
+            }
+
+            &.active {
+                opacity: 1;
+
+                span {
+                    background: $body-bg !important;
+                }
+            }
+        }
+    }
+}
+
+.carousel-item {
+    transition: all 9.5s ease-in;
+    overflow: hidden;
+    max-height: 82rem;
+    background-size: cover;
+    background-repeat: no-repeat;
+    
+    @include media-breakpoint-down(md) {
+        height: auto;
+        min-height: 15rem;
+    }
+
+    &:hover {
+        @include media-breakpoint-up(md) {
+            .carousel-bg {
+                transform: scale(1.1);
+
+                &.parallax {
+                    transform: scale(1.2);
+                }
+            }
+        }
+    }
+
+    &.zoom-off {
+        &:hover {
+            .carousel-bg {
+                transform: unset;
+            }
+        }
+    }
+
+    &.has-video {
+        height: 100vh;
+
+        @include media-breakpoint-down(lg) {
+            height: 50vh;
+        }
+    }
+}
+
+.carousel-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    background-size: cover;
+    background-repeat: no-repeat;
+    transition: all 9.5s ease;
+    background-position: center center;
+
+    &.parallax {
+        background-attachment: fixed;
+        transform: unset !important;
+        transition: unset;
+    }
+}
+
+.carousel-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+}
+
+.carousel-caption {
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 51;
+    max-width: 100%;
+    padding: 0 10%;
+
+    @include media-breakpoint-down(md) {
+        right: unset;
+        bottom: unset;
+    }
+}
+
+.carousel-info {
+    position: relative;
+    z-index: 80;
+    max-width: 100%;
+
+    &.text-left {
+        .text {
+            margin: auto 0 0 0;
+        }
+    }
+
+    &.text-center {
+        .text {
+            margin: 0 auto;
+        }
+    }   
+
+    &.text-right {
+        .text {
+            margin: 0 0 0 auto;
+        }
+    }
+}
+
+.carousel-control-prev,
+.carousel-control-next,
+.carousel-indicators {
+    z-index: 25;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.dc-youtube {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+
+    .frame {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 1;
+        margin: auto;
+        opacity: 0;
+        transform: translate(-50%, -50%);
+        transition: opacity .5s;
+
+        &.active {
+            opacity: 1;
+        }
+    }
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    top: 50%;
+    bottom: unset;
+}
+
+.carousel-inner {
+    .owl-nav {
+        height: 0 !important;
+        margin: 0 !important;
+    }
+}
+
+
+.banners-carousel-content {
+    max-width: 45rem;
+}

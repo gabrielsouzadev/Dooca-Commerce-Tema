@@ -1,0 +1,177 @@
+{% set container = section.settings.container ?: 'container-fluid' %}
+{% set filter_position = theme.sections.sidebar.settings.filter_position ?: section.settings.filter_position|default('left') %}
+{% set order = { 'sidebar': 'order-0', 'list': 'order-1' } %}
+{% set column = { 'sidebar': 'col-auto', 'list': 'col' } %}
+
+{% if filter_position == 'right' %}
+    {% set order = { 'sidebar': 'order-1', 'list': 'order-0' } %}
+{% endif %}
+
+<div class="{{ container }}">
+        <div class="{% if filter_position == 'top' %}d-none d-lg-block{% endif %} d-none">
+            <div class="col-auto {{ order.sidebar }}">
+                {% if paginate.total > 0 %}
+                    {% section "collection-sidebar" %}
+                {% endif %}
+            </div>
+            <div class="col-12 {{ order.list }}">
+                {% if paginate.total > 0 %}
+                    {% section "collection-list" %}
+                {% else %}
+                    {% include 'collection-not-found.twig' %}
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="{% if filter_position == 'top' %}d-block d-lg-none{% endif %} row no-gutters">
+            <div class="col-auto {{ order.sidebar }}">
+                {% if paginate.total > 0 %}
+                    {% section "collection-sidebar" %}
+                {% endif %}
+            </div>
+            <div class="col {{ order.list }}">
+                {% if paginate.total > 0 %}
+                    {% section "collection-list" %}
+                {% else %}
+                    {% include 'collection-not-found.twig' %}
+                {% endif %}
+            </div>
+        </div>
+</div>
+
+{% schema %}
+    {
+        "name": "Listagem de produtos",
+        "settings": [
+            {
+                "type": "select",
+                "id": "collection_sort",
+                "label": "Ordenação padrão da listagem",
+                "default": "-relevance",
+                "options": [
+                    {
+                        "value": "-relevance",
+                        "label": "Mais relevantes"
+                    },
+                    {
+                        "value": "-created_at",
+                        "label": "Novidades"
+                    },
+                    {
+                        "value": "-price",
+                        "label": "Maiores preços"
+                    },
+                    {
+                        "value": "price",
+                        "label": "Menores preços"
+                    },
+                    {
+                        "value": "-discount",
+                        "label": "Maiores descontos"
+                    },
+                    {
+                        "value": "name",
+                        "label": "Alfabética de A>Z"
+                    },
+                    {
+                        "value": "-name",
+                        "label": "Alfabética de Z>A"
+                    }
+                ]
+            },
+            {
+                "type": "select",
+                "id": "filter_position",
+                "label": "Posicionamento do filtro de produtos",
+                "default":  "left",
+                "hide": true,
+                "options": [
+                    {
+                        "value": "left",
+                        "label": "Esquerda"
+                    },
+                    {
+                        "value": "right",
+                        "label": "Direita"
+                    },
+                    {
+                        "value":  "top",
+                        "label": "Superior"
+                    }
+                ]
+            },
+            {
+                "type": "select",
+                "id": "products_per_row",
+                "label": "Quantidade de produtos por linha",
+                "default": "3",
+                "options": [
+                    {
+                        "value": "2",
+                        "label": "2"
+                    },
+                    {
+                        "value": "3",
+                        "label": "3"
+                    },
+                    {
+                        "value": "4",
+                        "label": "4"
+                    }
+                ]
+            },
+            {
+                "type": "select",
+                "id": "products_per_page",
+                "label": "Quantidade de produtos exíbidos por página",
+                "default":  "24",
+                "options": [
+                    {
+                        "value": "24",
+                        "label": "24"
+                    },
+                    {
+                        "value": "36",
+                        "label": "36"
+                    },
+                    {
+                        "value": "48",
+                        "label": "48"
+                    }
+                ]
+            },
+			{
+				"type": "select",
+				"id": "container",
+				"label": "Estilo do conteúdo",
+				"default": "container-fluid",
+				"options": [
+                    {
+						"value": "container",
+						"label": "Centralizado"
+					},
+					{
+						"value": "container-fluid",
+						"label": "Adaptável a largura da tela"
+					}
+				]
+			},
+			{
+				"type": "select",
+				"id": "filter_color_type",
+				"label": "Filtro de cores",
+				"default": "list",
+				"options": [
+                    {
+						"value": "list",
+						"label": "Seleção por lista"
+					},
+					{
+						"value": "icons",
+						"label": "Seleção por miniatura"
+					}
+				]
+			}
+        ]
+    }
+{% endschema %}

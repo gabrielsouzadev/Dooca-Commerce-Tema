@@ -1,0 +1,52 @@
+{% set menu_main = navigation[theme.sections.header.settings.menu_main] %}
+{% set menu = menu_main.values %}
+
+{% if theme.sections.header.settings.menu_departments %}
+	{% set menu_departments = navigation[theme.sections.header.settings.menu_departments] %}
+	{% set departments_menu = {
+		'name': menu_departments.name,
+		'items': 'Menu',
+		'values': [{
+			'name': 'Menu',
+			'children': menu_departments.values
+		}]
+	} %}
+{% endif %}
+
+<nav class="navigation">
+	<div class="row no-gutters justify-content-end">
+		{% if theme.sections.header.settings.menu_departments %}
+			<div class="col-auto navigation-item">
+				<a class="{% if version %}h-mn-color{% endif %} departments navigation-link h-100 d-flex justify-content-center align-items-center p-4" href="{{ item.menu_type_link }}" aria-label="{{ item.name }}" {% if section.settings.menu_color_bg_dp %} style="background-color: {{ section.settings.menu_color_bg_dp }};"{% endif %}>
+					<i class="navigation-icon mr-3 {% if not section_highlight %} h-blank-color {% endif %}"><i class="material-icons md-36">menu</i></i>
+					<span class="d-flex justify-content-center align-items-center text-center px-4">{{ departments_menu.name }}</span>
+				</a>
+				{% for item in departments_menu.values %}
+					{% include "menu-dropdown.twig" %}
+				{% endfor %}
+			</div>
+		{% endif %}
+		{% for item in menu %}
+			{% if item.active %}
+				<div class="col-auto navigation-item {% if item.banner.src %}navigation-banner{% endif %}">
+					<a class="{% if section_menu %}h-mn-color{% endif %} navigation-link {{ item.slug }} h-100 d-flex justify-content-center align-items-center pt-4 pb-4" href="{{ item.menu_type_link }}" aria-label="{{ item.name }}">
+						{% if item.image.src %}
+							<img loading="lazy" class="img-fluid navigation-image mx-3" src="{{ item.image.src | img_url }}" alt="{{ item.name }}">
+						{% endif %}
+						{% if not no_separator %}
+							<div class="navigation-separator" style="color: {{ color_border }};"></div>
+						{% endif %}
+						<span class="d-flex justify-content-center align-items-center text-center px-4">{{ item.name }}</span>
+					</a>
+					{% if item.children %}
+						{% if item.banner.src %}
+							{% include "menu-dropdown-banner.twig" %}
+						{% else %}
+							{% include "menu-dropdown.twig" %}
+						{% endif %}
+					{% endif %}
+				</div>
+			{% endif %}
+		{% endfor %}
+	</div>
+</nav>

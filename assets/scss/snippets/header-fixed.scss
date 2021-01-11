@@ -1,0 +1,71 @@
+.header-fixed {
+    position: fixed;
+    width: 100%;
+    z-index: 0;
+    transition: all ease-in-out .25s;
+    top: -8rem;
+    opacity: 0;
+    background: $body-bg;
+    border-bottom: 0 !important;
+    box-shadow: 0px 0px 40px 0px rgba(0,0,0,0.15);
+    
+    &.minimalist {
+        .nav-user {
+            span {
+                display: none;
+            }
+        }
+
+        .smart-search.modal-s .smart-button {
+            padding: 0;
+        }
+    }
+
+    &.is-fixed {
+        top: 0;
+        opacity: 1;
+        z-index: 160;
+    }
+
+    .menu-icon{
+        // height: 2.8rem;
+        // width: 2.8rem;
+    }
+
+    .smart-search {
+        &>.row {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    }
+
+    .nav-menu {
+        font-family: $h1-ff;
+        font-weight: $h1-fw;
+        font-size: 1.5rem;
+    }
+
+    .logo .logo-link {
+        .img-fluid {
+            margin: 1rem 0;
+            max-height: 5rem;
+            max-width: 20rem;
+        }
+    }
+
+    .container {
+        max-width: $dc-max-width;
+    }
+
+    .container,
+    .container-fluid {
+        padding-right: $dc-gutter/2;
+        padding-left: $dc-gutter/2;
+    }
+
+    .col,
+    .col-auto {
+        padding-right: $dc-gutter/2;
+        padding-left: $dc-gutter/2;
+    }
+}

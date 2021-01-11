@@ -1,0 +1,24 @@
+{% set crop_type = theme.settings.product_image_crop %}
+{% set img_zoom = '1600x1600+fill_ffffff' %}
+{% set gallery_type = section.settings.image_galery ?: 'gallery' %}
+
+{% if crop_type == 'square' %}
+    {% set img_featured = '620x620+fill_ffffff' %}
+{% else %}
+    {% set img_featured = '600x800+fill_ffffff' %}
+    {% set img_zoom = '1600x2000+fill_ffffff' %}
+{% endif %}
+
+{% if theme.settings.product_info_custom_crop %}
+    {% set img_featured = theme.settings.product_info_custom_crop ~ '+fill_ffffff' %}
+{% endif %}
+
+<div class="product-gallery d-flex d-lg-none  justify-content-center position-relative {% if not center %} m-0 mr-md-5 {% endif %}">
+    {% include 'product-gallery/mobile.twig' with { 'img_featured': img_featured, 'img_zoom': img_zoom } %}
+</div>
+
+<div class="product-gallery d-none d-lg-flex  justify-content-center position-relative {% if not center %} m-0 mr-md-5 {% endif %}">
+    {% include 'product-gallery/' ~ gallery_type ~ '.twig' with { 'img_featured': img_featured, 'img_zoom': img_zoom } %}
+</div>
+
+{{ 'lib/jquery.zoom.min.js' | assets_url | script_append }}

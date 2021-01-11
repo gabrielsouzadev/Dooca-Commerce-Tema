@@ -1,0 +1,302 @@
+{% set show_section = true %}
+
+{% set title = section.settings.title ?: null %}
+{% set subtitle = section.settings.subtitle ?: null %}
+
+{% set title_color = section.settings.title_color ?: theme.settings.color_primary %}
+{% set subtitle_color = section.settings.subtitle_color ?: theme.settings.color_text %}
+
+{% set container = section.settings.container ?: 'container' %}
+
+{% set border_size = section.settings.border_size ?: 0 %}
+{% set border_color = section.settings.border_color ?: theme.settings.color_border %}
+{% set margin_up = section.settings.margin_up ?: 0 %}
+{% set margin_dw = section.settings.margin_dw ?: 0 %}
+
+{% set background_color = section.settings.background_color ?: '#FFFFFF' %}
+{% set background_image = section.settings.background_image ?: null %}
+
+{% set button_color = section.settings.button_color ?: '#FFFFFF' %}
+{% set button_bg = section.settings.button_bg ?: theme.settings.color_primary %}
+{% set button_text = section.settings.button_text ?: 'OK' %}
+
+{% set form_bg_color = section.settings.form_bg_color ?: '#FFFFFF' %}
+{% set form_border_color = section.settings.form_border_color ?: theme.settings.color_border %}
+{% set form_text_color = section.settings.form_text_color ?: theme.settings.color_primary %}
+
+{% set align = section.settings.align ?: 'left' %}
+{% set custom_class = section.settings.custom_class ?: null %}
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-lg-block' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-block d-lg-none' %}
+{% endif %}
+
+{% if show_section %}
+    <div class="{{ s }} email-capture {{ custom_class }} {{ align }}"
+    style="
+        padding: {{ margin_up }}rem 5% {{ margin_dw }}rem 5%;
+        border-style: solid;
+        border-width: 0 0 {{ border_size }}px 0;
+        border-color: {{ border_color }};
+        background-color: {{ background_color }};
+        {% if background_image.src %}
+            background-image: url({{ background_image.src }});
+        {% endif %}
+        background-size: cover;
+    " id="{{ section.id }}">
+    <div class="{{ container }}">
+            <div class="row justify-content-between align-items-center position-relative">
+                <div class="email-capture-loader"><span class="loader"></span></div>
+                <div class="col-12 {% if align != 'top'%}col-lg-auto{% endif %}">
+                    <div class="row {% if align != 'top'%}jsutify-content-between{% else %}justify-content-center{% endif %} align-items-center">
+                        <div class="col-12 col-lg-auto">
+                            <i class="icon d-flex" style="color: {{ title_color }};">{{ 'img/email.svg' | svg }}</i>
+                        </div>
+                        <div class="email-capture-title col-12 col-lg-auto d-flex flex-column mt-3 mt-lg-0">
+                            {% if title %}
+                                <h2 class="h2" style="color: {{ title_color }};">{{ title | raw }}</h2>
+                            {% endif %}
+                            {% if subtitle %}
+                                <h3 class="h4 m-0" style="color: {{ subtitle_color }};">{{ subtitle | raw }}</h3>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg">
+                    <form class="row justify-content-center aligns-items-center" action="#formulariocadastrofixo" data-url="{{ 'newsletter' | action ('add') }}" id="email-capture-{{ section.id }}">
+                        <input type="hidden" name="form_type" value="newsletter">
+                        <input type="text" name="empty" style="display: none;">
+
+                        <div class="col-12 col-md">
+                            <input class="email-capture-input w-100 pl-4 pr-4" minlength="3" name="name" placeholder="Seu nome" required type="text"
+                            style="
+                                background-color: {{ form_bg_color }};
+                                border-color: {{ form_border_color }};
+                                color: {{ form_text_color }};
+                            ">
+                        </div>
+                        <div class="col-12 col-md">
+                            <input class="email-capture-input w-100 pl-4 pr-4" name="email" placeholder="Seu e-mail" required type="email"
+                            style="
+                                background-color: {{ form_bg_color }};
+                                border-color: {{ form_border_color }};
+                                color: {{ form_text_color }};
+                            ">
+                        </div>
+                        <div class="col-12 col-md-auto">
+                            <button class="btn email-capture-btn" name="button" type="submit" style="background-color: {{ button_bg }}; color: {{ button_color }};">
+                                {{ button_text }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="email-capture-errors" style="display: none;"></div>
+                <div class="email-capture-success" style="background-color: {{ background_color }}; display: none;">
+                    <div class="d-flex align-items-center justify-content-center text-center h-100">
+                        <h4 class="h2 m-0">Cadastro realizado com sucesso</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% javascript %}
+        $(function() {
+            var url = $('#email-capture-{{ section.id }}').data('url');
+            var xhr = _dcs.Xhr(url);
+
+            window.getParamns = function (element) {
+                var data = element.serializeArray().reduce(function (obj, item) {
+                    obj[item.name] = item.value;
+                    return obj;
+                }, {});
+
+                return data || null;
+            };
+
+            var registerEmail = function(data) {
+                $('.email-capture-loader').fadeIn();
+
+                xhr.post({
+                    id: 'email-capture',
+                    data: data
+                }).done(function() {
+                    $('.email-capture-success').fadeIn();
+                    $('.email-capture-loader').fadeOut();
+
+                    document.dispatchEvent(new CustomEvent('tracker.signUpNewsletter', {'detail': data}));
+                }).fail(function(jqXHR, textStatus, errorThrown) {
+                    var errors = $('.email-capture-errors');
+
+                    jqXHR.responseJSON.errors.map(function(item) {
+                        errors.empty();
+                        errors.append(item);
+                    });
+
+                    errors.fadeIn();
+
+                    $('.email-capture-loader').fadeOut();
+                });
+            };
+
+            $('#email-capture-{{ section.id }}').on('submit', function (evt) {
+                evt.preventDefault();
+                var paramns = window.getParamns($(this));
+
+                registerEmail(paramns);
+            });
+        });
+    {% endjavascript %}
+{% endif %}
+{% schema %}
+{
+    "name": "Captura de email",
+    "category": "Marketing",
+    "content_for_index": "1",
+    "settings": [{
+        "type": "accordion",
+        "content": "Conteúdo",
+        "icon": "content"
+    },{
+        "type": "text",
+        "label": "Título",
+        "id": "title",
+        "default": "Fique por dentro"
+    }, {
+        "type": "text",
+        "label": "Subtítulo",
+        "default": "Receba novidades e promoções",
+        "id": "subtitle"
+    }, {
+        "type": "text",
+        "label": "Texto do botão",
+        "id": "button_text",
+        "default": "cadastrar"
+    }, {
+        "type": "accordion",
+        "content": "Aparência",
+        "icon": "design"
+    },{
+        "type": "checkbox",
+        "label": "Não exibir em dispositivos móveis",
+        "id": "hide_mobile",
+        "default": 0
+    },{
+        "type": "checkbox",
+        "label": "Não exibir em desktop",
+        "id": "hide_desktop",
+        "default": 0
+    },{
+        "type": "separator"
+    },{
+		"type": "text",
+		"id": "custom_class",
+		"label": "Classe customizada para editar o css"
+	},{
+        "type": "select",
+        "id": "container",
+        "label": "Estilo do conteúdo",
+        "tooltip": "Você poderá definir o se o conteúdo da seção é centralizado ou adaptável a largura da tela.",
+        "default": "container",
+        "options": [{
+                "value": "container",
+                "label": "Centralizado"
+            },
+            {
+                "value": "container-fluid",
+                "label": "Adaptável a largura da tela"
+            }
+        ]
+    },{
+        "type": "select",
+        "id": "align",
+        "label": "Alinhamento do texto",
+        "default": "left",
+        "options": [
+            {
+                "value": "left",
+                "label": "Esquerda"
+            },
+            {
+                "value": "top",
+                "label": "Sobre"
+            }
+        ]
+    },{
+        "type": "separator"
+    },{
+        "type": "color_picker",
+        "id": "title_color",
+        "label": "Cor do título"
+    }, {
+        "type": "color_picker",
+        "id": "subtitle_color",
+        "label": "Cor do subtítulo"
+    }, {
+        "type": "color_picker",
+        "id": "button_color",
+        "label": "Cor do texto do botão"
+    }, {
+        "type": "color_picker",
+        "id": "button_bg",
+        "label": "Cor do fundo do botão"
+    }, {
+        "type": "color_picker",
+        "id": "form_bg_color",
+        "label": "Cor de fundo do formulário"
+    }, {
+        "type": "color_picker",
+        "id": "form_border_color",
+        "label": "Cor da borda do formulário"
+    }, {
+        "type": "color_picker",
+        "id": "form_text_color",
+        "label": "Cor do texto do formulário"
+    }, {
+        "type": "color_picker",
+        "id": "background_color",
+        "label": "Cor de fundo da seção"
+    }, {
+        "type": "color_picker",
+        "id": "border_color",
+        "label": "Cor da borda de seção"
+    },{
+        "type": "image_picker",
+        "id": "background_image",
+        "label": "Imagem de fundo da seção",
+        "info": "Recomendado: 1600x600px com até 250kb"
+    },{
+        "type": "checkbox",
+        "label": "Imagem fixa de fundo",
+        "id": "background_parallax"
+    }, {
+        "type": "range",
+        "id": "border_size",
+        "min": "0",
+        "max": "10",
+        "default": "1",
+        "label": "Espessura da borda de seção"
+    }, {
+        "type": "range",
+        "id": "margin_up",
+        "min": "0",
+        "max": "10",
+        "default": "10",
+        "label": "Margem de cima da seção"
+    }, {
+        "type": "range",
+        "id": "margin_dw",
+        "min": "0",
+        "max": "10",
+        "default": "10",
+        "label": "Margem de baixo da seção"
+    }],
+    "blocks": []
+}
+{% endschema %}

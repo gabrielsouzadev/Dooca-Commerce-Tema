@@ -1,0 +1,41 @@
+{% set color_name = theme.settings.product_color_name ?: null %}
+{% set img_thumb = '70x70+fill_ffffff+crop_center' %}
+
+<div 
+    class="product-card-kit" 
+    data-modal="modal-kit-{{ product.variation.id }}" 
+>
+    <div class="row no-gutters align-items-center justify-content-between">
+        {% if product.image %}
+            <div class="col-auto p-3">
+                <img loading="lazy" class="img-fluid lazy" src="{{ product.image | img_url (img_thumb) }}">
+            </div>
+        {% endif %}
+
+        <div class="col p-3">
+            <div class="d-flex w-100 align-items-center justify-content-start">
+                {% if product.quantity %}
+                    <div class="product-kit-quantity mr-4 d-flex align-items-center justify-content-center">
+                        <span class="quantity">{{ product.quantity }}</span>
+                    </div>
+                {% endif %}
+                
+                {% if product.name %}
+                    <h3 class="h2">
+                        {{ product.name }}
+
+                        {% if color_name and product.color.name %}
+                            {{ product.color.name }}
+                        {% endif %}
+                    </h3>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-auto p-3">
+            <span href="javascript:void(0)" class="btn">
+                Detalhes
+            </span>
+        </div>
+    </div>
+</div>

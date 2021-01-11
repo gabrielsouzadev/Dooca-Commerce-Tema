@@ -1,0 +1,477 @@
+            
+                <div class="container d-flex flex-column">
+                    {% for group in groups %}
+                        {% set is_first = 0 %}
+                        {% set price = 0 %}
+
+                        <div class="row customize-product-group pb-5 mt-5 {% if order == 'no_group'%}order-1{% endif %}">
+                            <div class="col-12">
+                                <div class="mb-4">
+                                    <h2 class="h2 mb-4">{{ group.name }} {% if group.optional %}(Opcional){% endif %}</h2>
+                                    <p class="text">{{ group.description }}</p>
+                                    <div class="alert-shipping col-12 m-0 customize-product-alert d-none" style="max-width: 19rem;"> 
+                                        <span>Nenhuma opção disponível</span> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="customize-product-components">
+                                    {% for component in components %}
+                                        {% if group.id == component.product_component_group_id %}
+                                            {% set isf = isf + 1 %}
+
+                                            {% if component.selected or (isf == 1 and not group.optional) %}
+                                                {% set price = component.price %}
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    
+                                    {% for component in components %}
+                                        {% if group.id == component.product_component_group_id %}
+                                            {% set is_first = is_first + 1 %}
+
+                                            {% if group.optional and is_first == 1 %}
+                                                <label class="row customize-product-component d-flex align-items-center justify-content-start mt-4 py-1">
+                                                    <div class="col-auto">
+                                                        <div class="customize-product-radio">
+                                                            <input type="radio" name="" value="" {% if not component.selected %}checked{% endif %}>
+                                                                
+                                                            <span class="checkmark">
+                                                                <i>{{ 'img/dc-icons/check-bold.svg' | svg }}</i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-auto">
+                                                        <div class="customize-product-image mr-3">
+                                                            <div class="icon p-3">
+                                                                {{ 'img/dc-icons/image.svg' | svg }}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <div class="customize-product-title">
+                                                            <h3 class="h3">Nenhum componente</h3>
+                                                        </div>
+                                                    </div>
+                                                </label>
+                                            {% endif %}
+
+                                            <label class="row customize-product-component align-items-center justify-content-start mt-4 py-1 {% if component.balance <= 0 and not component.selling_out_of_stock %}d-none{% else %}d-flex{% endif %}">
+                                                <div class="col-auto">
+                                                    <div class="customize-product-radio">
+                                                        <input type="radio" name="components[{{ group.id }}][product_component_id]" value="{{ component.product_component_id }}" {% if component.selected or (is_first == 1 and not group.optional) %}checked{% endif %}>
+                                                        <span class="checkmark">
+                                                            <i>{{ 'img/dc-icons/check-bold.svg' | svg }}</i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-auto">
+                                                    <div class="customize-product-image mr-3">
+                                                        {% if component.image.src %}
+                                                            <img loading="lazy" src="{{ component.image.src | img_url('60x60+filll_ffffff') }}" alt="{{ component.name }}" class="img-fluid">
+                                                        {% else %}
+                                                            <div class="icon p-3">
+                                                                {{ 'img/dc-icons/image.svg' | svg }}
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col">
+                                                    <div class="customize-product-title">
+                                                        <span class="h3">
+                                                            {% if component.quantity > 1 %}
+                                                                {{ component.quantity }}x
+                                                            {% endif %}
+                                                            {{ component.name }}
+                                                        </span>
+                                                        {% if component.price != price %}
+                                                            <span class="customize-product-price">
+                                                                {% set diff = component.price - price %}
+                                                                ({{ diff | currency }})
+                                                            </span>
+                                                        {% endif %}
+                                                        {% if component.balance <= 0 and not component.selling_out_of_stock %}
+                                                            <span class="customize-out-of-stock text">indisponível</span>
+                                                        {% endif %}
+                                                    </div>
+
+                                                    {% if component.variations|length > 1 %}
+                                                        {% if component.variation.attribute_value_id|length > 0 and component.variation.attribute_value_secondary_id|length > 0 %}
+                                                            {% set _product = _getProduct(component.grid_id) %}
+                                                            {% set attributes = [] %}
+                                                            {% set attributes = attributes|merge([_product.attribute]) %}
+                                                            {% set attributes = attributes|merge([_product.attribute_secondary]) %}
+                                                            
+                                                            {% set variation = null %}
+                                                            {% set attr1 = null %}
+                                                            {% set attr2 = null %}
+
+                                                            {% if _get.attributesc[component.grid_id]|length > 0 %}
+                                                                {% set attr1 = _get.attributesc[component.grid_id]['attr-1'] ?: null %}
+                                                                {% set attr2 = _get.attributesc[component.grid_id]['attr-2'] ?: null %}
+                                                            {% else %}
+                                                                {% for _variation in _product.variations %}
+                                                                    {% if not attr1 and not attr2 %}
+                                                                        {% if (_variation.balance >= 1) or _variation.selling_out_of_stock %}
+                                                                            {% set attr1 = _variation.attribute_value_id ?: null %}
+                                                                            {% set attr2 = _variation.attribute_value_secondary_id ?: null %}
+                                                                        {% endif %}
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% endif %}
+
+                                                            {% if attr1 and attr2 %}
+                                                                {% for _variation in _product.variations %}
+                                                                    {% if _variation.attribute_value_id == attr1 and _variation.attribute_value_secondary_id == attr2 %}
+                                                                        {% set variation = _variation %}
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                            
+                                                            <div class="product-attributes">
+                                                                {% for attribute in attributes %}
+                                                                    {% set last = loop.last %}
+                                                                    {% set s_attr = (last) ? attr2 : attr1 %}
+
+                                                                    <div class="product-attribute" {% if last and not attr2 %}style="display: none;"{% endif %}>
+                                                                        <div class="row align-items-center mb-3">
+                                                                            <div class="col">
+                                                                                <h4 class="h4 m-0">{{ attribute.name }}</h4>
+                                                                            </div>
+                                                                            <div class="col">
+                                                                                <div class="product-attribute-select position-relative">
+                                                                                    <select class="select product-attribute-action attr-{{ loop.index }}" name="attributesc[{{ component.grid_id }}][attr-{{ loop.index }}]" required="required">
+                                                                                        <option disabled selected value="">Selecione</option>
+                                                                                        {% for attr in attribute.values %}
+                                                                                            <option value="{{ attr.id }}" {% if s_attr == attr.id %}selected{% endif %}>
+                                                                                                {{ attr.name }}
+                                                                                            </option>
+                                                                                        {% endfor %}
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                {% endfor %}
+                                                            </div>
+                                                            
+                                                            {% if variation|length > 0 %}
+                                                                {% if variation.balance >= 1 or variation.selling_out_of_stock %}
+                                                                    <input class="d-none" type="radio" name="components[{{ component.product_component_group_id }}][variation_id]" value="{{ variation.id }}" {% if component.selected or (is_first == 1 and not group.optional) %}checked{% endif %}>
+                                                                {% else %}
+                                                                    <div class="customize-product-alert mb-3">
+                                                                        <i>{{ 'img/dc-icons/exclamation.svg' | svg }}</i>
+                                                                        Este produto não possui unidades em estoque.
+                                                                    </div>
+                                                                {% endif %}
+                                                            {% endif %}
+                                                        {% elseif variation_select_type == 'buttons' %}
+                                                            {# {% set has_selected = null %} #}
+                                                            <div class="customize-product-buttons d-flex flex-wrap mb-2">
+                                                                {% for variation in component.variations %}
+
+                                                                    
+                                                                    {% set disabled = (variation.balance <= 0 or variation.balance < component.quantity) ? 'disabled' : null %}
+                                                                    
+                                                                    {# {% if not disabled and not has_selected %}
+                                                                        {% set has_selected = variation.id %}
+                                                                    {% endif %} #}
+
+                                                                    <label class="customize-product-button mt-2 mr-2 p-2 {{ disabled }}" for="variation-{{ variation.id }}" {% if disabled %}style="pointer-events: none;"{% endif %}>
+                                                                        <span class="text">{{ variation.attribute.name }}</span>
+                                                                        <input id="variation-{{ variation.id }}" type="radio" name="components[{{ component.product_component_group_id }}][variation_id]" value="{{ variation.id }}" required>
+                                                                    </label>
+                                                                {% endfor %}
+
+                                                            </div>
+                                                        {% else %}
+                                                            <div class="customize-product-select">
+                                                                <select class="select" name="components[{{ component.product_component_group_id }}][variation_id]">
+                                                                    <option value="" disabled selected>Selecione</option>
+                                                                    {% for variation in component.variations %}
+                                                                        {% if variation.balance > 0 and variation.balance >= component.quantity %}
+                                                                            <option value="{{ variation.id }}">
+                                                                                {{ variation.attribute.name }}
+                                                                            </option>
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                </select>
+
+                                                                <i class="select-icon">{{ 'img/arrow-down.svg' | svg }}</i>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        <div class="text my-2">{{ component.variations[0].attribute.name }}</div>
+                                                        <input class="d-none" type="radio" name="components[{{ group.id }}][variation_id]" value="{{ component.variation.id }}" {% if component.selected or (is_first == 1 and not group.optional) %}checked{% endif %}>
+                                                    {% endif %}
+
+                                                    <div class="customize-product-detail" data-id="{{ component.product_component_id }}">
+                                                        <span class="text">+ Detalhes</span>
+                                                    </div>
+                                                </div>
+
+                                                {% if individual_buy %}
+                                                    {% set buy_button_text = theme.settings.product_buy_button_text ?: 'Comprar' %}
+
+                                                    <div class="{% if individual_price %}col-12 col-md-auto{% else %}col-auto{% endif %}">
+                                                        {% if individual_price %}
+                                                            <div class="mt-4 mt-md-2">
+                                                                {% include 'product-card-price.twig' with { product: component } %}
+                                                            </div>
+                                                        {% endif %}
+                                                        
+                                                        {% if theme.settings.product_buy_button_type == 'quantity' %}
+                                                            <div class="row align-items-center no-gutters mt-4 mt-md-2">
+                                                                <div class="col-6 pr-2 product-action">
+                                                                    <div class="product-info">
+                                                                        <div class="product-buy">
+                                                                            <div class="col-12 dc-quantity" style="min-height: 4.6rem;">
+                                                                                <button aria-label="dc-decrease" class="dc-decrease position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button" style="min-height: 100%;">
+                                                                                    <i class="icon">{{ 'img/dc-icons/minus.svg' | svg }}</i>
+                                                                                </button>
+
+                                                                                <input aria-label="dc-quantity" type="number" class="input dc-input text-center w-100 h-100" name="quantity" value="1" min="{{ component.min_quantity }}" max="{{ (component.max_quantity > 0) ? component.max_quantity : component.balance }}" style="opacity: 1; left: 0; min-height: 100%;">
+
+                                                                                <button aria-label="dc-increase" class="dc-increase position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button" style="min-height: 100%;">
+                                                                                    <i class="icon">{{ 'img/dc-icons/plus.svg' | svg }}</i>
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <button class="btn customize-individual-buy position-relative w-100" style="background-color: {{ theme.settings.color_button_buy }}; color: {{ theme.settings.color_button_buy_text }};" data-variation="components[{{ loop.index }}][variation_id]">
+                                                                        <div class="product-action-buy-loader">
+                                                                            <div class="loader"></div>
+                                                                        </div>
+                                                                        <span>{{ buy_button_text }}</span>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        {% else %}
+                                                            <button class="{% if individual_price %}mt-4 mt-md-2{% endif %} btn customize-individual-buy position-relative" style="background-color: {{ theme.settings.color_button_buy }}; color: {{ theme.settings.color_button_buy_text }};" data-variation="components[{{ loop.index }}][variation_id]">
+                                                                <div class="product-action-buy-loader">
+                                                                    <div class="loader"></div>
+                                                                </div>
+                                                                <span>{{ buy_button_text }}</span>
+                                                            </button>
+                                                        {% endif %}
+                                                    </div>
+                                                {% endif %}
+                                            </label>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                        {# SEM GRUPOS #}
+                        {% for component in components %}
+                            {% if not component.product_component_group_id %}
+                                {% set index = loop.index %}
+                                <div class="row customize-product-component d-flex align-items-center justify-content-start py-4 no-group {% if order == 'no_group'%}order-0{% endif %}">
+                                    <div class="d-none col-auto">
+                                        <div class="customize-product-radio">
+                                            <input type="radio" name="components[{{ loop.index }}][product_component_id]" value="{{ component.product_component_id }}" checked>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-auto">
+                                        <div class="customize-product-image">
+                                            {% if component.image.src %}
+                                                <img loading="lazy" src="{{ component.image.src | img_url('60x60+filll_ffffff') }}" alt="{{ component.name }}" class="img-fluid">
+                                            {% else %}
+                                                <div class="icon p-3">
+                                                    {{ 'img/dc-icons/image.svg' | svg }}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+
+                                    <div class="col">
+                                        <div class="customize-product-title">
+                                            <span class="h3">
+                                                {% if component.quantity > 1 %}
+                                                    {{ component.quantity }}x
+                                                {% endif %}
+                                                {{ component.name }}
+                                            </span>
+                                        </div>
+
+                                        {% if component.variations|length > 1 %}
+                                            {% if component.variation.attribute_value_id|length > 0 and component.variation.attribute_value_secondary_id|length > 0 %}
+                                                {% set _product = _getProduct(component.grid_id) %}
+                                                {% set attributes = [] %}
+                                                {% set attributes = attributes|merge([_product.attribute]) %}
+                                                {% set attributes = attributes|merge([_product.attribute_secondary]) %}
+                                                
+                                                {% set variation = null %}
+                                                {% set attr1 = null %}
+                                                {% set attr2 = null %}
+
+                                                {% if _get.attributes[index]|length > 0 %}
+                                                    {% set attr1 = _get.attributes[index]['attr-1'] ?: null %}
+                                                    {% set attr2 = _get.attributes[index]['attr-2'] ?: null %}
+                                                {% else %}
+                                                    {% for _variation in _product.variations %}
+                                                        {% if not attr1 and not attr2 %}
+                                                            {% if (_variation.balance >= 1) or _variation.selling_out_of_stock %}
+                                                                {% set attr1 = _variation.attribute_value_id ?: null %}
+                                                                {% set attr2 = _variation.attribute_value_secondary_id ?: null %}
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
+
+                                                {% if attr1 and attr2 %}
+                                                    {% for _variation in _product.variations %}
+                                                        {% if _variation.attribute_value_id == attr1 and _variation.attribute_value_secondary_id == attr2 %}
+                                                            {% set variation = _variation %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                                
+                                                <div class="product-attributes">
+                                                    {% for attribute in attributes %}
+                                                        {% set last = loop.last %}
+                                                        {% set s_attr = (last) ? attr2 : attr1 %}
+
+                                                        <div class="product-attribute" {% if last and not attr2 %}style="display: none;"{% endif %}>
+                                                            <div class="row align-items-center mb-3">
+                                                                <div class="col">
+                                                                    <h4 class="h4 m-0">{{ attribute.name }}</h4>
+                                                                </div>
+                                                                <div class="col">
+                                                                    <div class="product-attribute-select position-relative">
+                                                                        <select class="select product-attribute-action attr-{{ loop.index }}" name="attributes[{{ index }}][attr-{{ loop.index }}]" required="required">
+                                                                            {% for attr in attribute.values %}
+                                                                                <option value="{{ attr.id }}" {% if s_attr == attr.id %}selected{% endif %}>
+                                                                                    {{ attr.name }}
+                                                                                </option>
+                                                                            {% endfor %}
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                                
+                                                {% if variation.balance >= 1 or variation.selling_out_of_stock %}
+                                                    <input class="d-none" type="radio" name="components[{{ loop.index }}][variation_id]" value="{{ variation.id }}" checked>
+                                                {% else %}
+                                                    <div class="customize-product-alert mb-3">
+                                                        <i>{{ 'img/dc-icons/exclamation.svg' | svg }}</i>
+                                                        Este produto não possui unidades em estoque.
+                                                    </div>
+                                                {% endif %}
+                                            {% elseif variation_select_type == 'buttons' %}
+                                                {# {% set has_selected = null %} #}
+                                                {% set _index = loop.index %}
+                                                <div class="customize-product-buttons d-flex flex-wrap mb-2">
+                                                    {% for variation in component.variations %}
+
+                                    
+                                                        {% set disabled = (variation.balance <= 0 or variation.balance < component.quantity) ? 'disabled' : null %}
+
+                                                        {# {% if not disabled and not has_selected %}
+                                                            {% set has_selected = variation.id %}
+                                                        {% endif %} #}
+
+                                                        <label class="customize-product-button mt-2 mr-2 p-2 {{ disabled }}" for="variation-{{ variation.id }}" {% if disabled %}style="pointer-events: none;"{% endif %}>
+                                                            <span class="text">{{ variation.attribute.name }}</span>
+                                                                <input id="variation-{{ variation.id }}" type="radio" name="components[{{ _index }}][variation_id]" value="{{ variation.id }}" required>
+                                                        </label>
+                                                    {% endfor %}
+
+                                                </div>
+                                            {% else %}
+                                                <div class="customize-product-select">
+                                                    <select class="select" name="components[{{ loop.index }}][variation_id]">
+                                                        <option value="" disabled selected>Selecione</option>
+                                                        {% for variation in component.variations %}
+                                                            {% if variation.balance > 0 and variation.balance >= component.quantity %}
+                                                                <option value="{{ variation.id }}">
+                                                                    {{ variation.attribute.name }}
+                                                                </option>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </select>
+                                                    <i class="select-icon">{{ 'img/arrow-down.svg' | svg }}</i>
+                                                </div>
+                                            {% endif %}
+                                        {% else %}
+                                            <div class="text my-2">{{ component.variations[0].attribute.name }}</div>
+                                            <input type="hidden" name="components[{{ loop.index }}][variation_id]" value="{{ component.variation.id }}" checked>
+                                        {% endif %}
+
+                                        <div class="customize-product-detail" data-id="{{ component.product_component_id }}">
+                                            <span class="text">+ Detalhes</span>
+                                        </div>
+                                    </div>
+
+                                    {% if individual_buy %}
+                                        {% set buy_button_text = theme.settings.product_buy_button_text ?: 'Comprar' %}
+
+                                        <div class="{% if individual_price %}col-12 col-md-6{% else %}col-auto{% endif %}">
+                                            {% if individual_price %}
+                                                <div class="mt-4 mt-md-2">
+                                                    {% include 'product-card-price.twig' with { product: component } %}
+                                                </div>
+                                            {% endif %}
+                                            
+                                            {% if theme.settings.product_buy_button_type == 'quantity' %}
+                                                <div class="row align-items-center no-gutters mt-4 mt-md-2">
+                                                    <div class="col-12 mb-2 product-action">
+                                                        <div class="product-info">
+                                                            <div class="product-buy">
+                                                                <div class="col-12 dc-quantity" style="min-height: 4.6rem;">
+                                                                    <button aria-label="dc-decrease" class="dc-decrease position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button" style="min-height: 100%;">
+                                                                        <i class="icon">{{ 'img/dc-icons/minus.svg' | svg }}</i>
+                                                                    </button>
+
+                                                                    <input aria-label="dc-quantity" type="number" class="input dc-input text-center w-100 h-100" name="quantity" value="1" min="{{ component.min_quantity }}" max="{{ (component.max_quantity > 0) ? component.max_quantity : component.balance }}" style="opacity: 1; left: 0; min-height: 100%;">
+
+                                                                    <button aria-label="dc-increase" class="dc-increase position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button" style="min-height: 100%;">
+                                                                        <i class="icon">{{ 'img/dc-icons/plus.svg' | svg }}</i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <button class="btn customize-individual-buy position-relative w-100" style="background-color: {{ theme.settings.color_button_buy }}; color: {{ theme.settings.color_button_buy_text }};" data-variation="components[{{ loop.index }}][variation_id]">
+                                                            <div class="product-action-buy-loader">
+                                                                <div class="loader"></div>
+                                                            </div>
+                                                            <span>{{ buy_button_text }}</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            {% else %}
+                                                <button class="{% if individual_price %}mt-4 mt-md-2{% endif %} btn customize-individual-buy position-relative" style="background-color: {{ theme.settings.color_button_buy }}; color: {{ theme.settings.color_button_buy_text }};" data-variation="components[{{ loop.index }}][variation_id]">
+                                                    <div class="product-action-buy-loader">
+                                                        <div class="loader"></div>
+                                                    </div>
+                                                    <span>{{ buy_button_text }}</span>
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                </div>
+
+                <div class="d-none quick-buy">
+                    {% include 'product-action-price.twig' with { 'quick_buy': true } %}
+                </div>
+
+                <div class="d-none product-info">
+                    {% include 'product-action-price.twig' %}
+                </div>
+            

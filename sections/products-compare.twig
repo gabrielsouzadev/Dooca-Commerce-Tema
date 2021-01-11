@@ -1,0 +1,298 @@
+{% set show_section = true %}
+
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-lg-block' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-block d-lg-none' %}
+{% endif %}
+
+{% set product_background_color = section.settings.product_background_color ?: '#ffffff' %}
+{% set product_border_color = section.settings.product_border_color ?: null %}
+{% set product_title_color = section.settings.product_title_color ?: theme.settings.color_primary %}
+{% set product_text_color = section.settings.product_text_color ?: null %}
+{% set product_buy_background_color = section.settings.product_buy_background_color ?: '#37c79b' %}
+{% set product_buy_text_color = section.settings.product_buy_text_color ?: null %}
+{% set product_buy_button_text = section.settings.product_buy_button_text ?: 'Detalhes' %}
+
+{% if show_section %}
+    <div class="{{ s }}">
+    {% include 'section-header.twig' with { 'name': 'products-compare' }  %}
+
+    {% set _features = _getFeatures({ ids: section.settings.features })['data'] %}
+    {% set _products = [] %}
+
+    {% for product_id in section.settings.products %}
+        {% if product_id %}
+            {% set _product = _getProductFeature(product_id) %}
+            {% set _products = _products|merge([_product]) %}
+        {% endif %}
+    {% endfor %}
+
+    {% if _features|length >= 1 and _products|length >= 1 %}
+
+        {% set column = 3 %}
+        {% set offset = 3 %}
+
+        {% if _products|length == 2 %}
+            {% set column = 4 %}
+            {% set offset = 4 %}
+        {% endif %}
+        
+        {% if _products|length == 1 %}
+            {% set column = 6 %}
+            {% set offset = 6 %}
+        {% endif %}
+
+        <div class="wrapper" style="overflow:auto;">
+            <div class="content mt-5" style="background-color: {{ product_background_color }}; color: {{ product_text_color }};">
+                
+                <div class="row">
+                    <div class="offset-{{ offset }}"></div>
+                    {% for product in _products %}
+                        {% set src = product.image | img_url('254x254') %}
+                        <div class="col-{{ column }}">
+                            <a class="d-block" href="{{ 'product' | url (product) }}" aria-label="{{ product.name }}">
+                                <img loading="lazy" class="img-fluid d-flex mx-auto" src="{{ src }}" alt="{{ product.name }}" style="max-height: 254px;" />
+                                <h2 class="text my-5" {% if product_title_color %}style="color: {{ product_title_color }};"{% endif %}>
+                                    {{ product.name }}
+                                    {% if color_name and product.color.name %}
+                                        {{ product.color.name }}
+                                    {% endif %}
+                                </h2>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="row">
+                    {% for feature in _features %}
+                        <div class="col-{{ column }} p-4 border-bottom" {% if product_border_color %}style="border-color: {{ product_border_color }} !important;"{% endif %}>
+                            <b style="color: {{ product_title_color }};">{{ feature.name }}</b>
+                        </div>
+                        {% for product in _products %}
+                            {% set _product_f = null %}
+                            {% for product_f in product.features %}
+                                {% if product_f.id == feature.id %}
+                                    {% set _product_f = product_f.values %}
+                                {% endif %}
+                            {% endfor %}
+                            <div class="col-{{ column }} p-4 border-bottom" {% if product_border_color %}style="border-color: {{ product_border_color }} !important;"{% endif %}>
+                                {% if _product_f %}
+                                    {% for value in _product_f %}
+                                        <span class="text">
+                                            {{ value.name }}{% if not loop.last %},{% endif %}
+                                        </span>
+                                    {% endfor %}
+                                {% else %}
+                                    --
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+
+                <div class="row">
+                    <div class="offset-{{ offset }}"></div>
+                    {% for product in _products %}
+                        <div class="col-{{ column }} mt-5">
+                            {% if product.balance <= 0 and not product.selling_out_of_stock %}
+                                {% set text = 'Indisponível' %}
+                            {% endif %}
+                            <a href="{{ 'product' | url (product) }}" aria-label="{{ product.name }}" class="product-buy d-block text-center w-100">
+                                <button type="submit" class="btn product-buy-button w-100 {% if product.balance <= 0 and not product.selling_out_of_stock %} no-stock {% endif %}" style="background-color: {{ product_buy_background_color }}; color: {{ product_buy_text_color }};">
+                                    {{ product_buy_button_text }}
+                                </button>
+                            </a> 
+                        </div> 
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+
+    {% endif %}
+
+    {% include 'section-footer.twig' %}
+    </div>
+{% endif %}
+
+{% schema %}
+{
+    "name": "Comparar produtos",
+    "category": "Produtos",
+    "content_for_index": "1",
+    "settings": [
+        {
+            "type": "accordion",
+            "content": "Conteúdo",
+            "icon": "content"
+        },
+        {
+            "type": "text",
+            "label": "Título",
+            "id": "title"
+        },
+        {
+            "type": "text",
+            "label": "Subtítulo",
+            "id": "subtitle"
+        },
+        {
+            "type": "text",
+            "label": "Texto do botão",
+            "id": "product_buy_button_text"
+        },
+        {
+            "type": "product",
+            "max": 3,
+            "id": "products",
+            "label": "Produtos"
+        },
+        {
+            "type": "feature-group",
+            "max": "8",
+            "id": "features",
+            "label": "Características"
+        },
+        {
+            "type": "accordion",
+            "content": "Aparência",
+            "icon": "design"
+        },
+        {
+            "type": "checkbox",
+            "label": "Não exibir em dispositivos móveis",
+            "id": "hide_mobile",
+            "default": 0
+        },
+        {
+            "type": "checkbox",
+            "label": "Não exibir em desktop",
+            "id": "hide_desktop",
+            "default": 0
+        },
+        {
+            "type": "separator"
+        },
+        {
+			"type": "text",
+			"id": "custom_class",
+			"label": "Classe customizada para editar o css"
+		},
+        {
+            "type": "select",
+            "id": "container",
+            "label": "Estilo do conteúdo",
+            "default": "container",
+            "options": [{
+                    "value": "container",
+                    "label": "Centralizado"
+                },
+                {
+                    "value": "container-fluid",
+                    "label": "Adaptável a largura da tela"
+                }
+            ]
+        },
+        {
+            "type": "separator"
+        },
+        {
+            "type": "color_picker",
+            "id": "background_color",
+            "label": "Cor de fundo da seção"
+        },
+        {
+            "type": "color_picker",
+            "id": "border_color",
+            "label": "Cor da borda de seção"
+        },
+        {
+            "type": "color_picker",
+            "id": "title_color",
+            "label": "Cor do título"
+        },
+        {
+            "type": "color_picker",
+            "id": "subtitle_color",
+            "label": "Cor do subtítulo"
+        },
+        {
+            "type": "color_picker",
+            "id": "product_background_color",
+            "label": "Cor de fundo do bloco de produto"
+        },
+        {
+            "type": "color_picker",
+            "id": "product_border_color",
+            "label": "Cor de borda do produto"
+        },
+        {
+            "type": "color_picker",
+            "id": "product_title_color",
+            "label": "Cor de título do produto"
+        },
+        {
+            "type": "color_picker",
+            "id": "product_text_color",
+            "label": "Cor de texto do produto"
+        },
+        {
+            "type": "color_picker",
+            "id": "product_buy_background_color",
+            "label": "Cor de fundo do botão"
+        },
+        {
+            "type": "color_picker",
+            "id": "product_buy_text_color",
+            "label": "Cor de texto do botão"
+        },
+        {
+            "type": "separator"
+        },
+        {
+            "type": "image_picker",
+            "id": "background_image",
+            "label": "Imagem de fundo da seção",
+            "info": "Recomendado: 1600x600px com até 250kb"
+        },{
+            "type": "checkbox",
+            "label": "Imagem fixa de fundo",
+            "id": "background_parallax"
+        },
+        {
+            "type": "separator"
+        },
+        {
+            "type": "range",
+            "id": "border_size",
+            "min": "0",
+            "max": "10",
+            "default": "1",
+            "label": "Espessura da borda de seção"
+        },
+        {
+            "type": "range",
+            "id": "margin_up",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de cima da seção"
+        },
+        {
+            "type": "range",
+            "id": "margin_dw",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de baixo da seção"
+        }
+    ],
+	"blocks": []
+}
+{% endschema %}

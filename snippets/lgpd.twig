@@ -1,0 +1,28 @@
+<div id="lgpd" class="lgpd d-none" {% if theme.settings.lgpd_background %} style="background-color: {{ theme.settings.lgpd_background }};" {% endif %}>
+    <div class="container-fluid">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-12 col-md text-center">
+                <div class="text" {% if theme.settings.lgpd_text_color %} style="color: {{ theme.settings.lgpd_text_color }};" {% endif %}>
+                    {{ theme.settings.lgpd_text|default('Utilizamos cookies para melhorar a sua experiência em nosso site.') }} Ao continuar navegando você concorda com a nossa <a href="{% if theme.settings.lgpd_button_url %}{{ theme.settings.lgpd_button_url }}{% else %}/politica-de-privacidade{% endif %}">política de privacidade</a>.
+                </div>
+            </div>
+            <div class="col-12 col-md-auto mt-3 mt-md-0 text-center">
+                <button id="lgpd-btn" class="btn product-buy-button" style="{% if theme.settings.lgpd_button_background %}background-color: {{ theme.settings.lgpd_button_background }};{% endif %} {% if theme.settings.lgpd_button_text_color %}color: {{ theme.settings.lgpd_button_text_color }};{% endif %}">
+                    {{ theme.settings.lgpd_button_text|default('Continuar e fechar') }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var lgpd = document.getElementById('lgpd');
+    var isPreview = new URLSearchParams(window.location.search).get('preview');
+    if (!localStorage.getItem('lgpd') || isPreview) {
+        lgpd.classList.remove("d-none");
+    }
+    document.getElementById('lgpd-btn').onclick = function() {
+        localStorage.setItem('lgpd', true);
+        lgpd.classList.add('d-none');
+    };
+</script>

@@ -1,0 +1,126 @@
+{% if theme.settings.product_cart_add_redirect == 'not_redirect' %}
+    <script type="text/javascript" defer>
+        $(function() {
+            var modal = $('.cart-redirect-modal').modal();
+            var loader = $('.product-buy-loader');
+
+            $('body').delegate('#form-add-cart, #form-add-cart-custom', 'submit', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                var url = '{{ 'cart' | action ('add') }}';
+                var xhr = _dcs.Xhr(url);
+                var buy_btn = $('#form-add-cart, #form-add-cart-custom').find('.product-action-buy');
+
+                buy_btn.attr('disabled', true);
+                buy_btn.find('span').fadeOut();
+                buy_btn.find('.product-action-buy-loader').fadeIn();
+
+                xhr.post({
+                    data: $(this).serialize()
+                }).done(function(res) {
+                    loader.fadeOut();
+
+                    // Atualizar o carrinho
+                    updateCart(res);
+
+                    $('.modal').each(function() {
+                        $(this).fadeOut();
+                    });
+
+                    modal.open();
+                    
+                    buy_btn.find('.product-action-buy-loader').fadeOut();
+                    buy_btn.find('span').fadeIn();
+                    buy_btn.attr('disabled', false);
+                });
+
+                return false;
+            });
+
+            var btn_continue = $('.cart-redirect-continue');
+            var btn_checkout = $('.cart-redirect-checkout');
+
+            btn_continue.on('click', function() {
+                modal.close();
+            });
+
+            btn_checkout.on('click', function() {
+                window.location.href = location.origin + '/carrinho';
+            });
+
+            // Criar o html do carrinho atualizado
+            var createCartTemplate = function(data) {
+                var formatter = new Intl.NumberFormat('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                });
+
+                var html = '';
+
+                if (data) {
+                    html += '<div class="container">';
+                        html += '<div class="row justify-content-center">';
+                            html += '<div class="col-12 p-3 text-center">';
+                                html += '<span class="text ">Últimos produtos adicionados</span>';
+                            html += '</div>';
+                            html += '<div class="col-12" style="border: solid .1rem {{ color_border | default(theme.settings.color_border) }};  border-width: .1rem 0;">';
+                                for (var i=0; i<data.items.length; i++) {
+                                    var item = data.items[i];
+                                    html += '<a href="'+ item.url +'" class="col-12 d-flex align-items-center justify-content-start pt-3 pb-3">';
+                                        html += '<div class="nav-cart-thumb text-center mr-3">';
+                                            if (item.image) {
+                                                html += '<img class="img-fluid" src="'+ item.image.src +'" alt="' + item.name +'">';
+                                            }
+                                        html += '</div>';
+                                        html += '<div>';
+                                            html += '<span class="w-100 text">' + item.name + '</span>';
+                                            html += '<div class="price d-flex align-items-center mt-2">';
+                                                if (item.total > 0.00) {
+                                                    if (item.compare) {
+                                                        html += '<span class="compare">'+ formatter.format(item.compare) +'</span>';
+                                                    }
+                                                    html += '<span class="price-final">'+ formatter.format(item.price) +'</span>';
+                                                } else {
+                                                    html += '<span class="price-final">Brinde</span>';
+                                                }
+                                            html += '</div>';
+                                        html += '</div>';
+                                    html += '</a>'
+                                }
+                            html += '</div>';
+                            
+                            html += '<div class="col-12 p-3">';
+                                html += '<a href="{{ 'cart' | url }}" class="btn w-100">ir para o carrinho</a>';
+                            html += '</div>';
+                        html += '</div>';
+                    html += '</div>';
+                }
+
+                return html;
+            };
+
+            // Atualizar os elementos do carrinho
+            var updateCart = function(data) {
+                var cart = $('.nav-cart');
+                if (cart.length > 0) {
+                    cart.each(function() {
+                        var _this = $(this);
+                        var badge = _this.find('.nav-badge');
+                        
+                        badge.empty();
+                        badge.append('<span class="text">' + data.quantity + '</span>');
+
+                        if (data.items.length > 0) {
+                            var dropdown = _this.find('.nav-cart-dropdown');
+                            var tpl = createCartTemplate(data);
+
+                            dropdown.empty();
+                            dropdown.append(tpl)
+                        }
+                    });
+                }
+            };
+        });
+    </script>
+{% endif %}

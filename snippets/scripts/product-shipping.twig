@@ -1,0 +1,229 @@
+{% javascript %}
+    $(function () {
+        'use strict';
+
+        var url = '{{ "product-shipping" | action ("get") }}';
+        var class_modal = window.innerWidth < 768 ? 'modal--mobile' : '';
+
+        var xhr = _dcs.Xhr(url);
+
+        var modal_shipping = $('.product-shipping-modal').modal({ class: class_modal });
+        var modal_loader = $('.product-shipping-loader');
+
+        var getShipping = function getShipping(data) {
+            $('.product-shipping-message').attr('class', 'product-shipping-message').empty();
+
+            {% if product.kit %}
+                var data = $(".product-shipping-form, #form-add-cart-custom :input[value!='']").serialize();
+            {% else %}
+                var quantity = 1;
+                
+                if (parseInt($('.product-buy').find("input[name='quantity']").val()) > 1) {
+                    quantity = parseInt($('.product-buy').find("input[name='quantity']").val());
+                }
+
+                data.quantity = quantity;
+            {% endif %}
+
+            xhr.get({
+                id: 'product-shipping',
+                data: data
+            }).done(function (response) {
+                if (typeof response.data != 'undefined') {
+                    var template = getTemplate(response.data);
+                }
+
+                if (typeof response.taxes != 'undefined') {
+                    var taxes = response.taxes;
+
+                    if (taxes.length > 0) {
+                        var taxes_template = getTemplateTaxes(taxes);
+                        
+                        $('.product-shipping-taxes').addClass('mt-5');
+                        $('.product-shipping-taxes').empty().append(taxes_template);
+                    }
+                }
+                
+                if (typeof response.error != 'undefined') {
+                    $('.product-shipping-message').addClass('p-2').empty().append(response.error.message);
+                }
+
+                if (typeof response.additional_messages != 'undefined') {
+                    $('.product-shipping-message').addClass('mt-5');
+
+                    for (var prop in response.additional_messages) {
+                        $('.product-shipping-message').empty().append(response.additional_messages[prop]);
+                    }                    
+                }
+
+                modal_loader.fadeOut();
+                $('.product-shipping-result').empty().append(template);
+            });
+        };
+
+        var getTemplateTaxes = function(data) {
+            var table = `
+            <table class="product-shipping-table w-100" border="0">
+                <thead>
+                    <tr>
+                        <th class="p-2">
+                            <h2 class="h2 m-0">Taxa</h2>
+                        </th>
+                        <th class="p-2">
+                            <h2 class="h2 m-0">Valor estimado</h2>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+            `;
+                data.forEach(function (item) {
+                    var price = new Intl.NumberFormat('pt-br', {
+                            style: 'currency',
+                            currency: 'BRL'
+                    }).format({{ product.price }} * item.rules[0].markup);
+
+                    var additional_message = item.additional_message > 0 ? '*' : '';
+
+                    table += `
+                        <tr>
+                            <td class="p-2">${item.name} ${additional_message}</td>
+                            <td class="p-2">${price}</td>
+                        </tr>
+                    `;
+                });
+            table += `
+                </tbody>
+            </table>
+            `;
+
+            return table;
+        };
+
+        var getTemplate = function getTemplate(data) {
+            var content = [];
+
+            if (data.length > 0) {
+                data.forEach(function (item) {
+                    
+                    if (item.price <= 0) {
+                        var price = 'Frete Grátis';
+                    } else {
+                        var price = new Intl.NumberFormat('pt-br', {
+                                style: 'currency',
+                                currency: 'BRL'
+                        }).format(item.price);
+                    }
+
+                    var additional_message = item.additional_message ? '*' : '';
+                    var delivery_message = '';
+
+                    if (item.delivery_time > 0) {
+                        delivery_message = 'em até ' + item.delivery_time + ' dias úteis';
+                    } else {
+                        delivery_message = 'entrega imediata';
+                    }
+
+                    var f_p = parseFloat(item.price);
+                    var f_pc = parseFloat(item.price_cost);
+
+                    var price_discount = '';
+                    if (f_pc > f_p) {
+                        price_discount = new Intl.NumberFormat('pt-br', {
+                                style: 'currency',
+                                currency: 'BRL'
+                        }).format(item.price_cost);
+                    }
+
+                    var tmp = `<tr>
+                        <td class="p-2">${item.alias} ${additional_message}</td>
+                        <td class="p-2">
+                            <span class="discount">${price_discount}</span>
+                            ${price}
+                        </td>
+                        <td class="p-2">${delivery_message}</td>
+                    </tr>`;
+                    content.push(tmp);
+                });
+            } else {
+                var not_found = `
+                    <tr>
+                        <td class="p-2">
+                            {% if theme.settings.shipping_message %}
+                                <b>Frete sob consulta.</b>
+                                Entre em contato via <br />
+                                <a class="link" target="_blank" href="{{ theme.settings.shipping_whatsapp | phone_link ('whatsapp') }}">
+                                    Whatsapp <b>{{ theme.settings.shipping_whatsapp }}</b>
+                                </a>
+                                para finalizar o pedido.
+                            {% else %}
+                                Nenhuma transportadora disponível
+                            {% endif %}
+                        </td>
+                        <td class="p-2"></td>
+                        <td class="p-2"></td>
+                    </tr>
+                `;
+
+                content.push(not_found);
+            }
+
+            return content;
+        };
+
+        $('.product-shipping-form').off('submit').on('submit', function (evt) {
+            evt.preventDefault();
+
+            {% if product.kit %}
+                var customizeButtons = $('.customize-product-buttons');
+                var customizeMessage = false;
+                var offsetTop = false;
+
+                if (customizeButtons.length > 0) {
+                    customizeButtons.each(function() {
+                        var hasSelectedVariation = $(this).find('.active');
+
+                        if (hasSelectedVariation.length <= 0) {
+                            customizeMessage = true;
+
+                            var html = `
+                                <div class="alert-shipping col-12 m-0 px-0 customize-product-alert justify-content-start">
+                                    <span>Por favor selecione uma variação antes de calcular o frete.</span>
+                                </div>
+                            `;
+
+                            $(this).find('.alert-shipping').empty();
+                            $(this).append(html);
+
+                            if(!offsetTop) {
+                                offsetTop = $(this).offset().top - $('.header-fixed').outerHeight() - 30;
+                            }
+                        } else {
+                            $(this).find('.alert-shipping').empty();
+                        }
+                    });
+                }
+
+                if (customizeMessage) {  
+                    if (offsetTop > 0) {
+                        $('html, body').animate({
+                            scrollTop: offsetTop 
+                        }, 1500);
+                    }
+                                  
+                    return false;
+                }
+            {% endif %}
+
+            var paramns = window.getParamns($(this));
+            $('.product-shipping-result').empty();
+            $('.product-shipping-taxes').empty();
+            $('.product-shipping-modal').fadeIn();
+
+            if (paramns.zipcode) {
+                modal_shipping.open();
+                modal_loader.fadeIn();
+                getShipping(paramns);
+            }
+        });
+    });
+{% endjavascript %}

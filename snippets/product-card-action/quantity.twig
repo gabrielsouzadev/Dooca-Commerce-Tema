@@ -1,0 +1,46 @@
+<form 
+    id="form-add-cart" 
+    name="form_add_cart"
+    class="d-flex flex-wrap w-100 dc-quantity"
+    method="post" 
+    action="{{ 'cart' | action ('add') }}"
+    dc-quantity
+    data-action="button"
+    data-min="0"
+    data-max="{{ (product.max_quantity > 0) ? product.max_quantity : product.balance }}"
+>
+    <input type="hidden" name="redirect" value="cart">
+
+    <div class="{% if cards >= 4 or col == 3 %}col-12 mb-3{% else %}col-12 col-lg-6 mb-3 mb-lg-0{% endif %} position-relative">
+        <button 
+            aria-label="dc-decrease"
+            class="dc-quantity-button decrease position-absolute" dc-quantity-decrease type="button">
+            <i class="icon">{{ 'img/dc-icons/minus.svg' | svg }}</i>
+        </button>
+
+        <input 
+            aria-label="dc-input" 
+            dc-quantity-input 
+            type="number" 
+            class="input m-0 w-100 text-center" 
+            name="quantity" 
+            value="1" 
+            min="0" 
+            max="{{ (product.max_quantity > 0) ? product.max_quantity : product.balance }}"
+        >
+
+        <button 
+            aria-label="dc-increase"
+            class="dc-quantity-button increase position-absolute" dc-quantity-increase type="button">
+            <i class="icon">{{ 'img/dc-icons/plus.svg' | svg }}</i>
+        </button>
+    </div>
+
+    <div class="product-buy text-center {% if cards >= 4 or col == 3 %}col-12{% else %}col-12 col-lg-6{% endif %}">
+        <button type="submit" class="btn product-buy-button w-100" dc-quantity-submit>
+            {{ text }}
+        </button>
+    </div>
+
+    {% include 'product-card-action/modal.twig' %}
+</form>

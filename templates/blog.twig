@@ -1,0 +1,63 @@
+{% section 'banners-carousel' %}
+
+<div class="blog">
+    <div class="container">
+        <div class="row no-gutters">
+            <div class="col-12 col-lg">
+                {% section 'blog-header' %}
+                {% include 'blog-posts.twig' %}
+                
+                {% if paginate.pages > 1 %}
+                    {% include 'paginate.twig' %}
+                {% endif %}
+            </div>
+            <div class="col-12 col-lg-auto">
+                {% include 'blog-filter.twig' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% section 'products-showcase' %}
+
+{# <div class="blog">
+    {% section 'blog-header' %}
+    
+    <div class="blog-filter">
+        <div class="container">
+            <div class="row p-4 align-items-center justify-content-center">
+                {% include 'blog-filter.twig' %}
+            </div>
+        </div>
+    </div>
+
+    {% if search %}
+        <div class="blog-search">
+            <div class="container">
+                <div class="row p-4 flex-column text-center justify-content-center">
+                    <h3 class="h3">Resultados de busca para o termo</h2>
+                    <h2 class="h2">{{ search }}</h2>
+                    <h3 class="h3">{{ paginate.total }} postagens encontradas</h2>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="blog-posts">
+        <div class="container">
+            <div class="row p-4 justify-content-start">
+                {% include 'blog-posts.twig' %}
+            </div>
+        </div>
+    </div>
+
+    {% if paginate.pages > 1 %}
+        <div class="blog-paginate mb-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    {% include 'paginate.twig' %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div> #}

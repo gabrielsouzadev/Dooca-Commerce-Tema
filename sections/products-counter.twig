@@ -1,0 +1,337 @@
+{% set show_section = true %}
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-lg-block' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-block d-lg-none' %}
+{% endif %}
+
+{% if show_section %}
+    <div class="{{ s }}">
+        {% include 'section-header.twig' with { 'name': 'products-counter' }  %}
+
+            {% set countdown = section.settings.countdown %}
+            {% set countdown_background = section.settings.countdown_background ?: null %}
+            {% set slider = section.settings.slider ?: null %}
+            {% set bpl = section.settings.bpl ?: 4 %}
+            {% set number_bg = section.settings.number_background_color ?: theme.settings.color_primary %}
+            {% set number_color = section.settings.number_color ?: null %}
+            {% set border_width = section.settings.border_width_content ?: 0 %}
+            {% set border_color = section.settings.border_color_content ?: theme.settings.color_border %}
+
+            {% set cols = 'col-12 col-md-4 cl-lg-' ~ bpl %}
+
+            {% if slider %}
+                {% set cols = 'col-12' %}
+            {% endif %}
+
+            {% if not countdown %}
+                {% set countdown = 'preview' %}
+            {% endif %}
+
+            <div class="products-counter-content position-relative" style="
+                border: solid {{ border_width }}px {{ border_color }};
+                background-color: {{ countdown_background }};
+            ">
+                {% if countdown %}
+                    <div class="countdown row no-gutters align-items-center justify-content-center" date="{{ countdown }}">
+                        <div class="col-auto text-center d-flex d-lg-block">
+                            <span class="h1 d-inline-flex align-items-center justify-content-center m-1" style="background-color: {{ number_bg }}; color: {{ number_color }};" data-days-d></span>
+                            <span class="h1 d-inline-flex align-items-center justify-content-center m-1" style="background-color: {{ number_bg }}; color: {{ number_color }};" data-days-u></span>
+                            <p class="position-absolute countdown-time">Dias</p>
+                        </div>
+                        <div class="countdown-separator" style="color: {{ number_bg }}; opacity: 0.25;">:</div>
+                        <div class="col-auto text-center d-flex d-lg-block">
+                            <span class="h1 d-inline-flex align-items-center justify-content-center m-1" style="background-color: {{ number_bg }}; color: {{ number_color }};" data-hours-d></span>
+                            <span class="h1 d-inline-flex align-items-center justify-content-center m-1" style="background-color: {{ number_bg }}; color: {{ number_color }};" data-hours-u></span>
+                            <p class="position-absolute countdown-time">Horas</p>
+                        </div>
+                        <div class="countdown-separator" style="color: {{ number_bg }}; opacity: 0.25;">:</div>
+                        <div class="col-auto text-center d-flex d-lg-block">
+                            <span class="h1 d-inline-flex align-items-center justify-content-center m-1" style="background-color: {{ number_bg }}; color: {{ number_color }};" data-minutes-d></span>
+                            <span class="h1 d-inline-flex align-items-center justify-content-center m-1" style="background-color: {{ number_bg }}; color: {{ number_color }};" data-minutes-u></span>
+                            <p class="position-absolute countdown-time">Minutos</p>
+                        </div>
+                        <div class="countdown-separator" style="color: {{ number_bg }}; opacity: 0.25;">:</div>
+                        <div class="col-auto text-center d-flex d-lg-block">
+                            <span class="h1 d-inline-flex align-items-center justify-content-center m-1" style="background-color: {{ number_bg }}; color: {{ number_color }};" data-seconds-d></span>
+                            <span class="h1 d-inline-flex align-items-center justify-content-center m-1" style="background-color: {{ number_bg }}; color: {{ number_color }};" data-seconds-u></span>
+                            <p class="position-absolute countdown-time">Segundos</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% set section_products = section.settings.products %}
+
+                {% if section_products|length > 0 %}
+                    <div class="products-counter-slider pt-5 justify-content-center">
+                        <div class="d-flex d-lg-none row justify-content-center products-content-list owl-carousel owl-theme no-gutters">
+                            {% for product_id in section_products %}
+                                {% if product_id %}
+                                    {% set product = products[product_id] %}
+
+                                    {% if product|length > 0 %}
+                                        <div class="{{ cols }} p-5 p-md-0 pt-md-4 pb-md-4 {% if slider %}h-100{% endif %}">
+                                            {% set params = { 'cards': bpl } %}
+                                            {% include 'product-card.twig' with params %}
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <div class="d-none d-lg-flex row justify-content-center products-content-list {% if slider %} owl-carousel owl-theme no-gutters {% else %} px-0 px-md-5 pb-0 pb-md-4 {% endif %}">
+                            {% for product_id in section_products %}
+                                {% if product_id %}
+                                    {% set product = products[product_id] %}
+
+                                    {% if product|length > 0 %}
+                                        <div class="{{ cols }} p-5 p-md-0 pt-md-4 pb-md-4 {% if slider %}h-100{% endif %}">
+                                            {% set params = { 'cards': bpl } %}
+                                            {% include 'product-card.twig' with params %}
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+        {% include 'section-footer.twig' %}
+    </div>
+
+    {% javascript %}
+        $(function() {
+                var slider = {{ (slider) ? 'true' : 'false' }};
+                if (slider || window.is_mobile) {
+                    const options = {
+                        autoplay: true,
+                        autoheight: true,
+                        autoplayHoverPause: true,
+                        dots: true,
+                        loop: true,
+                        items: {{ bpl }},
+                        responsive : {
+                            0 : {
+                                items: 1
+                            },
+                            480 : {
+                                items: 2
+                            },
+                            768 : {
+                                items: {{ bpl }}
+                            }
+                        }
+                    };
+
+                    $('.products-content-list').owlCarousel(options);
+            }
+
+            {% if countdown %}
+                $('.countdown').each(function() {
+                    var date_end = new Date($(this).attr('date'));
+
+                    {% if countdown == 'preview' %}
+                        var today = new Date();
+                        date_end = new Date();
+                        date_end.setDate(today.getDate()+2);
+                    {% endif %}
+
+                    $(this).countdown(date_end, function(event) {
+                        var day = event.strftime('%D');
+                        var hours = event.strftime('%H');
+                        var minutes = event.strftime('%M');
+                        var seconds = event.strftime('%S');
+
+                        $('[data-days]', this).html(day);
+                        $('[data-days-d]', this).html(day[0]);
+                        $('[data-days-u]', this).html(day[1]);
+
+                        $('[data-hours]', this).html(hours);
+                        $('[data-hours-d]', this).html(hours[0]);
+                        $('[data-hours-u]', this).html(hours[1]);
+
+                        $('[data-minutes]', this).html(minutes);
+                        $('[data-minutes-d]', this).html(minutes[0]);
+                        $('[data-minutes-u]', this).html(minutes[1]);
+
+                        $('[data-seconds]', this).html(seconds);
+                        $('[data-seconds-d]', this).html(seconds[0]);
+                        $('[data-seconds-u]', this).html(seconds[1]);
+
+                        if (day <= 0) {
+                            $(this).addClass('days-finished');
+                        }
+
+                    }).on('finish.countdown', function () {
+                        $(this).addClass('is-finished');
+                    });
+                });
+            {% endif %}
+        });
+    {% endjavascript %}
+{% endif %}
+
+{% schema %}
+{
+    "name": "Vitrine com contador superior",
+    "category": "Produtos",
+    "content_for_index": "1",
+    "settings": [
+        {
+            "type": "accordion",
+            "content": "Conteúdo",
+            "icon": "content"
+        },
+        {
+            "type": "text",
+            "label": "Título",
+            "id": "title"
+        }, {
+            "type": "text",
+            "label": "Subtítulo",
+            "id": "subtitle"
+        },
+        {
+			"type": "date_picker",
+			"id": "countdown",
+			"label": "Data de término do contador",
+			"info": "<i>O contador termina às 00:00:00 da data selecionada</i>"
+		},
+        {
+            "type": "product",
+            "max": 8,
+            "id": "products",
+            "label": "Produtos"
+        }, {
+            "type": "accordion",
+            "content": "Aparência",
+            "icon": "design"
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em dispositivos móveis",
+            "id": "hide_mobile",
+            "default": 0
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em desktop",
+            "id": "hide_desktop",
+            "default": 0
+        },{
+            "type": "separator"
+        },{
+			"type": "text",
+			"id": "custom_class",
+			"label": "Classe customizada para editar o css"
+		},
+        {
+            "type": "select",
+            "id": "container",
+            "label": "Estilo do conteúdo",
+            "tooltip": "Você poderá definir o se o conteúdo da seção é centralizado ou adaptável a largura da tela.",
+            "default": "container",
+            "options": [
+                {
+                    "value": "container",
+                    "label": "Centralizado"
+                },
+                {
+                    "value": "container-fluid",
+                    "label": "Adaptável a largura da tela"
+                }
+            ]
+        },
+        {
+            "type": "checkbox",
+            "label": "Habilitar slider",
+            "id": "slider",
+            "default": 0
+        },
+        {
+            "type": "range",
+            "id": "bpl",
+            "min": "0",
+            "max": "4",
+            "default": "4",
+            "label": "Quantidade máxima de produtos por linha"
+        }, {
+            "type": "separator"
+        },{
+            "type": "color_picker",
+            "id": "title_color",
+            "label": "Cor do título"
+        }, {
+            "type": "color_picker",
+            "id": "subtitle_color",
+            "label": "Cor do subtítulo"
+        }, {
+            "type": "color_picker",
+            "id": "background_color",
+            "label": "Cor de fundo da seção"
+        }, {
+            "type": "color_picker",
+            "id": "countdown_background",
+            "label": "Cor de fundo do contador"
+        }, {
+            "type": "color_picker",
+            "id": "number_background_color",
+            "label": "Cor de fundo dos números"
+        }, {
+            "type": "color_picker",
+            "id": "number_color",
+            "label": "Cor dos números"
+        }, {
+            "type": "color_picker",
+            "id": "border_color",
+            "label": "Cor da borda de seção"
+        }, {
+            "type": "color_picker",
+            "id": "border_color_content",
+            "label": "Cor da borda do contador"
+        },{
+            "type": "image_picker",
+            "id": "background_image",
+            "label": "Imagem de fundo da seção",
+            "info": "Recomendado: 1600x600px com até 250kb"
+        },{
+            "type": "checkbox",
+            "label": "Imagem fixa de fundo",
+            "id": "background_parallax"
+        }, {
+            "type": "range",
+            "id": "border_size",
+            "min": "0",
+            "max": "10",
+            "default": "1",
+            "label": "Espessura da borda de seção"
+        }, {
+            "type": "range",
+            "id": "border_width_content",
+            "min": "0",
+            "max": "10",
+            "default": "2",
+            "label": "Espessura da borda do contador"
+        }, {
+            "type": "range",
+            "id": "margin_up",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de cima da seção"
+        }, {
+            "type": "range",
+            "id": "margin_dw",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de baixo da seção"
+        }
+    ],
+    "blocks": []
+}
+{% endschema %}

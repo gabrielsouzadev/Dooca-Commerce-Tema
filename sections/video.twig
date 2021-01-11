@@ -1,0 +1,282 @@
+{% set show_section = true %}
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+
+{% set border_size = section.settings.border_size ?: 0 %}
+{% set border_color = section.settings.border_color ?: theme.settings.color_border %}
+{% set margin_up = section.settings.margin_up ?: 0 %}
+{% set margin_dw = section.settings.margin_dw ?: 0 %}
+{% set background_color = section.settings.background_color ?: null %}
+{% set background_image = section.settings.background_image ?: null %}
+{% set custom_class = section.settings.custom_class ?: null %}
+{% set button_color = section.settings.button_color ?: '#FFFFFF' %}
+{% set mask_color = section.settings.mask_color ?: 'transparent' %}
+{% set mask_opacity = section.settings.mask_opacity ?: 0 %}
+
+{% set video = section.settings.video.id ?: null %}
+{% set video_size = section.settings.video_size ?: '16by9' %}
+{% set video_width = section.settings.video_width ?: '12' %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-lg-block' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-block d-lg-none' %}
+{% endif %}
+
+{% if show_section %}
+    <div class="{{ s }} video position-relative {{ custom_class }}" id="{{ section.id }}"
+        style=" 
+            padding: {{ margin_up }}rem 0 {{ margin_dw }}rem 0;
+            border-style: solid;
+            border-width: 0 0 {{ border_size }}px 0;
+            border-color: {{ border_color }};
+            background-color: {{ background_color }};
+            {% if background_image %}
+                background-image: url({{ background_image | img_url }});
+            {% endif %}
+            background-size: cover; 
+            background-position: center center;
+        ">
+
+        {% if not background_image and not background_color %}
+            {% include 'placeholder-bg.twig' %}
+        {% endif %}
+
+        <div class="video-mask position-absolute" style="background-color: {{ mask_color }}; opacity: {% if mask_opacity < 10 %} 0.{{ mask_opacity }} {% else %}1{% endif %};"></div>
+        <div class="container position-relative">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-12">
+                    {% include 'section-title.twig' %}
+                    <div class="video-btn mt-5">
+                        <i class="video-icon" style="color: {{ button_color }};">
+                            {{ 'img/play.svg' | svg }}
+                        </i> 
+                    </div>
+                </div>
+            </div>
+    
+            <div class="video-modal">
+                <div class="container">
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-12">
+                            <div class="video-close">
+                                 <i class="icon">{{ 'img/close.svg' | svg }}</i>
+                            </div>
+                        </div>
+                        <div class="col-{{ video_width }}">
+                            {% if not video %}
+                                {% include 'placeholder.twig' with { icon: 'img/dc-placeholders/video.svg' } %}
+                            {% endif %}
+
+                            {% if video %}
+                                <div class="embed-responsive embed-responsive-{{ video_size }}">
+                                    <iframe allowfullscreen class="mt-5 embed-responsive-item" title="{{ section.settings.title }}" frameborder="0" src="https://www.youtube-nocookie.com/embed/{{ video }}?wmode=transparent&loop=1&rel=0&showinfo=0" allow="autoplay"></iframe>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% javascript %}
+    $(function() {
+        var section = $('#{{ section.id }}');
+        var modal = section.find('.video-modal').modal({ class: 'video-{{ section.id }}' });
+        var close = $('.video-{{ section.id }}').find('.video-close');
+        var btn = section.find('.video');
+
+        section.on('click', function() {
+            modal.open();
+
+            setTimeout(function() {
+                var video = $('.video-{{ section.id }}');
+                var iframe = video.find('iframe');
+                var url = '';
+
+                url = new URL(iframe.attr('src'));
+                url.searchParams.set('autoplay', '1');
+
+                iframe.attr('src', url);
+                iframe.attr( 'src', function ( i, val ) { return val; });
+            }, 100);
+        });
+
+        close.on('click', function() {
+            modal.close();
+
+            var video = $('.video-{{ section.id }}');
+            var iframe = video.find('iframe');
+            var url = '';
+
+            url = new URL(iframe.attr('src'));
+            url.searchParams.set('autoplay', '0');
+
+            iframe.attr('src', url);
+            iframe.attr( 'src', function ( i, val ) { return val; });
+        });
+
+        $('.modal__container').on('click', function() {
+            modal.close();
+
+            var video = $('.video-{{ section.id }}');
+            var iframe = video.find('iframe');
+            var url = '';
+
+            url = new URL(iframe.attr('src'));
+            url.searchParams.set('autoplay', '0');
+
+            iframe.attr('src', url);
+            iframe.attr( 'src', function ( i, val ) { return val; });
+        });
+    });
+{% endjavascript %}
+
+{% schema %}
+{
+	"name": "Vídeo",
+	"category": "Multimídia",
+	"content_for_index": "1",
+	"settings": [
+		{
+			"type": "accordion",
+			"content": "Conteúdo",
+			"icon": "content"
+		},
+        {
+            "type": "text",
+            "label": "Título",
+            "id": "title"
+        }, {
+            "type": "text",
+            "label": "Subtítulo",
+            "id": "subtitle"
+        },
+        {
+            "type": "video_url",
+            "id": "video",
+            "label": "Link do vídeo no YouTube",
+            "accept": ["youtube"],
+            "tooltip": "Insira a URL do vídeo previamente cadastrado no YouTube."
+        }, {
+            "type": "accordion",
+            "content": "Aparência",
+            "icon": "design"
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em dispositivos móveis",
+            "id": "hide_mobile",
+            "default": 0
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em desktop",
+            "id": "hide_desktop",
+            "default": 0
+        },{
+            "type": "separator"
+        },{
+			"type": "text",
+			"id": "custom_class",
+			"label": "Classe customizada para editar o css"
+		}, {
+            "type": "select",
+            "id": "video_size",
+            "label": "Proporção do vídeo",
+            "tooltip": "Você poderá definir o tamanho de exibição do vídeo com base na proporção da tela.",
+            "default": "16by9",
+            "options": [{
+                    "value": "21by9",
+                    "label": "21:9"
+                },
+                {
+                    "value": "16by9",
+                    "label": "16:9"
+                },
+                {
+                    "value": "4by3",
+                    "label": "4:3"
+                },
+                {
+                    "value": "1by1",
+                    "label": "1:1"
+                }
+            ]
+        },
+        {
+            "type": "range",
+            "id": "video_width",
+            "min": "2",
+            "max": "12",
+            "step": "2",
+            "default": "10",
+            "label": "Dimensão do vídeo"
+        }, {
+            "type": "separator"
+        },{
+            "type": "color_picker",
+            "id": "title_color",
+            "label": "Cor do título"
+        }, {
+            "type": "color_picker",
+            "id": "subtitle_color",
+            "label": "Cor do subtítulo"
+        }, {
+            "type": "color_picker",
+            "id": "button_color",
+            "label": "Cor do botão"
+        }, {
+            "type": "color_picker",
+            "id": "mask_color",
+            "label": "Cor da máscara"
+        }, {
+            "type": "color_picker",
+            "id": "background_color",
+            "label": "Cor de fundo da seção"
+        }, {
+            "type": "color_picker",
+            "id": "border_color",
+            "label": "Cor da borda de seção"
+        },{
+            "type": "image_picker",
+            "id": "background_image",
+            "label": "Imagem de fundo da seção",
+            "info": "Recomendado: 1600x600px com até 250kb"
+        },{
+            "type": "checkbox",
+            "label": "Imagem fixa de fundo",
+            "id": "background_parallax"
+        }, {
+            "type": "range",
+            "id": "mask_opacity",
+            "min": "0",
+            "max": "10",
+            "default": "1",
+            "label": "Transparência da máscara"
+        }, {
+            "type": "range",
+            "id": "border_size",
+            "min": "0",
+            "max": "10",
+            "default": "0",
+            "label": "Espessura da borda de seção"
+        }, {
+            "type": "range",
+            "id": "margin_up",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de cima da seção"
+        }, {
+            "type": "range",
+            "id": "margin_dw",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de baixo da seção"
+        }]
+}
+{% endschema %}

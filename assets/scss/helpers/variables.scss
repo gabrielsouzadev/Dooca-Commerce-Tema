@@ -1,0 +1,68 @@
+/**
+ * Variables
+ **/
+
+/* path */
+$img_dir: "img/";
+$font_dir: "fonts/";
+
+/* colors */
+$color-primary: "{{ theme.settings.color_primary }}";
+$color-primary-dark: "{{ theme.settings.color_primary | darken_color (1.2) }}";
+$color-secondary: "{{ theme.settings.color_secondary }}";
+$color-secondary-dark: "{{ theme.settings.color_secondary | darken_color (1.2) }}";
+$color-highlight: "{{ theme.settings.color_highlight }}";
+$color-success: #95DB84;
+$color-error: #e74c3c;
+$text-color: "{{ theme.settings.color_text }}";
+$text-color-secondary: #fff;
+$body-bg: #fff;
+$bt-buy: "{{ theme.settings.color_button_buy }}";
+$bt-buy-dark: "{{ theme.settings.color_button_buy | darken_color (1.2) }}";
+$bt-buy-ligth: "{{ theme.settings.color_button_buy | lighten_color (1.2) }}";
+$buy_button_bg: '{{ theme.settings.color_button_buy }}';
+$buy_button_color: '{{ theme.settings.color_button_buy_text }}';
+$buy_button_bg_hover: '{{ theme.settings.color_button_buy | darken_color (1.2) }}';
+$gray: "{{ theme.settings.color_text }}";
+$gray-light: "{{ theme.settings.color_text | lighten_color (2.1) }}";
+
+/*! fonts
+
+{% set font_base = (theme.settings.font_family_base | raw) | str_to_array(true) %}
+{% set font_heading = (theme.settings.font_family_heading | raw) |  str_to_array(true) %}
+
+*/
+
+/* fonts */
+$font-family-base: "{{ font_base.css | raw }}";
+$font-family-headings: "{{ font_heading.css | raw }}",
+$font-family-base;
+$font-size-base: 1.3rem;
+$font-weight-base: 400;
+$line-height-base: 1.2em;
+
+/* links */
+$link-color: $color-primary;
+$link-decoration: none;
+$link-hover-color: $color-secondary;
+$link-hover-decoration: underline;
+
+/* border */
+$border-color: "{{ theme.settings.color_border }}";
+$border-color-light: "{{ theme.settings.color_border | lighten_color (1.03) }}";
+$border-radius: 0;
+
+/* loader */
+$loader-size: 5rem;
+$loader-color: #333;
+
+/* breakpoints */
+$bp-xl: 1128px;
+$bp-lg: 1024px;
+$bp-md: 910px;
+$bp-sm: 769px;
+$bp-xs: 470px;
+
+/* breakpoints */
+$section-container: 116.8rem;
+$section-margin: 16rem;

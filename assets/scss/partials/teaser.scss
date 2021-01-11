@@ -1,0 +1,18 @@
+@import "../mixins/mixins";
+@import "../helpers/helpers";
+@import "../ui/ui";
+
+/**
+ * Teaser
+ **/
+
+.page--teaser {
+    .header {
+        padding-top: 0;
+        
+        &__top {
+            padding: 2.5rem 0;
+            position: unset;
+        }
+    }
+}

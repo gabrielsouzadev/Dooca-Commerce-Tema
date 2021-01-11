@@ -1,0 +1,9 @@
+<div class="blog-posts">
+    <div class="row">
+        {% for post in posts %}
+            <div class="col-12 col-lg-6 d-flex">
+                {% include 'blog-card.twig' %}
+            </div>
+        {% endfor %}
+    </div>
+</div>

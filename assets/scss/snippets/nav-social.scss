@@ -1,0 +1,22 @@
+.nav-social {
+    .icon {
+        display: flex;
+    }
+    .link {
+        .icon svg {
+            filter: brightness(100%);
+            transition: filter ease-in-out .15s;
+        }
+
+        &:hover {
+            .icon svg {
+                filter: brightness(70%);
+            }
+        }
+    }
+
+    [class^="icon-"], 
+    [class*=" icon-"] {
+        font-size: 18px !important;
+    }
+}

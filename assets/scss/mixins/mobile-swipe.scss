@@ -1,0 +1,35 @@
+/**
+* Mobile swipe
+*
+* Vars:
+*
+* $items -> Number of items displayed
+* $parent -> Parent class ( element )
+* $child -> Child class ( element )
+*
+* Create a swipe when items overflow the content
+*
+**/
+
+@mixin mobile-swipe($items: 2, $parent: ul, $child: li) {
+    $width-sm: (100 / ($items + 0.5)) + %;
+    $width-xs: (100 / ($items - 0.5)) + %;
+    padding: 0;
+
+    #{$parent} {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-y: scroll;
+        align-items: stretch;
+        justify-content: flex-start;
+
+        #{$child} {
+            flex-grow: 1;
+            min-width: $width-sm;
+
+            @include breakpoint('max-width: #{$bp-xs}') {
+                min-width: $width-xs;
+            }
+        }
+    }
+}

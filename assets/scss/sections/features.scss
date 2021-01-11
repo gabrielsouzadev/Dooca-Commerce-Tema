@@ -1,0 +1,46 @@
+.features {
+    background-size: unset !important;
+    background-repeat: repeat-x;
+    background-position: top center !important;
+
+    .placeholder {
+        max-width: 7rem;
+    }
+}
+
+.features-content {
+    background: $body-bg;
+
+    .h1 {
+        color: $color-primary;
+        font-size: $h2-cs;
+    }
+}
+
+.features-thumb {
+    max-width: 4rem;
+}
+
+.features-list {
+    max-height: 22rem;
+    overflow-y: hidden;
+}
+
+.features-icon {
+    width: .5rem;
+    color: $color-secondary;
+}
+
+.features-link {
+    opacity: 1;
+    transition: all ease .15s;
+    color: $color-primary;
+
+    &:hover {
+        opacity: .65;
+    }
+
+    span {
+        line-height: 1;
+    }
+}

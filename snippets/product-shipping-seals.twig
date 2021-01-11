@@ -1,0 +1,17 @@
+{% set additional_shipping_time = product.variation.additional_shipping_time %}
+{% set selling_out_of_stock = product.selling_out_of_stock %}
+{% set on_request_time = product.additional_time_out_of_stock + additional_shipping_time %}
+
+<div class="product-shipping-seals d-flex align-items-center justify-content-center text-center mt-3">
+    {% if selling_out_of_stock %}
+        {% if product.additional_time_out_of_stock > 0 %}
+            <p class="text mb-0 p-3">Produto vendido sob encomenda, envio em {{ on_request_time }} dias</p>
+        {% else %}
+            <p class="text mb-0 p-3">Produto vendido sob encomenda</p>
+        {% endif %}
+    {% elseif additional_shipping_time > 0 %}
+         <p class="text mb-0 p-3">Envio em {{ additional_shipping_time }} dias</p>
+    {% elseif product.balance > 0 %}
+        <p class="text mb-0 p-3">Envio imediato</p>
+    {% endif %}
+</div>

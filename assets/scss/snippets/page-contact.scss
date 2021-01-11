@@ -1,0 +1,55 @@
+.page-contact-title {
+    color: $color-primary;
+    font-size: $h1-fs;
+}
+
+.page-contact-form {
+    .label {
+        color: $color-primary;
+    }
+
+    .input,
+    .textarea {
+        border: solid .1rem $border-color;
+    }
+
+    .btn,
+    .input {
+        height: 4rem;
+    }
+
+    .textarea {
+        min-height: 20rem;
+    }
+}
+
+.page-contact-form-success,
+.page-contact-form-errors {
+    display: none;
+    color: $text-color-secondary;
+}
+
+.page-contact-form-success .text {
+    background: $color-success;
+}
+
+.page-contact-form-errors .text {
+    background: $color-error;
+}
+
+.page-contact-form-loader {
+    display: none;
+    background: $body-bg;
+    opacity: .5;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    .loader {
+        @include loader();
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}

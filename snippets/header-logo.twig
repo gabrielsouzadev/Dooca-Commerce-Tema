@@ -1,0 +1,48 @@
+{% set logo_dark = section.settings.logo_dark ?: null %}
+{% set logo_light = section.settings.logo_light ?: null %}
+{% set logo_mobile = section.settings.logo_mobile ?: null %}
+{% set logo_align = align ?: 'center' %}
+
+{% set logo = (version) ? logo_light : logo_dark %}
+
+{% if fixed %}
+    {% set logo_dark = section.settings.logo_dark_fixed ?: section.settings.logo_dark %}
+    {% set logo_light = section.settings.logo_light_fixed ?: section.settings.logo_light %}
+    {% set logo = (version_fixed) ? logo_light : logo_dark %}
+{% endif %}
+
+<div class="d-block d-lg-none logo text-center">
+    <a class="logo-link" href="{{ 'home' | url }}" title="{{ shop.name }}" aria-label="logo">
+        {% if logo or logo_mobile %}
+            <img 
+                loading="lazy" 
+                class="img-fluid" src="{{ (logo_mobile ?: logo) | img_url }}" 
+                alt="{{ (logo_mobile ?: logo) | img_url | get_filename }}"
+                {% if max_height > 0 %}
+                    style="max-height:
+                    {{ max_height }}px"
+                {% endif %}
+            >
+        {% else %}
+            <h2 class="h2 m-0">{{ shop.name }}</h2>
+        {% endif %}
+    </a>
+</div>
+
+<div class="d-none d-lg-block logo text-{{ logo_align }}">
+    <a class="logo-link" href="{{ 'home' | url }}" title="{{ shop.name }}" aria-label="logo">
+        {% if logo %}
+            <img 
+                loading="lazy" 
+                class="img-fluid" src="{{ logo | img_url }}" 
+                alt="{{ logo| img_url | get_filename }}"
+                {% if max_height > 0 %}
+                    style="max-height:
+                    {{ max_height }}px"
+                {% endif %}
+            >
+        {% else %}
+            <h2 class="h2 m-0">{{ shop.name }}</h2>
+        {% endif %}
+    </a>
+</div>

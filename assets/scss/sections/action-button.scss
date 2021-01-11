@@ -1,0 +1,30 @@
+.action-button {
+    .container-fluid {
+        max-height: 80rem;
+        max-width: 80rem;
+
+        // .row:nth-child(1) {
+        //     &:after {
+        //         content: '';
+        //         width: 100%;
+        //         max-width: 4rem;
+        //         height: .4rem;
+        //         background: $color-secondary;
+        //         display: inline-block;
+        //         margin: 0 auto;
+        //     }
+
+        //     .col-12:last-of-type {
+        //         margin-bottom: 2rem;
+        //     }
+        // }
+    }
+
+    .btn-sm {
+        font-size: 1.3rem;
+    }
+
+    .btn-lg {
+        font-size: 1.8rem;
+    }
+}

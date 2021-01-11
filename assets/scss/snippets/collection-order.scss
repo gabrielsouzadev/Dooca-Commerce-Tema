@@ -1,0 +1,16 @@
+.collection-grid {
+	i {
+		display: block;
+		width: .6rem;
+		height: .6rem;
+		margin: 0.35rem;
+		border-radius: 50em;
+		background: $border-color;
+	}
+
+	&.is-active {
+		i {
+			background: $color-primary;
+		}
+	}
+}

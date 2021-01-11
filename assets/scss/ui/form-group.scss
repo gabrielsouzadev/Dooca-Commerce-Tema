@@ -1,0 +1,111 @@
+/**
+ * Inputs
+ */
+.form-group {
+	.label {
+		font-size: 1.4rem;
+		color: $color-primary;
+		margin-bottom: 0.3rem;
+	}
+
+	input[type=number] {
+		appearance: none;
+		-moz-appearance: textfield;
+		margin: 0;
+
+		&::-webkit-inner-spin-button {
+			appearance: none;
+			margin: 0;
+		}
+	}
+
+	&--input {
+		.input {
+			max-width: 100%;
+			font-size: 1.4rem;
+			color: $text-color;
+			border-radius: $border-radius;
+			border: solid 0.1rem $border-color;
+			padding: 1rem;
+			height: 4rem;
+
+			&:focus {
+				outline: none;
+				border-color: $color-primary;
+			}
+
+			&--flat {
+				border-color: transparent;
+			}
+		}
+	}
+
+	&--select {
+		.select {
+			position: relative;
+			border: solid .1rem $border-color;
+
+			&::after {
+				content: '';
+				position: absolute;
+				top: 50%;
+				right: 1.2rem;
+				margin-top: -0.2rem;
+				border: solid 0.4rem;
+				border-color: $border-color transparent transparent transparent;
+				pointer-events: none;
+			}
+
+			select {
+				width: 100%;
+				font-size: 1.4rem;
+				color: $text-color;
+				padding: 1rem 3rem 1rem 1rem;
+				height: 4rem;
+				appearance: none;
+				line-height: normal;
+				border: none;
+				background: none;
+				cursor: pointer;
+
+				&:focus {
+					outline: none;
+				}
+			}
+		}
+	}
+
+	&--textarea {
+		.textarea {
+			max-width: 100%;
+			font-size: 1.4rem;
+			color: $text-color;
+			border-radius: $border-radius;
+			border: solid 0.1rem $border-color;
+			padding: 1rem;
+			min-height: 20rem;
+
+			&:focus {
+				outline: none;
+				border-color: $color-primary;
+			}
+		}
+	}
+
+	&--full {
+		flex-grow: 1;
+		width: 100%;
+
+		.bt,
+		.input,
+		.select,
+		.textarea {
+			width: 100%;
+		}
+	}
+
+	&--button {
+		display: flex;
+		justify-content: flex-end;
+	}
+}

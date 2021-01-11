@@ -1,0 +1,125 @@
+<div class="menu-dropdown-banner w-100 position-absolute" style="border: solid .1rem {{ color_border }};">
+    <div class="{{ container }}">
+        <div class="row menu-dropdown-content p-5">
+            <div class="col">
+                <div class="row align-items-start d-block">
+                    {% for item in item.children %}
+                        {% if item.active %}
+                            <div class="col-12 menu-dropdown-col {% if item.banner.src %}has-banner{% endif %} {% if item.children %}mb-4{% endif %}">
+                                <a 
+                                    {% if item.menu_type_link %}
+                                        href="{{ item.menu_type_link }}"
+                                    {% endif %}
+
+                                    class="d-block mb-3 
+                                        {% if item.children %}
+                                            menu-dropdown-title
+                                        {% endif %}
+                                    "
+                                    {% if item.menu_type_link %}
+                                        {% if shop.domain and shop.domain not in item.menu_type_link %}
+                                            target="_blank"
+                                        {% endif %}
+                                    {% endif %}
+                                >
+                                    <div class="d-flex justify-content-start align-items-center">
+                                        {% if item.image.src %}
+                                            <img class="img-fluid menu-dropdown-image mr-2" src="{{ item.image.src | img_url }}" alt="{{ item.name }}">
+                                        {% endif %}
+                                        <span class="text">{{ item.name }}</span>
+                                    </div>
+                                </a>
+                                {% if item.children %}
+                                    <div class="row flex-column">
+                                        {% for item in item.children %}
+                                            {% if item.active %}
+                                                <div class="col">
+                                                    <a 
+                                                        {% if item.menu_type_link %}href="{{ item.menu_type_link }}"{% endif %} 
+                                                        class="
+                                                            d-flex justify-content-start align-items-center mb-2
+                                                        "
+                                                        {% if shop.domain and shop.domain not in item.menu_type_link %}
+                                                            target="_blank"
+                                                        {% endif %}
+                                                    >
+                                                        {% if item.image.src %}
+                                                            <img class="img-fluid menu-dropdown-image mr-2" src="{{ item.image.src | img_url }}" alt="{{ item.name }}">
+                                                        {% endif %}
+                                                        <span class="text">{{ item.name }}</span>
+                                                    </a>
+                                                </div>
+                                                {% if item.children|length > 0 %}
+                                                    {% for item in item.children %}
+                                                        {% if item.active %}
+                                                            <div class="col">
+                                                                <a 
+                                                                    {% if item.menu_type_link %}href="{{ item.menu_type_link }}"{% endif %} 
+                                                                    class="
+                                                                        d-flex justify-content-start align-items-center mb-2
+                                                                    "
+                                                                    {% if shop.domain and shop.domain not in item.menu_type_link %}
+                                                                        target="_blank"
+                                                                    {% endif %}
+                                                                >
+                                                                    {% if item.image.src %}
+                                                                        <img class="img-fluid menu-dropdown-image mr-2" src="{{ item.image.src | img_url }}" alt="{{ item.name }}">
+                                                                    {% endif %}
+                                                                    <span class="text">{{ item.name }}</span>
+                                                                </a>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% if item.banner.src %}
+                <div class="{% if not item.children %}col-12{% else %}col-4{% endif %}">
+                    <a 
+                        href="{{ item.banner_link }}"
+                        class="menu-dropdown-bannerlink d-flex w-100"
+                        {% if not shop.domain in item.banner_link and shop.dooca_domain in item.banner_link %}
+                            target="_blank"
+                        {% endif %}
+                    >
+                        <img class="img-fluid" src="{{ item.banner.src }}" alt="{{ item.name }}">
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% javascript %}
+	$(function() {
+        var menu_item = $('.navigation-banner');
+        var menu_bg = $('.menu-dropdown-background');
+        var header = $('.header');
+        
+        menu_bg.css('top', header.height() + 'px');
+
+        $(menu_item).hover(function() {
+            $(this).find('.menu-dropdown-banner').stop().slideDown(250);
+            menu_bg.stop().fadeIn();
+        }, function() {
+            $(this).find('.menu-dropdown-banner').stop().slideUp(250);
+        });
+
+        $('.navigation').mouseleave(function() {
+			menu_bg.stop().fadeOut();
+		});
+
+        $('.navigation-item').hover(function() {
+            if (!$(this).hasClass('navigation-banner')) {
+                menu_bg.stop().fadeOut();
+            }
+        })
+    });
+{% endjavascript %}

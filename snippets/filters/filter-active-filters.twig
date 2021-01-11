@@ -1,0 +1,29 @@
+{% if sidebar.active %}
+<div class="sidebar-block sidebar-block--active-filters">
+    <div class="sidebar-block__header">
+        <h2 class="h2 m-0">Filtros ativos</h2>
+    </div>
+    <div class="sidebar-block__content" dc-scroll>
+        <ul class="sidebar-block__list">
+            {% for item in sidebar.active %}
+                {% if item.name %}
+                <li class="sidebar-block__item">
+                    <a href="{{ item | url_params (item.filter_type, 'remove') }}" class="link" rel="nofollow">
+                        <span class="text">{{ item.name }}</span>
+                        <span class="remove">{{ 'img/dc-icons/close.svg' | svg }}</span>
+                    </a>
+                </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="sidebar-block__footer">
+        {% if collection_type == 'brand' %}
+            {% set url_collection = 'category' | url %}
+        {% else %}
+            {% set url_collection = 'category' | url (collection) %}
+        {% endif %}
+        <a href="{{ url_collection }}" class="link" rel="nofollow">Remover todos</a>
+    </div>
+</div>
+{% endif %}

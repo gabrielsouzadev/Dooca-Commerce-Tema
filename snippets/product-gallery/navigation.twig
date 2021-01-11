@@ -1,0 +1,172 @@
+<div class="product-gallery-images navigation w-100 owl-carousel owl-theme">
+    {% if product.images %}
+        {% for image in product.images %}
+            <div class="w-100">
+                <figure 
+                    class="position-relative product-gallery-figure"
+                    data-featured="{{ image.src | img_url (img_featured) }}"
+                    data-zoom="{{ image.src | img_url (img_zoom) }}"
+                    data-legend="{{ product.name }}"
+                >
+                    <img 
+                        class="img-fluid" 
+                        src="{{ image.src | img_url (img_featured) }}" 
+                        alt="{{ image.src | img_url | get_filename }}"
+                        data-legend="{{ product.name }}"
+                    > 
+                    {% include 'product-tags.twig' %}
+                </figure>
+                {% app 'custom-badge' %}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% if product.video %}
+        {% set product_video = product.video | video_url %}
+        
+        <div class="w-100 h-100 position-relative">
+            {% include 'product-tags.twig' %}
+            {% app 'custom-badge' %}
+            
+            <div class="product-video">
+                <div class="product-gallery-video">
+                    <div class="icon-play">
+                        <svg viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M0 34C0 15.232 15.232 0 34 0C52.768 0 68 15.232 68 34C68 52.768 52.768 68 34 68C15.232 68 0 52.768 0 34ZM47.6 34L27.2 18.7V49.3L47.6 34Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <img class="img-fluid" src="https://img.youtube.com/vi/{{ product_video.id }}/sddefault.jpg" alt="{{ product.name }}" data-legend="{{ product.name }}"/>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<div class="arrow-left">
+    <i>{{ 'img/icon-left.svg' | svg }}</i>
+</div>
+
+<div class="arrow-right">
+    <i>{{ 'img/icon-right.svg' | svg }}</i>
+</div>
+
+{% if product.video %}
+    {% set product_video = product.video | video_url %}
+    
+    <div class="video-modal">
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-12">
+                    <div class="video-close">
+                        <i class="icon">{{ 'img/close.svg' | svg }}</i>
+                    </div>
+                </div>
+                
+                <div class="col-8">
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe allowfullscreen class="mt-5 embed-responsive-item" frameborder="0" src="https://www.youtube-nocookie.com/embed/{{ product_video.id }}?wmode=transparent&loop=1&rel=0&showinfo=0" allow="autoplay"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>     
+{% endif %}
+
+{% javascript %}
+    $(function() {
+        var images = $('.product-gallery-images');
+        var figures  = $('.product-gallery-images figure');
+
+        {% if not section.settings.product_main_image_zoom %}
+            figures.each(function( index ) {
+                var img_url = $(this).attr('data-zoom');
+                
+                $(this).zoom({ url: img_url });
+
+                $(this).hover(function() {
+                    $(this).css('cursor','zoom-in');
+                });
+            });
+
+            images.gallery_p({
+                only_zoom: true
+            });
+        {% endif %}
+
+        images.owlCarousel({
+            autoHeight: false,
+            loop: true,
+            margin: 0,
+            dots: false,
+            nav: true,
+            items: 1,
+            navText: [
+                $('.arrow-left'),
+                $('.arrow-right')
+            ] 
+        });
+
+        var min_height = function() {
+            var main = $('.product-gallery-images');
+            var img_height = main.find('.product-gallery-figure').height();
+
+            main.find('.product-video').css('min-height', img_height + 'px');
+        };
+
+        min_height();
+
+        $(window).resize(function() {
+            min_height();
+        });
+
+        var section = $('.product-gallery');
+        var modal = section.find('.video-modal').modal();
+        var close = $('.video-modal').find('.video-close');
+
+        $('body').delegate('.product-gallery-video', 'click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            modal.open();
+
+            setTimeout(function() {
+                var video = $('.video-modal');
+                var iframe = video.find('iframe');
+                var url = '';
+
+                url = new URL(iframe.attr('src'));
+                url.searchParams.set('autoplay', '1');
+
+                iframe.attr('src', url);
+                iframe.attr( 'src', function ( i, val ) { return val; });
+            }, 0);
+        });
+
+        var stopVideo = function() {
+            var video = $('.video-modal');
+            var iframe = video.find('iframe');
+            var url = '';
+
+            url = new URL(iframe.attr('src'));
+            url.searchParams.set('autoplay', '0');
+
+            iframe.attr('src', url);
+            iframe.attr( 'src', function ( i, val ) { return val; });
+        };
+
+        close.on('click', function() {
+            modal.close();
+            stopVideo();
+        });
+
+        $('.modal__container').on('click', function() {
+            modal.close();
+            stopVideo();
+        });
+        
+        $(document).keyup(function(e) {
+            if (e.key === "Escape") {
+                stopVideo();
+            }
+        });
+    });
+{% endjavascript %}

@@ -1,0 +1,23 @@
+.breadcrumb {
+    font-size: 1.2rem;
+
+    &:before {
+        content: '';
+        position: absolute;
+        display: block;
+        background: $border-color;
+        opacity: .3;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+}
+
+.breadcrumb-arrow {
+    width: .9rem;
+}
+
+.breadcrumb-link:hover {
+    color: $color-secondary;
+}

@@ -1,0 +1,47 @@
+ {% set title = section.settings.contact_title ?: null %}
+
+{% if section.blocks %}
+    <div class="footer-contact">
+        {% include 'footer-title.twig' with { 'title' : title } %}
+
+        <div class="row no-gutters align-items-start flex-column justify-content-start">
+            {% for item in section.blocks %}
+                {% set icon = 'img/' ~ item.settings.type ~ '.svg' %}
+
+                {% if item.settings.type == 'phone' %}
+                    {% set href = 'tel:' ~ (item.settings.value | phone_link) %}
+                {% elseif item.settings.type == 'whatsapp' %}
+                    {% set href = (item.settings.value | phone_link ('whatsapp')) %}
+                {% elseif item.settings.type == 'skype' %}
+                    {% set href = 'skype:' ~ item.settings.value ~ '?chat' %}
+                {% elseif item.settings.type == 'email' %}
+                    {% set href = 'mailto:' ~ item.settings.value %}
+                {% elseif item.settings.type == 'address' %}
+                    {% set href = 'https://maps.google.com/?q=' ~ item.settings.value %}
+                {% endif %}
+
+                <div class="col-auto mb-3">
+                    {% if item.settings.type == 'address'%}
+                        <a class="{% if section_secondary %}f-sc-color{% else %}f-tx-color{% endif %} phone d-flex align-items-center" rel="noreferrer" href="{{ href }}" target="_blank">
+                            <span class="{% if section_secondary %}f-sc-color{% else %}f-tx-color{% endif %} text d-flex">{{ item.settings.value }}</span>
+                        </a>
+                    {% elseif item.settings.type != 'schedule' %}
+                        <a class="{% if section_secondary %}f-sc-color{% else %}f-tx-color{% endif %} phone d-flex align-items-center" rel="noreferrer" href="{{ href }}" target="_blank">
+                            {# <i class="{% if section_highglight %}f-hl-color{% else %}f-sc-color{% endif %} icon mr-3 d-flex align-items-center">{{ icon | svg }}</i> #}
+                            <i class="icon mr-3 d-flex align-items-center">
+                                {% if item.settings.type == 'phone' %}
+                                    <i class="{% if section_highglight %}f-hl-color{% else %}f-sc-color{% endif %} material-icons" style="font-size: 19px;">call</i>
+                                {% else %}
+                                    <span class="{% if section_highglight %}f-hl-color{% else %}f-sc-color{% endif %} icon-{{ item.settings.type }}" style="font-size: 19px;"></span>
+                                {% endif %}
+                            </i>
+                            <b class="{{ item.settings.type }}">{{ item.settings.value }}</b>
+                        </a>
+                    {% else %}
+                        <span class="{% if section_secondary %}f-sc-color{% else %}f-tx-color{% endif %} text d-flex">{{ item.settings.value }}</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,589 @@
+{% javascript %}
+    $(function () {
+        var uri = window.location.toString();
+
+        if (uri.indexOf("?") > 0) {
+            var clean_uri = uri.substring(0, uri.indexOf("?"));
+            window.history.replaceState({}, document.title, clean_uri);
+        }
+
+        // Etapas
+        var currentStep = 0;
+        var finalStep = parseInt($('.pcbuilder-group-item').length);
+
+        // Ações da modal
+        var modal_open = '.pcbuilder-quantity-select, .pcbuilder-quantity-change';
+        var modal_back = '.pcbuilder-modal-back';
+        var modal_item = '.pcbuilder-modal-item';
+        var modal_close = '.pcbuilder-modal-close';
+        var modal_submit = '.pcbuilder-modal-button';
+        var modal_detail = '.pcbuilder-product-details';
+        
+        // Ações do filtro de modal
+        var filter_brands = '.filter-brands';
+        var filter_search = '.filter-search';
+        var filter_quantity = '.filter-quantity';
+
+        // Ações de quantidade dos componentes
+        var qtd = '.pcbuilder-quantity-item';
+
+        // Remover um componente
+        var remove_component = '.pcbuilder-item-remove';
+
+        // Adicionar ao carrinho
+        var add_cart = '.pcbuilder-add-cart';
+
+        // Armazena as modais que ja foram abertas para não refazer o ajax
+        var has_opened = [];
+
+        // Criar bind dos eventos para elementos do append
+        var bindEvent = function (element, event, cb) {
+            $('body').delegate(element, event, function (ev) {
+                ev.preventDefault();
+                ev.stopPropagation();
+
+                cb(this, ev);
+            });
+        };
+
+        // Abrir a modal para selecionar os componentes
+        bindEvent(modal_open, 'click', function (vm) {
+            var _this = $(vm);
+            var id = _this.data('modal-id');
+            var step = parseInt(_this.data('step'));
+
+            currentStep = step;
+
+            isLoading(true);
+
+            if (!has_opened.includes(id)) {
+                getModalComponents(id);
+                has_opened.push(id);
+            } else {
+                getModalComponents(id, true);
+            }
+        });
+
+        // Selecionar um componente na modal
+        bindEvent(modal_item, 'click', function (vm) {
+            var _this = $(vm);
+            var radio = _this.find('input:radio');
+
+            $(modal_item).each(function() {
+                $(this).removeClass('active');
+            });
+
+            _this.addClass('active');
+
+            radio.prop('checked', true);
+        });
+
+        // Fechar a modal
+        bindEvent(modal_close, 'click', function (vm) {
+            var _this = $(vm);
+            var id = _this.data('modal-id');
+
+            if ($('.' + id).length > 0) {
+                $('.' + id).fadeOut();
+            } else {
+                $('#' + id).removeClass('open');
+
+                if (!id.includes('detail')) {
+                    $('.pcbuilder-modal-bg').fadeOut();
+                }
+            }
+
+            $('body').removeClass('modal-open');
+            $('body').removeClass('no-scroll');
+            $('body').css('overflow', 'scroll');
+        });
+
+        // Enviar os componentes
+        bindEvent(modal_submit, 'click', function (vm) {
+            var _this = $(vm);
+
+            var id = _this.data('modal-id');
+            var optional = _this.data('optional');
+            var position = _this.data('position');
+
+            var modal = '#' + id;
+            var form = $(modal).find('.pcbuilder-modal-form');
+            var data = form.serializeArray();
+
+            if (!optional) {
+                if (data.length > 0) {
+                    if (data[0].value) {
+                        dataMount(data[0].value, modal, position);
+                    }
+                }
+            } else {
+                if (data.length > 0) {
+                    if (data[0].value) {
+                        dataMount(data[0].value, modal, position);
+                    }
+                } else {
+                    $(modal).fadeOut();
+                    $('body').removeClass('modal-open');
+                    $('body').css('overflow', 'scroll');
+
+                    nextModal();
+                }
+            }
+
+            return false;
+        });
+
+        // Abrir modal de detalhes do component na modal
+        bindEvent(modal_detail, 'click', function (vm) {
+            var _this = $(vm);
+
+            var id = _this.data('modal-id');
+            var modal = $('#' + id);
+
+            modal.addClass('open');
+            $('.pcbuilder-modal-bg').fadeIn();
+            $('body').addClass('modal-open');
+        });
+
+        // Filtrar components por marca
+        bindEvent(filter_brands, 'change', function (vm) {
+            var _this = $(vm);
+            var brand = _this.val();
+
+            var items = $('.pcbuilder-modal-item');
+
+            // Resetar o filtro
+            var resetFilter = function () {
+                items.each(function () {
+                    $(this).removeClass('d-none');
+                });
+            };
+
+            // Adicionar o filtro aos items
+            var addFilter = function () {
+                items.each(function () {
+                    var item = $(this);
+                    var item_brand = item.data('brand');
+
+                    if (item_brand != brand) {
+                        item.addClass('d-none');
+                    }
+                });
+            };
+
+            if (brand.length > 0) {
+                resetFilter();
+                addFilter();
+            } else {
+                resetFilter();
+            }
+        });
+
+        // Filtrar componentes por campo de texto
+        bindEvent(filter_search, 'keyup', function (vm) {
+            var _this = $(vm);
+            var text = _this.val().toLowerCase().trim();
+        
+            var items = $('.pcbuilder-modal-item');
+
+            items.show().filter(function () {
+                return $(this).data('name').toLowerCase().trim().indexOf(text) == -1;
+            }).hide();
+
+            var i = 0;
+
+            items.each(function() {
+                if ($(this).css('display') == 'none') {
+                    i++;
+                }
+            });
+
+            if (i == items.length) {
+                $('.pcbuilder-modal-noitems').removeClass('d-none');
+            } else {
+                $('.pcbuilder-modal-noitems').addClass('d-none');
+            }
+        });
+
+        // Filtrar components por preço
+        bindEvent(filter_quantity, 'change', function (vm) {
+            var _this = $(vm);
+            var price = _this.val();
+        });
+
+        // Rmover os componentes por grupo
+        bindEvent(remove_component, 'click', function (vm) {
+            var _this = $(vm);
+            var index = _this.data('position');
+
+            // Cookie settings
+            var cdays = 7;
+            var cname = '_dc_pc_builder';
+            var cookie = Cookies.get(cname);
+
+            var selected = cookie.split(',');
+
+            selected = selected.slice(0, index);
+
+            Cookies.set(cname, selected, { expires: cdays });
+
+            isLoading(true);
+
+            // Reload content
+            var content = $('.pcbuilder-form');
+            var url = window.location.href;
+            var xhr = _dcs.Xhr(url);
+
+            xhr.get({
+                id: 'pcbuilder'
+            }).done(function(res) {
+                content.empty();
+                content.append(res);
+
+                isLoading(false);
+            });
+        });
+
+        // Atualizar a quantidade de um componente
+        bindEvent(qtd, 'click', function(vm, ev) {
+            var _this = $(vm);
+            var _ev = $(ev.target);
+
+            var type = _this.data('type');
+            var id = _this.data('pcbuilder-id');
+
+            var input = _this.find('.pcbuilder-quantity-value');
+
+            var min = parseInt(input.data('min'));
+            var max = parseInt(input.data('max'));
+            var val = parseInt(input.val());
+
+            if (_ev.hasClass('pcbuilder-quantity-plus')) {
+                var new_val = val + 1;
+
+                if (new_val <= max) {
+                    val = new_val;
+
+                    input.val(val);
+                    updateQuantity(val, input, type, id);
+                }
+            }
+
+            if (_ev.hasClass('pcbuilder-quantity-minus')) {
+                var new_val = val - 1;
+
+                if (new_val >= min) {
+                    val = new_val;
+
+                    input.val(val);
+                    updateQuantity(val, input, type, id);
+                }
+            }
+        });
+
+        // Watch nos input de quantidade
+        bindEvent(qtd, 'change', function(vm, ev) {
+            var _this = $(vm);
+            var _ev = $(ev.target);
+
+            var type = _this.data('type');
+            var id = _this.data('pcbuilder-id');
+
+            if (_ev.hasClass('pcbuilder-quantity-value')) {
+                var min = parseInt(_ev.data('min'));
+                var max = parseInt(_ev.data('max'));
+                var val = parseInt(_ev.val());
+
+                if (val < min) {
+                    val = min;
+                }
+
+                if (val > max) {
+                    val = max;
+                }
+
+                _ev.val(val);
+                updateQuantity(val, _ev, type, id);
+            }
+        });
+
+        // Voltar um step 
+        bindEvent(modal_back, 'click', function(vm) {
+            var _this = $(vm);
+            var modal = _this.data('modal-id');
+
+            $('#' + modal).fadeOut();
+            $('body').removeClass('modal-open');
+            $('body').css('overflow', 'scroll');
+
+            nextModal(true);
+        });
+
+        // Montar o objeto e enviar para o checkout
+        bindEvent(add_cart, 'click', function(vm) {
+            var _this = $(vm);
+            var obj = {
+                quantity: 1,
+                name: '{{ app.product_title | default('Computador personalizado') }}',
+                note: null,
+                products: []
+            };
+
+            // Cookie
+            var cname = '_dc_pc_builder';
+            var cookie = Cookies.get(cname);
+            cookie = cookie.split(',');
+
+            {% set cover_id = null %}
+            {% set ids = [] %}
+
+            {% for item in data %}
+                {% set ids = ids|merge([item.id]) %}
+                {% if item.cover %}
+                    {% set cover_id = item.id %}
+                {% endif %}
+            {% endfor %}
+
+            var cover_id = {{ cover_id ?: 0 }};
+            var ids = {{ ids | json_encode }};
+            var is_valid = true;
+
+            cookie.forEach(function(item) {
+                if (item.length > 1) {
+                    var _item = item.split(':');
+                    var is_cover = 0;
+
+                    if (_item[1] != 'no-component') {
+                        if (cover_id == _item[0]) {
+                            is_cover = 1;
+                        }
+
+                        if (ids.includes(parseInt(_item[0])) == false) {
+                            is_valid = false;
+                        }
+
+                        obj.products.push({
+                            variation_id: _item[3],
+                            quantity: _item[4],
+                            is_cover: is_cover
+                        });
+                    }
+                }
+            });
+
+            // console.log(obj);
+
+            if (is_valid) {
+                // Checkout
+                isLoading(true);
+
+                var url = '{{ "cart" | action ("pcbuilder") }}';
+                var xhr = _dcs.Xhr(url);
+
+                xhr.post({
+                    data: obj
+                }).done(function() {
+                    isLoading(false);
+                    Cookies.remove(cname);
+                    window.location.href = window.location.origin + '/carrinho';
+                });
+            } else {
+                console.log('Erro: Categoria inexistente ou deletada, por favor monte novamente');
+            }
+        });
+
+        // Atualiza o objeto e manda pro coockie
+        var dataMount = function (val, modal, position) {
+            // Cookie settings
+            var cdays = 7;
+            var cname = '_dc_pc_builder';
+            var cookie = Cookies.get(cname);
+            var selected = [];
+
+            var component = val;
+            var no_components = component.split(':')[1];
+
+            if (cookie) {
+                selected = cookie.split(',');
+            }
+
+            if (no_components == 'no-component') {
+                selected[position] = [];
+            }
+
+            selected[position] = component;
+            selected = selected.join();
+
+            Cookies.set(cname, selected, { expires: cdays });
+
+            $(modal).fadeOut();
+            $('body').removeClass('modal-open');
+            $('body').css('overflow', 'scroll');
+
+            nextModal();
+        };
+
+        // Ir para a próxima modal de selecionar componentes
+        var nextModal = function(back = false) {
+            isLoading(true);
+
+            var content = $('.pcbuilder-form');
+            var url = window.location.href;
+            var xhr = _dcs.Xhr(url);
+            
+            if (back) {
+                currentStep = currentStep - 1;
+            } else {
+                currentStep = currentStep + 1;
+            }
+
+            xhr.get({
+                id: 'pcbuilder'
+            }).done(function(res) {
+                content.empty();
+                content.append(res);
+
+                var groups = $('.pcbuilder-group-item');
+
+                console.log(currentStep);
+                console.log(finalStep);
+
+                if (currentStep != finalStep) {
+                    groups.each(function(index) {
+                        if (index == currentStep) {
+                            if ($(this).find('.pcbuilder-quantity-select').length > 0) {
+                                $(this).find('.pcbuilder-quantity-select').trigger('click');
+                            } else if ($(this).find('.pcbuilder-quantity-change').length > 0){
+                                $(this).find('.pcbuilder-quantity-change').trigger('click');
+                            } else {
+                                isLoading(false);
+                            }
+                        }
+                    });
+                } else {
+                    isLoading(false);
+                    $('.pcbuilder-modal-bg').fadeOut();
+                }
+            });
+        };
+
+        // Atualiza a quantidade de um componente
+        var updateQuantity = function(val, input, type, id) {
+            var _input = $(input);
+            var pcbuilder_id = id;
+
+            if (type != 'modal') {
+                // Cookie settings
+                var cdays = 7;
+                var cname = '_dc_pc_builder';
+                var cookie = Cookies.get(cname);
+                var selected = cookie.split(',');
+
+                var item = selected[pcbuilder_id];
+
+                item = item.slice(0, -1) + val;
+
+                selected[pcbuilder_id] = item;
+                selected = selected.join();
+
+                Cookies.set(cname, selected, { expires: cdays });
+
+                isLoading(true);
+
+                // Reload content
+                var content = $('.pcbuilder-form');
+                var url = window.location.href;
+                var xhr = _dcs.Xhr(url);
+
+                xhr.get({
+                    id: 'pcbuilder'
+                }).done(function(res) {
+                    content.empty();
+                    content.append(res);
+
+                    isLoading(false);
+                });
+            } else {
+                var item = _input.parents('.pcbuilder-modal-item');
+                var radio = item.find('.pcbuilder-modal-radio input');
+                var _val = radio.val();
+
+                _val = _val.slice(0, -1) + val;
+                radio.val(_val);
+            }
+        };
+
+        /*
+         * Utilitários
+         */
+
+        // Carregar o loader quando executar alguma ação de xhr
+        var isLoading = function (step = false) {
+            var loader = $('.pc-builder-loader');
+
+            if (step) {
+                $('body, html').css({'overflow': 'hidden'});
+                loader.fadeIn(500);
+            } else {
+                $('body, html').removeAttr('style');
+                loader.fadeOut(500);
+            }
+        };
+
+        // Criar a modal
+        var createModalComponents = function (id, data, has_opened = false) {
+            if (!has_opened) {
+                var modal = $('#pcbuilder-group-' + id);
+                var modal_content = modal.find('.container-fluid');
+
+                modal_content.append(data);
+                
+                if(!window.is_mobile) {
+                    $('body').addClass('no-scroll');
+                }
+
+                $('.pcbuilder-modal-bg').fadeIn();
+                modal.addClass('open');
+
+                // modal.modal({ class: 'pcbuilder ' + 'pcbuilder-group-' + id });
+                // modal.open();
+            } else {
+                var modal = $('#pcbuilder-group-' + id);
+                var modal_content = modal.find('.container-fluid');
+
+                modal_content.empty();
+                modal_content.append(data);
+
+                modal.addClass('open');
+                $('.pcbuilder-modal-bg').fadeIn();
+                $('body').addClass('modal-open');
+                $('body').addClass('no-scroll');
+                $('body').css('overflow', 'hidden');
+            }
+
+            isLoading(false);
+        };
+
+        // Carregar os componentes
+        var getModalComponents = function (id, has_opened = false) {
+            var url = window.location.href + '?pcbuilder_id=' + id;
+            var xhr = _dcs.Xhr(url);
+
+            xhr.get({ id: 'modal' }).done(function (res) {
+                createModalComponents(id, res, has_opened);
+            });
+        };
+
+        // Fechar modal lateral
+        $('.pcbuilder-modal-bg').on('click', function() {
+            $('body').removeClass('no-scroll');
+            $('body').removeClass('modal-open');
+
+            $('.pcbuilder-modal-select, .pcbuilder-product-detail').each(function() {
+                $(this).removeClass('open');
+            });
+
+            $(this).fadeOut();
+        });
+    });
+{% endjavascript %}

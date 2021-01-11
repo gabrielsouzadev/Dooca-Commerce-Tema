@@ -1,0 +1,28 @@
+{% set content = section.settings.content ?: null %}
+
+{% if _get.preview and not content %}
+    {% set content = '
+        <div class="container text-center" style="padding: 8rem 0;">
+            <h1 class="h1 m-0">Insira o seu código html</h1>
+        </div>
+    ' %}
+{% endif %}
+
+<div id="{{ section.id }}">
+    {{ content | richtext | raw }}
+</div>
+
+{% schema %}
+    {
+        "name": "Html",
+        "category": "Conteúdo",
+        "content_for_index": "1",
+        "settings": [
+            {
+                "type": "textarea",
+                "id": "content",
+                "label": "Conteúdo html"
+            }
+        ]
+    }
+{% endschema %}

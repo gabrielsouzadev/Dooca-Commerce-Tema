@@ -1,0 +1,7 @@
+.footer-certificate .seals {
+    max-width: 40rem;
+
+    @include media-breakpoint-down(md) {
+        margin: 0 auto;
+    }
+}

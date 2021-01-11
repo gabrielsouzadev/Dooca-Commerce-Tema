@@ -1,0 +1,36 @@
+{% if section.blocks %}
+    <div class="nav-contact mt-3 mb-3">
+        <div class="row no-gutters align-items-center">
+            {% for item in section.blocks %}
+                {% set icon = 'img/' ~ item.settings.type ~ '.svg' %}
+
+                {% if item.settings.type == 'phone' %}
+                    {% set href = 'tel:' ~ (item.settings.value | phone_link) %}
+                {% elseif item.settings.type == 'whatsapp' %}
+                    {% set href = (item.settings.value | phone_link ('whatsapp')) %}
+                {% elseif item.settings.type == 'skype' %}
+                    {% set href = 'skype:' ~ item.settings.value ~ '?chat' %}
+                {% elseif item.settings.type == 'email' %}
+                    {% set href = 'mailto:' ~ item.settings.value %}
+                {% endif %}
+
+                <div class="col-auto mr-2">
+                    {% if item.settings.type != 'schedule' %}
+                        <a class="{% if section_secondary %}h-sc-color{% endif %} phone d-flex align-items-center" rel="noreferrer" href="{{ href }}" target="_blank">
+                            <i class="{% if section_highlight %}h-hl-color{% endif %} icon mr-2">
+                                {% if item.settings.type == 'phone' %}
+                                    <span class="material-icons" style="font-size: 19px;">call</span>
+                                {% else %}
+                                    <span class=" icon-{{ item.settings.type }}" style="font-size: 19px;"></span>
+                                {% endif %}
+                            </i>
+                            {{ item.settings.value }}
+                        </a>
+                    {% else %}
+                        <span class="{% if section_secondary %}h-sc-color{% endif %} text">{{ item.settings.value }}</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}

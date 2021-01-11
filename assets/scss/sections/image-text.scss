@@ -1,0 +1,51 @@
+.image-text {
+    .banner-info {
+        display: none;
+    }
+    
+    .container {
+        &>.row {
+            &.max-width {
+                max-width: 60rem;
+
+                @include media-breakpoint-down(md) {
+                    max-width: unset;
+                }
+            }
+        }
+    }
+
+    @include media-breakpoint-down(md) {
+        .container {
+            padding: 0 2rem;
+        }
+    }
+
+    .container-fluid {
+        padding: 0 !important;
+        margin: 0 !important;
+
+        .image-text-content {
+            @include media-breakpoint-up(md) {
+                padding: 0 20% !important;
+            }
+
+            @include media-breakpoint-up(lg) {
+                padding: 0 10% !important;
+            }
+        }
+    }
+
+    .image-text-link {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    .btn {
+        position: relative;
+        z-index: 20;
+    }
+}

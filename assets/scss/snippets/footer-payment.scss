@@ -1,0 +1,24 @@
+.footer-payment {
+    @include media-breakpoint-up(sm) {
+        .no-gutters {
+            max-width: 85%;
+        }
+    }
+
+    .icon {
+        svg{
+            width: 5rem;
+            max-height: 3.2rem;
+        }
+    }
+
+    &.color {
+        svg {
+            fill: none;
+
+            .bg {
+                stroke: #e1e1e1;
+            }
+        }
+    }
+}

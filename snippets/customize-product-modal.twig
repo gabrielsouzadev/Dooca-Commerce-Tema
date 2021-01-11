@@ -1,0 +1,51 @@
+{% if component.grid_id %}
+    {% set p = _getProductFeature(component.grid_id) %}
+{% endif %}
+
+<div class="customize-modal" id="customize-modal-{{ id }}">
+    <div class="customize-modal-content">
+        <div class="customize-modal-header d-flex justify-content-between align-items-center">
+            <h2 class="h2 m-0">{{ component.name }}</h2>
+            <span class="customize-modal-close" data-id="{{ id }}">
+                {{ 'img/dc-icons/close.svg' | svg }}
+            </span>
+        </div>
+
+        <div class="customize-modal-body py-5">
+            <div class="customize-modal-images owl-carousel owl-theme">
+                {% for image in component.images %}
+                    <img loading="lazy" src="{{ image.src | img_url('650x650+fill_ffffff') }}" alt="{{ component.name }}" class="img-fluid">
+                {% endfor %}
+            </div>
+
+            <div class="mt-5">
+                <div class="cms">
+                    {{ component.description | richtext | raw }}
+                </div>
+            </div>
+
+            {% if p.features %}
+                <div class="mt-5">
+                    <div class="w-100 no-gutters justify-content-center product-description-features px-3">
+                        {% set features = p.features %}
+                        {% for feature in features %}
+                            {% if feature.values %}
+                                <div class="col-12 pt-4 pb-4">
+                                    <div class="d-flex align-items-center justify-content-start">
+                                        <h3 class="h3 mb-0 mr-4"><b>{{ feature.name }}</b></h3>
+                                        <h4 class="text m-0">
+                                            {% set values = feature.values %}
+                                            {% for value in values %}
+                                                {{ value.name }}
+                                            {% endfor %}
+                                        </h4>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

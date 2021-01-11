@@ -1,0 +1,256 @@
+{% set show_section = true %}
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-lg-block' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-block d-lg-none' %}
+{% endif %}
+
+{% if show_section %}
+    <div class="{{ s }}">
+        {% include 'section-header.twig' with { 'name': 'products-showcase' }  %}
+
+            {% set bpl = section.settings.bpl ?: 5 %}
+            {% set bpl_mobile = 6 %}
+
+            {% if section.settings.bpl_mobile == 1 %}
+                {% set bpl_mobile = 12 %}
+            {% endif %}
+
+            {% set background_product = section.settings.product_background_color ?: null %}
+            {% set arrows = section.settings.arrows ?: null %}
+            {% set arrows_color = section.settings.arrows_color ?: null %}
+
+            {% set section_products = section.settings.products %}
+
+            {% if section_products|length > 0 %}
+                {% if section.settings.slider %}<div class="row no-gutters mt-5 align-items-center">{% endif %}
+
+                    {% if arrows and section.settings.slider %}
+                        <div class="col-1 d-none d-md-block text-left">
+                            <div class="showcase-prev d-inline-block" style="color: {{ arrows_color }};">
+                                <i class="icon d-inline-block p-4">{{ 'img/reviews/arrow-left.svg' | svg }}</i>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="{% if arrows and section.settings.slider %}col-12 col-md-10{% endif %} {% if section.settings.slider %}owl-carousel owl-theme{% else %}row no-gutters mt-5 justify-content-center{% endif %}" id="show-case-slider-products-{{ section.id }}">
+                        {% for product_id in section_products %}
+                            {% if product_id %}
+                                {% if template != 'blog' and template != 'blog-post' %}
+                                    {% set product = products[product_id] %}
+                                {% else %}
+                                    {% set product = _getProduct(product_id) %}
+                                {% endif %}
+                            {% endif %}
+
+                            {% if product|length > 0 %}
+                                <div class="{% if section.settings.slider %}col-12 h-100{% else %}col-{{ bpl_mobile }} col-md-4 cl-lg-{{ bpl }}{% endif %} mb-4">
+                                    {% set params = { 'bg': background_product, 'padding': null, 'cards': bpl } %}
+                                    {% include 'product-card.twig' with params %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    {% if arrows and section.settings.slider %}
+                        <div class="col-1 d-none d-md-block text-right">
+                            <div class="showcase-next d-inline-block" style="color: {{ arrows_color }};">
+                                <i class="icon d-inline-block p-4">{{ 'img/reviews/arrow-right.svg' | svg }}</i>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                {% if section.settings.slider %}</div>{% endif %}
+            {% endif %}
+
+        {% include 'section-footer.twig' %}
+    </div>
+
+    {% if section.settings.slider %}
+        {% javascript %}
+            $(function() {
+                var section = $('#show-case-slider-products-{{ section.id }}');
+                var prev = $('.products-showcase').find('.showcase-prev');
+                var next = $('.products-showcase').find('.showcase-next');
+
+                var owl = section.owlCarousel({
+                    autoplay: true,
+                    autoheight: true,
+                    autoplayHoverPause: true,
+                    loop: true,
+                    dots: true,
+                    items: {{ bpl }},
+                    responsive : {
+                        0 : {
+                            items: {{ section.settings.bpl_mobile }}
+                        },
+                        480 : {
+                            items: {{ section.settings.bpl_mobile }}
+                        },
+                        768 : {
+                            items: {{ bpl }}
+                        }
+                    }
+                });
+
+                prev.click(function() {
+                    owl.trigger('prev.owl.carousel', [300]);
+                });
+
+                next.click(function() {
+                    owl.trigger('next.owl.carousel', [300]);
+                });
+
+            });
+        {% endjavascript %}
+    {% endif %}
+{% endif %}
+
+{% schema %}
+{
+    "name": "Vitrine de produtos",
+    "category": "Produtos",
+    "content_for_index": "1",
+    "settings": [
+        {
+            "type": "accordion",
+            "content": "Conteúdo",
+            "icon": "content"
+        }, {
+            "type": "text",
+            "label": "Título",
+            "id": "title"
+        }, {
+            "type": "text",
+            "label": "Subtítulo",
+            "id": "subtitle"
+        },
+        {
+			"type": "product",
+			"max": "20",
+			"id": "products",
+			"label": "Produto"
+		}, {
+            "type": "accordion",
+            "content": "Aparência",
+            "icon": "design"
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em dispositivos móveis",
+            "id": "hide_mobile",
+            "default": 0
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em desktop",
+            "id": "hide_desktop",
+            "default": 0
+        },{
+            "type": "separator"
+        },{
+			"type": "text",
+			"id": "custom_class",
+			"label": "Classe customizada para editar o css"
+		},{
+            "type": "select",
+            "id": "container",
+            "label": "Estilo do conteúdo",
+            "default": "container",
+            "options": [{
+                    "value": "container",
+                    "label": "Centralizado"
+                },
+                {
+                    "value": "container-fluid",
+                    "label": "Adaptável a largura da tela"
+                }
+            ]
+        }, {
+            "type": "range",
+            "id": "bpl",
+            "min": "0",
+            "max": "5",
+            "default": "5",
+            "label": "Quantidade máxima de produtos por linha"
+        }, {
+            "type": "range",
+            "id": "bpl_mobile",
+            "min": "0",
+            "max": "2",
+            "default": "2",
+            "label": "Quantidade máxima de produtos por linha mobile"
+        },{
+            "type": "checkbox",
+            "label": "Habilitar carrossel",
+            "id": "slider",
+            "default": 0
+        }, {
+            "type": "checkbox",
+            "label": "Exibir setas de navegação",
+            "id": "arrows",
+            "default": 0
+        }, {
+            "type": "separator"
+        },{
+            "type": "color_picker",
+            "id": "title_color",
+            "label": "Cor do título"
+        }, {
+            "type": "color_picker",
+            "id": "subtitle_color",
+            "label": "Cor do subtítulo"
+        }, {
+            "type": "color_picker",
+            "id": "background_color",
+            "label": "Cor de fundo da seção"
+        }, {
+            "type": "color_picker",
+            "id": "product_background_color",
+            "label": "Cor de fundo do produto"
+        }, {
+            "type": "color_picker",
+            "id": "border_color",
+            "label": "Cor da borda de seção"
+        }, {
+            "type": "color_picker",
+            "id": "arrows_color",
+            "label": "Cor das setas"
+        },{
+            "type": "image_picker",
+            "id": "background_image",
+            "label": "Imagem de fundo da seção",
+            "info": "Recomendado: 1600x600px com até 250kb"
+        },{
+            "type": "checkbox",
+            "label": "Imagem fixa de fundo",
+            "id": "background_parallax"
+        }, {
+            "type": "range",
+            "id": "border_size",
+            "min": "0",
+            "max": "10",
+            "default": "1",
+            "label": "Espessura da borda de seção"
+        }, {
+            "type": "range",
+            "id": "margin_up",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de cima da seção"
+        }, {
+            "type": "range",
+            "id": "margin_dw",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de baixo da seção"
+        }
+    ],
+	"blocks": []
+}
+{% endschema %}

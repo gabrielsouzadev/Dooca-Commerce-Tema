@@ -1,0 +1,121 @@
+<script type="text/javascript" defer>
+    $(function() {
+        var actions = $('.product-action, .product-action-content');
+        var quick_buy = $('.quick-buy');
+
+        var updateQuickBuyPrice = function() {
+            var total;
+            var installments;
+            var save;
+
+            var target = $('.product-action .product-action-price');
+
+            total = target.find('.product-price-final .total').text();
+            installments = target.find('.product-price-installments').text();
+            save = target.find('.product-price-save').text();
+
+            quick_buy.find('.product-price-final .total').text(total);
+            quick_buy.find('.product-price-installments').text(installments);
+            quick_buy.find('.product-price-save').text(save);
+        };
+        
+        actions.each(function() {
+            $(this).on('change', '.product-attributes-selects', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                var action = $(this).parents().closest('.product-action-content, .product-action');
+
+                $('div[id^="installment-modal"], div[id^="size-guide-modal"]').each(function() {
+                    $(this).remove();
+                });
+
+                var variation_id = $(this).val();
+                var quantity = action.find('.dc-input').val();
+                var loader = action.find('.product-attribute-loader');
+
+                {% if product %}
+                    var url = '{{ 'product' | url (product) }}?variation=' + variation_id;
+                {% else %}
+                    var url = $(this).data('product-url') + '?variation=' + variation_id;
+                {% endif %}
+
+                if (quantity > 0) {
+                    url += '&quantity=' + quantity;    
+                }
+
+                var xhr = _dcs.Xhr(url);
+
+                loader.fadeIn();
+
+                if (window.dooca.base_url.includes('pedalokos')) {
+                    xhr.get({
+                        id: 'product-id-erp'
+                    }).done(function(res) {
+                        $('.product-reference').empty();
+                        $('.product-reference').append(res);
+                    });
+                }
+
+                xhr.get({
+                    id: 'product-action'
+                }).done(function(res) {
+                    action.empty();
+                    action.append(res);
+                    if (quick_buy.length > 0) { updateQuickBuyPrice(); }
+                    window.history.replaceState(null, null, "?variation=" + variation_id);
+                    loader.fadeOut();
+                });
+            });
+
+            $(this).on('click', '.product-attribute-button', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                var action = $(this).parents().closest('.product-action-content, .product-action');
+
+                $('div[id^="installment-modal"], div[id^="size-guide-modal"]').each(function() {
+                    $(this).remove();
+                });
+
+                var input = $(this).find('input');
+                var variation_id = input.data('variation-id');
+                var quantity = action.find('.dc-input').val();
+                var loader = action.find('.product-attribute-loader');
+
+                {% if product %}
+                    var url = '{{ 'product' | url (product) }}?variation=' + variation_id;
+                {% else %}
+                    var url = input.data('product-url') + '?variation=' + variation_id;
+                {% endif %}
+
+                if (quantity > 0) {
+                    url += '&quantity=' + quantity;    
+                }
+
+                var xhr = _dcs.Xhr(url);
+
+                loader.fadeIn();
+
+                if (window.dooca.base_url.includes('pedalokos')) {
+                    xhr.get({
+                        id: 'product-id-erp'
+                    }).done(function(res) {
+                        $('.product-reference').empty();
+                        $('.product-reference').append(res);
+                    });
+                }
+
+                xhr.get({
+                    id: 'product-action'
+                }).done(function(res) {
+                    action.empty();
+                    action.append(res);
+                    if (quick_buy.length > 0) { updateQuickBuyPrice(); }
+                    window.history.replaceState(null, null, "?variation=" + variation_id);
+                    loader.fadeOut();
+                });
+            });
+        });
+    });
+</script>

@@ -1,0 +1,338 @@
+{% set version = header.settings.version ?: null %}
+
+{% set logo_dark = header.settings.logo_dark ?: null %}
+{% set logo_light = header.settings.logo_light ?: null %}
+
+{% set logo = (version) ? logo_light : logo_dark %}
+
+{% if version %}
+	{% set secondary_color = header.settings.secondary_color %}
+{% endif %}
+
+{% set logo_max_height = header.settings.logo_maxheight ?: 150 %}
+
+{% set mask_color = section.settings.mask_color ?: null %}
+{% set mask_opacity = section.settings.mask_opacity ?: 0 %}
+
+{% set section_primary = header.settings.primary_color ?: null %}
+{% set section_secondary = header.settings.secondary_color ?: null %}
+
+{% set color_primary = section_primary ?: null %}
+{% set color_secondary = section_secondary ?: null %}
+
+{% if version %}
+	{% set color_primary = color_secondary %}
+{% endif %}
+
+{% set bg_image = section.settings.background_image ?: null %}
+{% set bg_image_mobile = section.settings.background_image_mobile %}
+
+{% include 'style/header.twig' with { section: header.settings } %}
+
+{% set video = section.settings.video.id ?: null %}
+{% set video_size = section.settings.video_size ?: '16by9' %}
+{% set video_width = section.settings.video_width ?: '12' %}
+{% set video_text = section.settings.video_text ?: null %}
+
+<div class="d-flex flex-column">
+    <div class="w-100">
+        <header class="header border-bottom {% if version %}version{% endif %} {% if not section_primary and version %}h-hl-background{% elseif section_primary %}h-pr-background{% endif %}">
+            <div class="container">
+                <div class="row no-gutters">
+                    <div class="col-12">
+                        <div class="py-5 w-100 text-center">
+                            {% if logo %}
+                                <img 
+                                    loading="lazy"
+                                    class="img-fluid" src="{{ logo | img_url }}" 
+                                    alt="{{ shop.name }}"
+                                    style="max-height: {{ logo_max_height }}px;"
+                                >
+                            {% else %}
+                                <h2 class="h1 m-0" style="color: {{ color_secondary }}">{{ shop.name }}</h2>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </div>
+</div>
+
+<style>
+    .teaser-bg {
+        background-image: url({{ bg_image | img_url }});
+    }
+
+    {% if bg_image_mobile %}
+        @media only screen and (max-width: 992px) {
+            .teaser-bg {
+                background-image: url({{ bg_image_mobile | img_url }});
+            }
+        }
+    {% endif %}
+</style>
+
+<div class="w-100">
+    <main class="teaser-bg main position-relative d-flex align-items-center" style="background-color: {{ section.settings.background_color }}; ">
+        <div class="mask" style="
+            background-color: {{ mask_color }};
+
+            {% if section.settings.mask_opacity == 10 %}
+                 opacity: 1;
+            {% else %}
+                 opacity: .{{ mask_opacity }};
+            {% endif %}
+        "></div>
+        <div class="container">
+            <div class="row no-gutters justify-content-center align-items-center" id="teaser">
+                <div class="col-12 col-md-8">
+                    <div class="w-100 text-center">
+                        {% if section.settings.title %}
+                            <h2 class="h1" style="color: {{ section.settings.title_color }};">{{ section.settings.title }}</h2>
+                        {% endif %}
+                        {% if section.settings.description %}
+                            <div class="mt-3">
+                                <div class="text" style="color: {{ section.settings.description_color }};">
+                                    {{ section.settings.description | raw }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="mt-5 w-100 text-center">
+                        <a class="btn btn-lg my-2 m-md-2" href="/cadastro" style="background-color: {{ section.settings.button_color }}; border-color: {{ section.settings.button_color }};">
+                            <span style="color: {{ section.settings.button_text_color }};">
+                                Solicitar cadastro
+                            </span>
+                        </a>
+                        <a class="btn btn-lg my-2 m-md-2" href="/login" style="background-color: {{ section.settings.button_color }}; border-color: {{ section.settings.button_color }};">
+                            <span style="color: {{ section.settings.button_text_color }};">
+                                Entrar
+                            </span>
+                        </a>
+                    </div>
+                    {% if video %}
+                        <div class="mt-5 w-100 text-center">
+                            <div class="video-btn">
+                                <i class="video-icon" style="color: {{ section.settings.description_color }};">
+                                    {{ 'img/play.svg' | svg }}
+                                </i> 
+                            </div>
+
+                            {% if video_text %}
+                                <div class="mt-3">
+                                    <div class="text" style="color: {{ section.settings.description_color }};">
+                                        {{ video_text | raw }}
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <div class="video-modal">
+                                <div class="container">
+                                    <div class="row align-items-center justify-content-center">
+                                        <div class="col-12">
+                                            <div class="video-close">
+                                                <i class="icon">{{ 'img/close.svg' | svg }}</i>
+                                            </div>
+                                        </div>
+                                        <div class="col-{{ video_width }}">
+                                            {% if not video %}
+                                                {% include 'placeholder.twig' with { icon: 'img/dc-placeholders/video.svg' } %}
+                                            {% endif %}
+
+                                            {% if video %}
+                                                <div class="embed-responsive embed-responsive-{{ video_size }}">
+                                                    <iframe allowfullscreen class="mt-5 embed-responsive-item" title="{{ section.settings.title }}" frameborder="0" src="https://www.youtube-nocookie.com/embed/{{ video }}?wmode=transparent&loop=1&rel=0&showinfo=0" allow="autoplay"></iframe>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+{% if video %}
+    {% javascript %}
+        $(function() {
+            var section = $('#teaser');
+            var modal = section.find('.video-modal').modal({ class: 'video-teaser' });
+            var close = $('.video-teaser').find('.video-close');
+            var btn = section.find('.video');
+
+            section.on('click', function() {
+                modal.open();
+
+                setTimeout(function() {
+                    var video = $('.video-teaser');
+                    var iframe = video.find('iframe');
+                    var url = '';
+
+                    url = new URL(iframe.attr('src'));
+                    url.searchParams.set('autoplay', '1');
+
+                    iframe.attr('src', url);
+                    iframe.attr( 'src', function ( i, val ) { return val; });
+                }, 100);
+            });
+
+            close.on('click', function() {
+                modal.close();
+
+                var video = $('.video-teaser');
+                var iframe = video.find('iframe');
+                var url = '';
+
+                url = new URL(iframe.attr('src'));
+                url.searchParams.set('autoplay', '0');
+
+                iframe.attr('src', url);
+                iframe.attr( 'src', function ( i, val ) { return val; });
+            });
+
+            $('.modal__container').on('click', function() {
+                modal.close();
+
+                var video = $('.video-teaser');
+                var iframe = video.find('iframe');
+                var url = '';
+
+                url = new URL(iframe.attr('src'));
+                url.searchParams.set('autoplay', '0');
+
+                iframe.attr('src', url);
+                iframe.attr( 'src', function ( i, val ) { return val; });
+            });
+        });
+    {% endjavascript %}
+{% endif %}
+
+{% schema %}
+    {
+        "name": "Conteúdo",
+        "settings": [
+            {
+                "type": "text",
+                "id": "title",
+                "label": "Título"
+            },
+            {
+                "type": "html",
+                "id": "description",
+                "label": "Descrição"
+            },
+            {
+                "type": "header",
+                "content": "Vídeo"
+            },
+            {
+                "type": "video_url",
+                "id": "video",
+                "label": "Link do vídeo no YouTube",
+                "accept": ["youtube"],
+                "tooltip": "Insira a URL do vídeo previamente cadastrado no YouTube."
+            }, 
+            {
+                "type": "text",
+                "id": "video_text",
+                "label": "Texto do vídeo"
+            },
+            {
+                "type": "select",
+                "id": "video_size",
+                "label": "Proporção do vídeo",
+                "tooltip": "Você poderá definir o tamanho de exibição do vídeo com base na proporção da tela.",
+                "default": "16by9",
+                "options": [{
+                        "value": "21by9",
+                        "label": "21:9"
+                    },
+                    {
+                        "value": "16by9",
+                        "label": "16:9"
+                    },
+                    {
+                        "value": "4by3",
+                        "label": "4:3"
+                    },
+                    {
+                        "value": "1by1",
+                        "label": "1:1"
+                    }
+                ]
+            },
+            {
+                "type": "range",
+                "id": "video_width",
+                "min": "2",
+                "max": "12",
+                "step": "2",
+                "default": "10",
+                "label": "Dimensão do vídeo"
+            },
+            {
+                "type": "header",
+                "content": "Aparência"
+            }, 
+            {
+                "type": "color_picker",
+				"id": "background_color",
+				"label": "Cor de fundo da seção"
+            },
+            {
+				"type": "color_picker",
+				"id": "title_color",
+				"label": "Cor do título"
+			}, 
+            {
+				"type": "color_picker",
+				"id": "description_color",
+				"label": "Cor da descrição"
+			}, 
+            {
+				"type": "color_picker",
+				"id": "button_color",
+				"label": "Cor de fundo do botão"
+			}, 
+            {
+				"type": "color_picker",
+				"id": "button_text_color",
+				"label": "Cor de texto do botão"
+			},
+            {
+                "type": "color_picker",
+                "id": "mask_color",
+                "label": "Cor da máscara de fundo"
+            },
+            {
+                "type": "range",
+                "id": "mask_opacity",
+                "min": "0",
+                "max": "10",
+                "default": "0",
+                "label": "Transparência da máscara de fundo"
+            }, 
+            {
+				"type": "image_picker",
+				"id": "background_image",
+				"label": "Imagem de fundo da seção",
+                "info": "Recomendado: 1600x600px com até 250kb"
+			}, 
+            {
+				"type": "image_picker",
+				"id": "background_image_mobile",
+				"label": "Imagem de fundo da seção mobile",
+                "info": "Recomendado: 800x800px com até 250kb"
+			},{
+                "type": "checkbox",
+                "label": "Imagem fixa de fundo",
+                "id": "background_parallax"
+            }
+        ]
+    }
+{% endschema %}

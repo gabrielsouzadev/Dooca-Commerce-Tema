@@ -1,0 +1,29 @@
+/**
+ * Typography
+ *
+ **/
+
+@mixin title($size: 1.4rem, $weight: 500, $color: $color-primary) {
+    font-family: $font-family-headings;
+    font-size: $size;
+    font-weight: $weight;
+    color: $color;
+    margin: 0;
+}
+
+@mixin section-title($size: 1.8rem, $weight: 500, $color: $color-primary) {
+    @include title($size, $weight, $color);
+    letter-spacing: .35em;
+    text-transform: uppercase;
+    word-wrap: break-word;
+}
+
+@mixin footer-title($size: 1.1rem, $weight: 500, $color: $color-primary) {
+    @include title($size, $weight, $color);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+
+    @include breakpoint('max-width: #{$bp-xs}') {
+        text-align: center;
+    }
+}

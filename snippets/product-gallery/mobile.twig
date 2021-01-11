@@ -1,0 +1,156 @@
+{% set img_featured = '640x640+fill_ffffff' %}
+
+{% if crop_type != 'square' %}
+    {% set img_featured = '450x600+fill_ffffff' %}
+{% endif %}
+
+{% set thumbs = product.images ?: null %}
+{% set mobile_zoom = section.settings.mobile_zoom %}
+
+<div class="product-gallery-mobile {{ theme.settings.product_image_crop }} row owl-carousel owl-theme">
+    {% for thumb in thumbs %}
+        <div 
+            class="col-12"
+            data-featured="{{ thumb.src | img_url (img_featured) }}"
+            data-zoom="{{ thumb.src | img_url (img_zoom) }}"
+            data-legend="{{ product.name }}"
+        >
+            <img class="img-fluid" src="{{ thumb.src | img_url (img_featured) }}" alt="{{ product.name }}" data-legend="{{ product.name }}">
+        </div>
+    {% endfor %}
+
+    {% if product.video %}
+        {% set product_video = product.video | video_url %}
+        <div class="{% if theme.settings.product_image_crop == 'vertical' %}d-flex h-100{% else %}col-12{% endif %}">
+            
+            {% if theme.settings.product_image_crop == 'vertical' %}
+                <div class="product-gallery-video-bg vertical dc-gallery__video" style="background-image: url('https://img.youtube.com/vi/{{ product_video.id }}/sddefault.jpg')"></div>
+            {% endif %}
+            
+            <div class="product-gallery-video {{ theme.settings.product_image_crop }} position-relative">
+                <div class="icon-play">
+                    <svg viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M0 34C0 15.232 15.232 0 34 0C52.768 0 68 15.232 68 34C68 52.768 52.768 68 34 68C15.232 68 0 52.768 0 34ZM47.6 34L27.2 18.7V49.3L47.6 34Z" fill="currentColor"></path>
+                    </svg>
+                </div>
+                <img class="img-fluid" src="https://img.youtube.com/vi/{{ product_video.id }}/sddefault.jpg">
+            </div>
+
+            <div class="video-modal mobile">
+                <div class="container-fluid">
+                    <div class="row align-items-center justify-content-center">
+                        <div class="col-12">
+                            <div class="video-close">
+                                <i class="icon">{{ 'img/close.svg' | svg }}</i>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div class="embed-responsive embed-responsive-16by9">
+                                <iframe allowfullscreen class="mt-5 embed-responsive-item" frameborder="0" src="https://www.youtube-nocookie.com/embed/{{ product_video.id }}?wmode=transparent&loop=1&rel=0&showinfo=0" allow="autoplay"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% app 'custom-badge' %}
+{% include 'product-tags.twig' %}
+
+{% javascript %}
+    $(function() {
+    	if (window.is_mobile) {
+            var images = [];
+
+            // Buscar url das imagens
+            $('.product-gallery-mobile').each(function() {
+                var _this = $(this);
+                var img = _this.find('.img-fluid');
+
+                images.push(img.attr('src'));
+            });
+
+            // Prelodar as imagens
+            var preload = function(images, cb) {
+
+                $(images).each(function() {
+                    $('<img/>')[0].src = this;
+                });
+
+                cb();
+            };
+
+            // Depois que carregar as imagens executar o owl
+            preload(images, function() {
+                $('.product-gallery-mobile').owlCarousel({
+                    {% if theme.settings.product_image_crop != 'vertical' and product.video %}
+                    autoheight: true,
+                    {% endif %}
+                    dots: true,
+                    items: 1
+                });
+            });
+
+            {% if mobile_zoom %}
+                var thumbs = $('.product-gallery-mobile');
+
+                thumbs.gallery_p({
+                    only_zoom: true
+                });
+            {% endif %}
+
+            var section = $('.product-gallery-mobile');
+            var modal = section.find('.video-modal.mobile').modal();
+            var close = $('.video-modal.mobile').find('.video-close');
+
+            $('body').delegate('.product-gallery-video', 'click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                modal.open();
+
+                setTimeout(function() {
+                    var video = $('.video-modal.mobile');
+                    var iframe = video.find('iframe');
+                    var url = '';
+
+                    url = new URL(iframe.attr('src'));
+                    url.searchParams.set('autoplay', '1');
+
+                    iframe.attr('src', url);
+                    iframe.attr( 'src', function ( i, val ) { return val; });
+                }, 0);
+            });
+
+            var stopVideo = function() {
+                var video = $('.video-modal.mobile');
+                var iframe = video.find('iframe');
+                var url = '';
+
+                url = new URL(iframe.attr('src'));
+                url.searchParams.set('autoplay', '0');
+
+                iframe.attr('src', url);
+                iframe.attr( 'src', function ( i, val ) { return val; });
+            };
+
+            close.on('click', function() {
+                modal.close();
+                stopVideo();
+            });
+
+            $('.modal__container').on('click', function() {
+                modal.close();
+                stopVideo();
+            });
+
+            $(document).keyup(function(e) {
+                if (e.key === "Escape") {
+                    stopVideo();
+                }
+            });
+        }
+    });
+{% endjavascript %}

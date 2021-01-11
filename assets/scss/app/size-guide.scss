@@ -1,0 +1,107 @@
+/**
+ * Sizeguide
+ **/
+
+.app-size-guide {
+    &__link {
+        font-family: $font-family-base;
+        font-weight: $font-weight-base;
+        font-size: $font-size-base;
+        color: $text-color;
+        text-transform: none;
+
+        &:hover {
+            cursor: pointer;
+            color: $color-secondary;
+        }
+    }
+
+    &__modal {
+        display: none;
+
+        [id^="size-guide-modal"] & {
+            display: block;
+        }
+
+        &__image {
+            @include make-container;
+            text-align: center;
+
+            img {
+                max-width: 100%;
+                margin: 0 auto;
+            }
+        }
+    }
+}
+
+#app-size-guide__modal {
+
+    .modal__header,
+    .modal__content {
+        padding: 0;
+    }
+
+    .modal__container {
+        max-width: 100rem;
+        padding: 4rem;
+    }
+
+    .modal__close {
+        display: block;
+        width: 4rem;
+        height: 4rem;
+        position: absolute;
+        top: .5rem;
+        right: .5rem;
+        cursor: pointer;
+        opacity: 1;
+        transition: all ease .15s;
+
+        &:before,
+        &:after {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 60%;
+            border: solid 1px #ccc;
+            height: 50%;
+            border-color: $color-primary;
+        }
+
+        &:before {
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+
+        &:after {
+            transform: translate(-50%, -50%) rotate(-45deg);
+        }
+
+        &:hover {
+            opacity: .65;
+        }
+    }
+}
+
+[id^="size-guide-modal"] {
+    .modal__title {
+        font-family: $h2-ff;
+        font-weight: $h2-fw;
+        font-size: $h2-cs;
+        letter-spacing: $h2-cl;
+        text-indent: $h2-cl;
+        text-transform: $h2-tt;
+        font-style: $h2-st;
+    }
+
+    .modal__header {
+        padding-bottom: 1rem;
+        
+        @include media-breakpoint-down(md) {
+            padding: 1rem;
+        }
+    }
+}

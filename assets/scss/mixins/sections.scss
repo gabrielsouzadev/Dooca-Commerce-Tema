@@ -1,0 +1,50 @@
+/**
+ * Mixins sections
+ *
+ **/
+
+@mixin section-spacing($margin : $section-margin) {
+    padding-top: $margin/2;
+    padding-bottom: $margin/2;
+
+    @include breakpoint('max-width: #{$bp-sm}') {
+        padding-top: $margin/4;
+        padding-bottom: $margin/4;
+    }
+}
+
+@mixin info-banner($title-size:1.4rem) {
+    position: absolute;
+    left: 4rem;
+    top: 4rem;
+    right: 4rem;
+    bottom: 4rem;
+    text-align: center;
+    color: $text-color-secondary;
+    border: solid .2rem currentColor;
+    z-index: 10;
+    @include transition;
+    transition-delay: .05s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .info {
+        &__title {
+            @include section-title($title-size, 600);
+            color: inherit;
+        }
+
+        &__description {
+            display: none;
+        }
+
+        &__bt {
+            display: inline-flex;
+            padding: 2rem;
+            position: absolute;
+            bottom: 1rem;
+        }
+    }
+}

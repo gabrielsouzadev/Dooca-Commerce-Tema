@@ -1,0 +1,256 @@
+{% set show_section = true %}
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-lg-block' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-block d-lg-none' %}
+{% endif %}
+
+{% if show_section %}
+    {% include 'section-header.twig' with { 'name':'brands' } %}
+
+        {% set brands = [] %}
+
+        {% set getBrands = _getBrands({ limit: 100, sort: 'position' }) %}
+        {% set pages_current = getBrands.meta.current_page %}
+        {% set pages_last = getBrands.meta.last_page %}
+
+        {% for i in pages_current..pages_last %}
+            {% set getBrands = _getBrands({ page: i, limit: 100, sort: 'position' }) %}
+            {% set brands = brands|merge(getBrands.data) %}
+        {% endfor %}
+
+        {% set bpl = section.settings.bpl ?: 4 %}
+        {% set only_image = section.settings.only_has_image ?: null %}
+        {% set slider = section.settings.slider ?: null %}
+        {% set bg_color = section.settings.background_color ?: 'ffffff' %}
+        {% set crop = '400x400+fill_' ~ bg_color|trim('#') %}
+        {% set limit = section.settings.limit ?: 250 %}
+
+        {% set cols = (slider) ? 'col-12' : 'col-12 cl-lg-' ~ bpl ~ ' d-lg-flex align-self-lg-center text-lg-center flex-lg-column p-lg-3' %}
+
+        {% if brands|length == 0 %}
+            {% set brands = [{}, {}, {}, {}, {}, {}] %}
+        {% endif %}
+
+        {% if brands|length > 0 %}
+            <div class="{{ s }} brands-slider row mt-5 justify-content-center no-gutters owl-carousel owl-theme">
+                {% if only_image %}
+                    {% for brand in brands|slice(0, limit) %}
+                        {% if brand.image and brand.active != 0 %}
+                            <div class="{{ cols }}">
+                                <a class="brands-link d-block" aria-label="{{ brand.name }}" href="{{ 'brand' | url (brand) }}">
+                                    <img loading="lazy"  src="{{ brand.image | img_url(crop) }}" alt="{{ brand.name }}" class="img-fluid">
+                                    {% if section.settings.show_title and brand.name %}
+                                        <h4 class="h4 mt-4 mb-0 text-center">{{ brand.name }}</h4>
+                                    {% endif %}
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    {% for brand in brands|slice(0, limit) %}
+                        {% set url = 'javascript:void(0)' %}
+
+                        {% if brand.slug %}
+                            {% set url = 'brand' | url (brand) %}
+                        {% endif %}
+
+                        {% if brand.active != 0 %}
+                            <div class="{{ cols }}">
+                                <a class="brands-link d-flex align-items-center justify-content-center" href="{{ url }}" aria-label="{{ brand.name }}">
+                                    {% if not brand.image and not brand.name %}
+                                        {% include 'placeholder.twig' %}
+                                    {% endif %}
+
+                                    {% if brand.image %}
+                                        <img loading="lazy" src="{{ brand.image | img_url }}" alt="{{ brand.name }}" class="img-fluid mb-3">
+                                        
+                                        {% if section.settings.show_title and brand.name %}
+                                            <h4 class="h4 mt-4 mb-0 text-center">{{ brand.name }}</h4>
+                                        {% endif %}
+                                    {% elseif brand.name %}
+                                        <h4 class="h4 m-0">{{ brand.name }}</h4>
+                                    {% endif %}
+                                </a>
+                            </div>
+                        {% endif %}
+
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% endif %}
+
+    {% include 'section-footer.twig' %}
+
+        {% javascript %}
+            $(function() {
+                var is_slider = {{ (slider) ? 'true' : 'false' }};
+        
+                if (is_slider || window.is_mobile) {
+                    const options = {
+                        autoplay: true,
+                        autoheight: true,
+                        autoplayHoverPause: true,
+                        loop: true,
+                        dots: true,
+                        items: {{ bpl }},
+                        responsive : {
+                            0 : {
+                                items: 2
+                            },
+                            480 : {
+                                items: 3
+                            },
+                            768 : {
+                                items: {{ bpl }}
+                            }
+                        }
+                    };
+
+                    $('.brands-slider').owlCarousel(options);
+                }
+            });
+        {% endjavascript %}
+{% endif %}
+
+{% schema %}
+{
+    "name": "Galeria de marcas",
+    "category": "Produtos",
+    "content_for_index": "1",
+    "settings": [
+        {
+            "type": "accordion",
+            "content": "Conteúdo",
+            "icon": "content"
+        },
+        {
+            "type": "text",
+            "label": "Título",
+            "id": "title"
+        }, {
+            "type": "text",
+            "label": "Subtítulo",
+            "id": "subtitle"
+        }, {
+            "type": "accordion",
+            "content": "Aparência",
+            "icon": "design"
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em dispositivos móveis",
+            "id": "hide_mobile",
+            "default": 0
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em desktop",
+            "id": "hide_desktop",
+            "default": 0
+        },{
+            "type": "separator"
+        },{
+			"type": "text",
+			"id": "custom_class",
+			"label": "Classe customizada para editar o css"
+		},{
+            "type": "select",
+            "id": "container",
+            "label": "Estilo do conteúdo",
+            "tooltip": "Você poderá definir o se o conteúdo da seção é centralizado ou adaptável a largura da tela.",
+            "default": "container",
+            "options": [{
+                    "value": "container",
+                    "label": "Centralizado"
+                },
+                {
+                    "value": "container-fluid",
+                    "label": "Adaptável a largura da tela"
+                }
+            ]
+        },{
+            "type": "checkbox",
+            "label": "Habilitar slider",
+            "id": "slider",
+            "default": 1
+        },{
+            "type": "range",
+            "id": "bpl",
+            "min": "0",
+            "max": "10",
+            "default": "6",
+            "label": "Quantidade máxima de marcas por linha"
+        },{
+            "type": "range",
+            "id": "limit",
+            "min": "0",
+            "max": "250",
+            "default": "20",
+            "label": "Limite máximo de marcas"
+        }, {
+            "type": "checkbox",
+            "label": "Exibir apenas marcas com logo",
+            "id": "only_has_image",
+            "default": 0
+        }, {
+            "type": "checkbox",
+            "label": "Exibir título da marca",
+            "id": "show_title",
+            "default": 0
+        }, {
+            "type": "separator"
+        },{
+            "type": "color_picker",
+            "id": "title_color",
+            "label": "Cor do título"
+        }, {
+            "type": "color_picker",
+            "id": "subtitle_color",
+            "label": "Cor do subtítulo"
+        }, {
+            "type": "color_picker",
+            "id": "background_color",
+            "label": "Cor de fundo da seção"
+        }, {
+            "type": "color_picker",
+            "id": "border_color",
+            "label": "Cor da borda de seção"
+        },{
+            "type": "image_picker",
+            "id": "background_image",
+            "label": "Imagem de fundo da seção",
+            "info": "Recomendado: 1600x600px com até 250kb"
+        },{
+            "type": "checkbox",
+            "label": "Imagem fixa de fundo",
+            "id": "background_parallax"
+        }, {
+            "type": "range",
+            "id": "border_size",
+            "min": "0",
+            "max": "10",
+            "default": "1",
+            "label": "Espessura da borda de seção"
+        }, {
+            "type": "range",
+            "id": "margin_up",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de cima da seção"
+        }, {
+            "type": "range",
+            "id": "margin_dw",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de baixo da seção"
+        }
+    ],
+	"blocks": []
+}
+{% endschema %}

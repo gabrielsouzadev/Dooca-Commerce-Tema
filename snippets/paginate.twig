@@ -1,0 +1,29 @@
+<div class="paginate">
+    <div class="paginate__item paginate__item--select">
+        <span class="text">Página:</span>
+        <div class="form-group form-group--select">
+            <div class="select">
+                <select class="change-page" name="page">
+                    {% for item in (1..paginate.pages) %}
+                    <option value="{{ item | url_params_paginate ('page') }}"{% if paginate.current_page == item %}selected{% endif %}>
+                        {{ item }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <span class="text">de {{ paginate.pages }}</span>
+    </div>
+    <div class="paginate__item paginate__item--prev {% if paginate.current_page == 1 %}is-disabled{% endif %}">
+        <a href="{{ paginate.prev | url_params_paginate ('page') }}" class="link">
+            <i class="icon">{{ 'img/dc-icons/angle-left.svg' | svg }}</i>
+            <span class="text">Anterior</span>
+        </a>
+    </div>
+    <div class="paginate__item paginate__item--next{% if paginate.current_page == paginate.pages %} is-disabled{% endif %}">
+        <a href="{{ paginate.next | url_params_paginate ('page') }}" class="link">
+            <i class="icon">{{ 'img/dc-icons/angle-right.svg' | svg }}</i>
+            <span class="text">Próximo</span>
+        </a>
+    </div>
+</div>

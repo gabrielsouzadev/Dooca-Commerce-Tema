@@ -1,0 +1,87 @@
+<div class="blog-filter">
+    <div class="blog-filter-search">
+        <form method="get" action="{{ url }}/blog">
+            <input class="input" type="text" name="q" placeholder="Buscar postagens">
+            <button class="btn btn-primary" type="submit">
+                <i class="d-block icon"><i class="material-icons md-36">search</i></i>
+            </button>
+        </form>
+    </div>
+
+    {% if post_categories|length > 0 %}
+        <div class="blog-filter-item">
+            <div class="blog-filter-title">
+                <span class="h2">
+                    Categorias
+                </span>
+            </div>
+
+            <ul class="categories">
+                {% for item in post_categories %}
+                    <li class="category {% if post_category_id == item.id %}active{% endif %}">
+                        <a href="{{ 'blog' | url (item) }}">
+                            <i></i> {{ item.name }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    {% if posts_related|length > 0 %}
+        <div class="blog-filter-item">
+            <div class="blog-filter-title">
+                <span class="h2">
+                    Veja também
+                </span>
+            </div>
+
+            <ul class="posts">
+                {% for post in posts_related %}
+                    {% set url = 'post' | url (post) %}
+                    {% set post_image = post.image ?: null %}
+
+                    <li class="post">
+                        <a class="d-flex align-items-start" href="{{ url }}">
+                            <div class="post-image">
+                                <div class="banner position-relative d-flex align-items-center justify-content-center "> 
+                                    <div class="banner-bg position-absolute" style="background-image: url({{ post_image | img_url() }});"></div> 
+                                    <img loading="lazy" src="{{ post_image | img_url('60x60') }}" alt="{{ post_image | img_url('60x60') | get_filename }}"> 
+                                </div>
+                            </div>
+                            <div class="h3">{{ post.name }}</div>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>            
+    {% endif %}
+</div>
+
+{# <div class="col-12 col-md-6">
+    <div class="d-flex align-items-center">
+        <h4 class="h4 mb-0 mr-4">Categorias</h4>
+
+        <div class="blog-filter-select position-relative w-100">
+            <select class="change-page select pl-4 pr-4 w-100" name="categories">
+                <option disabled {% if not post_category_id %}selected{% endif %}>Selecione</option>
+                
+                {% for item in post_categories %}
+                    <option value="{{ 'blog' | url (item) }}" {% if post_category_id == item.id %}selected{% endif %}>{{ item.name }}</option>
+                {% endfor %}
+                
+                <option value="{{ url }}/blog">Todas</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="col-12 col-md-6 mt-4 mt-md-0">
+    <form class="form w-100 position-relative" method="get" action="{{ url }}/blog">
+        <input class="input w-100 pl-4 pr-4" type="text" name="q" placeholder="Buscar postagens">
+        
+        <button class="icon position-absolute p-3" type="submit">
+            <span class="icon"><i class="material-icons md-36">search</i></span>
+        </button>
+    </form>
+</div> #}

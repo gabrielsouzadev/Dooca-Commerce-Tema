@@ -1,0 +1,93 @@
+.reviews {
+    .container-fluid,
+    .container {
+        position: relative;
+    }
+
+    .owl-prev,
+    .owl-next {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: all ease .15s;
+        opacity: 1;
+
+        &:hover {
+            background: 0 !important;
+            opacity: .5;
+        }
+    }
+
+    .owl-prev {
+        left: 6rem;
+    }
+
+    .owl-next {
+        right: 6rem;
+    }
+    
+    .owl-stage-outer {
+        overflow: visible;
+    }
+
+    .owl-stage {
+        display: flex;
+        align-items: center;
+    }
+}
+
+.reviews-slider {
+    position: unset;
+}
+
+.reviews-quote {
+    width: 8rem !important;
+    color: $border-color;
+
+    &.left {
+        i {
+            transform: rotate(180deg);
+        }
+    }
+}
+
+.reviews-nav {
+    color: $color-primary;
+
+    svg {
+        width: 3rem;
+        height: 6rem;
+    }
+}
+
+.reviews-text {
+    padding: 0 14.5rem;
+
+    @include media-breakpoint-down(md) {
+        padding: 0;
+    }
+}
+
+.reviews-content {
+    max-width: 42rem;
+    margin: 0 auto;
+
+    @include media-breakpoint-down(md) {
+        max-width: 100%;
+    }
+}
+
+.reviews-next,
+.reviews-prev {
+    user-select: none;
+    opacity: 1;
+    transition: all ease .15s;
+    width: 1.6rem;
+    margin: 0 auto;
+    color: $color-primary;
+
+    &:hover {
+        cursor: pointer;
+        opacity: .5;
+    }
+}

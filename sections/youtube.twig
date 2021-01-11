@@ -1,0 +1,342 @@
+{% set show_section = true %}
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-lg-block' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-block d-lg-none' %}
+{% endif %}
+
+{% if show_section %}
+    {% set channel_id = section.settings.channel_id ?: null %}
+    {% set per_page = section.settings.per_page ?: 8 %}
+    {% set button_text = section.settings.button_text ?: 'Carregar mais' %}
+
+    <div class="{{ s }}">
+        {% include 'section-header.twig' with { 'name':'youtube' } %}
+
+            <div class="youtube" data-channel-id="{{ channel_id }}" data-per-page="{{ per_page }}">
+                <div class="row justify-content-center mt-5">
+                
+                </div>
+
+                <div class="youtube-loader py-5">
+                    <div class="loader"></div>
+                </div>
+
+            <div class="youtube-more mt-4 d-none">
+                <div class="d-inline-block youtube-btn btn" style="background-color: {{ section.settings.button_bg_color }}; color: {{ section.settings.button_text_color }};">
+                    {{ button_text }}
+                </div>
+            </div>
+
+        {% include 'section-footer.twig' %}
+    </div>
+    
+    {% javascript %}
+        $(function() {
+            var url = 'https://guarded-crag-64749.herokuapp.com/?channel_id=';
+            
+            /*
+            * Criar o html dos vídeos e retornar como
+            * string para fazer o append na seção
+            * @return String
+            */
+            var createTemplate = function(items) {
+                var tpl = '';
+                
+                for (var i = 0; i < items.length; i++) {
+                    var src = items[i].src;
+                    var link = 'https://www.youtube.com/watch?v=' + items[i].videoId;
+                    var title = items[i].title;
+
+                    var _is_visible = 'visible';
+
+                    if (i >= 8) {
+                        _is_visible = 'd-none';
+                    }
+
+                    tpl += '<div class="col-6 col-md-4 col-lg-3 mb-4 ' + _is_visible + '">';
+                        tpl += '<div class="youtube-item">';
+                            tpl += '<a href="' + link + '" class="youtube-link" target="_blank">';
+                                tpl += '<div class="youtube-image">';
+                                    tpl += '<img loading="lazy" src="' + src + '" class="img-fluid" />';
+                                    
+                                    tpl += '<i class="icon" style="color: {{ section.settings.video_icon_color }};">';
+                                        tpl += '{{ 'img/dc-icons/play.svg' | svg }}';
+                                    tpl += '</i>';
+                                tpl += '</div>';
+
+                                tpl += '<div class="youtube-title mt-3 px-3" style="color: {{ section.settings.video_title_color }};">';
+                                    tpl += '<h3 class="title">' + title + '</h3>';
+                                tpl += '</div>';
+                            tpl += '</a>';
+                        tpl += '</div>';
+                    tpl += '</div>';
+                }
+
+                return tpl;
+            };
+
+            function setWithExpiry(key, value, ttl) {
+				var now = new Date();
+
+				var item = {
+					value: value,
+					expiry: now.getTime() + ttl,
+				};
+
+				localStorage.setItem(key, JSON.stringify(item));
+			}
+
+			function getWithExpiry(key) {
+				var itemStr = localStorage.getItem(key);
+
+				if (!itemStr) {
+					return null;
+				}
+
+				var item = JSON.parse(itemStr);
+				var now = new Date();
+
+				if (now.getTime() < item.expiry) {
+					localStorage.removeItem(key);
+					return null;
+				}
+
+				return item.value;
+			}
+
+            /*
+            * Fazer requisição para a API do Youtube v3
+            * @return void
+            */
+            var getVideos = function(id, limit, vm) {
+                var _url = url + id;
+
+                var row = vm.find('.row');
+                var loader = vm.find('.youtube-loader');
+
+                var _data = getWithExpiry('youtube');
+
+                if (_data) {
+                    if (_data.length > 0) {
+                        loader.fadeOut();
+
+                        var tpl = createTemplate(_data);
+                        $(row).append(tpl);
+
+                        if (_data.length > 8) {
+                            $('#{{ section.id }}').find('.youtube .youtube-more').removeClass('d-none');
+                        }
+                    }
+                } else {
+                    loader.fadeIn();
+                    
+                    $.ajax({    
+                        url: _url,
+                        type: 'GET',
+                        cache: true,
+                        success: function (data) {
+                            setWithExpiry('youtube', data, 5000);
+
+                            var items = data;
+
+                            if (items.length > 0) {
+                                loader.fadeOut();
+
+                                var tpl = createTemplate(items);
+                                $(row).append(tpl);
+
+                                if (items.length > 8) {
+                                    $('#{{ section.id }}').find('.youtube .youtube-more').removeClass('d-none');
+                                }
+                            }
+                        },
+                        error: function (xhr, textStatus, error) {
+                            console.log('Youtube Section error');
+                            loader.fadeOut(300);
+                        }
+                    });
+                }
+            };
+
+            /*
+            * Buscar as seções que possuem youtube
+            * @return void
+            */
+            var init = function() {
+                var vm = $('#{{ section.id }}').find('.youtube');
+
+                var _perPage = vm.data('per-page') || perPage;
+                var _channelId = vm.data('channel-id');
+
+                var loadMore = vm.find('.youtube-btn');
+
+                getVideos(_channelId, _perPage, vm);
+
+                loadMore.on('click', function() {
+                    var visibles = vm.find('.col-6.visible');
+                    var total_visibles = visibles.length;
+
+                    var total = vm.find('.col-6');
+
+                    if (visibles.length == total.length) {
+                        $(this).removeClass('d-inline-block').addClass('d-none');
+                    } else {
+                        total.each(function(index, elm) {
+                            if ($(this).hasClass('d-none') && index >= total_visibles && index < (total_visibles + 9)) {
+                                $(this).removeClass('d-none').addClass('visible');
+                            }
+                        });
+                    }
+                });             
+            };
+
+            init();
+        });
+    {% endjavascript %}
+{% endif %}
+
+{% schema %}
+{
+    "name": "Galeria de vídeos",
+    "category": "Multimídia",
+    "content_for_index": "1",
+    "settings": [
+        {
+            "type": "accordion",
+            "content": "Conteúdo",
+            "icon": "content"
+        },
+        {
+            "type": "text",
+            "label": "Título",
+            "id": "title"
+        }, {
+            "type": "text",
+            "label": "Subtítulo",
+            "id": "subtitle"
+        },{
+            "type": "text",
+            "id": "channel_id",
+            "label": "ID do canal do Youtube",
+            "info": "<a href='https://support.google.com/youtube/answer/3250431?hl=pt-BR' target='_blank'>Clique aqui para saber como encontrar seu ID de canal</a>"
+        },{
+            "type": "text",
+            "id": "button_text",
+            "label": "Texto do botão"
+        },
+        {
+            "type": "accordion",
+            "content": "Aparência",
+            "icon": "design"
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em dispositivos móveis",
+            "id": "hide_mobile",
+            "default": 0
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em desktop",
+            "id": "hide_desktop",
+            "default": 0
+        },{
+            "type": "separator"
+        },
+        {
+			"type": "text",
+			"id": "custom_class",
+			"label": "Classe customizada para editar o css"
+		},{
+            "type": "select",
+            "id": "button_size",
+            "label": "Tamanho do botão",
+            "tooltip": "Você poderá definir o tamanho que será exibido o botão",
+            "default": "",
+            "options": [{
+                    "value": "",
+                    "label": "Normal"
+                },
+                {
+                    "value": "sm",
+                    "label": "Pequeno"
+                },
+                {
+                    "value": "lg",
+                    "label": "Grande"
+                }
+            ]
+        }, {
+            "type": "separator"
+        },{
+            "type": "color_picker",
+            "id": "title_color",
+            "label": "Cor do título"
+        }, {
+            "type": "color_picker",
+            "id": "subtitle_color",
+            "label": "Cor do subtítulo"
+        },{
+            "type": "color_picker",
+            "id": "video_title_color",
+            "label": "Cor do título dos vídeos"
+        },{
+            "type": "color_picker",
+            "id": "video_icon_color",
+            "label": "Cor do ícone dos vídeos"
+        }, {
+            "type": "color_picker",
+            "id": "background_color",
+            "label": "Cor de fundo da seção"
+        }, {
+            "type": "color_picker",
+            "id": "border_color",
+            "label": "Cor da borda de seção"
+        },
+        {
+            "type": "color_picker",
+            "id": "button_bg_color",
+            "label": "Cor de fundo do botão"
+        },
+        {
+            "type": "color_picker",
+            "id": "button_text_color",
+            "label": "Cor de texto do botão"
+        },{
+            "type": "image_picker",
+            "id": "background_image",
+            "label": "Imagem de fundo da seção",
+            "info": "Recomendado: 1600x600px com até 250kb"
+        },{
+            "type": "checkbox",
+            "label": "Imagem fixa de fundo",
+            "id": "background_parallax"
+        }, {
+            "type": "range",
+            "id": "border_size",
+            "min": "0",
+            "max": "10",
+            "default": "1",
+            "label": "Espessura da borda de seção"
+        }, {
+            "type": "range",
+            "id": "margin_up",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de cima da seção"
+        }, {
+            "type": "range",
+            "id": "margin_dw",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de baixo da seção"
+        }
+    ]
+}
+{% endschema %}

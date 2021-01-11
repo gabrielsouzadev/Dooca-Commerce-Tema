@@ -1,0 +1,110 @@
+/**
+ * Base
+ **/
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+    text-rendering: optimizeLegibility;
+    font-variant-ligatures: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.3;
+}
+
+body {
+    color: $text-color;
+    background: $body-bg;
+    position: relative;
+}
+
+svg {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    fill: currentColor;
+    position: relative;
+    
+    .none{
+        fill:none;
+    }
+
+    .bg,
+    .st0 {
+        stroke: currentColor;
+    }
+
+    .icon {
+        fill: currentColor;
+    }
+}
+
+.dc-palceholder {
+    color: $gray-light;
+
+    div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        svg {
+            flex-grow: 1;
+        }
+    }
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    @include reset-list;
+}
+
+a:hover {
+	text-decoration: none;
+    color: currentColor;
+}
+
+body.no-scroll {
+    overflow: hidden;
+	height: 100%;
+
+    @include media-breakpoint-down(md) {
+        overflow-x: hidden;
+        position: relative;
+
+        & {
+            html {
+                overflow-x: hidden;
+            }
+        }
+    }
+}
+
+@include media-breakpoint-down(md) {
+    .no-scroll {
+        overflow: hidden !important;
+        position: fixed !important;
+        width: 100vw !important;
+    }
+}
+
+*:focus,
+button:focus {
+    outline: none;
+}
+
+@include media-breakpoint-up(md) {
+    :target::before {
+        content: "";
+        display: block;
+        height: 70px;
+        margin: -70px 0 0;
+    }
+}

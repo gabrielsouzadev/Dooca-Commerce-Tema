@@ -1,0 +1,49 @@
+{% set mobile_opacity = (opacity == 10) ? 0 : '.' ~ opacity %}
+{% set menu_main = navigation[theme.sections.header.settings.menu_main] %}
+
+<div class="header-mobile header-mobile-2 position-relative">
+    <div class="header-bg h-pr-background" style="opacity: {{ mobile_opacity }};"></div>
+    <div class="container-fluid">
+        <div class="row equal no-gutters">
+            {% if menu_main %}
+                <div class="col-auto">
+                    <div class="h-100 d-flex align-items-center justify-content-start">
+                        <a class="nav-menu d-flex align-items-center h-sc-color" href="javascript:void(0)" aria-label="Menu">
+                            <i class="menu-icon h-hl-color"><i class="material-icons md-36">menu</i></i>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="col">
+                <div class="h-100 d-flex align-items-center justify-content-start ml-3">
+                    {% include 'header-logo.twig' with { 'max_height': logo_max_height_mobile } %}
+                </div>
+            </div>
+            <div class="col">
+                <div class="h-100 d-flex align-items-center justify-content-end">
+                    <div class="{% if type == 1 %}mr-4{% elseif type != 1 and not (section.settings.cart_custom_light or section.settings.cart_custom) %}mr-3{% else %}mr-4{% endif %}">
+                        {% include 'nav-user.twig' with { no_text: true } %}
+                    </div>
+                    {% if not shop.catalog %}
+                        {% include 'nav-cart.twig' %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="header-mobile-2 row no-gutters">
+    {% if section.settings.show_smartsearch %}
+        <div class="col-12">
+            {% include 'smart-search.twig' %}
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    if (window.is_mobile) {
+        var element = document.getElementById("sideMenu");
+        element.classList.add("header-mobile-2");
+    }
+</script>

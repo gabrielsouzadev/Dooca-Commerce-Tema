@@ -1,0 +1,199 @@
+{% set title = section.settings.payment_title ?: null %}
+{% set color = section.settings.payment_color ?: null %}
+
+{% if not shop.catalog %}
+    {% if section.settings.seal_payment %}
+        <div class="footer-payment {% if color %}color{% endif %}">
+            {% include 'footer-title.twig' with { 'title' : title } %}
+            <div class="row no-gutters {% if color %}align-items-center{% endif %}">
+                {% if section.settings.seal_payment_visa %}
+                    {% if color %}
+                        <div class="icon mb-3 mr-3" style="max-width: 50px">
+                            <img class="img-fluid" src="{{ ('img/dc-payment/visa-color.svg' ) | assets_url | img_url }}" />
+                        </div>
+                    {% else %}
+                        <div class="icon {% if section_secondary %} f-sc-color {% else %} f-hl-color {% endif %} mr-3 mb-3">
+                            <span class="icon-dc-visa md-31"></span>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% if section.settings.seal_payment_master %}
+                    {% if color %}
+                        <div class="icon mb-3 mr-3" style="max-width: 50px">
+                            <img class="img-fluid" src="{{ ('img/dc-payment/mastercard-color.svg') | assets_url | img_url }}" />
+                        </div>
+                    {% else %}
+                        <div class="icon {% if section_secondary %} f-sc-color {% else %} f-hl-color {% endif %} mr-3 mb-3">
+                            <span class="icon-dc-mastercard md-31"></span>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% if section.settings.seal_payment_amex %}
+                    {% if color %}
+                        <div class="icon mb-3 mr-3" style="max-width: 50px">
+                            <img class="img-fluid" src="{{ ('img/dc-payment/americanexpress-color.svg') | assets_url | img_url }}" />
+                        </div>
+                    {% else %}
+                        <div class="icon {% if section_secondary %} f-sc-color {% else %} f-hl-color {% endif %} mr-3 mb-3">
+                            <span class="icon-dc-amex md-31"></span>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% if section.settings.seal_payment_elo %}
+                    {% if color %}
+                        <div class="icon mb-3 mr-3" style="max-width: 50px">
+                            <img class="img-fluid" src="{{ ('img/dc-payment/elo-color.svg') | assets_url | img_url }}" />
+                        </div>
+                    {% else %}
+                        <div class="icon {% if section_secondary %} f-sc-color {% else %} f-hl-color {% endif %} mr-3 mb-3">
+                            <span class="icon-dc-elo md-31"></span>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% if section.settings.seal_payment_hipercard %}
+                    {% if color %}
+                        <div class="icon mb-3 mr-3" style="max-width: 50px">
+                            <img class="img-fluid" src="{{ ('img/dc-payment/hipercard-color.svg') | assets_url | img_url }}" />
+                        </div>
+                    {% else %}
+                        <div class="icon {% if section_secondary %} f-sc-color {% else %} f-hl-color {% endif %} mr-3 mb-3">
+                            <span class="icon-dc-hipercard md-31"></span>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% if section.settings.seal_payment_hiper %}
+                    {% if color %}
+                        <div class="icon mb-3 mr-3" style="max-width: 50px">
+                            <img class="img-fluid" src="{{ ('img/dc-payment/hiper-color.svg') | assets_url | img_url }}" />
+                        </div>
+                    {% else %}
+                        <div class="icon {% if section_secondary %} f-sc-color {% else %} f-hl-color {% endif %} mr-3 mb-3">
+                            <span class="icon-dc-hiper md-31"></span>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% if section.settings.seal_payment_diners %}
+                    {% if color %}
+                        <div class="icon mb-3 mr-3" style="max-width: 50px">
+                            <img class="img-fluid" src="{{ ('img/dc-payment/diners-color.svg') | assets_url | img_url }}" />
+                        </div>
+                    {% else %}
+                        <div class="icon {% if section_secondary %} f-sc-color {% else %} f-hl-color {% endif %} mr-3 mb-3">
+                            <span class="icon-dc-dinners md-31"></span>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% if section.settings.seal_payment_discover %}
+                    {% if color %}
+                        <div class="icon mb-3 mr-3" style="max-width: 50px">
+                            <img class="img-fluid" src="{{ ('img/dc-payment/discover-color.svg') | assets_url | img_url }}" />
+                        </div>
+                    {% else %}
+                        <div class="icon {% if section_secondary %} f-sc-color {% else %} f-hl-color {% endif %} mr-3 mb-3">
+                            <span class="icon-dc-discover md-31"></span>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% if section.settings.seal_payment_aura %}
+                    {% if color %}
+                        <div class="icon mb-3 mr-3" style="max-width: 50px">
+                            <img class="img-fluid" src="{{ ('img/dc-payment/aura-color.svg') | assets_url | img_url }}" />
+                        </div>
+                    {% else %}
+                        <div class="icon {% if section_secondary %} f-sc-color {% else %} f-hl-color {% endif %} mr-3 mb-3">
+                            <span class="icon-dc-aura md-31"></span>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% if section.settings.seal_payment_jcb %}
+                    {% if color %}
+                        <div class="icon mb-3 mr-3" style="max-width: 50px">
+                            <img class="img-fluid" src="{{ ('img/dc-payment/jcb-color.svg') | assets_url | img_url }}" />
+                        </div>
+                    {% else %}
+                        <div class="icon {% if section_secondary %} f-sc-color {% else %} f-hl-color {% endif %} mr-3 mb-3">
+                            <span class="icon-dc-jcb md-31"></span>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% if section.settings.seal_payment_paypal %}
+                    {% if color %}
+                        <div class="icon mb-3 mr-3" style="max-width: 50px">
+                            <img class="img-fluid" src="{{ ('img/dc-payment/paypal-color.svg') | assets_url | img_url }}" />
+                        </div>
+                    {% else %}
+                        <div class="icon {% if section_secondary %} f-sc-color {% else %} f-hl-color {% endif %} mr-3 mb-3">
+                            <span class="icon-dc-paypal md-31"></span>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% if section.settings.seal_payment_billet %}
+                    {% if color %}
+                        <div class="icon mb-3 mr-3" style="max-width: 50px">
+                            <img class="img-fluid" src="{{ ('img/dc-payment/billet-color.svg' ) | assets_url | img_url }}" />
+                        </div>
+                    {% else %}
+                        <div class="icon {% if section_secondary %} f-sc-color {% else %} f-hl-color {% endif %} mr-3 mb-3">
+                            <span class="icon-dc-boleto md-31"></span>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% if section.settings.seal_payment_bancointer %}
+                    {% if color %}
+                        <div class="icon mb-3 mr-3" style="max-width: 50px">
+                            <img class="img-fluid" src="{{ ('img/dc-payment/bancointer-color.svg') | assets_url | img_url }}" />
+                        </div>
+                    {% else %}
+                        <div class="icon {% if section_secondary %} f-sc-color {% else %} f-hl-color {% endif %} mr-3 mb-3">
+                            <span class="icon-dc-inter md-31"></span>
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% if section.settings.seal_payment_itau %}
+                    {% if color %}
+                        <div class="icon mb-3 mr-3" style="max-width: 50px">
+                            <img class="img-fluid" src="{{ ('img/dc-payment/itau-color.svg' ) | assets_url | img_url }}" />
+                        </div>
+                    {% else %}
+                        <div class="icon {% if section_secondary %} f-sc-color {% else %} f-hl-color {% endif %} mr-3 mb-3">
+                            <span class="icon-dc-itau md-31"></span>
+                        </div>
+                    {% endif %}
+                {% endif %} 
+                {% if section.settings.seal_payment_mercadopago %}
+                    {% if color %}
+                        <div class="icon mb-3 mr-3" style="max-width: 50px">
+                            <img class="img-fluid" src="{{ ('img/dc-payment/mercadopago-color.svg' ) | assets_url | img_url }}" />
+                        </div>
+                    {% else %}
+                        <div class="icon {% if section_secondary %} f-sc-color {% else %} f-hl-color {% endif %} mr-3 mb-3">
+                            <span class="icon-dc-mercadopago md-31"></span>
+                        </div>
+                    {% endif %}
+                {% endif %} 
+                {% if section.settings.seal_payment_picpay %}
+                    {% if color %}
+                        <div class="icon mb-3 mr-3">
+                            <img class="img-fluid" src="{{ ('img/dc-payment/picpay-color.svg' ) | assets_url | img_url }}" />
+                        </div>
+                    {% else %}
+                        <div class="icon {% if section_secondary %} f-sc-color {% else %} f-hl-color {% endif %} mr-3 mb-3">
+                            <span class="icon-dc-picpay md-31"></span>
+                        </div>
+                    {% endif %}
+                {% endif %} 
+                {% if section.settings.seal_payment_ame %}
+                    {% if color %}
+                        <div class="icon mb-3 mr-3">
+                            <img class="img-fluid" src="{{ ('img/dc-payment/ame-color.svg' ) | assets_url | img_url }}" />
+                        </div>
+                    {% else %}
+                        <div class="icon {% if section_secondary %} f-sc-color {% else %} f-hl-color {% endif %} mr-3 mb-3">
+                            <span class="icon-dc-ame md-31"></span>
+                        </div>
+                    {% endif %}
+                {% endif %} 
+            </div>
+        </div>
+    {% endif %}
+{% endif %}

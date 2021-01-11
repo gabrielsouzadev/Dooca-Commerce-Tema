@@ -1,0 +1,69 @@
+{% set features = product.features %}
+
+<div class="product-description-features row no-gutters justify-content-center">
+    {% for feature in features|slice(0, 6) %}
+        <div class="col-12 col-md text-center">
+            <div class="d-flex h-100 align-items-center justify-content-center flex-column p-5">
+                {% set values = feature.values %}
+
+                {% if values > 0 %}
+                    {% if loop.first %}
+                        <div class="icon mb-3 position-relative">
+                            <div class="bg" style="background-image: url({{ values[0].image.src }})"></div>
+                        </div>
+                        <div class="h1 m-0">
+                            {{ values[0].name }}
+                        </div>
+                    {% else %}
+                        <div class="h1 mb-3">
+                            {{ feature.name }}
+                        </div>
+                        <div class="separator mb-3"></div>
+                        <div class="w-100">
+                            {% for value in values %}
+                                <span class="text">{{ value.name }}{% if not loop.last %},{% endif %}</span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<div class="product-description-icons row no-gutters align-items-center mt-5">
+    {% for feature in features|slice(6) %}
+        {% set values = feature.values %}
+        <div class="col-12 col-md-6">
+            <div class="d-flex align-items-center w-100 text-left mb-5">
+                {% if feature.image.src %}
+                    <div class="feature-icon mr-5 d-flex align-items-center justify-content-center text-center">
+                        <img class="img-fluid m-0" src="{{ feature.image.src }}" alt="{{ feature.name }}">
+                    </div>
+                {% endif %}
+                <div class="d-block">
+                    <div class="h2 mb-2">{{ feature.name }}</div>
+                    <div class="w-100">
+                        {% for value in values %}
+                            <span class="text">
+                                {{ value.name }}{% if not loop.last %},{% endif %}
+                            </span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% if product.description %}
+    <div class="row mt-5 no-gutters">
+        <div class="col-12">
+            <div class="cms w-100">
+                {% ajax 'product-description' %}
+                    {{ product.description | richtext | raw }}
+                {% endajax %}
+            </div>
+        </div>
+    </div>
+{% endif %}

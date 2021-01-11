@@ -1,0 +1,146 @@
+{% set components = product.components %}
+{% set groups = product.component_groups %}
+{% set order = section.settings.order ?: 'group' %}
+{% set variation_select_type = section.settings.variation_select_type ?: 'select' %}
+{% set individual_buy = section.settings.buy_individual_products %}
+{% set individual_price = section.settings.show_price_individual_products %}
+
+{% if components|length > 0 %}
+    <form id="form-add-cart-custom" name="form_add_cart" class="customize-product" method="post" action="{{ 'cart' | action ('add') }}" data-url="{{ product.url }}">
+        
+        {% if theme.settings.customize_position_customize != "before_buy" %}
+            {% include 'section-title.twig' %}
+        {% endif %}
+
+        <input type="hidden" name="redirect" value="cart">
+        <input type="hidden" name="variation_id" value="{{ product.variation.id }}">
+
+        <div class="customize-product-loader">
+            <div class="loader-bg">
+                <span class="loader"></span>
+            </div>
+        </div>
+
+        <div class="customize-product-ajax">
+            {% if theme.settings.customize_position_customize != "before_buy" %}
+                {% include "customize-product/custom-ajax.twig" %}
+            {% else %}
+                {% include "customize-product/custom.twig" %}
+            {% endif %}
+        </div>
+
+        {% for component in components %}
+            {% include 'customize-product-modal.twig' with { 'id': component.product_component_id } %}
+        {% endfor %}
+
+        <button type="submit" id="buy-kit" class="d-none"></button>
+    </form>
+    {% include "scripts/customize-product.twig" %}
+
+    {% if individual_buy %}
+        {% javascript %}
+            $(function() {
+                $('body').delegate('.customize-individual-buy', 'click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    var component = $(this).parents('.customize-product-component');
+                    var form = $(this).parents('.customize-individual-form');
+                    var name = $(this).data('variation');
+                    var variation_id = component.find("[name='" + name +"']").val();
+                    var hasAttributeButtons = component.find('.customize-product-buttons');
+                    var quantity = component.find('.dc-input').val();
+
+                    if (hasAttributeButtons && hasAttributeButtons.length > 0) {
+                        variation_id = hasAttributeButtons.find('.active input').val();
+                    }
+
+                    var url = '{{ 'cart' | action ('add') }}';
+                    var xhr = _dcs.Xhr(url);
+
+                    $(this).find('span').css('opacity', '0');
+                    $(this).find('.product-action-buy-loader').fadeIn();
+
+                    xhr.post({
+                        data: {
+                            variation_id: variation_id,
+                            quantity: (quantity > 0) ? quantity : 1,
+                        }
+                    }).done(function() {
+                        var url_redirect = window.location.origin + '/carrinho';
+                        window.location.href = url_redirect;
+                    });
+                });
+            });
+        {% endjavascript %}
+    {% endif %}
+{% endif %}
+
+<div class="customize-product-modalbg"></div>
+
+{% schema %}
+{
+    "name": "Kit de produtos",
+    "settings": [
+        {
+            "type": "header",
+            "content": "Aparência"
+        },
+        {
+            "type": "text",
+            "id": "title",
+            "label": "Título",
+            "default": "Produtos do kit"
+        },
+        {
+            "type": "text",
+            "id": "subtitle",
+            "label": "Subtítulo"
+        },
+        {
+            "type": "select",
+            "id": "order",
+            "label": "Ordenação de produtos",
+            "default": "group",
+            "options": [
+                {
+                    "value": "group",
+                    "label": "Primeiro produtos agrupados"
+                },
+                {
+                    "value": "no_group",
+                    "label": "Primeiro produtos sem grupos"
+                }
+            ]
+        },
+        {
+            "type": "select",
+            "id": "variation_select_type",
+            "label": "Estilo de seleção das variações",
+            "default": "select",
+            "options": [
+                {
+                    "value": "select",
+                    "label": "Lista"
+                },
+                {
+                    "value": "buttons",
+                    "label": "Botões"
+                }
+            ]
+        },
+        {
+            "type": "checkbox",
+            "id": "buy_individual_products",
+            "label": "Permitir venda avulsa dos produtos",
+            "default": 0
+        },
+        {
+            "type": "checkbox",
+            "id": "show_price_individual_products",
+            "label": "Exibir preço de cada produto do kit",
+            "default": 0
+        }
+    ]
+}
+{% endschema %}

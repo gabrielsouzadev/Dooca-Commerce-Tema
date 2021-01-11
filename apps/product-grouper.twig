@@ -1,0 +1,15 @@
+{% if app.data %}
+    <div class="product-grouper mt-5">
+        <div class="h4 m-0">{{ section.settings.product_options_title|default('Outras opções') }}</div>
+
+        <div class="d-flex mt-3 flex-wrap no-gutters">
+            {% for product in app.data %}
+                <div class="col-auto mb-2 mr-2">
+                    <a href="{{ product.url }}" title="{{ product.name }}">
+                        <img loading="lazy" class="img-fluid w-100" src="{{ product.image | img_url ('65x65+fill_ffffff') }}" alt="{{ product.name }}">
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,44 @@
+.product-attachment {
+    flex-grow: 1;
+    width: 100%;
+    margin-top: 3rem;
+
+    @include breakpoint('max-width: #{$bp-sm}') {
+        padding: 0 1.5rem;
+    }
+
+    &__title {
+        @include title(1.2rem);
+        text-transform: uppercase;
+    }
+
+    &__list {
+        @include reset-list;
+        margin-top: 1rem;
+    }
+
+    &__item {
+        margin-top: .8rem;
+
+        .link {
+            display: flex;
+            align-items: center;
+
+            &::before {
+                content: '';
+                width: .4rem;
+                height: .4rem;
+                border-radius: .2rem;
+                background: currentColor;
+                margin-right: .5rem;
+            }
+        }
+
+        &:hover {
+            .link {
+                color: $color-secondary;
+            }
+        }
+    }
+
+}

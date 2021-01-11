@@ -1,0 +1,46 @@
+{% set sidebarSettings = theme.sections.sidebar.settings ?: null %}
+{% set sidebarCustom = sidebarSettings.sidebar_custom ?: null %}
+{% set sidebarCustomIds = null %}
+
+{% if sidebarSettings.sidebar_ids %}
+    {% set sidebarCustomIds = sidebarSettings.sidebar_ids|split(',') %}
+{% endif %}
+
+{% set brands = sidebar.filters.brands %}
+
+{% if sidebarCustom and sidebarCustomIds|length > 0 %}
+    {% set brands = [] %}
+    {% for brand in sidebar.filters.brands %}
+        {% if brand.id not in sidebarCustomIds %}
+            {% set brands = brands|merge([brand]) %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+{% if brands and brands|length > 1 %}
+<div class="sidebar-block sidebar-block--list sidebar-block--brand sidebar-block--order-1">
+    <div class="sidebar-block__header">
+        <span class="close"></span>
+        <h2 class="h2 m-0">Marcas</h2>
+    </div>
+    <div class="sidebar-block__content" dc-scroll>
+        <ul class="sidebar-block__list">
+            {% for item in brands %}
+                {% if collection_type == 'brand' %}
+                    {% set url_brand = 'brand' | url (item) %}
+                {% else %}
+                    {% set url_brand = item | url_params ('brand', 'append') %}
+                {% endif %}
+                <li class="sidebar-block__item {% if item.filter_active %}is-active{% endif %}">
+                    <a href="{{ url_brand }}" class="link" rel="nofollow">
+                        {% if collection_type != 'brand' %}
+                            <span class="icon"><i>{{ 'img/dc-icons/check-bold.svg' | svg }}</i></span>
+                        {% endif %}
+                        <h3 class="text">{{ item.name }}</h3>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endif %}

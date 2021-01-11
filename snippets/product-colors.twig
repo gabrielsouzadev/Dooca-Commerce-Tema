@@ -1,0 +1,167 @@
+{% set colors_type = section.settings.product_colors_type ?: 'colors' %}
+{% set colors_slider = section.settings.product_colors_slider ?: null %}
+
+{% if product.colors and product.colors | length > 1 %}
+    {% set colors = product.colors %}
+
+    <div class="product-color mt-5 {{ colors_type }} position-relative">
+        <div class="h4 m-0">{{ section.settings.product_colors_title|default('Outras cores') }}</div>
+        
+        {% if colors_slider %}
+            <div class="prev">
+                <i class="nav-icon">{{ 'img/arrow-left.svg' | svg }}</i>
+            </div>
+        {% endif %}
+
+        {% if (colors_type == 'colors') or (colors_type == 'images') %}
+            <div class="d-flex mt-3 flex-wrap no-gutters {% if colors_slider %}product-color-slider owl-carousel owl-theme" {% else %} dc-scroll" dc-scroll{% endif %}>
+                {% for color in colors %}
+                    {% set grid_id = product.id ~ '-' ~ color.id %}
+                    {% set active = (grid_id == product.grid_id) ? 'active' : null %}
+                    {% set is_images = (color.product_images and colors_type == 'images') ? 'col-2' : null %}
+                    
+                    {% if is_images == 'col-2' and colors_slider %}
+                        {% set is_images = 'col-12' %}
+                    {% endif %}
+
+                    <div class="col-auto {% if colors_slider %}p-0{% else %}mb-2 mr-2{% endif %} {{ is_images }} {{ active }}">
+                        <a href="{{ color.url }}" title="{{ color.name }}">
+                            {% if is_images %}
+                                <img loading="lazy" class="img-fluid w-100" src="{{ color.product_images[0].src }}" alt="{{ color.name }}">
+                            {% else %}
+                                <i class="d-flex icon" style="background-color: {{ color.hexadecimal }}; {% if color.image.src %}background-image: url({{ color.image.src | img_url() }}); background-size: contain; background-position: center center;{% endif %}"></i>
+                            {% endif %}
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="mt-3">
+                <select class="select-colors">
+                    {% for color in colors %}
+                        <option value="{{ color.name }}" {% if product.color_id == color.id %}selected{% endif %}>{{ color.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        {% endif %}
+
+        {% if colors_slider %}
+            <div class="next">
+                <i class="nav-icon">{{ 'img/arrow-right.svg' | svg }}</i>
+            </div>
+        {% endif %}
+    </div>
+{% endif %}
+
+{% if colors_type == 'select' %}
+    <style>
+        .selectric-select-colors .icon-colors{
+            border: 2px solid #e1e1e1;
+            display: inline-block;
+            height: 3.6rem;
+            width: 3.6rem;
+            padding: .3rem;
+            vertical-align: middle;
+        }
+        .selectric-select-colors .icon-colors .color{
+            background-color: #e1e1e1;
+            border-radius: 50%;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+
+    {{ 'lib/jquery.selectric.min.js' | assets_url | script_append }}
+
+    {% javascript %}
+        $(function() {
+            var data = {{ product.colors | json_encode | raw }};
+            var option = "";
+            var select = $('.select-colors');
+
+            console.log(data);
+            
+            for (var i = 0; i < data.length; i++) {
+                var slug = data[i].slug;
+                var hexadecimal = data[i].hexadecimal;
+                var url = data[i].url;
+                var name = data[i].name;
+                var selected = '';
+                var src = '';
+
+                if (data[i].id == {{ product.color_id }}) {
+                    selected = 'selected';
+                }
+
+                if (typeof data[i].image != null) {
+                    src = data[i].image.src;
+                }
+
+                option += "<option data-src='"+ src +"' data-color='"+ hexadecimal +"' data-url='"+ url +"' value='"+ slug +"'" + selected + ">"+ name +"</option>";
+            }
+
+            select.html(option).selectric({
+                nativeOnMobile:false,
+                labelBuilder:function(i, element) {
+                    return (i.value.length ? '<i class="icon-colors color-' + i.value + ' rounded-circle mr-4"><div class="color" style="background-color:'+$(i.element).attr("data-color")+';background-image: url('+$(i.element).attr("data-src")+'); background-size: contain; background-position: center center;"></div></i>' : '') + i.text;
+                },
+                optionsItemBuilder:function(i, element) {
+                    return (i.value.length ? '<a class="d-block" href="'+$(i.element).attr("data-url")+'"><i class="icon-colors color-' + i.value + ' rounded-circle mr-4"><div class="color" style="background-color:'+$(i.element).attr("data-color")+'; background-image: url('+$(i.element).attr("data-src")+'); background-size: contain; background-position: center center;"></div></i>' : '') + i.text + '</a>';
+                }
+
+            });
+
+            var change_page = function (ele) {
+                var url = $(ele).val();
+                window.location = url;
+            };
+
+            select.on('change', function () {
+                change_page(this);
+            });
+            
+        });
+    {% endjavascript %}
+{% elseif colors_slider %}
+    {% javascript %}
+        $(function() {
+            var owl = $('.product-color-slider');
+            var next = $('.product-color .next');
+            var prev = $('.product-color .prev');
+
+            var opt = {
+                autoplay: true,
+                autoheight: true,
+                autoplayHoverPause: true,
+                loop: true,
+                dots: false,
+                items: 6,
+                margin: 10,
+                responsive : {
+                    0 : {
+                        items: 3
+                    },
+                    480 : {
+                        items: 6
+                    },
+                    760 : {
+                        items: 4
+                    },
+                    1080 : {
+                        items: 6
+                    }
+                }
+            };
+
+            owl.owlCarousel(opt);
+
+            prev.click(function() {
+                owl.trigger('prev.owl.carousel', [300]);
+            });
+
+            next.click(function() {
+                owl.trigger('next.owl.carousel', [300]);
+            });
+        });
+    {% endjavascript %}
+{% endif %}

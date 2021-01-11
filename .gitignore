@@ -1,0 +1,17 @@
+#*
+#!.gitignore
+
+# theme kit
+dooca-config.json
+
+# themes
+settings-data-*.json
+
+# vs code
+.vscode
+
+# front
+.env
+
+# store
+.DS_Store

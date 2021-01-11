@@ -1,0 +1,58 @@
+{% if banner %}
+
+    {% set image = banner | img_url(crop) %}
+
+    {% set visible = (data.visible) ? 'visible-desktop' : null %}
+    {% set visible_mobile = (data.visible_mobile) ? 'visible-mobile' : null %}
+
+    <div class="banner {{ visible }} {{ visible_mobile }} position-relative d-flex align-items-center justify-content-center {% if class %}{{ class }}{% endif %}">
+            <div class="banner-bg position-absolute" style="background-image: url({{ image }});"></div>
+                <img loading="lazy" src="{{ image }}" alt="{{ image | get_filename }}">
+        {% if data.title or data.text or data.banner_url or data.main_title %}
+            <a class="banner-link w-100 position-absolute d-flex align-items-center justify-content-center" {% if data.banner_url %} href="{{ data.banner_url }}" {% endif %}
+               {% if data.banner_blank %} target="_blank" {% endif %} aria-label="Banner">
+                <div class="banner-mask {% if data.mask_opacity %} op-{{ data.mask_opacity }} {% endif %}" style="
+                    background-color: {{ data.mask_color }};
+                ">
+                </div>
+
+                <div class="banner-info p-4 text-center position-relative"
+                ">
+
+                    {% if data.title or data.main_title %}
+                        <h3 class="h3" style="
+                            color: {{ data.title_color }};
+                            {% if data.title_color_main %}
+                                color: {{ data.title_color_main }};
+                            {% endif %}
+                        ">
+                            {% if data.main_title %}
+                                {{ data.main_title | raw }}
+                            {% else %}
+                                {{ data.title | raw }}
+                            {% endif %}
+                        </h3>
+                    {% endif %}
+
+                    {% if data.text %}
+                        <p style="
+                            color: {{ data.text_color }};
+                        ">
+                            {{ data.text | raw }}
+                        </p>
+                    {% endif %}
+
+                    {% if data.button_text %}
+                        <span class="btn mt-3" style="
+                            background-color: {{ data.button_bg_color | default(theme.settings.color_primary) }};
+                            color: {{ data.button_text_color | default('#FFFFFF') }};
+                        ">
+                            {{ data.button_text }}
+                        </span>
+                    {% endif %}
+                </div>
+            </a>
+        {% endif %}
+    </div>
+
+{% endif %}

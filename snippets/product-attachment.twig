@@ -1,0 +1,19 @@
+{% if product.attachments and product.attachments | length > 0 %}
+	<div class="product-attachment">
+		<strong class="product-attachment__title">
+			Anexos
+		</strong>
+		<ul class="product-attachment__list">
+			{% for attachment in product.attachments %}
+				<li class="product-attachment__item">
+					<a href="{{ attachment.src | img_url }}" target="_blank" class="link" title="{{ attachment.name }}">
+						<i class="position-absolute" style="color: #eb6f0d; width: 2rem; left: 1.2rem; top: 54%; left: 1.2rem; transform: translateY(-50%);">
+                        	{{ 'img/dc-icons/download.svg' | svg }}
+                        </i>
+						<div class="text"></div>
+					</a>
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
+{% endif %}

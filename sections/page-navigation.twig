@@ -1,0 +1,35 @@
+{% set menus = pages %}
+{% set icons = 'img/dc-icons/angle-right.svg' %}
+
+<aside class="page-navigation">
+	<div class="container">
+		<div class="row">			
+			{% for menu in menus.data %}
+				{% if menu.active %}
+					{% set order = (menu.id == page.id) ? 'order-1' : 'order-2' %}
+					{% set active = (menu.id == page.id) ? 'active' : null %}
+					
+					<div class="d-block d-lg-none col-12 p-3 p-md-0 mb-0 mb-md-4 {{ active }} {{ order }}">
+						<a 
+							href="{{ 'page' | url (menu) }}" 
+							class="page-navigation-link d-flex align-items-center jutify-content-start"
+						>
+							<i class="icon mr-3">{{ icons | svg }}</i>
+							<span>{{ menu.name }}</span>
+						</a>
+					</div>
+
+					<div class="d-none d-lg-block col-12 p-3 p-md-0 mb-0 mb-md-4 {{ active }}">
+						<a 
+							href="{{ 'page' | url (menu) }}" 
+							class="page-navigation-link d-flex align-items-center jutify-content-start"
+						>
+							<i class="icon mr-3">{{ icons | svg }}</i>
+							<span>{{ menu.name }}</span>
+						</a>
+					</div>
+				{% endif %}
+			{% endfor %}
+		</div>
+	</div>
+</aside>

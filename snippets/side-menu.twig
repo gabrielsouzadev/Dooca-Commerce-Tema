@@ -1,0 +1,158 @@
+{% set menu_main = navigation[theme.sections.header.settings.menu_main] %}
+{% set menu = menu_main.values %}
+
+{% set menu_departments = navigation[theme.sections.header.settings.menu_departments] %}
+{% set departments_menu = {
+	'name': menu_departments.name,
+	'items': 'Menu',
+	'values': [{
+		'name': 'Menu',
+		'children': menu_departments.values
+	}]
+} %}
+
+<div class="side-menu {% if section_primary %}h-pr-background{% endif %}" id="sideMenu">
+    <div class="row flex-column no-gutters">
+        <div class="side-user {% if version %}version{% endif %} col-12 pl-5 pr-5 pt-4 pb-4" style="border-bottom: solid .1rem {{ color_border }};">
+            {% include 'nav-user.twig' with { 'side_menu' : true } %}
+            <div class="close-side">
+                <i class="icon h-hl-color">
+                    <i class="icon material-icons md-36">close</i>
+                </i>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="side-navigation position-relative {% if section.settings.menu_color_bg %}h-mn-background{% endif %}">
+                <div class="row no-gutters pt-3 pb-3 position-static">
+                    {% if departments_menu.name %}
+                        <div class="col-12 text-left position-static">
+                            <a 
+                                class="
+                                    side-link d-flex pl-5 pr-5 pt-3 pb-3 
+                                    {% if section_menu %}
+                                        h-mn-color
+                                    {% else %}
+                                        h-pr-color
+                                    {% endif %} 
+                                    d-flex align-items-center justify-content-between 
+                                    {% if departments_menu.values[0].children %}
+                                        has-children
+                                    {% endif %}
+                                " 
+                                href="{{ item.menu_type_link }}" 
+                                aria-label="{{ item.name }}"
+                                {% if shop.domain and shop.domain not in item.menu_type_link %}
+                                    target="_blank"
+                                {% endif %}
+                            >
+                                <span>{{ departments_menu.name }}</span>
+                                {% if departments_menu.values[0] %}
+                                    <i class="icon">
+                                        <i class="material-icons" style="font-size: 18px">keyboard_arrow_right</i>
+                                    </i>
+                                {% endif %}
+                            </a>
+                            {% if departments_menu.values[0].children %}
+					            {% include "side-dropdown.twig" with { 'items': departments_menu.values[0].children, 'department': true } %}
+				            {% endif %}
+                        </div>
+                    {% endif %}
+                    {% for item in menu %}
+                        {% if item.active %}
+                            <div class="col-12 text-left position-static">
+                                <a 
+                                    href="{{ item.menu_type_link }}" 
+                                    aria-label="{{ item.name }}" 
+                                    class="
+                                        {{ item.slug }}
+                                        side-link d-flex align-items-center justify-content-between pl-5 pr-5 pt-3 pb-3
+                                        {% if section_menu %}
+                                            h-mn-color
+                                        {% elseif section_primary and not version %}
+                                            h-sc-color
+                                        {% else %}
+                                            h-pr-color
+                                        {% endif %} 
+                                        {% if item.children %}
+                                            has-children
+                                        {% endif %}
+                                    "
+                                    {% if shop.domain and shop.domain not in item.menu_type_link %}
+                                        target="_blank"
+                                    {% endif %}
+                                >
+                                    <span>{{ item.name }}</span>
+                                    {% if item.children %}
+                                        <i class="icon">
+                                            <i class="material-icons" style="font-size: 18px">keyboard_arrow_right</i>
+                                        </i>
+                                    {% endif %}
+                                </a>
+                                {% if item.children %}
+                                    {% include "side-dropdown.twig" with { 'items': item.children } %}
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="side-close"></div>
+
+{% javascript %}
+    $(function() {
+        var side_menu = $('.side-menu');
+        var side_close = $('.side-close');
+        var close_size = $('.close-side');
+        var button = $('.{{ button_class }}');
+        var scroll = $('body, html');
+
+        var toggleMenu = function() {
+            scroll.stop().toggleClass('no-scroll');
+            side_menu.stop().toggleClass('is-open');
+            side_close.stop().fadeToggle(350);
+            $('.side-dropdown').removeClass('open');
+        };
+
+        close_size.click(function() {
+            toggleMenu();
+        });
+
+        button.click(function() {
+            toggleMenu();
+        });
+
+        side_close.click(function() {
+            toggleMenu();
+        });
+
+        $(document).keyup(function(e) {
+            if (e.keyCode === 27) {
+                scroll.stop().removeClass('no-scroll');
+                side_menu.stop().removeClass('is-open');
+                side_close.stop().fadeOut(350);
+            }
+        });
+
+        side_menu.find('.side-link').each(function(i, e) {
+            if ($(this).hasClass('has-children')) {
+                $(this).click(function(e) {
+                    e.preventDefault();
+                    $(this).parent().find('.side-dropdown').first().addClass('open');
+                });
+            }
+        });
+
+        $('.side-dropdown-back').click(function(e) {
+            e.preventDefault();
+            var parent = $(this).closest('.side-dropdown');
+
+            if (parent.hasClass('open')) {
+                parent.removeClass('open');
+            }
+        });
+    });
+{% endjavascript %}

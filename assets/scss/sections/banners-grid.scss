@@ -1,0 +1,35 @@
+.banners-grid {
+    .container-fluid {
+        padding: 0;
+    }
+
+    .placeholder {
+        @include media-breakpoint-up(md) {
+            padding: 7rem !important;
+        }
+    }
+}
+
+.banners-grid-content {
+    &.style-2 {
+        .banners-grid-blocks {
+            flex-direction: column;
+        }
+    }
+
+    &.style-4 {
+        .banner {
+            @include media-breakpoint-down(sm) {
+                padding: 0 !important;
+            }
+        }
+
+        .banners-grid-block {
+            .banner-bg {
+                @include media-breakpoint-down(sm) {
+                    background-size: contain;
+                }
+            }
+        }
+    }
+}

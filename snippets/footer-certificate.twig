@@ -1,0 +1,14 @@
+{% set title = section.settings.certificate_title ?: null %}
+
+{% if section.settings.seal_certificate %}
+    <div class="footer-certificate">
+        {% include 'footer-title.twig' with { 'title' : title } %}
+        <div class="row">
+            <div class="col d-flex d-lg-block">
+                <div class="seals">
+                    {{ section.settings.seal_certificate | richtext | raw }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

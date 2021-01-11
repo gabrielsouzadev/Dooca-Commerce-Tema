@@ -1,0 +1,45 @@
+/**
+ * Reset Owl
+ *
+ * Reset Owl components
+ *
+ **/
+@mixin owl-paginate() {
+	&.owl-carousel {
+		.owl-item img {
+			width: auto;
+		}
+	}
+
+	&.owl-theme .owl-dots {
+		display: flex;
+		align-items: center;
+		position: absolute;
+		bottom: 5%;
+		left: 50%;
+		transform: translateX(-50%);
+
+		.owl-dot {
+			margin: 0 .2rem;
+
+			span {
+				width: .8rem;
+				height: .8rem;
+				border: 0;
+				background: $text-color;
+				opacity: 0.5;
+			}
+
+			&.active,
+			&:focus,
+			&:hover {
+				outline: none;
+
+				span {
+					background: $color-secondary;
+					opacity: 1;
+				}
+			}
+		}
+	}
+}

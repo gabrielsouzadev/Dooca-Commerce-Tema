@@ -1,0 +1,60 @@
+{% set title = section.settings.newsletter_title ?: null %}
+
+<div class="footer-newsletter">
+    <div class="row no-gutters justify-content-center align-items-center">
+        <div class="col-12 col-md-auto">
+            <div class="row no-gutters align-items-center justify-content-center mr-0 mr-md-5">
+                <div class="col-12 col-md-auto text-center">
+                    <i class="d-flex newsletter-icon mr-4 {% if section_highglight %}f-hl-color{% endif %}">{{ 'img/email.svg' | svg }}</i>
+                </div>
+                <div class="col-12 col-md-auto">
+                    <h2 class="h2 m-0{% if section.settings.primary_color and section.settings.secondary_color %} f-pr-color {% elseif version and section.settings.primary_color %}f-pr-color{% endif %}">{{ title | raw }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-auto">
+            <form class="newsletter-form row no-gutters position-relative" data-url="{{ 'newsletter' | action ('add') }}" method="post">
+                <input type="hidden" name="form_type" value="newsletter">
+                <input type="text" name="empty" style="display: none;">
+
+                <div class="col-12 col-md">
+                    <input class="footer-input w-100 mt-3 mt-md-0" minlength="3" aria-label="name" name="name" placeholder="Seu nome" required type="text">
+                </div>
+
+                <div class="col-12 col-md">
+                    <input class="footer-input w-100 mt-3 mt-md-0" aria-label="email" name="email" placeholder="Seu e-mail" required type="email">
+                </div>
+
+                <div class="col-12 col-md-auto">
+                    {% if version %}
+                        <button class="btn footer-submit mt-3 mt-md-0 f-hl-background" name="button" type="submit">
+                            <span class="text f-sc-color">Eu quero!</span>
+                        </button>
+                    {% else %}
+                        <button class="btn footer-submit position-relative mt-3 mt-md-0 f-hl-background" name="button" type="submit">
+                            <span class="text {% if section_highlight %}f-pr-color{% endif %}">Eu quero!</span>
+                        </button>
+                    {% endif %}
+                </div>
+
+                <div class="footer-success">
+                    <div class="d-flex align-items-center justify-content-center h-100">
+                        <span class="text h3 m-0">Cadastro realizado com sucesso</span>
+                    </div>
+                </div>
+
+                <div class="footer-errors">
+                    <div class="d-flex align-items-center justify-content-center h-100">
+                        <span class="text h3 m-0">E-mail já cadastrado</span>
+                    </div>
+                </div>
+
+                <div class="footer-loader">
+                    <span class="loader"></span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% include 'scripts/newsletter.twig' %}

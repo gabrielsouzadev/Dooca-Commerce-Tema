@@ -1,0 +1,221 @@
+{% set show_section = true %}
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-lg-block' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-block d-lg-none' %}
+{% endif %}
+
+{% if show_section %}
+    <div class="{{ s }}">
+        {% include 'section-header.twig' with { 'name': 'features' }  %}
+
+        {% set items = section.blocks %}
+
+        {% if items|length <= 1 %}
+            {% if not section.blocks[0].settings.features %}
+                {% set items = [{}, {}, {}, {}, {}] %}
+            {% endif %}
+        {% endif %}
+
+        <div class="features-content p-5" style="background-color: {{ section.settings.product_background_color }};">
+            <div class="row align-items-start justify-content-center">
+                {% for item in items %}
+                    {% if item.settings.features %}
+                        {% set getFeatures = _getFeatures({ ids: item.settings.features }) %}
+                        {% set features = getFeatures.data[0] %}
+                        {% set title = item.settings.title ?: features.name %}
+                    {% endif %}
+
+                    <div class="col-12 col-md mb-5 mb-md-0">
+                        <div class="row no-gutters px-3">
+                            <div class="col-12">
+                                <div class="mb-3 mb-md-5">
+                                    <div class="d-flex align-items-center justify-content-start">
+                                        {% if features.image %}
+                                            <img loading="lazy" class="image-fluid features-thumb mr-4" src="{{ features.image | img_url() }}" alt="{{ features.image | img_url | get_filename }}">
+                                        {% endif %}
+
+                                        <h3 class="h1 m-0">
+                                            {% if not title %}
+                                                Característica {{ loop.index }}
+                                            {% endif %}
+
+                                            {% if title %}
+                                                {{ title }}
+                                            {% endif %}
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="pr-3">
+                                    <div class="row features-list" dc-scroll>
+                                        {% if not features.values and not item.settings.features %}
+                                            {% for i in 0..11 %}
+                                                <div class="col-12">
+                                                    <div class="mb-3">
+                                                        <a class="features-link d-flex justify-content-start align-items-center w-100" href="javascript:void(0)">
+                                                            <i class="features-icon d-flex mr-4">{{ 'img/dc-icons/circle-fill.svg' | svg }}</i>
+                                                            <span>Característica {{ loop.index }}</span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+
+                                        {% for feature in features.values %}
+                                            <div class="col-12">
+                                                <div class="mb-3">
+                                                    {% if feature.name %}
+                                                        <a class="features-link d-flex justify-content-start align-items-center w-100" href="https://{{ shop.domain | default(shop.dooca_domain) ~ '/produtos?feature=' ~ feature.id }}">
+                                                            <i class="features-icon d-flex mr-4">{{ 'img/dc-icons/circle-fill.svg' | svg }}</i>
+                                                            <span>{{ feature.name }}</span>
+                                                        </a>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% include 'section-footer.twig' %}
+    </div>
+{% endif %}
+
+{% schema %}
+{
+    "name": "Características",
+    "category": "Produtos",
+    "content_for_index": "1",
+    "max_blocks": "6",
+    "settings": [
+        {
+            "type": "accordion",
+            "content": "Aparência",
+            "icon": "design"
+        },{
+            "type": "text",
+            "label": "Título",
+            "id": "title"
+        }, {
+            "type": "text",
+            "label": "Subtítulo",
+            "id": "subtitle"
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em dispositivos móveis",
+            "id": "hide_mobile",
+            "default": 0
+        },{
+            "type": "checkbox",
+            "label": "Não exibir em desktop",
+            "id": "hide_desktop",
+            "default": 0
+        },{
+            "type": "separator"
+        },{
+			"type": "text",
+			"id": "custom_class",
+			"label": "Classe customizada para editar o css"
+		},{
+            "type": "select",
+            "id": "container",
+            "label": "Estilo do conteúdo",
+            "tooltip": "Você poderá definir o se o conteúdo da seção é centralizado ou adaptável a largura da tela.",
+            "default": "container",
+            "options": [{
+                    "value": "container",
+                    "label": "Centralizado"
+                },
+                {
+                    "value": "container-fluid",
+                    "label": "Adaptável a largura da tela"
+                }
+            ]
+        }, {
+            "type": "separator"
+        },{
+            "type": "color_picker",
+            "id": "title_color",
+            "label": "Cor do título"
+        }, {
+            "type": "color_picker",
+            "id": "subtitle_color",
+            "label": "Cor do subtítulo"
+        }, {
+            "type": "color_picker",
+            "id": "background_color",
+            "label": "Cor de fundo da seção"
+        }, {
+            "type": "color_picker",
+            "id": "product_background_color",
+            "label": "Cor de fundo do conteúdo"
+        }, {
+            "type": "color_picker",
+            "id": "border_color",
+            "label": "Cor da borda de seção"
+        },{
+            "type": "image_picker",
+            "id": "background_image",
+            "label": "Imagem de fundo da seção",
+            "info": "Recomendado: 1600x600px com até 250kb"
+        },{
+            "type": "checkbox",
+            "label": "Imagem fixa de fundo",
+            "id": "background_parallax"
+        }, {
+            "type": "range",
+            "id": "border_size",
+            "min": "0",
+            "max": "10",
+            "default": "1",
+            "label": "Espessura da borda de seção"
+        }, {
+            "type": "range",
+            "id": "margin_up",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de cima da seção"
+        }, {
+            "type": "range",
+            "id": "margin_dw",
+            "min": "0",
+            "max": "10",
+            "default": "10",
+            "label": "Margem de baixo da seção"
+        }
+    ],
+	"blocks": [
+        {
+            "type": "feature",
+            "name": "Característica",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Título do bloco",
+                    "info": "Caso não coloque um título será exibido o nome da característica cadastrada."
+                },
+                {
+                    "type": "feature-group",
+                    "max": "1",
+                    "id": "features",
+                    "label": "Características"
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

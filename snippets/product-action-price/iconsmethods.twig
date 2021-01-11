@@ -1,0 +1,64 @@
+<div class="row no-gutters algin-items-center justify-content-start pb-5">
+    {% if billet or creditcard %}
+        {% if billet %}
+            <div class="col-12 col-md-6 mb-4 mb-md-0">
+                <div class="d-flex align-items-center">
+                    <i class="product-price-icon position-relative d-block mr-4">
+                        {{ 'img/dc-icons/barcode.svg' | svg }}
+                    </i>
+
+                    <div class="product-price-billet">
+                        {% if discount > 0 %}
+                            <div class="product-price-discount mb-2">
+                                {{ discount | currency }}
+                            </div>
+                        {% endif %}
+
+                        <div class="product-price-final">
+                            <span class="total">{{ billet.total | currency }}</span>
+                            <span class="text">no boleto</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if creditcard %}
+            <div class="col-12 col-md-6">
+                <div class="d-flex align-items-center">
+                    <i class="product-price-icon position-relative d-block mr-4">
+                        {{ 'img/dc-icons/creditcard.svg' | svg }}
+                    </i>
+
+                    <div class="product-price-billet">
+                        <div class="product-price-final">
+                            <span class="total">{{ creditcard.total | currency }}</span>
+                            <span class="text">no cartão</span>
+                        </div>
+
+                        <div class="product-price-installments">
+                            <div class="text">
+                                <span class="until">em até</span>
+                                <span class="parcel">{{ creditcard.parcel | default(creditcard.parcels) }}x</span>
+                                <span class="parcel-price">de {{ creditcard.parcel_price | currency }}</span>
+                                {% if not creditcard.has_interest and creditcard.interest <= 0 %}
+                                    <span class="interest">sem juros</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    {% else %}
+        {% if discount > 0 %}
+            <div class="product-price-discount mr-4">
+                {{ discount | currency }}
+            </div>
+        {% endif %}
+
+        <div class="product-price-final">
+            <span class="total">{{ product.price | currency }}</span>
+        </div>
+    {% endif %}
+</div>

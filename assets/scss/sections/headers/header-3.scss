@@ -1,0 +1,88 @@
+.header-3 {
+    .navigation .departments:hover {
+        background: unset !important;
+    }
+
+    .nav-arrow {
+        width: 1.1rem;
+        height: 1.1rem;
+        
+        svg path {
+            stroke: currentColor;
+        }
+    }
+
+    .nav-cart{
+        .nav-icon{
+            // width: 3.5rem;
+            // height: 100%;
+            svg{
+                height: 3.5rem;
+            }
+        }
+    }
+    
+    .smart-search.modal-s {
+        // width: 2.6rem;
+        // height: 2.6rem;
+
+        .smart-button {
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            // width: auto;
+            // height: auto;
+
+            .icon {
+                // display: inline-block;
+                // width: 2.6rem;
+                // height: 2.6rem;
+            }
+        }
+    }
+
+    .nav-icon {
+        // width: 2.6rem;
+        // height: 2.6rem;
+        
+        svg {
+            height: 2.6rem;
+        }
+
+        .text {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-style: normal;
+        }
+    }
+
+    .nav-search {
+        position: unset;
+    }
+
+    @include media-breakpoint-up(md) {
+        .nav-search {
+            min-width: 60rem;
+            max-width: 90rem;
+        }
+    }
+
+    .smart-search.slide .smart-button {
+        padding: 1.25rem;
+    }
+
+    .header-mobile {
+        .nav-cart {
+            padding: 0 !important;
+
+            &>a {
+                min-width: 5.5rem;
+                min-height: 5.5rem;
+                justify-content: center;
+            }
+        }
+    }
+}

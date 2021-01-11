@@ -1,0 +1,97 @@
+{% set bg_color = background ?: '#F8F8F8' %}
+{% set color = color ?: '#808080' %}
+{% set img = icon ?: null %}
+
+{% set placeholder = [
+    'img/dc-placeholders/baby-bottle.svg',
+    'img/dc-placeholders/baby-carriage.svg',
+    'img/dc-placeholders/bag.svg',
+    'img/dc-placeholders/basket-ball.svg',
+    'img/dc-placeholders/basket-case.svg',
+    'img/dc-placeholders/bicycle.svg',
+    'img/dc-placeholders/book.svg',
+    'img/dc-placeholders/bottle.svg',
+    'img/dc-placeholders/cap.svg',
+    'img/dc-placeholders/chair.svg',
+    'img/dc-placeholders/couch.svg',
+    'img/dc-placeholders/dress.svg',
+    'img/dc-placeholders/eyeglass.svg',
+    'img/dc-placeholders/foam.svg',
+    'img/dc-placeholders/football-ballsvg',
+    'img/dc-placeholders/game.svg',
+    'img/dc-placeholders/guitar.svg',
+    'img/dc-placeholders/headphone.svg',
+    'img/dc-placeholders/helmet.svg',
+    'img/dc-placeholders/hummer.svg',
+    'img/dc-placeholders/image.svg',
+    'img/dc-placeholders/laptop.svg',
+    'img/dc-placeholders/lipstick.svg',
+    'img/dc-placeholders/liquefier.svg',
+    'img/dc-placeholders/man-shoes.svg',
+    'img/dc-placeholders/mirror.svg',
+    'img/dc-placeholders/monitor.svg',
+    'img/dc-placeholders/pan.svg',
+    'img/dc-placeholders/perfume.svg',
+    'img/dc-placeholders/racket.svg',
+    'img/dc-placeholders/screwdriver.svg',
+    'img/dc-placeholders/skate.svg',
+    'img/dc-placeholders/smartphone.svg',
+    'img/dc-placeholders/sound.svg',
+    'img/dc-placeholders/table-lamp.svg',
+    'img/dc-placeholders/tablet.svg',
+    'img/dc-placeholders/tshirt.svg',
+    'img/dc-placeholders/video.svg',
+    'img/dc-placeholders/washer.svg',
+    'img/dc-placeholders/woman-shoes.svg',
+] %}
+
+<div class="banner placeholder img-fluid p-4 w-100 position-relative {% if flex %} d-flex align-items-center justify-content-center {% endif %}" style="background-color: {{ bg_color }}; color: {{ color }};">
+    <div class="svg" style="opacity: 0.2">
+        {% if icon %}
+            {{ icon | svg }}
+        {% else %}
+            {{ random(placeholder) | svg }}
+        {% endif %}
+    </div>
+
+    {% if data.title or data.text %}
+            <a class="banner-link w-100 position-absolute d-flex align-items-center justify-content-center" {% if data.banner_url %} href="{{ data.banner_url }}" {% endif %}
+               {% if data.banner_blank %} target="_blank" {% endif %} aria-label="{{ data.title }}">
+                <div class="banner-mask" style="
+                    background-color: {{ data.mask_color }};
+                    {% if visible %} opacity: .6; {% endif %}
+                ">
+                </div>
+
+                <div class="banner-info p-4 text-center position-relative"
+                    style="{% if visible %} opacity: 1; {% endif %}
+                ">
+
+                    {% if data.title %}
+                        <h3 class="h3" style="
+                            color: {{ data.title_color }};
+                        ">
+                            {{ data.title | raw }}
+                        </h3>
+                    {% endif %}
+
+                    {% if data.text %}
+                        <p style="
+                            color: {{ data.text_color }};
+                        ">
+                            {{ data.text | raw }}
+                        </p>
+                    {% endif %}
+
+                    {% if data.button_text %}
+                        <span class="btn mt-3" style="
+                            background-color: {{ data.button_bg_color | default(theme.settings.color_primary) }};
+                            color: {{ data.button_text_color | default('#FFFFFF') }};
+                        ">
+                            {{ data.button_text }}
+                        </span>
+                    {% endif %}
+                </div>
+            </a>
+        {% endif %}
+</div>

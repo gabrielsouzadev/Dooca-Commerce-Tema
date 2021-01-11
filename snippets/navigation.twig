@@ -1,0 +1,114 @@
+{% set menu_main = navigation[theme.sections.header.settings.menu_main] %}
+{% set list = section.settings.menu_list ?: null %}
+{% set menu = menu_main.values %}
+
+{% if theme.sections.header.settings.menu_departments %}
+	{% set menu_departments = navigation[theme.sections.header.settings.menu_departments] %}
+	{% set departments_menu = {
+		'name': menu_departments.name,
+		'items': 'Menu',
+		'values': [{
+			'name': 'Menu',
+			'children': menu_departments.values
+		}]
+	} %}
+{% endif %}
+
+<nav class="navigation {% if menu|length > 4 %}rv-last-items{% endif %}">
+	<div class="row no-gutters {% if section.settings.type == 3 %}justify-content-end{% endif %}">
+		{% if theme.sections.header.settings.menu_departments %}
+
+			{% set column = null %}
+			{% set has_third_children = null %}
+            {% set items = departments_menu.values[0].children|length %}
+
+            {% if items >= 10 %}
+                {% set column = 'double-column' %}
+            {% endif %}
+
+			{% if items >= 20 %}
+                {% set column = 'triple-column' %}
+            {% endif %}
+
+			{# Check if has a third menu children #}
+			{% for item in departments_menu.values %}
+				{% for item in item.children %}
+					{% if item.children %}
+						{% set has_third_children = true %}
+					{% endif %}
+				{% endfor %}
+			{% endfor %}
+
+			<div class="{% if section.settings.type == 3 %}col-auto{% else %}col{% endif %} navigation-item {% if not has_third_children and not list %} {{ column }} {% elseif not list %} navigation-banner {% endif %}">
+				<a 
+					class="
+						{% if version %}h-mn-color{% endif %} 
+						departments navigation-link h-100 d-flex justify-content-center align-items-center p-4
+					" 
+					{% if item.menu_type_link %}href="{{ item.menu_type_link }}"{% endif %} 
+					aria-label="{{ item.name }}"
+					{% if shop.domain and shop.domain not in item.menu_type_link %}
+						target="_blank"
+					{% endif %}
+					{% if section.settings.menu_color_bg_dp %}
+					style="background-color: {{ section.settings.menu_color_bg_dp }};"
+					{% endif %}
+				>
+					<i class="navigation-icon mr-3" style="color: {{ section.settings.menu_color_dp }};"><i class="material-icons">menu</i></i>
+					<span class="d-flex justify-content-center align-items-center text-center px-4" style="color: {{ section.settings.menu_color_dp }};">{{ departments_menu.name }}</span>
+				</a>
+				{% for item in departments_menu.values %}
+					{% if has_third_children and not list %}
+						{% include "menu-dropdown-banner.twig" %}
+					{% else %}
+						{% include "menu-dropdown.twig" %}
+					{% endif %}
+				{% endfor %}
+			</div>
+		{% endif %}
+		{% for item in menu %}
+			{% if item.active %}
+
+			    {% set column = null %}
+                {% set items = item.children|length %}
+
+                {% if items >= 10 and not list %}
+                    {% set column = 'double-column' %}
+                {% endif %}
+
+				{% if items >= 20 and not list %}
+                    {% set column = 'triple-column' %}
+                {% endif %}
+
+				<div class="{% if section.settings.type == 3 %}col-auto{% else %}col{% endif %} navigation-item {{ column }} {% if item.banner.src %}navigation-banner{% endif %}">
+					<a 
+						class="
+							{% if section_menu %}h-mn-color{% endif %} 
+							navigation-link {{ item.slug }} h-100 d-flex justify-content-center align-items-center pt-4 pb-4
+						" 
+						{% if item.menu_type_link %}href="{{ item.menu_type_link }}"{% endif %} 
+						aria-label="{{ item.name }}"
+						{% if shop.domain and shop.domain not in item.menu_type_link %}
+							target="_blank"
+						{% endif %}
+					>
+						{% if item.image.src %}
+							<img loading="lazy" class="img-fluid navigation-image mx-3" src="{{ item.image.src | img_url }}" alt="{{ item.name }}">
+						{% endif %}
+						{% if not no_separator %}
+							<div class="navigation-separator" style="color: {{ color_border }};"></div>
+						{% endif %}
+						<span class="d-flex justify-content-center align-items-center text-center px-4">{{ item.name }}</span>
+					</a>
+					{% if item.children or item.banner.src %}
+						{% if item.banner.src %}
+							{% include "menu-dropdown-banner.twig" %}
+						{% else %}
+							{% include "menu-dropdown.twig" %}
+						{% endif %}
+					{% endif %}
+				</div>
+			{% endif %}
+		{% endfor %}
+	</div>
+</nav>

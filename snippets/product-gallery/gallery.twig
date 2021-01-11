@@ -1,0 +1,173 @@
+{% set main_image = product.image | img_url (img_featured) %}
+{% set thumbs = product.images ?: null %}
+{% set hash1 = random() %}
+{% set hash2 = random() %}
+
+<div class="row justify-content-center">
+    {% if thumbs %}
+        <div class="{% if center %}col-12 order-2{% else %}col-2{% endif %}">
+            <div class="thumbs {{ hash2 }} {% if not center %}pr-4{% else %}d-flex justify-content-center center{% endif %}" dc-scroll>
+                {% for thumb in thumbs %}
+                    {% set img_thumb = img_featured %}
+
+                    {% if crop_type != 'square' %}
+                        {% set img_thumb = '60x80+fill_ffffff' %}
+                    {% endif %}
+                    <div 
+                        class="thumb d-flex justify-content-center w-100 p-2 m-2 {% if loop.index is same as(1) %}is-active{% endif %}"
+                        data-featured="{{ thumb.src | img_url (img_featured) }}"
+                        data-zoom="{{ thumb.src | img_url (img_zoom) }}"
+                        data-legend="{{ thumb.src | img_url | get_filename }}"
+                    >
+                        <img class="img-fluid" src="{{ thumb.src | img_url (img_thumb) }}" alt="{{ thumb.src | img_url | get_filename }}" data-legend="{{ thumb.src | img_url | get_filename }}">
+                    </div>
+                {% endfor %}
+                {% if product.video %}
+                    {% set product_video = product.video | video_url %}
+                    <div
+                        class="thumb w-100 {% if center %} p-2 mb-3 d-flex align-items-center justify-content-center {% else %}m-2{% endif %}"
+                        data-featured 
+                        data-video-type="{{ product_video.type }}" 
+                        data-video="{{ product_video.id }}"
+                        data-legend="{{ product.name }}"
+                    >
+                        <img class="img-fluid" src="https://img.youtube.com/vi/{{ product_video.id }}/hqdefault.jpg" alt="{{ product.name }}" data-legend="{{ product.name }}">
+                    </div>
+                {% endif %}
+            </div>    
+        </div> 
+    {% endif %}
+
+    {% if main_image %}
+        <div class="{% if center %}col-12 order-1{% else %}col-10{% endif %}">
+            <figure class="product-gallery-main {{ hash1 }} w-100 text-center position-relative">
+                <img class="img-fluid" src="{{ main_image }}" alt="{{ product.image | img_url | get_filename }}">
+                {% include 'product-tags.twig' %}
+            </figure>
+            
+            {% app 'custom-badge' %}
+        </div>
+    {% endif %}
+</div>
+
+{% if product.video %}
+    {% set product_video = product.video | video_url %}
+    
+    <div class="video-modal desktop">
+        <div class="container">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-12">
+                    <div class="video-close">
+                        <i class="icon">{{ 'img/close.svg' | svg }}</i>
+                    </div>
+                </div>
+                
+                <div class="col-8">
+                    <div class="embed-responsive embed-responsive-16by9 {{ crop_type }}">
+                        <iframe allowfullscreen class="mt-5 embed-responsive-item" frameborder="0" src="https://www.youtube-nocookie.com/embed/{{ product_video.id }}?wmode=transparent&loop=1&rel=0&showinfo=0" allow="autoplay"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>     
+{% endif %}
+
+{% javascript %}
+    $(function() {
+        var image = $('.{{ hash1 }}');
+        var thumbs = $('.{{ hash2 }}');
+
+        $(window).on('load', function() {
+            thumbs.css('max-height', image.height() + 'px');
+        });
+
+        thumbs.gallery_p({
+            target_featured: '.{{ hash1 }}',
+            onChangeFeature: function(data) {
+                $('.{{ hash1 }}').zoom({
+                    url: data.src_zoom,
+                    magnify: {% if section.settings.product_main_image_zoom %}0{% else %}0.8{% endif %}
+                });
+            }
+        });
+
+        var min_height = function() {
+            var main = $('.{{ hash1 }}');
+            var img_height = main.find('.img-fluid').height();
+
+            main.css('min-height', img_height + 'px');
+        };
+
+        min_height();
+
+        $(window).resize(function() {
+            min_height();
+        });
+
+        var section = $('.product-gallery');
+        var modal = section.find('.video-modal.desktop').modal();
+        var close = $('.video-modal.desktop').find('.video-close');
+
+        $('body').delegate('.product-gallery-video', 'click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            modal.open();
+
+            setTimeout(function() {
+                var video = $('.video-modal.desktop');
+                var iframe = video.find('iframe');
+                var url = '';
+
+                url = new URL(iframe.attr('src'));
+                url.searchParams.set('autoplay', '1');
+
+                iframe.attr('src', url);
+                iframe.attr( 'src', function ( i, val ) { return val; });
+            }, 0);
+        });
+
+        var stopVideo = function() {
+            var video = $('.video-modal.desktop');
+            var iframe = video.find('iframe');
+            var url = '';
+
+            url = new URL(iframe.attr('src'));
+            url.searchParams.set('autoplay', '0');
+
+            iframe.attr('src', url);
+            iframe.attr( 'src', function ( i, val ) { return val; });
+        };
+
+        close.on('click', function() {
+            modal.close();
+            stopVideo();
+        });
+
+        $('.modal__container').on('click', function() {
+            modal.close();
+            stopVideo();
+        });
+        
+        $(document).keyup(function(e) {
+            if (e.key === "Escape") {
+                stopVideo();
+            }
+        });
+
+        // Alt img zoom
+        var imgZoom = $('.product-gallery-main .zoomImg');
+        var thumb = $('.thumbs .thumb');
+		var attr = imgZoom.attr('alt');
+        
+        setTimeout(function(){ 
+        	var alt = $('.thumbs .thumb.is-active img').attr('alt');
+            imgZoom.attr('alt', alt);
+        }, 1500);
+        
+        thumb.on('click', function() {
+            var alt = $(this).find('img').attr('alt');
+            imgZoom.attr('alt', alt);
+        });
+    });
+{% endjavascript %}

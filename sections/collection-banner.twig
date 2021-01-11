@@ -1,0 +1,79 @@
+{% set container = section.settings.container ?: 'container-fluid' %}
+{% set show_logo = section.settings.show_logo ?: null %}
+
+{% if paginate.total > 0 %}
+    <div class="{{ container }}">
+        <div class="row">
+            <div class="col-12 {% if container == 'container-fluid'%}p-0{% endif %}">
+                {% if collection.banner.src %}
+                    <div class="collection-banner" style="
+                        {% if collection.banner.src %}
+                            background-image: url({{ collection.banner.src | img_url }});
+                        {% endif %}
+                        background-position: center center;
+                        background-repeat: no-repeat;
+                        background-size: cover;
+                        overflow: hidden;
+                    ">
+                        <a href="{% if collection.banner_link %}{{ collection.banner_link }}{% else %}javascript:void(0){% endif %}" class="d-block w-100 m-0">
+                            <img loading="lazy" class="img-fluid " src="{{ collection.banner.src | img_url }}" alt="{{ collection.name }}">
+                        </a>
+                    </div>
+                {% endif %}
+                <div
+                    class="flex-column flex-lg-row d-flex align-items-center justify-content-center text-center p-5">
+                    {% if collection.name %}
+                        {% if collection.image.src and show_logo %}
+                            <div class="collection-logo mr-0 mr-md-5 mb-4 mb-md-0">
+                                <img loading="lazy" src="{{ collection.image.src | img_url('90x90+fill_ffffff') }}" alt="{{ collection.name }}" class="mw-100">
+                            </div>
+                        {% endif %}
+
+                        <h1 class="h1 m-0 mr-2">{{ collection.name }}</h1>
+                    {% elseif search %}
+                        <div class="search">
+                            <strong class="h1">
+                                Você buscou por:
+                                <span>“{{ search }}”</span>
+                            </strong>
+                        </div>
+                    {% else %}
+                        <h1 class="h1 m-0">Produtos</h1>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% schema %}
+    {
+        "name": "Topo da listagem",
+        "settings": [
+			{
+				"type": "select",
+				"id": "container",
+				"label": "Estilo do conteúdo",
+				"tooltip": "Você poderá definir o se o conteúdo da seção é centralizado ou adaptável a largura da tela.",
+				"default": "container-fluid",
+				"options": [
+                    {
+						"value": "container",
+						"label": "Centralizado"
+					},
+					{
+						"value": "container-fluid",
+						"label": "Adaptável a largura da tela"
+					}
+				]
+			},
+            {
+                "type": "checkbox",
+                "label": "Exibir imagem de categoria",
+                "id": "show_logo",
+                "default": 0,
+                "hide": true
+            }
+        ]
+    }
+{% endschema %}

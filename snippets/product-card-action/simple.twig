@@ -1,0 +1,9 @@
+{% if product.balance <= 0 and not product.selling_out_of_stock %}
+    {% set text = 'Avise-me' %}
+{% endif %}
+
+<div class="product-buy text-center col-12">
+    <button type="submit" class="btn product-buy-button w-100 {% if product.balance <= 0 and not product.selling_out_of_stock %} no-stock {% endif %}">
+        {{ text }}
+    </button>
+</div> 

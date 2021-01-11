@@ -1,0 +1,14 @@
+.nav-icon {
+    display: inherit;
+
+    img {
+        max-width: 3.5rem;
+        max-height: 3.5rem;
+    }
+}
+
+.nav-link {
+    font-family: $h1-ff;
+    font-weight: $h1-fw;
+    font-size: 1.3rem;
+}

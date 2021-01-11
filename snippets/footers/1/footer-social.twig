@@ -1,0 +1,39 @@
+<div class="footer-social">
+    <div class="row align-items-center justify-content-center">
+        {% if theme.settings.social_facebook_link %}
+            <div class="col-auto">
+                <a class="{% if section_highglight %}f-hl-color{% else %}f-sc-color{% endif %} text-center" rel="noreferrer" aria-label="facebook" target="_blank" href="{{ theme.settings.social_facebook_link }}">
+                    <i class="d-flex icon"><span class="icon-facebook"></span></i>
+                </a>
+            </div>
+        {% endif %}
+        {% if theme.settings.social_twitter_link %}
+            <div class="col-auto">
+                <a class="{% if section_highglight %}f-hl-color{% else %}f-sc-color{% endif %} text-center" rel="noreferrer" aria-label="twitter" target="_blank" href="{{ theme.settings.social_twitter_link }}">
+                    <i class="d-flex icon"><span class="icon-twitter"></span></i>
+                </a>
+            </div>
+        {% endif %}
+        {% if theme.settings.social_instagram_link %}
+            <div class="col-auto">
+                <a class="{% if section_highglight %}f-hl-color{% else %}f-sc-color{% endif %} text-center" rel="noreferrer" aria-label="instagram" target="_blank" href="{{ theme.settings.social_instagram_link }}">
+                    <i class="d-flex icon"><span class="icon-instagram"></span></i>
+                </a>
+            </div>
+        {% endif %}
+        {% if theme.settings.social_pinterest_link %}
+            <div class="col-auto">
+                <a class="{% if section_highglight %}f-hl-color{% else %}f-sc-color{% endif %} text-center" rel="noreferrer" aria-label="pinterest" target="_blank" href="{{ theme.settings.social_pinterest_link }}">
+                    <i class="d-flex icon"><span class="icon-pinterest"></span></i>
+                </a>
+            </div>
+        {% endif %}
+        {% if theme.settings.social_youtube_link %}
+            <div class="col-auto">
+                <a class="{% if section_highglight %}f-hl-color{% else %}f-sc-color{% endif %} text-center" rel="noreferrer" aria-label="youtube" target="_blank" href="{{ theme.settings.social_youtube_link }}">
+                    <i class="d-flex icon"><span class="icon-youtube"></span></i>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>

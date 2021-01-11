@@ -1,0 +1,28 @@
+{% set var_length = variations|length %}
+
+<div class="d-flex flex-wrap">
+    {% for variation in variations %}
+        {% set active = (variation.id == product_variation) ? 'active' : null %}
+        {% set disabled = (variation.balance <= 0 and product.selling_out_of_stock == 0) ? 'disabled' : null %}
+
+        {% if var_length == 1 %}
+            {% set active = 'active' %}
+        {% endif %}
+        
+        <div class="product-attribute-button product-attribute-action position-relative mt-2 mr-2 {{ active }} {{ disabled }}">
+            <label class="label d-flex align-items-center justify-content-center m-0 p-2">
+                <input 
+                    class="input position-absolute" 
+                    type="radio" 
+                    required 
+                    value="{{ variation.id }}" 
+                    name="variation_id" 
+                    {% if active %} checked {% endif %}
+                    data-variation-id="{{ variation.id }}"
+                    data-product-url="{{ product.url }}"
+                >
+                <span class="text">{{ variation.attribute.name }}</span>
+            </label>
+        </div>
+    {% endfor %}
+</div>

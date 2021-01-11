@@ -1,0 +1,45 @@
+{% set hotsite_align = 'down' %}
+
+{% if theme.sections['collection-hotsite'] %}
+    {% set collection_hosite = theme.sections['collection-hotsite'] %}
+    {% set hotsite_align = collection_hosite.settings.hotsite_align %}
+{% endif %}
+
+<div class="collection">
+    <div class="collection-banner">
+        {% section 'collection-banner' %}
+    </div>
+
+    {% if hotsite_align == 'top' %}
+        {{ content_for_hotsite | raw }}
+    {% endif %}
+    
+    {% section 'sidebar' %}
+
+    <div class="collection-content">
+        {% section 'collection-content' %}
+    </div>
+    
+    {% section 'collection-seo' %}
+</div>
+
+{% section 'collection-hotsite' %}
+
+{% if hotsite_align != 'top' %}
+    {{ content_for_hotsite | raw }}
+{% endif %}
+
+{% javascript %}
+    $(function(){
+        $('.sidebar-block__header').on('click', function() {
+            $(this).parent('.sidebar-block').toggleClass('is-hidden');
+            $(this).parent('.sidebar-block').find('.sidebar-block__content').slideToggle();
+        });
+    });
+{% endjavascript %}
+
+<div id="smarthint-position-1"></div>
+<div id="smarthint-position-2"></div>
+<div id="smarthint-position-3"></div>
+<div id="smarthint-position-4"></div>
+<div id="smarthint-position-5"></div>

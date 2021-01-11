@@ -1,0 +1,11 @@
+/**
+* Mobile hide
+*
+* Adds a display:none; when mobile or tablet
+*
+**/
+@mixin mobile-hide {
+    @include breakpoint('max-width: #{$bp-md}') {
+        display: none;
+    }
+}

@@ -1,0 +1,170 @@
+.footer {
+    a {
+        transition: opacity ease-in-out .15s;
+        opacity: 1;
+        cursor: pointer;
+
+        .icon,
+        svg {
+            opacity: 1;
+        }
+
+        &:hover {
+            opacity: .75;
+
+            .icon,
+            svg {
+                opacity: .75;
+            }
+        }
+    }
+
+    @include media-breakpoint-down(sm) {
+        .col,
+        .row {
+            text-align: center !important;
+        }
+
+        .row {
+            justify-content: center !important;
+            align-items: center !important;
+        }
+
+        .footer-navigation,
+        .footer-contact,
+        .footer-payment,
+        .footer-security {
+            margin-bottom: 6rem;
+        }
+    }
+
+    .footer-terms {
+        p,h1,h2,h3,h4,h5,h6 {
+            margin: 0;
+        }
+    }
+
+    .footer-contact {
+        .phone {
+            margin: 0;
+        }
+    }
+
+    .footer-top,
+    .footer-middle,
+    .footer-bottom,
+    .footer-logo {
+        .container,
+        .container-fluid {
+            padding: 0 5%;
+        }
+    }
+}
+
+/*
+ * Cores default do rodapé
+ */
+
+.footer {
+    .footer-contact {
+        .icon {
+            color: var(--color-highlight);
+        }
+    }
+
+    .footer-payment .row.no-gutters>.icon,
+    .footer-security .row:last-of-type .col-auto>.icon {
+        color: var(--color-text);
+    }
+
+    .footer-newsletter .footer-submit {
+        background-color: var(--color-secondary);
+    }
+
+    .footer-social a {
+        color: var(--color-secondary);
+    }
+
+    .footer-navigation .h2,
+    .footer-contact .h2,
+    .footer-newsletter .h2,
+    .footer-payment .h2,
+    .footer-security .h2,
+    .footer-certificate .h2 {
+        color: var(--color-primary);
+    }
+
+    &.version {
+        background-color: var(--color-primary);
+
+        .footer-navigation a,
+        .footer-contact a,
+        .footer-contact .text,
+        .footer-payment .row.no-gutters>.icon,
+        .footer-security .row:last-of-type .col-auto>.icon {
+            color: #fff;
+        }
+
+        .footer-navigation .h2,
+        .footer-contact .h2,
+        .footer-newsletter .h2,
+        .footer-payment .h2,
+        .footer-security .h2,
+        .footer-certificate .h2 {
+            color: var(--color-secondary);
+        }
+    }
+
+    &.footer-2 {
+        .newsletter-icon {
+            color: var(--color-secondary);
+        }
+
+        &.version {
+            .newsletter-icon {
+                color: #fff;
+            }
+
+            .footer-input {
+                border: 0 !important;
+            }
+        }
+    }
+
+    &.footer-3 {
+        // .footer-bottom {
+        //     background: var(--color-primary);
+        // }
+
+        &.version {
+            .footer-bottom {
+                // background: var(--color-secondary);
+
+                .footer-social a {
+                    color: #ffffff;
+                }
+            }
+        }
+    }
+
+    &.footer-4 {
+        .newsletter-icon {
+            color: var(--color-secondary);
+        }
+
+        .footer-submit {
+            background: var(--color-secondary);
+            position: unset;
+        }
+
+        &.version {
+            .newsletter-icon {
+                color: #fff;
+            }
+
+            .footer-submit {
+                background: var(--color-secondary);
+            }
+        }
+    }
+}

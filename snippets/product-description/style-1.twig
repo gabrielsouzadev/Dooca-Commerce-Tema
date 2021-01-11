@@ -1,0 +1,100 @@
+
+    <div class="product-description-navigation row justify-content-center">
+        {% if product.description and not is_ajax %}
+            <div class="col text-center p-3" data-link="0">
+                <h3 class="h2 m-0">Descrição do produto</h3>
+            </div>
+        {% endif %}
+
+        {% if product.features and not is_ajax %}
+            <div class="col text-center p-3" data-link="1">
+                <h3 class="h2 m-0">Características</h3>
+            </div>
+        {% endif %}
+    </div>
+    <div class="product-description-item row mt-3 mt-md-5">
+        <div class="{% if not is_ajax %}d-none{% endif %} w-100">
+            <div class="cms p-3 p-sm-0">
+                {{ product.description | richtext | raw }}
+            </div>
+        </div>
+
+        <div class="{% if product.features and not is_ajax and product.description %}d-none{% endif %} w-100 no-gutters justify-content-center product-description-features px-3">
+            {% set features = product.features %}
+            {% for feature in features %}
+                {% if feature.values %}
+                    <div class="col-12 pt-4 pb-4">
+                        <div class="d-flex align-items-center justify-content-start">
+                            <h3 class="h3 mb-0 mr-4"><b>{{ feature.name }}</b></h3>
+                            <h4 class="text m-0">
+                                {% set values = feature.values %}
+                                {% for value in values %}
+                                    {{ value.name }} {% if not loop.last %} / {% endif %}
+                                {% endfor %}
+                            </h4>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+{% javascript %}
+    $(function() {
+        var nav_item = $('.product-description-navigation>.col');
+        var tab_item = $('.product-description-item>.d-none');
+
+        $(nav_item).eq(0).addClass('active');
+        $(tab_item).eq(0).addClass('active');
+
+        $(nav_item).on('click', function() {
+            var item = $(this).attr('data-link');
+
+            $(nav_item).removeClass('active');
+            $(this).addClass('active');
+            $(tab_item).removeClass('active');
+            $(tab_item).eq(item).addClass('active');
+        });
+
+        {% if product.components %}
+            var kit = $('.product-card-kit');
+            var has_opened = [];
+
+            var addGallery = function(id) {
+                var target = $(id);
+                var gallery = target.find('.product-kit-gallery');
+
+                if (!gallery.hasClass('owl-carousel')) {
+                    gallery.addClass('owl-carousel owl-theme');
+
+                    var owl = gallery.owlCarousel({
+                        autoHeight: true,
+                        margin: 0,
+                        nav: false,
+                        dots: true,
+                        items: 1
+                    });
+                }
+            };
+
+            kit.off('click').on('click', function() {
+                var item = $(this).data('modal');
+                var target = $('#' + item);
+
+                if (!has_opened.includes(item)) {
+                    has_opened.push(item);
+
+                    var modal = target.modal({ class: item });
+                    modal.open();
+
+                    addGallery('#' + item);
+                } else {
+                    $('.' + item).fadeIn();
+                    $('body').addClass('modal-open');
+                    $('body').css('overflow', 'hidden');
+                }
+            });
+
+        {% endif %}
+    });
+{% endjavascript %}

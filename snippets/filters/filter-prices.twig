@@ -1,0 +1,39 @@
+{% if not shop.catalog %}
+    {% if sidebar.filters.prices %}
+        <div class="sidebar-block sidebar-block--price">
+            <div class="sidebar-block__header">
+                <span class="close"></span>
+                <h2 class="h2 m-0">Faixa de preço</h2>
+            </div>
+            <div class="sidebar-block__content" dc-scroll>
+                <form class="d-flex flex-wrap align-items-center justify-content-between overflow-hidden">
+                    <div class="row">
+                        <div class="col-6">
+                            <label class="label m-0">De</label>
+                            <input data-mask="###.##0,00" data-mask-reverse="true" class="input w-100 pl-3 input_min" type="text" name="price_min" value="{{ sidebar.filters.prices.min | currency ('') }}">
+                        </div>
+                        <div class="col-6">
+                            <label class="label m-0">Até</label>
+                            <input data-mask="###.##0,00" data-mask-reverse="true" class="input w-100 pl-3 input_max" type="text" name="price_max" value="{{ sidebar.filters.prices.max | currency ('') }}">
+                        </div>
+                    </div>
+                    <div class="row w-100 no-gutters">
+                        <div class="col-12">
+                            <label class="form-checkbox w-100 mb-0 mt-3 d-flex align-items-center justify-content-start position-relative">
+                                <input type="checkbox" name="promotion" value="1" {% if _get.promotion %} checked {% endif %}>
+                                <span class="checkbox d-flex">
+                                    <i class="icon">{{ 'img/dc-icons/check-bold.svg' | svg }}</i>
+                                </span>
+                                <span class="label">Somente promoções</span>
+                            </label>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <button type="submit" class="btn w-100">Filtrar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {{ 'js/lib/jquery.mask.min.js' | dc_assets_url | script_append }}
+    {% endif %}
+{% endif %}

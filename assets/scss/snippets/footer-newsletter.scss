@@ -1,0 +1,66 @@
+.footer-newsletter {
+    .footer-input {
+        height: 4rem;
+        padding: 0 2rem;
+        max-width: 30rem;
+        min-width: 26rem;
+        color: currentColor;
+    }
+
+    .footer-submit {
+        position: absolute;
+        bottom: 0;
+        right: .7rem;
+        width: 5rem;
+        height: 4rem;
+        border-radius: 0;
+        padding: 0;
+    }
+
+    .footer-loader {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.75);
+        z-index: 50;
+        display: none;
+        
+        .loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            @include loader();
+        }
+    }
+
+    .footer-success {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: none;
+        background: $color-success;
+
+        .text {
+            color: $text-color-secondary;
+        }
+    }
+
+    .footer-errors {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: none;
+        background: $color-error;
+
+        .text {
+            color: $text-color-secondary;
+        }
+    }
+}

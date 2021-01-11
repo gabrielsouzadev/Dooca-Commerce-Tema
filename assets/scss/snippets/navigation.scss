@@ -1,0 +1,186 @@
+.navigation {
+
+    .col:hover,
+    .col-auto:hover {
+        z-index: 50;
+
+        .menu-dropdown {
+            display: block;
+        }
+    }
+
+    @include media-breakpoint-up(sm) {
+        .col:nth-last-of-type(-n+2),
+        .col-auto:nth-last-of-type(-n+2) {
+            .menu-dropdown__item .link {
+                .text {
+                    order: 2;
+                }
+
+                .icon {
+                    order: 1;
+                    transform: rotate(180deg);
+                }
+            }
+
+            &:hover {
+                .menu-dropdown {
+                    .submenu {
+                        left: unset;
+                        right: 100%;
+                    }
+                }
+            }
+        }
+    }
+
+    &.rv-last-items {
+        .navigation-item:nth-last-of-type(-n+2) {
+            .menu-dropdown {
+                left: unset !important;
+                right: 0;
+
+                .menu-dropdown-item {
+                    &.has-dropdown {
+                        .icon {
+                            transform: rotate(180deg);
+                            margin-right: .5rem;
+                        }
+                    }
+
+                    .menu-dropdown-link {
+                        flex-direction: row-reverse;
+                        justify-content: flex-end !important;
+
+                        &.has-image {
+                            flex-direction: row;
+                            justify-content: flex-start !important;
+
+                            .menu-dropdown-image-block {
+                                background: transparent;
+
+                                .menu-dropdown-image {
+                                    width: 100%;
+                                    max-width: 3rem;
+                                }
+                            }
+                        }
+                    }
+
+                    .menu-dropdown-sub {
+                        left: unset;
+                        right: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.navigation-separator {
+    content: '';
+    width: .1rem;
+    height: 2.4rem;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    background: currentColor;
+}
+
+.navigation-icon {
+    svg{
+        width: 1.8rem;
+        max-height: 1.8rem;
+        min-width: 1.8rem;
+    }
+}
+
+.navigation-link {
+    font-family: $mn-ff;
+    font-weight: $mn-fw;
+    font-size: $mn-cs;
+    letter-spacing: $mn-cl;
+    text-transform: $mn-tt;
+    color: var(--color-primary);
+    font-style: $mn-st;
+    line-height: 1;
+    position: relative;
+    
+    @media only screen and (min-width: 756px) and (max-width: 1026px) {
+        flex-direction: column;
+
+        .navigation-image {
+            margin-bottom: 1rem;
+        }
+    }
+}
+
+
+.navigation-image {
+    max-width: 4rem;
+
+    .menu-dropdown-container & {
+        padding: 0 !important;
+    }
+}
+
+.header {
+    .navigation-banner {
+        position: unset;
+    }
+}
+
+.header .navigation-item.double-column,
+.header .navigation-item.triple-column {
+    .menu-dropdown-item {
+        display: inline-block;
+        -webkit-column-break-inside: avoid;
+        page-break-inside: avoid;
+        break-inside: avoid-column;
+    }
+
+    .menu-dropdown-container>.row {
+        display: block;
+    }
+}
+
+.header .navigation-item.double-column {
+    .menu-dropdown {
+        min-width: 48rem;
+    }
+
+    .menu-dropdown-container>.row {
+        columns: 2;
+    }
+}
+
+.header .navigation-item.triple-column {
+    .menu-dropdown {
+        min-width: 53rem;
+    }
+
+    .menu-dropdown-container>.row {
+        columns: 3;
+    }
+}
+
+.header .navigation .navigation-item:nth-last-of-type(-n+3) {
+    &.double-column,
+    &.triple-column {
+        .menu-dropdown {
+            left: unset;
+            right: 0;
+        }
+    }
+}
+
+.header .navigation .navigation-item {
+    &.double-column,
+    &.triple-column {
+        .menu-dropdown-sub,
+        .menu-dropdown-item.has-dropdown .icon {
+            display: none !important;
+        }
+    }
+}

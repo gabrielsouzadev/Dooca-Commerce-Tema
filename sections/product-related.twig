@@ -1,0 +1,132 @@
+{% set show_section = true %}
+{% set hide_mobile = section.settings.hide_mobile ?: null %}
+{% set hide_desktop = section.settings.hide_desktop ?: null %}
+
+{% if hide_mobile and hide_desktop %}
+    {% set s = 'd-none' %}
+{% elseif hide_mobile %}
+    {% set s = 'd-none d-lg-block' %}
+{% elseif hide_desktop %}
+    {% set s = 'd-block d-lg-none' %}
+{% endif %}
+
+{% if products_related %}
+    {% if show_section %}
+        <div class="{{ s }}">
+            {% include 'section-header.twig' with { 'name': 'products-related' }  %}
+                <div class="row mt-5 mb-5 justify-content-center">
+                    {% for product in products_related %}
+                        <div class="col-6 col-md-3">
+                            {% set params = { 'cards': products_related } %}
+                            {% include 'product-card.twig' with params %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% include 'section-footer.twig' %}
+        </div>
+    {% endif %}
+{% endif %}
+
+{% schema %}
+    {
+        "name": "Produtos relacionados",
+        "settings": [
+            {
+                "type": "text",
+                "label": "Título",
+                "id": "title",
+                "default": "Veja também"
+            }, {
+                "type": "text",
+                "label": "Subtítulo",
+                "id": "subtitle"
+            },
+            {
+                "type": "select",
+                "id": "container",
+                "label": "Estilo do conteúdo",
+                "default": "container",
+                "options": [
+                    {
+                        "value": "container",
+                        "label": "Centralizado"
+                    },
+                    {
+                        "value": "container-fluid",
+                        "label": "Adaptável a largura da tela"
+                    }
+                ]
+            },{
+                "type": "text",
+                "id": "custom_class",
+                "label": "Classe customizada para editar o css"
+            },{
+                "type": "checkbox",
+                "label": "Não exibir em dispositivos móveis",
+                "id": "hide_mobile",
+                "default": 0
+            },{
+                "type": "header",
+                "content": "Aparência"
+            },{
+                "type": "color_picker",
+                "id": "title_color",
+                "label": "Cor do título"
+            },
+            {
+                "type": "color_picker",
+                "id": "subtitle_color",
+                "label": "Cor do subtítulo"
+            },
+            {
+                "type": "color_picker",
+                "id": "background_color",
+                "label": "Cor de fundo da seção"
+            },
+            {
+                "type": "color_picker",
+                "id": "post_background_color",
+                "label": "Cor de fundo do post"
+            },
+            {
+                "type": "color_picker",
+                "id": "border_color",
+                "label": "Cor da borda de seção"
+            },
+            {
+                "type": "image_picker",
+                "id": "background_image",
+                "label": "Imagem de fundo da seção",
+                "info": "Recomendado: 1600x600px com até 250kb"
+            },{
+                "type": "checkbox",
+                "label": "Imagem fixa de fundo",
+                "id": "background_parallax"
+            },
+            {
+                "type": "range",
+                "id": "border_size",
+                "min": "0",
+                "max": "10",
+                "default": "1",
+                "label": "Espessura da borda de seção"
+            },
+            {
+                "type": "range",
+                "id": "margin_up",
+                "min": "0",
+                "max": "10",
+                "default": "10",
+                "label": "Margem de cima da seção"
+            },
+            {
+                "type": "range",
+                "id": "margin_dw",
+                "min": "0",
+                "max": "10",
+                "default": "10",
+                "label": "Margem de baixo da seção"
+            }
+        ]
+    }
+{% endschema %}

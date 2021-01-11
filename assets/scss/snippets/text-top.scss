@@ -1,0 +1,12 @@
+.text-top a {
+    text-decoration: underline;
+}
+
+.text-top a:hover {
+    color: currentColor;
+    opacity: .75;
+}
+
+.text-top p, h1, h2, h3, a {
+    margin: 0;
+}

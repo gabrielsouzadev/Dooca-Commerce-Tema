@@ -1,0 +1,103 @@
+{% set cart_custom_img = (version) ? section.settings.cart_custom_light : section.settings.cart_custom %}
+
+<div class="nav-cart cart-style-1">
+    {% ajax 'nav-cart' %}
+		<div class="position-relative pt-3 pb-3">
+			<a href="{{ 'cart' | url }}" class="d-flex align-items-center" aria-label="Carrinho">
+				{% if cart_custom_img %}
+					<i class="nav-icon nav-custom">
+						<img loading="lazy" class="img-fluid" src="{{ cart_custom_img | img_url }}" alt="Carrinho">
+					</i>
+				{% else %}
+					<i class="nav-icon {% if section_secondary %}h-sc-color{% endif %}">
+						<i class="material-icons md-36">shopping_cart</i>
+					</i>
+				{% endif %}
+				<div class="ml-2 d-flex align-items-center justify-content-center flex-column">
+					<div class="nav-badge text-center d-flex align-items-center justify-content-center {% if section_highlight %}h-hl-background h-pr-color{% else %}h-sc-background{% endif %}">
+						<span class="text">{{ cart.quantity | default(0) }}</span>
+					</div>
+				</div>
+			</a>
+			<div class="nav-cart-dropdown" style="border: solid .1rem {{ color_border }};">
+				{% if cart.quantity > 0 %}
+					<div class="container">
+						<div class="row justify-content-center">
+							<div class="col-12 p-3 text-center">
+								<span class="text">Últimos produtos adicionados</span>
+							</div>
+							<div class="col-12" style="border: solid .1rem {{ color_border | default(theme.settings.color_border) }};  border-width: .1rem 0;">
+								{% for item in cart.items | slice(0, 2) %}
+									<a href="{{ 'product' | url (item) }}" class="col-12 d-flex align-items-center justify-content-start pt-3 pb-3">
+										<div class="nav-cart-thumb text-center mr-3">
+											<img loading="lazy" class="img-fluid" src="{{ item.image | img_url ('50x50') }}" alt="{{ item.name }}">
+										</div>
+										<div>
+											<span class="w-100 text">
+												{{ item.name }}
+											</span>
+
+											{% if item.customize %}
+												<div class="customized">
+													<ul class="customized-list">
+														{% for customize in item.customize.content %}
+															<li class="customized-item">
+																<b class="text">{{ customize.field }}:</b>
+																<span class="text">
+																	{{ customize.value }}
+																	{% if customize.price > 0 %}
+																		- <b>{{ customize.price | currency }}</b>
+																	{% endif %}
+																</span>
+															</li>
+														{% endfor %}
+													</ul>
+												</div>
+											{% endif %}
+
+											<div class="price d-flex align-items-center mt-2">
+												{% if shop.customer_register_for == 'view_prices' and not customer %}
+													<div class="view-price-cart">
+														<span class="view-price-link" onclick="event.stopPropagation(); event.preventDefault(); location.href=\'/login\';">Entre</span> ou <span class="view-price-link" onclick="location.href=\'/cadastro\';">cadastre-se</span> para visualizar o preço
+													</div>
+												{% else %}
+													{% if item.total > 0.00 %}
+														{% if item.compare %}
+															<span class="compare">{{ item.compare | currency }}</span>
+														{% endif %}
+														<span class="price-final">{{ item.price | currency }}</span>
+													{% else %}
+														<span class="price-final">Brinde</span>
+													{% endif %}
+												{% endif %}
+											</div>
+										</div>
+									</a>
+								{% endfor %}
+							</div>
+							<div class="col-12 p-3">
+								<a href="{{ 'cart' | url }}" class="btn w-100">
+									ir para o carrinho
+								</a>
+							</div>
+						</div>
+					</div>
+				{% else %}
+					<div class="d-flex align-items-center justify-content-center flex-wrap p-5">
+						{% if section.settings.cart_custom %}
+							<i class="icon mr-3">
+								<img loading="lazy" class="img-fluid" src="{{ section.settings.cart_custom | img_url }}" alt="Carrinho">
+							</i>
+						{% else %}
+							<i class="icon mr-3">
+								<i class="material-icons md-36">shopping_cart</i>
+							</i>
+						{% endif %}
+						<h2 class="h2 m-0 title">Ops!</h3>
+						<p class="text w-100 mt-3 mb-0 text-center">Seu carrinho de compras está vazio!</p>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+    {% endajax %}
+</div>

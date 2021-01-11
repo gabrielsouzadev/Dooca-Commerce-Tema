@@ -1,0 +1,19 @@
+{% if section.settings.menu_top or section.blocks %}
+    <div class="header-top position-relative ">
+        <div class="header-bg h-pr-background" style="opacity: {{ opacity_css }};"></div>
+        <div class="{{ container }}">
+            <div class="row no-gutters align-items-center {% if container == 'container-fluid' %}pl-3 pr-3{% endif %}">
+                <div class="col">
+                    {% include 'nav-contact.twig' %}
+                </div>
+
+                <div class="col-md-auto">
+                    {% include 'nav-top.twig' %}
+                </div>
+                <div class="col-md-auto">
+                    {% include 'nav-social.twig' %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,42 @@
+.product-card-kit {
+    transition: all ease .25s;
+    border-bottom: solid .1rem $border-color;
+
+    &:hover {
+        cursor: pointer;
+        color: $color-secondary;
+    }
+
+    .h2 {
+        color: $color-primary;
+        letter-spacing: 0;
+    }
+}
+
+.product-kit-quantity {
+    min-width: 3rem;
+    min-height: 3rem;
+    border-radius: 100%;
+    background: $color-secondary;
+    color: $text-color-secondary;
+
+    .quantity {
+        line-height: 1;
+    }
+}
+
+.product-kit-link {
+    color: currentColor;
+
+    &:hover {
+        color: $color-secondary;
+    }
+}
+
+.product-kit-modal {
+    display: none;
+
+    .modal & {
+        display: block;
+    }
+}
