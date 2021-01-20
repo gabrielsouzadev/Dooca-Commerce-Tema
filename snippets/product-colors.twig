@@ -93,8 +93,8 @@
                     selected = 'selected';
                 }
 
-                if (typeof data[i].image != null) {
-                    src = data[i].image.src;
+                if (data[i].image !== null) {
+                    src = data[i].image.src || '';
                 }
 
                 option += "<option data-src='"+ src +"' data-color='"+ hexadecimal +"' data-url='"+ url +"' value='"+ slug +"'" + selected + ">"+ name +"</option>";

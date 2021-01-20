@@ -1,0 +1,197 @@
+.selectric-wrapper {
+  position: relative;
+  cursor: pointer;
+}
+
+.selectric-responsive {
+  width: 100%;
+}
+
+.selectric {
+  border: 1px solid #e1e1e1;
+  border-radius: 0px;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.selectric .label {
+  color: #777;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0 52px 0 10px;
+  line-height: 52px;
+  height: 52px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.selectric .button {
+  display: block;
+  position: absolute;
+  font-size: 0;
+  right: 0;
+  top: 0;
+  width: 52px;
+  height: 52px;
+  line-height: 52px;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='6 8.295000076293945 12 7.409999847412109' height='7.41px' width='12px'%3E%3Cpath d='m16.59 8.295-4.59 4.58-4.59-4.58-1.41 1.41 6 6 6-6-1.41-1.41z' fill='%23000'%3E%3C/path%3E%3C/svg%3E") no-repeat center;
+}
+
+.selectric-open {
+  z-index: 20;
+}
+
+.selectric-open .selectric .button{
+  transform: rotate(180deg);
+}
+
+.selectric-open .selectric-items {
+  display: block;
+}
+
+.selectric-disabled {
+  filter: alpha(opacity=50);
+  opacity: 0.5;
+  cursor: default;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.selectric-hide-select {
+  position: relative;
+  overflow: hidden;
+  width: 0;
+  height: 0;
+}
+
+.selectric-hide-select select {
+  position: absolute;
+  left: -100%;
+}
+
+.selectric-hide-select.selectric-is-native {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+
+.selectric-hide-select.selectric-is-native select {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  border: none;
+  z-index: 1;
+  box-sizing: border-box;
+  opacity: 0;
+}
+
+.selectric-input {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 1px !important;
+  height: 1px !important;
+  outline: none !important;
+  border: none !important;
+  *font: 0/0 a !important;
+  background: none !important;
+}
+
+.selectric-temp-show {
+  position: absolute !important;
+  visibility: hidden !important;
+  display: block !important;
+}
+
+/* Items box */
+.selectric-items {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #fff;
+  border: 1px solid #e1e1e1;
+  z-index: -1;
+  margin: -1px 0;
+  max-height: 162px;
+}
+
+.selectric-items .selectric-scroll {
+  height: 100%;
+  overflow: auto;
+  max-height: 162px;
+}
+
+.selectric-above .selectric-items {
+  top: auto;
+  bottom: 100%;
+}
+
+.selectric-items ul, .selectric-items li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  line-height: 20px;
+  min-height: 20px;
+}
+
+.selectric-items li.selected {
+  display: none;
+}
+
+.selectric-items li {
+  color: #777;
+  display: block;
+  padding: 9px;
+  cursor: pointer;
+  transition: background-color .35s;
+}
+.selectric-items li:hover{
+  background-color: #f2f2f2;
+}
+.selectric-items .disabled {
+  filter: alpha(opacity=50);
+  opacity: 0.5;
+  cursor: default !important;
+  background: none !important;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.selectric-items .selectric-group .selectric-group-label {
+  font-weight: bold;
+  padding-left: 10px;
+  cursor: default;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  background: none;
+  color: #444;
+}
+
+.selectric-items .selectric-group.disabled li {
+  filter: alpha(opacity=100);
+  opacity: 1;
+}
+
+.selectric-items .selectric-group li {
+  padding-left: 25px;
+}

@@ -10,7 +10,7 @@
                 <div class="col-auto">
                     {% if color %}
                         <div class="icon">
-                            <img src="{{ ('img/dc-security/ssl-color.svg') | assets_url | img_url }}" style="max-width: 81px;"/>
+                            <img alt="SSL" src="{{ ('img/dc-security/ssl-color.svg') | assets_url | img_url }}" style="max-width: 81px;"/>
                         </div>
                     {% else %}
                         <div class="icon {% if section_secondary %} f-sc-color {% else %} f-hl-color {% endif %}">
@@ -23,7 +23,7 @@
                 <div class="col-auto d-flex align-items-center">
                     {% if color %}
                         <div class="icon">
-                            <img src="{{ ('img/dc-security/googlesafe-color.svg') | assets_url | img_url }}" style="max-width: 80px;" />
+                            <img alt="Google Safe" src="{{ ('img/dc-security/googlesafe-color.svg') | assets_url | img_url }}" style="max-width: 80px;" />
                         </div>
                     {% else %}
                         <div class="icon {% if section_secondary %} f-sc-color {% else %} f-hl-color {% endif %}">

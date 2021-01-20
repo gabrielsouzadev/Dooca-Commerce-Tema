@@ -332,13 +332,13 @@
 			]
 		},
 		{
-			"name": "Formato de imagem",
+			"name": "Formato de imagem de produto",
 			"fixed": 1,
 			"settings": [
 				{
 					"type": "select",
 					"id": "product_image_crop",
-					"label": "Formato da imagem do produto",
+					"label": "Formato de imagem de produto personalizado",
 					"default": "square",
 					"options": [
 						{
@@ -354,14 +354,14 @@
 				{
 					"type": "text",
 					"id": "product_card_custom_crop",
-					"label": "Tamanho de imagem personalizado de produto",
+					"label": "Tamanho da imagem na listagem de produto",
 					"info": "Exemplo: 495x495 ou 450x600"
 				},
 				{
 					"type": "text",
 					"id": "product_info_custom_crop",
-					"label": "Tamanho de imagem personalizado da interna de produto",
-					"info": "Exemplo: 620x620 ou 600x800"
+					"label": "Tamanho da imagem no detalhe de produto",
+					"info": "Exemplo: 620x620 ou 600x800. <br /> <br /> <div style=\"text-transform: none;\"> Não é necessário preencher os campos acima para sua loja funcionar corretamente. Utilize esse recurso apenas se desejar personalizar o formato das suas imagens de produto. Caso o formato aplicado reduza a qualidade da exibição das suas imagens, remova a configuração inserida.</div>"
 				}
 			]
 		},

@@ -78,6 +78,7 @@
     {% endif %}
 {% endif %}
 
+{% if template == "product" %}
 <script type="text/javascript">
     var waitForJQuery = setInterval(function () {
         if (typeof $ != 'undefined') {
@@ -315,3 +316,4 @@
         }
     }, 10);
 </script>
+{% endif %}

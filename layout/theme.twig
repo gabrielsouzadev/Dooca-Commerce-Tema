@@ -34,7 +34,7 @@
 			<meta name="googlebot" content="noindex">
 		{% endif %}
 
-		<meta name="theme_version" content="1.0.8">
+		<meta name="theme_version" content="1.0.10">
 
 		{% if theme.settings.favicon %}
 			<link rel="icon" href="{{ theme.settings.favicon | img_url ('96x96') }}">
@@ -45,19 +45,36 @@
 				{% include 'fonts/fonts.twig' %}
 			{# end custom fonts #}
 
-			{% set fileTime = _getSettingsModifiedTime() %}
+			{# {% set fileTime = _getSettingsModifiedTime() %}
 			
 			{% if _get.preview %}
-				{% set fileTime = date().timestamp %}
+				{% set fileTime = date().timestamp  ~ '999' %}
 			{% endif %}
 
 			{% set cssUrl = 'theme.css.compile?v=' ~ fileTime %}
 			{{ cssUrl | assets_url | stylesheet_tag }}
 
-			<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 			<link href="{{ 'doocaflags.css.compile' | assets_url }}" rel="stylesheet">
-			<link href="{{ 'doocasocials.css.compile' | assets_url }}" rel="stylesheet">
+			<link href="{{ 'doocasocials.css.compile' | assets_url }}" rel="stylesheet"> #}
 			
+			<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+			{# COMPILED CSS FILES #}
+				<style>
+					{# LIBS #}
+					{% include "compiled/owl.carousel.min.css.twig" %}
+					{% include "compiled/owl.theme.default.css.twig" %}
+					{% include "compiled/selectric.css.twig" %}
+
+					{# THEME #}
+					{% include "compiled/theme.css.twig" %}
+					
+					{# FONTS #}
+					{% include "compiled/doocaflags.css.twig" %}
+					{% include "compiled/doocasocials.css.twig" %}
+				</style>
+			{# COMPILED CSS FILES #}
+
 			{% if theme.settings.custom_style_css %}
 				<style>{{ theme.settings.custom_style_css | raw }}</style>
 			{% endif %}
@@ -203,12 +220,24 @@
 			{{ 'js/dc-common.js' | dc_assets_url | script_tag }}
 
 			{% if theme.settings.modal_image and theme.settings.modal_time >= 0 %}
-				{% include "modal.twig" %}`
+				{% include "modal.twig" %}
 			{% endif %}
 
 			{% if not theme.settings.lgpd_disable %}
 				{% include "lgpd.twig" %}
 			{% endif %}
+
+			{% javascript %}
+				$(function() {
+					$('body').delegate('.personalize-product__title', 'click', function(e) {
+						var icon = $(e.target);
+						var content = $('.personalize-product__content');
+
+						icon.toggleClass('opened');
+						content.slideToggle();
+					});
+				});
+			{% endjavascript %}
 		{% endif %}
 	</body>
 </html>

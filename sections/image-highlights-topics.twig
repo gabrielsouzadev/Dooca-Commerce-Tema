@@ -11,69 +11,71 @@
 {% endif %}
 
 {% if show_section %}
-    {% include 'section-header.twig' with { 'name': 'image-highlights-topics' } %}
+    <div class="{{ s }}">
+        {% include 'section-header.twig' with { 'name': 'image-highlights-topics' } %}
 
-        {% set blocks = section.blocks | length %}
-        {% set main_image = section.settings.main_image ?: null %}
+            {% set blocks = section.blocks | length %}
+            {% set main_image = section.settings.main_image ?: null %}
 
-        {% if blocks <= 1 %}
-            {% if not section.blocks[0].settings.title and not section.blocks[0].settings.text %}
-                {% set blocks = 4 %}
-                {% set section = {
-                    blocks: [
-                        {
-                            settings: {
-                                title: "MATERIAL",
-                                text: "Produzido no Brasil",
-                                button_text: "Veja mais"
-                            }
-                        },
-                        {
-                            settings: {
-                                title: "APARÊNCIA",
-                                text: "Design internacional",
-                                button_text: "Veja mais"
-                            }
-                        },
-                        {
-                            settings: {
-                                title: "QUALIDADE",
-                                text: "Produto certificado",
-                                button_text: "Veja mais"
-                            }
-                        },
-                        {
-                            settings: {
-                                title: "FUNCIONALIDADE",
-                                text: "Fácil de usar",
-                                button_text: "Veja mais"
-                            }
-                        },
-                    ]
-                } %}
+            {% if blocks <= 1 %}
+                {% if not section.blocks[0].settings.title and not section.blocks[0].settings.text %}
+                    {% set blocks = 4 %}
+                    {% set section = {
+                        blocks: [
+                            {
+                                settings: {
+                                    title: "MATERIAL",
+                                    text: "Produzido no Brasil",
+                                    button_text: "Veja mais"
+                                }
+                            },
+                            {
+                                settings: {
+                                    title: "APARÊNCIA",
+                                    text: "Design internacional",
+                                    button_text: "Veja mais"
+                                }
+                            },
+                            {
+                                settings: {
+                                    title: "QUALIDADE",
+                                    text: "Produto certificado",
+                                    button_text: "Veja mais"
+                                }
+                            },
+                            {
+                                settings: {
+                                    title: "FUNCIONALIDADE",
+                                    text: "Fácil de usar",
+                                    button_text: "Veja mais"
+                                }
+                            },
+                        ]
+                    } %}
+                {% endif %}
             {% endif %}
-        {% endif %}
 
-        <div class="{{ s }} row justify-content-center">
-            {% include 'topics.twig' %}
+            <div class="row justify-content-center">
+                {% include 'topics.twig' %}
 
-                <div class="mt-5 col-md-12 col-lg-6 d-flex justify-content-center align-items-center">
-                    {% if not main_image and _get.preview %}
-                        {% include 'placeholder.twig' with { flex: true } %}
-                    {% endif %}
+                    <div class="mt-5 col-md-12 col-lg-6 d-flex justify-content-center align-items-center">
+                        {% if not main_image and _get.preview %}
+                            {% include 'placeholder.twig' with { flex: true } %}
+                        {% endif %}
 
-                    {% if main_image %}
-                        <img loading="lazy" src="{{ main_image | img_url }}" class="img-fluid lazy" alt="{{ main_image | img_url | get_filename }}">
-                    {% endif %}
-                </div>
+                        {% if main_image %}
+                            <img loading="lazy" src="{{ main_image | img_url }}" class="img-fluid lazy" alt="{{ main_image | img_url | get_filename }}">
+                        {% endif %}
+                    </div>
 
-            {% if blocks > 2 %}
-                {% set params = { 'type': 'end' } %}
-                {% include 'topics.twig' with params %}
-            {% endif %}
-        </div>
+                {% if blocks > 2 %}
+                    {% set params = { 'type': 'end' } %}
+                    {% include 'topics.twig' with params %}
+                {% endif %}
+            </div>
 
-    {% include 'section-footer.twig' %}
+        {% include 'section-footer.twig' %}
+    </div>
 {% endif %}
 
 {% schema %}

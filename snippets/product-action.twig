@@ -181,7 +181,7 @@
     {% endajax %}
 </div>
 
-{% if section.settings.product_atribute_type != 'grid' %}
+{% if has_grid or (section.settings.product_atribute_type == 'grid' and product.attribute.values|length == 0) %}
     {% javascript %}
         $(function() {
             // TODO: arrumar isso na diretiva no front dc-quantity.js

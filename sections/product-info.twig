@@ -115,18 +115,6 @@
 
 {% include 'quick-buy.twig' %}
 
-{% javascript %}
-    $(function() {
-        $('body').delegate('.personalize-product__title', 'click', function(e) {
-            var icon = $(e.target);
-            var content = $('.personalize-product__content');
-
-            icon.toggleClass('opened');
-            content.slideToggle();
-        });
-    });
-{% endjavascript %}
-
 {% schema %}
     {
         "name": "Informações do produto",
