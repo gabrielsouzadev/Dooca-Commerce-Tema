@@ -43,6 +43,15 @@
                     </a>
                 </div>
             {% endif %}
+            {% if theme.settings.social_telegram_link %}
+                <div class="col-auto pl-4 mt-3 mb-3">
+                    <a class="{% if section_secondary %}h-sc-color{% endif %} text-center" rel="noreferrer" aria-label="linkedin" target="_blank" href="{{ theme.settings.social_linkedin_link }}">
+                        <i class="icon" style="max-width: 1.8rem;">
+                            {{ 'img/telegram.svg' | svg }}
+                        </i>
+                    </a>
+                </div>
+            {% endif %}
         </div>
     </div>
 {% endif %}

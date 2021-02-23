@@ -3,14 +3,34 @@
         $(function() {
             // Product
             var grid_id = '{{ product.grid_id }}';
-
+            
             /*
              * Watch nos atributos selecionados
              * @return void
              */
             $('body').delegate('.product-attribute-action', 'change', function() {
-                var product_component_ids = getComponents();
-                updateCustomize(product_component_ids);
+                var component = $(this).closest('.customize-product-component');
+                var variation = component.find("input[name*='variation_id']");
+
+                var selects = $('select option:selected');
+                var product = component.find('.product-attribute').data('json');
+                var variations = product.variations;
+
+                var attrs = [];
+
+                selects.each(function() {
+                    attrs.push($(this).val());
+                });
+
+                for (var i = 0; i < variations.length; i++) {
+                    var item = variations[i];
+
+                    if (item.attribute_value_id == parseInt(attrs[0]) && item.attribute_value_secondary_id == parseInt(attrs[1])) {
+                       variation.val(item.id);
+                    }
+                }
+
+                updateCustomize();
             });
             
             /*
@@ -18,43 +38,90 @@
              * @return void
              */
             $('body').delegate(".customize-product-radio input[type='radio']", 'change', function () {
-                var product_component_ids = getComponents();
-                updateCustomize(product_component_ids);
+                updateCustomize();
             });
 
             /*
-             * Atualiza o customizador com os novos componentes
-             * @param components_ids String
-             * @return void
+             * Formata todos os dados do form para o ajax
+             * @return object
              */
-            var updateCustomize = function(components_ids) {
+            var getData = function() {
                 var form = $('.customize-product');
                 var container = form.find('.customize-product-ajax');
-                
-                var url = '{{ product.url }}';
-                url = url + '?' + $('.customize-product').serialize();
 
-                // Xhr
-                var xhr = _dcs.Xhr(url);
+                    // variables
+                    var components = $('.customize-product-component');
+                    var components_ids = [];
+                    var components_variations = [];
+                    
+                    components.each(function() {
+                        var component = $(this);
+                        var checked = component.find("input[name*='product_component_id']:checked");
 
-                loader(true);
-
-                xhr.get({
-                        id: 'customize-product',
-                        data: {
-                            grid_id: grid_id,
-                            product_component_ids: components_ids
+                        if (checked.length > 0) {                        
+                            components_ids.push(checked.val());
+                            var variation_id = component.find("input[name*='variation_id']:checked");
+								
+                            if (!variation_id.val()) {
+                            	variation_id = component.find("input[name*='variation_id']");
+                            }
+                         
+                            components_variations.push(variation_id.val());
                         }
+                    });
+
+                    if (components_ids && components_variations) {
+ 
+                        var data = {};
+                        var variations = components_variations;
+                        var product_component_ids = components_ids.join(',').toString();
+                        var attributes_secondary_ids = [];
+                        
+                        var _items = form.serializeArray();
+                        if (_items.length > 0) {
+                        	for (var i = 0; i < _items.length; i++) {
+                            	var item = _items[i];
+                                if (item.name.includes('attributes')) {
+                                    attributes_secondary_ids.push(item)
+                                }
+                            }
+                        }
+                        
+                        data.grid_id = grid_id;
+                        data.variations = variations;
+                        data.product_component_ids = product_component_ids;
+						data.attributes = attributes_secondary_ids;
+                        
+                        return data;
+                    }
+            };
+
+            /*
+             * Atualiza o customizador com os novos componentes
+             * @return void
+             */
+            var updateCustomize = function() {
+                var form = $('.customize-product');
+                var container = form.find('.customize-product-ajax');
+				
+                setTimeout(function(){ 
+                    var url = '{{ product.url }}';
+                    var xhr = _dcs.Xhr(url);
+
+                    loader(true);
+                        
+                    var data = getData();
+
+                    xhr.get({
+                        id: 'customize-product',
+                        data: data
                     }).done(function(html) {
                         container.empty();
                         container.append(html);
-                        
+                            
                         xhr.get({
                             id: 'product-action',
-                            data: {
-                                grid_id: grid_id,
-                                product_component_ids: components_ids
-                            }
+                            data: data
                         }).done(function(html) {
                             $('.product-action').empty();
                             $('.product-action').append(html);
@@ -66,6 +133,7 @@
                     }).fail(function() {
                         loader(false);
                     });
+                }, 200);
             };
 
             /*
@@ -89,7 +157,7 @@
              */
             var getComponents = function() {
                 var arr = [];
-                $("input[type='radio']:checked").each(function() {
+                $("input[name*='product_component_id']:checked").each(function() {
                     arr.push($(this).val());
                 });
                 return arr.join(',').toString();
@@ -133,6 +201,26 @@
                 $('html, body').animate({
                     scrollTop: diff
                 }, 1000);
+            });
+
+            $('body').delegate('.customize-product-button input', 'click', function() {
+                var _this = $(this);
+                var _parent = _this.closest('.customize-product-component');
+                var isChecked = _parent.find("input[name*='product_component_id']:checked");
+
+                if (isChecked.length > 0) {
+                    updateCustomize();
+                } else {
+                    var html = `
+                        <div class="alert-shipping col-12 m-0 customize-product-alert">
+                            <span>Selecione o produto primeiro</span>
+                        </div>
+                    `;
+
+                    _parent.find('.customize-product-title').append(html);
+
+                    return false;
+                }
             });
 
             /*
@@ -234,6 +322,11 @@
                 } else {
                     var submitButton = $('.customize-product').find('#buy-kit');
 
+                    if ($('.personalize-product').length > 0) {
+                        var personalize_html = $('.personalize-product').html();
+                        $('<div class="d-none">'+personalize_html+'</div>').appendTo('.customize-product');
+                    }
+
                     if (submitButton.length > 0) {
                         submitButton.trigger('click');
                     } else {
@@ -299,8 +392,15 @@
                 var _this = $(this);
                 var target = $(e.target);
                 
-                _this.find('.customize-product-button').removeClass('active');
-                target.parent().addClass('active');
+                var _parent = _this.closest('.customize-product-component');
+                var isChecked = _parent.find("input[name*='product_component_id']:checked");
+
+                if (isChecked.length > 0) {
+                    _this.find('.customize-product-button').removeClass('active');
+                    target.parent().addClass('active');
+                } else {
+                    return false;
+                }
             });
             {% endif %}
 

@@ -1710,6 +1710,12 @@
 					"id": "social_linkedin_link",
 					"label": "Linkedin",
 					"info": "https://www.linkedin.com/doocacommerce/"
+				},
+				{
+					"type": "text",
+					"id": "social_telegram_link",
+					"label": "Telegram",
+					"info": "https://t.me/doocacommerce"
 				}
 			]
 		}

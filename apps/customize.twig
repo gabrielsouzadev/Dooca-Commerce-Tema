@@ -294,6 +294,7 @@
                                     elm.find("option[value='" + val + "']").attr('selected', 'selected');
                                 } else if (type == 'text') {
                                     elm.val(val);
+                                    elm.attr('value', val);
                                 } else if (type == 'radio') {
                                     elm = $("[name='" + id + "'][value='" + val + "']").prop('checked', true);
                                 }

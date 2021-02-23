@@ -79,18 +79,20 @@
                 }
 
                 searching = xhr.get({ id: 'direct' }).done(function(data) {   
-
                     searching = null;
 
                     var d = JSON.parse(data);
 
                     var imageSrc = d.image1;
                     var imageReplacement = d.image2;
+                    var productPrice = d.price;
 
                     cardImage.attr('src', imageSrc);
                     cardImage.attr('data-replacement', imageReplacement);
 
                     _this.attr('data-grid-id', 'card-modal-' + d.grid_id);
+                    _this.find('.product-card-price').remove();
+                    _this.find('.product-title').after(productPrice);
 
                     hover_card();
 
@@ -116,7 +118,7 @@
             var cardUrl = _this.find('.product-link');
             var url = cardUrl.attr('href');
 
-            var cvColors = _this.find('.cv-colors');
+            var cvColors = _this.find('.cv-colors.owl-carousel');
 
             // Owl carousel options
             var opts = {

@@ -55,7 +55,8 @@
         {% app 'custom-badge' %}
 
         <div class="yv-review-quickreview text-center" value="{{ product.id }}"></div>
-        
+        <div class="NETREVIEWS_PRODUCT_STARS" data-product-id="{{ product.variation.id }}"></div>
+
         {% if theme.settings.product_buy_button_type == 'color-variation' and product.colors|length > 0 %}
             <div class="d-block d-lg-none text text-center mb-4">
                 {% set colors_length = product.colors|length %}

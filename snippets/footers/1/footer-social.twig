@@ -35,5 +35,14 @@
                 </a>
             </div>
         {% endif %}
+        {% if theme.settings.social_telegram_link %}
+            <div class="col-auto">
+                <a class="{% if section_highglight %}f-hl-color{% else %}f-sc-color{% endif %} text-center" rel="noreferrer" aria-label="youtube" target="_blank" href="{{ theme.settings.social_youtube_link }}">
+                    <i class="d-flex icon">
+                        {{ 'img/telegram.svg' | svg }}
+                    </i>
+                </a>
+            </div>
+        {% endif %}
     </div>
 </div>

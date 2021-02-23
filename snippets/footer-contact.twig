@@ -18,6 +18,8 @@
                     {% set href = 'mailto:' ~ item.settings.value %}
                 {% elseif item.settings.type == 'address' %}
                     {% set href = 'https://maps.google.com/?q=' ~ item.settings.value %}
+                {% elseif item.settings.type == 'telegram' %}
+                    {% set href = 'https://t.me/' ~ item.settings.value %}
                 {% endif %}
 
                 <div class="col-auto mb-3">
@@ -31,6 +33,10 @@
                             <i class="icon mr-3 d-flex align-items-center">
                                 {% if item.settings.type == 'phone' %}
                                     <i class="{% if section_highglight %}f-hl-color{% else %}f-sc-color{% endif %} material-icons" style="font-size: 19px;">call</i>
+                                {% elseif item.settings.type == 'telegram' %}
+                                    <i class="{% if section_highglight %}f-hl-color{% else %}f-sc-color{% endif %}" style="max-width: 19px;">
+                                        {{ 'img/telegram.svg' | svg }}
+                                    </i>
                                 {% else %}
                                     <span class="{% if section_highglight %}f-hl-color{% else %}f-sc-color{% endif %} icon-{{ item.settings.type }}" style="font-size: 19px;"></span>
                                 {% endif %}

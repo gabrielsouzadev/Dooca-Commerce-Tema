@@ -33,6 +33,7 @@
 	{% section 'product-related' %}
 
 	<div id="review-widget"></div>
+    <div class="NETREVIEWS_PRODUCT_REVIEWS" data-product-id="{{ product.variation.id }}"></div>
 
     <div id="smarthint-position-1"></div>
     <div id="smarthint-position-2"></div>
@@ -41,11 +42,27 @@
     <div id="smarthint-position-5"></div>
 </div>
 
+
 {% ajax 'direct' hidden %}
+    {# options #}
+    {% set method = theme.settings.product_price_type %}
+    {% set parcel = theme.settings.price_parcel ?: false %}
+    {% set feature = theme.settings.price_feature ?: 'billet' %}
+
+    {# payments #}
+    {% set discount = product.price_compare %}
+    {% set billet = product.payments.billet %}
+    {% set creditcard = product.payments.creditcard %}
+
+    {% if parcel %} 
+        {% set creditcard = product.payments.creditcard.max_installment %}
+    {% endif %}
+
     {
         "image1": "{{ product.images[0].src }}",
         "image2": "{{ product.images[1].src }}",
-        "grid_id": "{{ product.grid_id }}"
+        "grid_id": "{{ product.grid_id }}",
+        "price": "<div class=\"product-card-price m-{{method}} {% if method=='creditcard' or method=='iconsmethods' %}f-{{feature}} mb-0{% endif %}\">{% if method=='final' %}{% if discount > 0 %}<div class=\"discount\">{{discount | currency}}</div>{% endif %}<div class=\"price\">{{product.price | currency}}</div>{% endif %}{% if billet and method !='only_creditcard' and method !='final' %}<div class=\"billet\"> <div class=\"icon\"></div><div class=\"product-price-final\">{% if discount > 0 %}<span class=\"text discount\">{{discount | currency}}</span>{% endif %}<span class=\"price total\">{{billet.total | currency}}</span> <span class=\"text\">no boleto</span> </div></div>{% endif %}{% if creditcard and method !='billet' and method !='final' %}<div class=\"creditcard\"> <div class=\"icon\"></div><div class=\"product-price-final\">{% if discount > 0 %}<span class=\"discount\">{{discount | currency}}</span>{% endif %}<div class=\"installments\"> <span class=\"price total\">{{creditcard.total | currency}}</span> <span class=\"text until\">em até</span> <span class=\"text parcels\"> <b>{{creditcard.parcel | default(creditcard.parcels)}}x</b> </span> <span class=\"text of\">de</span> <span class=\"text parcel-price\"> <b>{{creditcard.parcel_price | currency}}</b> </span>{% if not creditcard.has_interest and creditcard.interest <=0 %}<span class=\"text interest\">sem juros</span>{% endif %}</div></div></div>{% endif %}</div>"
     }
 {% endajax %}
 
@@ -59,7 +76,7 @@
                 </div>
 
                 <div class="col-10">
-                    <div class="cv-colors owl-carousel owl-theme">
+                    <div class="cv-colors {% if product.colors|length > 6 %}owl-carousel owl-theme{% else %}d-flex align-items-center justify-content-center flex-wrap{% endif %}">
                         {% for color in product.colors %}
                             <div class="cv-color {% if color.id == product.color_id %} active {% endif %}" data-url="{{ color.url }}" data-img-src="{{ color.product_images[0].src }}" data-img-rpt="{{ color.product_images[1].src }}">
                                 <i style="background-color: {{ color.hexadecimal }}; background-image: url({{ color.image | img_url() }});"></i>

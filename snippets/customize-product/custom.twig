@@ -1,4 +1,4 @@
-            
+
                 <div class="container d-flex flex-column">
                     {% for group in groups %}
                         {% set is_first = 0 %}
@@ -110,9 +110,15 @@
                                                             {% set attr1 = null %}
                                                             {% set attr2 = null %}
 
-                                                            {% if _get.attributesc[component.grid_id]|length > 0 %}
-                                                                {% set attr1 = _get.attributesc[component.grid_id]['attr-1'] ?: null %}
-                                                                {% set attr2 = _get.attributesc[component.grid_id]['attr-2'] ?: null %}
+                                                            {% if _get.attributes|length > 0 %}
+                                                                {% for attribute in _get.attributes %}
+                                                                    {% if attribute.name is same as('attributes['~ component.grid_id ~'][attr-1]') %}
+                                                                        {% set attr1 = attribute.value %}
+                                                                    {% endif %}
+                                                                    {% if attribute.name is same as('attributes['~ component.grid_id ~'][attr-2]') %}
+                                                                        {% set attr2 = attribute.value %}
+                                                                    {% endif %}
+                                                                {% endfor %}
                                                             {% else %}
                                                                 {% for _variation in _product.variations %}
                                                                     {% if not attr1 and not attr2 %}
@@ -137,7 +143,7 @@
                                                                     {% set last = loop.last %}
                                                                     {% set s_attr = (last) ? attr2 : attr1 %}
 
-                                                                    <div class="product-attribute" {% if last and not attr2 %}style="display: none;"{% endif %}>
+                                                                    <div class="product-attribute" {% if last and not attr2 %}style="display: none;"{% endif %} data-json='{{ _product | json_encode | raw }}'>
                                                                         <div class="row align-items-center mb-3">
                                                                             <div class="col">
                                                                                 <h4 class="h4 m-0">{{ attribute.name }}</h4>
@@ -170,20 +176,14 @@
                                                                 {% endif %}
                                                             {% endif %}
                                                         {% elseif variation_select_type == 'buttons' %}
-                                                            {# {% set has_selected = null %} #}
                                                             <div class="customize-product-buttons d-flex flex-wrap mb-2">
                                                                 {% for variation in component.variations %}
-
                                                                     
                                                                     {% set disabled = (variation.balance <= 0 or variation.balance < component.quantity) ? 'disabled' : null %}
                                                                     
-                                                                    {# {% if not disabled and not has_selected %}
-                                                                        {% set has_selected = variation.id %}
-                                                                    {% endif %} #}
-
-                                                                    <label class="customize-product-button mt-2 mr-2 p-2 {{ disabled }}" for="variation-{{ variation.id }}" {% if disabled %}style="pointer-events: none;"{% endif %}>
+                                                                    <label class="customize-product-button mt-2 mr-2 p-2 {% if variation.id in _get.variations %}active{% endif %} {{ disabled }}" for="variation-{{ variation.id }}" {% if disabled %}style="pointer-events: none;"{% endif %}>
                                                                         <span class="text">{{ variation.attribute.name }}</span>
-                                                                        <input id="variation-{{ variation.id }}" type="radio" name="components[{{ component.product_component_group_id }}][variation_id]" value="{{ variation.id }}" required>
+                                                                        <input id="variation-{{ variation.id }}" type="radio" name="components[{{ component.product_component_group_id }}][variation_id]"  value="{{ variation.id }}" {% if variation.id in _get.variations %}checked{% endif %} required>
                                                                     </label>
                                                                 {% endfor %}
 
@@ -304,6 +304,7 @@
 
                                         {% if component.variations|length > 1 %}
                                             {% if component.variation.attribute_value_id|length > 0 and component.variation.attribute_value_secondary_id|length > 0 %}
+                                                
                                                 {% set _product = _getProduct(component.grid_id) %}
                                                 {% set attributes = [] %}
                                                 {% set attributes = attributes|merge([_product.attribute]) %}
@@ -313,9 +314,15 @@
                                                 {% set attr1 = null %}
                                                 {% set attr2 = null %}
 
-                                                {% if _get.attributes[index]|length > 0 %}
-                                                    {% set attr1 = _get.attributes[index]['attr-1'] ?: null %}
-                                                    {% set attr2 = _get.attributes[index]['attr-2'] ?: null %}
+                                                {% if _get.attributes|length > 0 %}
+                                                    {% for attribute in _get.attributes %}
+                                                        {% if attribute.name is same as('attributes['~ index ~'][attr-1]') %}
+                                                            {% set attr1 = attribute.value %}
+                                                        {% endif %}
+                                                        {% if attribute.name is same as('attributes['~ index ~'][attr-2]') %}
+                                                            {% set attr2 = attribute.value %}
+                                                        {% endif %}
+                                                    {% endfor %}
                                                 {% else %}
                                                     {% for _variation in _product.variations %}
                                                         {% if not attr1 and not attr2 %}
@@ -340,7 +347,7 @@
                                                         {% set last = loop.last %}
                                                         {% set s_attr = (last) ? attr2 : attr1 %}
 
-                                                        <div class="product-attribute" {% if last and not attr2 %}style="display: none;"{% endif %}>
+                                                        <div class="product-attribute" {% if last and not attr2 %}style="display: none;"{% endif %} data-json='{{ _product | json_encode | raw }}'>
                                                             <div class="row align-items-center mb-3">
                                                                 <div class="col">
                                                                     <h4 class="h4 m-0">{{ attribute.name }}</h4>
@@ -370,21 +377,14 @@
                                                     </div>
                                                 {% endif %}
                                             {% elseif variation_select_type == 'buttons' %}
-                                                {# {% set has_selected = null %} #}
                                                 {% set _index = loop.index %}
                                                 <div class="customize-product-buttons d-flex flex-wrap mb-2">
                                                     {% for variation in component.variations %}
-
-                                    
                                                         {% set disabled = (variation.balance <= 0 or variation.balance < component.quantity) ? 'disabled' : null %}
 
-                                                        {# {% if not disabled and not has_selected %}
-                                                            {% set has_selected = variation.id %}
-                                                        {% endif %} #}
-
-                                                        <label class="customize-product-button mt-2 mr-2 p-2 {{ disabled }}" for="variation-{{ variation.id }}" {% if disabled %}style="pointer-events: none;"{% endif %}>
+                                                        <label class="customize-product-button mt-2 mr-2 p-2 {% if variation.id in _get.variations %}active{% endif %} {{ disabled }}" for="variation-{{ variation.id }}" {% if disabled %}style="pointer-events: none;"{% endif %}>
                                                             <span class="text">{{ variation.attribute.name }}</span>
-                                                                <input id="variation-{{ variation.id }}" type="radio" name="components[{{ _index }}][variation_id]" value="{{ variation.id }}" required>
+                                                                <input id="variation-{{ variation.id }}" type="radio" name="components[{{ _index }}][variation_id]" value="{{ variation.id }}" {% if variation.id in _get.variations %}checked{% endif %} required>
                                                         </label>
                                                     {% endfor %}
 

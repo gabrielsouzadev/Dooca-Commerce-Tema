@@ -12,6 +12,8 @@
                     {% set href = 'skype:' ~ item.settings.value ~ '?chat' %}
                 {% elseif item.settings.type == 'email' %}
                     {% set href = 'mailto:' ~ item.settings.value %}
+                {% elseif item.settings.type == 'telegram' %}
+                    {% set href = 'https://t.me/' ~ item.settings.value %}
                 {% endif %}
 
                 <div class="col-auto mr-2">
@@ -20,8 +22,12 @@
                             <i class="{% if section_highlight %}h-hl-color{% endif %} icon mr-2">
                                 {% if item.settings.type == 'phone' %}
                                     <span class="material-icons" style="font-size: 19px;">call</span>
+                                {% elseif item.settings.type == 'telegram' %}
+                                    <span class="icon" style="max-width: 1.9rem;">
+                                        {{ 'img/telegram.svg' | svg }}
+                                    </span>
                                 {% else %}
-                                    <span class=" icon-{{ item.settings.type }}" style="font-size: 19px;"></span>
+                                    <span class=" icon-{{ item.settings.type }}" style="font-size: 19px; max-width: 1.9rem;"></span>
                                 {% endif %}
                             </i>
                             {{ item.settings.value }}

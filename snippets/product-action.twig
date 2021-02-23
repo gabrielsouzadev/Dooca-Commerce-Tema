@@ -190,6 +190,7 @@
 
             action.on('click', '.dc-decrease', function(el) { decrease(el); });
             action.on('click', '.dc-increase', function(el) { increase(el); });
+            action.on('change', '.dc-input', function(el) { change(el); });
 
             getInput = function(el) {
                 var input = $(el.target).parents('.dc-quantity').find('.dc-input');
@@ -221,7 +222,25 @@
                 var n = data.val + 1;
 
                 if (n <= data.max) {
+                    $('.customize-product').find("input[name='quantity']").attr('value', n);
                     input.val(n);
+                }
+            };
+
+            change = function(el) {
+                var input = $(el.target);
+                var obj = {};
+
+                obj.val = parseInt(input.val());
+                obj.min = parseInt(input.attr('min'));
+                obj.max = {% if product.sell_out_of_stock %}999999{% else %}parseInt(input.attr('max')){% endif %};
+
+                var data = obj;
+                var n = data.val;
+            
+                if ((n <= data.max) || (n >= data.min)) {
+                    $('.customize-product').find("input[name='quantity']").attr('value', n);
+                    $(el).attr('value', n);
                 }
             };
         });

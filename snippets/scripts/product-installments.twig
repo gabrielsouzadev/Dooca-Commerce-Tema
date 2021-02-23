@@ -57,6 +57,13 @@
                     html += '<div class="row mb-3">';
                         html += '<div class="product-installments-title col-12 text-center p-3">';
                             html += '<h3 class="h3 m-0">' + item.name +'</h3>';
+                            if (parseFloat(item.min_purchase) > parseFloat(item.installment.total)) {
+                                var min_purchase = new Intl.NumberFormat('pt-br', {
+                                            style: 'currency',
+                                            currency: 'BRL'
+                                        }).format(item.min_purchase);
+                                html += '<small>Pedido mínimo de '+ min_purchase +'.</small>';
+                            }
                         html += '</div>';
 
                         html += '<div class="col-12 pt-3 pl-3 pr-3 border">';
