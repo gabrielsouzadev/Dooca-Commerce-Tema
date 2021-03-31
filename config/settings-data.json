@@ -1,0 +1,668 @@
+{
+    "current": {
+        "settings": {
+            "store_background_image": null,
+            "store_background_color": null,
+            "store_background_position": "top center",
+            "store_background_size": "cover",
+            "font_menu": {
+                "family": "Montserrat",
+                "category": "sans-serif",
+                "variants": [
+                    "100",
+                    "100italic",
+                    "200",
+                    "200italic",
+                    "300",
+                    "300italic",
+                    "regular",
+                    "italic",
+                    "500",
+                    "500italic",
+                    "600",
+                    "600italic",
+                    "700",
+                    "700italic",
+                    "800",
+                    "800italic",
+                    "900",
+                    "900italic"
+                ],
+                "font_size": 14,
+                "font_style": "normal",
+                "letter_spacing": 0,
+                "text_transform": "uppercase",
+                "font_weight": "600"
+            },
+            "font_h1": {
+                "family": "Montserrat",
+                "category": "sans-serif",
+                "variants": [
+                    "100",
+                    "100italic",
+                    "200",
+                    "200italic",
+                    "300",
+                    "300italic",
+                    "regular",
+                    "italic",
+                    "500",
+                    "500italic",
+                    "600",
+                    "600italic",
+                    "700",
+                    "700italic",
+                    "800",
+                    "800italic",
+                    "900",
+                    "900italic"
+                ],
+                "font_size": 36,
+                "font_style": "normal",
+                "letter_spacing": 0,
+                "text_transform": "none",
+                "font_weight": "700"
+            },
+            "font_h2": {
+                "family": "Montserrat",
+                "category": "sans-serif",
+                "variants": [
+                    "100",
+                    "100italic",
+                    "200",
+                    "200italic",
+                    "300",
+                    "300italic",
+                    "regular",
+                    "italic",
+                    "500",
+                    "500italic",
+                    "600",
+                    "600italic",
+                    "700",
+                    "700italic",
+                    "800",
+                    "800italic",
+                    "900",
+                    "900italic"
+                ],
+                "font_size": 18,
+                "font_style": "normal",
+                "letter_spacing": 0,
+                "text_transform": null,
+                "font_weight": "600"
+            },
+            "font_h3": {
+                "family": "Montserrat",
+                "category": "sans-serif",
+                "variants": [
+                    "100",
+                    "100italic",
+                    "200",
+                    "200italic",
+                    "300",
+                    "300italic",
+                    "regular",
+                    "italic",
+                    "500",
+                    "500italic",
+                    "600",
+                    "600italic",
+                    "700",
+                    "700italic",
+                    "800",
+                    "800italic",
+                    "900",
+                    "900italic"
+                ],
+                "font_size": 18,
+                "font_style": "normal",
+                "letter_spacing": 0,
+                "text_transform": "none",
+                "font_weight": "regular"
+            },
+            "font_texts": {
+                "family": "Roboto",
+                "category": "sans-serif",
+                "variants": [
+                    "100",
+                    "100italic",
+                    "300",
+                    "300italic",
+                    "regular",
+                    "italic",
+                    "500",
+                    "500italic",
+                    "700",
+                    "700italic",
+                    "900",
+                    "900italic"
+                ],
+                "font_size": 14,
+                "font_style": "normal",
+                "letter_spacing": 0,
+                "text_transform": null,
+                "font_weight": "regular"
+            },
+            "font_family_mn": "{\"name\":\"montserrat\",\"css\":\"'Montserrat', sans-serif\",\"url\":\"https:\/\/fonts.googleapis.com\/css?family=Montserrat:\"}",
+            "mn_fs": 14,
+            "mn_fw": "500",
+            "mn_ls": 0,
+            "mn_tt": "none",
+            "font_family_h1": "{\"name\":\"montserrat\",\"css\":\"'Montserrat', sans-serif\",\"url\":\"https:\/\/fonts.googleapis.com\/css?family=Montserrat:\"}",
+            "h1_fs": 18,
+            "h1_fw": "600",
+            "h1_ls": 0,
+            "h1_tt": "uppercase",
+            "font_family_h2": "{\"name\":\"montserrat\",\"css\":\"'Montserrat', sans-serif\",\"url\":\"https:\/\/fonts.googleapis.com\/css?family=Montserrat:\"}",
+            "h2_fs": 14,
+            "h2_fw": "600",
+            "h2_ls": 0,
+            "h2_tt": "none",
+            "font_family_h3": "{\"name\":\"montserrat\",\"css\":\"'Montserrat', sans-serif\",\"url\":\"https:\/\/fonts.googleapis.com\/css?family=Montserrat:\"}",
+            "h3_fs": 14,
+            "h3_fw": "400",
+            "h3_ls": 0,
+            "h3_tt": "none",
+            "font_family_tx": "{\"name\":\"roboto\",\"css\":\"'Roboto', sans-serif\",\"url\":\"https:\/\/fonts.googleapis.com\/css?family=Roboto:\"}",
+            "tx_fs": 13,
+            "tx_fw": "400",
+            "tx_ls": 0,
+            "tx_tt": "none",
+            "color_primary": "#293a80",
+            "color_secondary": "#f39422",
+            "color_border": "#eaeaea",
+            "color_highlight": "#537ec5",
+            "color_button_buy": "#537ec5",
+            "color_button_buy_text": "#ffffff",
+            "color_text": "#444547",
+            "radius_size": "light_rounded",
+            "product_image_crop": "square",
+            "product_buy_button_type": "simple",
+            "product_cart_add_redirect": "not_redirect",
+            "product_buy_button_text": "Comprar",
+            "product_image_hover": true,
+            "product_color_name": true,
+            "show_product_price_without_stock": false,
+            "product_price_type": "final",
+            "price_feature": "billet",
+            "price_parcel": "0",
+            "seal_promotion": true,
+            "seal_promotion_billet_discount": false,
+            "seal_promotion_type": "radius",
+            "seal_promotion_fontsize": 11,
+            "seal_promotion_fontcolor": "#ffffff",
+            "seal_promotion_background": "#fd7710",
+            "seal_launch": true,
+            "seal_launch_time": "15",
+            "seal_launch_fontsize": 10,
+            "seal_launch_fontcolor": "#8d8f91",
+            "seal_launch_background": "#eaeaea",
+            "custom_style_css": null,
+            "favicon": null,
+            "img_share": null,
+            "social_facebook_link": "https:\/\/facebook.com\/seufacebook",
+            "social_twitter_link": null,
+            "social_instagram_link": "http:\/\/instagram.com\/seuinstagram",
+            "social_pinterest_link": "https:\/\/br.pinterest.com\/seupinterest",
+            "social_youtube_link": null,
+            "static_logo": "media:\/\/files\/logo-top-be3845dcfdccf648f8f87fcc0354cc9a.svg",
+            "static_logo_height": "80",
+            "static_logo_height_mobile": "60",
+            "static_color_primary": "#323435",
+            "static_color_secondary": "#67696b",
+            "static_color_text": "#555759",
+            "contact_phone": "00 0000-0000",
+            "contact_whatsapp": "00 00000-0000",
+            "contact_skype": null,
+            "contact_email": "email@dominio.com.br",
+            "contact_schedule": "Seg a sex das 9h-12h \/ 14h-18h",
+            "static_custom_style_css": null,
+            "shipping_message": false,
+            "shipping_whatsapp": null
+        },
+        "sections": {
+            "header": {
+                "type": "header",
+                "settings": {
+                    "container": "container",
+                    "type": "1",
+                    "version": false,
+                    "show_smartsearch": true,
+                    "opacity": 0,
+                    "border_opacity": 0,
+                    "header_bg": null,
+                    "primary_color": null,
+                    "secondary_color": null,
+                    "highlight_color": null,
+                    "border_color": null,
+                    "logo_maxheight_fixed": "50",
+                    "fixed_type": "complete",
+                    "version_fixed": false,
+                    "logo_dark_fixed": null,
+                    "logo_light_fixed": null,
+                    "logo_dark": null,
+                    "logo_light": null,
+                    "logo_mobile": null,
+                    "logo_maxheight": "80",
+                    "logo_maxheight_mobile": "50",
+                    "cart_custom": null,
+                    "user_custom": null,
+                    "search_custom": null,
+                    "top": true,
+                    "top_text": "<p>Insira <strong>avisos<\/strong> ou <em><strong>promo\u00e7\u00f5es<\/strong><\/em>, estas informa\u00e7\u00f5es ser\u00e3o exibidas em todas as p\u00e1ginas da loja.<\/p>",
+                    "top_bg": "#f39422",
+                    "top_color": "#ffffff",
+                    "menu_top": null,
+                    "menu_main": null,
+                    "menu_departments": null,
+                    "version_menu": false,
+                    "menu_list": false,
+                    "menu_color_bg": "#fbfbfb",
+                    "menu_color": null,
+                    "menu_color_bg_dp": null,
+                    "menu_color_dp": null
+                },
+                "blocks": [
+                    {
+                        "type": "text",
+                        "settings": {
+                            "type": "phone",
+                            "value": "00 0000-0000"
+                        }
+                    },
+                    {
+                        "type": "text",
+                        "settings": {
+                            "type": "schedule",
+                            "value": "Seg a sex das 9h-12h \/ 14h-18h"
+                        }
+                    }
+                ]
+            },
+            "footer": {
+                "type": "footer",
+                "settings": {
+                    "container": "container",
+                    "type": "3",
+                    "version": false,
+                    "footer_bg": null,
+                    "primary_color": "#fbfbfb",
+                    "secondary_color": null,
+                    "highlight_color": null,
+                    "border_color": null,
+                    "border_opacity": 10,
+                    "margin_up": 5,
+                    "margin_dw": 5,
+                    "logo_dark": null,
+                    "logo_light": null,
+                    "logo_mobile": null,
+                    "logo_maxheight": "80",
+                    "logo_maxheight_mobile": "50",
+                    "menu_footer_1": "voluptas",
+                    "menu_footer_2": "n",
+                    "menu_footer_3": "voluptas",
+                    "menu_footer": "officia",
+                    "newsletter_title": "Receba novidades e promo\u00e7\u00f5es",
+                    "contact_title": "Central de atendimento",
+                    "payment_title": "Pagamento",
+                    "security_title": "Seguran\u00e7a",
+                    "certificate_title": "Certificados",
+                    "seal_payment": true,
+                    "payment_color": true,
+                    "seal_payment_amex": true,
+                    "seal_payment_diners": true,
+                    "seal_payment_elo": true,
+                    "seal_payment_hiper": true,
+                    "seal_payment_hipercard": true,
+                    "seal_payment_master": true,
+                    "seal_payment_visa": true,
+                    "seal_payment_paypal": true,
+                    "seal_payment_billet": true,
+                    "seal_payment_itau": true,
+                    "seal_security": true,
+                    "security_color": true,
+                    "seal_security_googlesafe": true,
+                    "seal_security_ssl": true,
+                    "seal_certificate": null,
+                    "terms": "<p>Insira aqui a raz\u00e3o social e o CNPJ da sua empresa.<\/p>",
+                    "phrase_id": "0",
+                    "version_phrases": true,
+                    "logo_partner": null,
+                    "logo_partner_url": null
+                },
+                "blocks": [
+                    {
+                        "type": "text",
+                        "settings": {
+                            "type": "phone",
+                            "value": "00 0000-0000"
+                        }
+                    },
+                    {
+                        "type": "text",
+                        "settings": {
+                            "type": "whatsapp",
+                            "value": "00 00000-0000"
+                        }
+                    },
+                    {
+                        "type": "text",
+                        "settings": {
+                            "type": "email",
+                            "value": "email@dominio.com.br"
+                        }
+                    },
+                    {
+                        "type": "text",
+                        "settings": {
+                            "type": "schedule",
+                            "value": "Seg a sex das 9h-12h \/  14h-18h"
+                        }
+                    }
+                ]
+            },
+            "collection-banner": {
+                "type": "collection-banner",
+                "settings": {
+                    "container": "container",
+                    "show_logo": false
+                },
+                "blocks": []
+            },
+            "collection-content": {
+                "type": "collection-content",
+                "settings": {
+                    "collection_sort": "-relevance",
+                    "filter_position": "left",
+                    "products_per_page": "36",
+                    "container": "container",
+                    "filter_color_type": "list"
+                },
+                "blocks": []
+            },
+            "collection-seo": {
+                "type": "collection-seo",
+                "settings": {
+                    "container": "container",
+                    "seo_align": "down"
+                },
+                "blocks": []
+            },
+            "product-info": {
+                "type": "product-info",
+                "settings": {
+                    "product_breadcrumb": true,
+                    "image_crop": "square",
+                    "image_position": "left",
+                    "image_galery": "gallery",
+                    "product_main_image_zoom": false,
+                    "product_features": null,
+                    "product_reference": true,
+                    "id_erp": false,
+                    "product_brand": true,
+                    "product_quantity": false,
+                    "product_payment": true,
+                    "product_shipping": true,
+                    "product_shipping_seals": false,
+                    "quick_buy": true,
+                    "variation_cheap_message": false,
+                    "product_alert": "9999",
+                    "product_alert_message": null,
+                    "product_atribute_type": "button",
+                    "product_colors_type": "colors",
+                    "select_custom_title": "Personalizar este produto"
+                },
+                "blocks": []
+            },
+            "product-related": {
+                "type": "product-related",
+                "settings": {
+                    "title": "Veja tamb\u00e9m",
+                    "subtitle": null,
+                    "container": "container",
+                    "custom_class": null,
+                    "hide_mobile": false,
+                    "title_color": null,
+                    "subtitle_color": null,
+                    "background_color": null,
+                    "post_background_color": null,
+                    "border_color": null,
+                    "background_image": null,
+                    "border_size": 1,
+                    "margin_up": 10,
+                    "margin_dw": 10
+                },
+                "blocks": []
+            },
+            "banners-carousel-16470250": {
+                "type": "banners-carousel",
+                "settings": {
+                    "hide_mobile": false,
+                    "hide_desktop": false,
+                    "custom_class": null,
+                    "container": "container-fluid",
+                    "speed": "12",
+                    "section_maxheight": null,
+                    "arrows": false,
+                    "dots": true,
+                    "background_color": null,
+                    "background_image": null
+                },
+                "blocks": [
+                    {
+                        "type": "image",
+                        "settings": {
+                            "src": null,
+                            "src_mobile": null,
+                            "video": null,
+                            "parallax": false,
+                            "zoom_off": false,
+                            "title": "T\u00edtulo do banner",
+                            "text": "Insira a descri\u00e7\u00e3o do banner",
+                            "button_text": "Bot\u00e3o",
+                            "banner_url": null,
+                            "banner_blank": false,
+                            "banner_align": "text-left justify-content-start",
+                            "mask_color": "#202223",
+                            "mask_opacity": 1,
+                            "title_color": "#323435",
+                            "text_color": "#555759",
+                            "button_bg_color": null,
+                            "button_text_color": null
+                        }
+                    },
+                    {
+                        "type": "image",
+                        "settings": {
+                            "src": null,
+                            "src_mobile": null,
+                            "video": null,
+                            "parallax": false,
+                            "zoom_off": false,
+                            "title": "T\u00edtulo do banner",
+                            "text": "Insira a descri\u00e7\u00e3o do banner",
+                            "button_text": "Bot\u00e3o",
+                            "banner_url": null,
+                            "banner_blank": false,
+                            "banner_align": "text-right justify-content-end",
+                            "mask_color": "#202223",
+                            "mask_opacity": 5,
+                            "title_color": "#FFFFFF",
+                            "text_color": "#FFFFFF",
+                            "button_bg_color": null,
+                            "button_text_color": null
+                        }
+                    }
+                ]
+            },
+            "banners-commercial-75065511": {
+                "type": "banners-commercial",
+                "settings": {
+                    "hide_mobile": false,
+                    "hide_desktop": false,
+                    "custom_class": null,
+                    "container": "container",
+                    "align": "top",
+                    "title_color": null,
+                    "description_color": null,
+                    "background_color": "#fbfbfb",
+                    "border_color": null,
+                    "background_image": null,
+                    "border_size": 0,
+                    "margin_up": 4,
+                    "margin_dw": 4
+                },
+                "blocks": [
+                    {
+                        "type": "image",
+                        "settings": {
+                            "image": null,
+                            "title": "Pague parcelado",
+                            "description": "no cart\u00e3o de cr\u00e9dito",
+                            "url": null,
+                            "target": false
+                        }
+                    },
+                    {
+                        "type": "image",
+                        "settings": {
+                            "image": null,
+                            "title": "Entrega garantida",
+                            "description": "para todo o Brasil",
+                            "url": null,
+                            "target": false
+                        }
+                    },
+                    {
+                        "type": "image",
+                        "settings": {
+                            "image": null,
+                            "title": "Compra segura",
+                            "description": "seus dados protegidos",
+                            "url": null,
+                            "target": false
+                        }
+                    }
+                ]
+            },
+            "products-showcase-77501840": {
+                "type": "products-showcase",
+                "settings": {
+                    "title": "Destaques da semana",
+                    "subtitle": "Confira nossos produtos mais vendidos",
+                    "products": null,
+                    "hide_mobile": false,
+                    "hide_desktop": false,
+                    "custom_class": null,
+                    "container": "container",
+                    "bpl": 4,
+                    "bpl_mobile": 2,
+                    "slider": true,
+                    "title_color": null,
+                    "subtitle_color": null,
+                    "background_color": null,
+                    "product_background_color": null,
+                    "border_color": null,
+                    "background_image": null,
+                    "border_size": 0,
+                    "margin_up": 8,
+                    "margin_dw": 8
+                },
+                "blocks": []
+            },
+            "banners-29194528": {
+                "type": "banners",
+                "settings": {
+                    "title": null,
+                    "subtitle": null,
+                    "hide_mobile": false,
+                    "hide_desktop": false,
+                    "custom_class": null,
+                    "container": "container",
+                    "bpl": "col-12 col-md-4",
+                    "slider": false,
+                    "margin": 3,
+                    "title_color": null,
+                    "subtitle_color": null,
+                    "background_color": null,
+                    "border_color": null,
+                    "background_image": null,
+                    "border_size": 0,
+                    "margin_up": 2,
+                    "margin_dw": 2
+                },
+                "blocks": [
+                    {
+                        "type": "image",
+                        "settings": {
+                            "image": null,
+                            "zoom": false,
+                            "visible": false,
+                            "visible_mobile": false,
+                            "title": null,
+                            "text": null,
+                            "button_text": null,
+                            "banner_url": null,
+                            "banner_blank": false,
+                            "mask_color": null,
+                            "title_color": null,
+                            "text_color": null,
+                            "button_bg_color": null,
+                            "button_text_color": null
+                        }
+                    }
+                ]
+            },
+            "products-showcase-96392237": {
+                "type": "products-showcase",
+                "settings": {
+                    "title": "Outlet",
+                    "subtitle": "Aproveite estas promo\u00e7\u00f5es incr\u00edveis!",
+                    "products": null,
+                    "hide_mobile": false,
+                    "hide_desktop": false,
+                    "custom_class": null,
+                    "container": "container",
+                    "bpl": 5,
+                    "bpl_mobile": 2,
+                    "slider": false,
+                    "title_color": null,
+                    "subtitle_color": null,
+                    "background_color": null,
+                    "product_background_color": null,
+                    "border_color": null,
+                    "background_image": null,
+                    "border_size": 1,
+                    "margin_up": 10,
+                    "margin_dw": 10
+                },
+                "blocks": []
+            },
+            "product-description": {
+                "type": "product-description",
+                "settings": {
+                    "type": "1",
+                    "border_size": "1"
+                },
+                "blocks": []
+            },
+            "customize-product": {
+                "type": "customize-product",
+                "settings": {
+                    "title": null,
+                    "subtitle": null,
+                    "order": "group"
+                },
+                "blocks": []
+            }
+        },
+        "content_for_index": [
+            "banners-carousel-16470250",
+            "banners-commercial-75065511",
+            "products-showcase-77501840",
+            "banners-29194528",
+            "products-showcase-96392237"
+        ]
+    }
+}

@@ -17,25 +17,7 @@
             {% set bpl = section.settings.bpl ?: 12 %}
             {% set align = section.settings.align ?: null %}
             {% set blocks = section.blocks | length %}
-            {# {% set text_center = (align == 'flex-column') ? 'text-center' : null %} #}
             {% set max_width = (blocks == 1 and section.settings.container != 'container-fluid') ? 'p-5' : null %}
-
-            {# {% if blocks <= 1 %}
-                {% if not section.blocks[0].settings.image and not section.blocks[0].settings.title and not section.blocks[0].settings.text %}
-                    {% set blocks = 1 %}
-                    {% set section = {
-                        blocks: [
-                            {
-                                settings: {
-                                    title: "Imperdível",
-                                    text: "Conheça o produto mais vendido na última semana e entenda porque ele se tornou o queridinho do Brasil. Compre você também!",
-                                    button_text: "compre agora"
-                                }
-                            }
-                        ]
-                    } %}
-                {% endif %}
-            {% endif %} #}
 
             {% if blocks > 0 %}
                 <div class="row justify-content-center {{ max_width }} {% if section.settings.container == 'container-fluid' %} no-gutters {% endif %} position-relative">
@@ -60,9 +42,9 @@
                         {% elseif align == 'flex-column' %}
                             {% set p = 'py-md-5' %}
                         {% elseif align == 'flex-row-reverse' %}
-                            {% set p = 'pr-md-5' %}
+                            {% set p = 'pr-md-8' %}
                         {% else %}
-                            {% set p = 'pl-md-5' %}
+                            {% set p = 'pl-md-8' %}
                         {% endif %}
 
                         {% set cols = (align == 'flex-column') ? 'pt-3 col-12' : 'col-sm-12 col-md-6 col-lg-6' %}
@@ -142,6 +124,13 @@
             "type": "accordion",
             "content": "Conteúdo",
             "icon": "content"
+        },
+        {
+        	"type": "text",
+          	"id": "section_name",
+          	"label": "Identificação da seção",
+            "info": "Exemplo: Banner de promoções",
+          	"default": ""
         },
         {
             "type": "text",

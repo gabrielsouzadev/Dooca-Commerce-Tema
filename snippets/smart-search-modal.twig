@@ -4,7 +4,7 @@
     <div class="row justify-content-center no-gutters">
         <button class="smart-button" aria-label="Procurar produtos">
             <i class="icon {% if section_highlight %}h-hl-color{% else %}h-sc-color{% endif %}">
-                {% if search_custom_img %}
+                {% if search_custom_img.src %}
                    <img loading="lazy" src="{{ search_custom_img | img_url }}" alt="Search" class="img-fluid">
                 {% else %}
                     <i class="material-icons md-36">search</i>

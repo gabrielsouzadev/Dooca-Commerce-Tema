@@ -37,9 +37,7 @@
     </div>
     
     {% javascript %}
-        $(function() {
-            var url = 'https://guarded-crag-64749.herokuapp.com/?channel_id=';
-            
+        $(function() {            
             /*
             * Criar o html dos vídeos e retornar como
             * string para fazer o append na seção
@@ -49,9 +47,9 @@
                 var tpl = '';
                 
                 for (var i = 0; i < items.length; i++) {
-                    var src = items[i].src;
-                    var link = 'https://www.youtube.com/watch?v=' + items[i].videoId;
-                    var title = items[i].title;
+                    var src = 'https://img.youtube.com/vi/' + items[i].id.videoId + '/hqdefault.jpg';
+                    var link = 'https://www.youtube.com/watch?v=' + items[i].id.videoId;
+                    var title = items[i].snippet.title;
 
                     var _is_visible = 'visible';
 
@@ -81,87 +79,37 @@
                 return tpl;
             };
 
-            function setWithExpiry(key, value, ttl) {
-				var now = new Date();
-
-				var item = {
-					value: value,
-					expiry: now.getTime() + ttl,
-				};
-
-				localStorage.setItem(key, JSON.stringify(item));
-			}
-
-			function getWithExpiry(key) {
-				var itemStr = localStorage.getItem(key);
-
-				if (!itemStr) {
-					return null;
-				}
-
-				var item = JSON.parse(itemStr);
-				var now = new Date();
-
-				if (now.getTime() < item.expiry) {
-					localStorage.removeItem(key);
-					return null;
-				}
-
-				return item.value;
-			}
-
             /*
             * Fazer requisição para a API do Youtube v3
             * @return void
             */
-            var getVideos = function(id, limit, vm) {
-                var _url = url + id;
-
+            var getVideos = function(vm) {
                 var row = vm.find('.row');
                 var loader = vm.find('.youtube-loader');
 
-                var _data = getWithExpiry('youtube');
-
-                if (_data) {
-                    if (_data.length > 0) {
+                loader.fadeIn();
+                    
+                $.ajax({    
+                    url: window.dooca.base_url + '/private/youtube?channelId={{ channel_id }}',
+                    type: 'GET',
+                    success: function (data) {
                         loader.fadeOut();
 
-                        var tpl = createTemplate(_data);
-                        $(row).append(tpl);
-
-                        if (_data.length > 8) {
-                            $('#{{ section.id }}').find('.youtube .youtube-more').removeClass('d-none');
-                        }
-                    }
-                } else {
-                    loader.fadeIn();
-                    
-                    $.ajax({    
-                        url: _url,
-                        type: 'GET',
-                        cache: true,
-                        success: function (data) {
-                            setWithExpiry('youtube', data, 5000);
-
-                            var items = data;
-
-                            if (items.length > 0) {
-                                loader.fadeOut();
-
-                                var tpl = createTemplate(items);
-                                $(row).append(tpl);
-
-                                if (items.length > 8) {
-                                    $('#{{ section.id }}').find('.youtube .youtube-more').removeClass('d-none');
-                                }
+                        var items = data.items;
+                        if (items.length > 0) {
+                            var tpl = createTemplate(items);
+                            
+                            $(row).append(tpl);
+                            if (items.length > 8) {
+                                $('#{{ section.id }}').find('.youtube .youtube-more').removeClass('d-none');
                             }
-                        },
-                        error: function (xhr, textStatus, error) {
-                            console.log('Youtube Section error');
-                            loader.fadeOut(300);
                         }
-                    });
-                }
+                    },
+                    error: function (xhr, textStatus, error) {
+                        console.log('Youtube Section error');
+                        loader.fadeOut(300);
+                    }
+                });
             };
 
             /*
@@ -171,12 +119,9 @@
             var init = function() {
                 var vm = $('#{{ section.id }}').find('.youtube');
 
-                var _perPage = vm.data('per-page') || perPage;
-                var _channelId = vm.data('channel-id');
-
                 var loadMore = vm.find('.youtube-btn');
 
-                getVideos(_channelId, _perPage, vm);
+                getVideos(vm);
 
                 loadMore.on('click', function() {
                     var visibles = vm.find('.col-6.visible');
@@ -188,7 +133,7 @@
                         $(this).removeClass('d-inline-block').addClass('d-none');
                     } else {
                         total.each(function(index, elm) {
-                            if ($(this).hasClass('d-none') && index >= total_visibles && index < (total_visibles + 9)) {
+                            if ($(this).hasClass('d-none') && index >= total_visibles && index < (total_visibles + 8)) {
                                 $(this).removeClass('d-none').addClass('visible');
                             }
                         });
@@ -211,6 +156,12 @@
             "type": "accordion",
             "content": "Conteúdo",
             "icon": "content"
+        },{
+        	"type": "text",
+          	"id": "section_name",
+          	"label": "Identificação da seção",
+            "info": "Exemplo: Banner de promoções",
+          	"default": ""
         },
         {
             "type": "text",

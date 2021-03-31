@@ -1,6 +1,6 @@
-{% set logo_dark = section.settings.logo_dark ?: null %}
-{% set logo_light = section.settings.logo_light ?: null %}
-{% set logo_mobile = section.settings.logo_mobile ?: null %}
+{% set logo_dark = section.settings.logo_dark.src ?: null %}
+{% set logo_light = section.settings.logo_light.src ?: null %}
+{% set logo_mobile = section.settings.logo_mobile.src ?: null %}
 {% set logo_align = align ?: 'center' %}
 
 {% set logo = (version) ? logo_light : logo_dark %}

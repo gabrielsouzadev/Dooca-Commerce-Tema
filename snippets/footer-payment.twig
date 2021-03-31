@@ -193,6 +193,17 @@
                         </div>
                     {% endif %}
                 {% endif %} 
+                {% if section.settings.seal_payment_pix %}
+                    {% if color %}
+                        <div class="icon mb-3 mr-3">
+                            <img alt="Pix" class="img-fluid" src="{{ ('img/dc-payment/pix-color.svg' ) | assets_url | img_url }}" />
+                        </div>
+                    {% else %}
+                        <div class="icon {% if section_secondary %} f-sc-color {% else %} f-hl-color {% endif %} mr-3 mb-3">
+                            {{ ('img/dc-payment/pix.svg') | svg }}
+                        </div>
+                    {% endif %}
+                {% endif %} 
             </div>
         </div>
     {% endif %}

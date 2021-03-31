@@ -4,7 +4,7 @@
     {% ajax 'nav-cart' %}
 		<div class="position-relative pt-3 pb-3">
 			<a href="{{ 'cart' | url }}" class="d-flex align-items-center" aria-label="Carrinho">
-				{% if cart_custom_img %}
+				{% if cart_custom_img.src %}
 					<i class="nav-icon nav-custom">
 						<img loading="lazy" class="img-fluid" src="{{ cart_custom_img | img_url }}" alt="Carrinho">
 					</i>
@@ -84,7 +84,7 @@
 					</div>
 				{% else %}
 					<div class="d-flex align-items-center justify-content-center flex-wrap p-5">
-						{% if section.settings.cart_custom %}
+						{% if section.settings.cart_custom.src %}
 							<i class="icon mr-3">
 								<img loading="lazy" class="img-fluid" src="{{ section.settings.cart_custom | img_url }}" alt="Carrinho">
 							</i>

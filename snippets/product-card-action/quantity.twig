@@ -20,7 +20,7 @@
     >
         <input type="hidden" name="redirect" value="cart">
 
-        <div class="{% if cards >= 4 or col == 3 %}col-12 mb-3{% else %}col-12 col-lg-6 mb-3 mb-lg-0{% endif %} position-relative">
+        <div class="{% if cards >= 4 or col == 3 %}col-12 mb-3{% else %}col-12 col-xl-6 mb-3 mb-xl-0{% endif %} position-relative">
             <button 
                 aria-label="dc-decrease"
                 class="dc-quantity-button decrease position-absolute" dc-quantity-decrease type="button">
@@ -45,7 +45,7 @@
             </button>
         </div>
 
-        <div class="product-buy text-center {% if cards >= 4 or col == 3 %}col-12{% else %}col-12 col-lg-6{% endif %}">
+        <div class="product-buy text-center {% if cards >= 4 or col == 3 %}col-12{% else %}col-12 col-xl-6{% endif %}">
             <button type="submit" class="btn product-buy-button w-100" dc-quantity-submit>
                 {{ text }}
             </button>

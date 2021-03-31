@@ -55,6 +55,13 @@
                         $('.product-reference').empty();
                         $('.product-reference').append(res);
                     });
+                } else {
+                    xhr.get({
+                        id: 'product-reference'
+                    }).done(function(res) {
+                        $('.product-reference').empty();
+                        $('.product-reference').append(res);
+                    });
                 }
 
                 xhr.get({

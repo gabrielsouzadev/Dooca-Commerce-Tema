@@ -123,7 +123,7 @@
 </style>
 
 <header 
-	class="header header-{{ type }} {{ section.settings.fixed_type }} {% if show_header_fixed %}is-fixed-mobile{% endif %} {% if version %}version{% endif %} {% if not section_primary and version and not opacity %}h-hl-background{% elseif section_primary and not opacity %}h-pr-background{% endif %} {% if template != 'index' and opacity and version %}h-pr-background{% endif %}" 
+	class="header header-{{ type }} {{ section.settings.fixed_type }} {% if show_header_fixed %}is-fixed-mobile{% endif %} {% if version %}version{% endif %} {% if not section_primary and version and not opacity %}h-hl-background{% elseif section_primary and not opacity %}h-pr-background{% endif %} {% if template != 'index' and opacity and version %}h-pr-background{% endif %} {% if not section.settings.logo_dark or not section.settings.logo_light %}no-logo-padding{% endif %}" 
 	id="{{ section.id }}"
 	{% if section.settings.header_bg %}
 		style="

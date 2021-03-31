@@ -15,7 +15,7 @@
 {% set product_border_color = section.settings.product_border_color ?: null %}
 {% set product_title_color = section.settings.product_title_color ?: theme.settings.color_primary %}
 {% set product_text_color = section.settings.product_text_color ?: null %}
-{% set product_buy_background_color = section.settings.product_buy_background_color ?: '#37c79b' %}
+{% set product_buy_background_color = section.settings.product_buy_background_color ?: theme.settings.color_primary %}
 {% set product_buy_text_color = section.settings.product_buy_text_color ?: null %}
 {% set product_buy_button_text = section.settings.product_buy_button_text ?: 'Detalhes' %}
 
@@ -131,6 +131,12 @@
             "type": "accordion",
             "content": "Conteúdo",
             "icon": "content"
+        },{
+        	"type": "text",
+          	"id": "section_name",
+          	"label": "Identificação da seção",
+            "info": "Exemplo: Banner de promoções",
+          	"default": ""
         },
         {
             "type": "text",

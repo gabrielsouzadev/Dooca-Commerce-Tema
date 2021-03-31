@@ -147,7 +147,7 @@
                                         background-position: center;
                                     {% endif %}
                                     {% if section_maxheight > 0 %}max-height: {{ section_maxheight }}px;{% endif %}
-                                    {% if not src %} max-height: 72rem;{% endif %}
+                                    {% if not src and not section_maxheight > 0 %} max-height: 72rem;{% endif %}
                                 ">
                                     {% if template == 'hotsite' and not has_h1 and title %}
                                         {% set has_h1 = true %}
@@ -284,6 +284,12 @@
             "type": "accordion",
             "content": "Aparência",
             "icon": "design"
+        },{
+        	"type": "text",
+          	"id": "section_name",
+          	"label": "Identificação da seção",
+            "info": "Exemplo: Banner de promoções",
+          	"default": ""
         }, {
             "type": "checkbox",
             "label": "Não exibir em dispositivos móveis",
