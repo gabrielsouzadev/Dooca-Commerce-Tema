@@ -38,7 +38,7 @@
                 background-color: {{ countdown_background }};
             ">
                 {% if countdown %}
-                    <div class="countdown row no-gutters align-items-center justify-content-center" date="{{ countdown }}">
+                    <div class="countdown row no-gutters align-items-center justify-content-center" date="{{ countdown.startDate ?: countdown }}">
                         <div class="col-auto text-center d-flex d-lg-block">
                             <span class="h1 d-inline-flex align-items-center justify-content-center m-1" style="background-color: {{ number_bg }}; color: {{ number_color }};" data-days-d></span>
                             <span class="h1 d-inline-flex align-items-center justify-content-center m-1" style="background-color: {{ number_bg }}; color: {{ number_color }};" data-days-u></span>
@@ -187,6 +187,12 @@
             "type": "accordion",
             "content": "Conteúdo",
             "icon": "content"
+        },{
+        	"type": "text",
+          	"id": "section_name",
+          	"label": "Identificação da seção",
+            "info": "Exemplo: Banner de promoções",
+          	"default": ""
         },
         {
             "type": "text",

@@ -34,7 +34,7 @@
                                                 <label class="row customize-product-component d-flex align-items-center justify-content-start mt-4 py-1">
                                                     <div class="col-auto">
                                                         <div class="customize-product-radio">
-                                                            <input type="radio" name="" value="" {% if not component.selected %}checked{% endif %}>
+                                                            <input type="radio" name="" value="components[{{ group.id }}][product_component_id]" {% if not component.selected %}checked{% endif %}>
                                                                 
                                                             <span class="checkmark">
                                                                 <i>{{ 'img/dc-icons/check-bold.svg' | svg }}</i>
@@ -228,15 +228,21 @@
                                                             <div class="row align-items-center no-gutters mt-4 mt-md-2">
                                                                 <div class="col-6 pr-2 product-action">
                                                                     <div class="product-info">
-                                                                        <div class="product-buy">
+                                                                        <div 
+                                                                            class="product-buy" 
+                                                                            dc-quantity
+                                                                            data-action="button"
+                                                                            data-min="{{ component.min_quantity ?: 0 }}"
+                                                                            data-max="{{ (component.max_quantity > 0) ? component.max_quantity : component.balance }}"
+                                                                        >
                                                                             <div class="col-12 dc-quantity" style="min-height: 4.6rem;">
-                                                                                <button aria-label="dc-decrease" class="dc-decrease position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button" style="min-height: 100%;">
+                                                                                <button dc-quantity-decrease aria-label="dc-decrease" class="dc-decrease position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button" style="min-height: 100%;">
                                                                                     <i class="icon">{{ 'img/dc-icons/minus.svg' | svg }}</i>
                                                                                 </button>
 
-                                                                                <input aria-label="dc-quantity" type="number" class="input dc-input text-center w-100 h-100" name="quantity" value="1" min="{{ component.min_quantity }}" max="{{ (component.max_quantity > 0) ? component.max_quantity : component.balance }}" style="opacity: 1; left: 0; min-height: 100%;">
+                                                                                <input dc-quantity-input aria-label="dc-quantity" type="number" class="input dc-input text-center w-100 h-100" name="quantity" value="1" min="{{ component.min_quantity }}" max="{{ (component.max_quantity > 0) ? component.max_quantity : component.balance }}" style="opacity: 1; left: 0; min-height: 100%;">
 
-                                                                                <button aria-label="dc-increase" class="dc-increase position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button" style="min-height: 100%;">
+                                                                                <button dc-quantity-increase aria-label="dc-increase" class="dc-increase position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button" style="min-height: 100%;">
                                                                                     <i class="icon">{{ 'img/dc-icons/plus.svg' | svg }}</i>
                                                                                 </button>
                                                                             </div>
@@ -428,15 +434,21 @@
                                                 <div class="row align-items-center no-gutters mt-4 mt-md-2">
                                                     <div class="col-12 mb-2 product-action">
                                                         <div class="product-info">
-                                                            <div class="product-buy">
+                                                            <div 
+                                                                class="product-buy"
+                                                                dc-quantity
+                                                                data-action="button"
+                                                                data-min="{{ component.min_quantity ?: 0 }}"
+                                                                data-max="{{ (component.max_quantity > 0) ? component.max_quantity : component.balance }}"
+                                                            >
                                                                 <div class="col-12 dc-quantity" style="min-height: 4.6rem;">
-                                                                    <button aria-label="dc-decrease" class="dc-decrease position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button" style="min-height: 100%;">
+                                                                    <button dc-quantity-decrease aria-label="dc-decrease" class="dc-decrease position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button" style="min-height: 100%;">
                                                                         <i class="icon">{{ 'img/dc-icons/minus.svg' | svg }}</i>
                                                                     </button>
 
-                                                                    <input aria-label="dc-quantity" type="number" class="input dc-input text-center w-100 h-100" name="quantity" value="1" min="{{ component.min_quantity }}" max="{{ (component.max_quantity > 0) ? component.max_quantity : component.balance }}" style="opacity: 1; left: 0; min-height: 100%;">
+                                                                    <input dc-quantity-input aria-label="dc-quantity" type="number" class="input dc-input text-center w-100 h-100" name="quantity" value="1" min="{{ component.min_quantity }}" max="{{ (component.max_quantity > 0) ? component.max_quantity : component.balance }}" style="opacity: 1; left: 0; min-height: 100%;">
 
-                                                                    <button aria-label="dc-increase" class="dc-increase position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button" style="min-height: 100%;">
+                                                                    <button dc-quantity-increase aria-label="dc-increase" class="dc-increase position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button" style="min-height: 100%;">
                                                                         <i class="icon">{{ 'img/dc-icons/plus.svg' | svg }}</i>
                                                                     </button>
                                                                 </div>

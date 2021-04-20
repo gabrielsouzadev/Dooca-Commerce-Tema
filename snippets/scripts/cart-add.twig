@@ -1,7 +1,7 @@
 {% if theme.settings.product_cart_add_redirect == 'not_redirect' %}
     <script type="text/javascript" defer>
         $(function() {
-            var modal = $('.cart-redirect-modal').modal();
+            var modal = $('.cart-redirect-modal.default').modal();
             var loader = $('.product-buy-loader');
 
             $('body').delegate('#form-add-cart, #form-add-cart-custom', 'submit', function(e) {
@@ -111,12 +111,14 @@
                         badge.empty();
                         badge.append('<span class="text">' + data.quantity + '</span>');
 
-                        if (data.items.length > 0) {
-                            var dropdown = _this.find('.nav-cart-dropdown');
-                            var tpl = createCartTemplate(data);
+                        if (data.items ?? false) {
+                            if (data.items.length > 0) {
+                                var dropdown = _this.find('.nav-cart-dropdown');
+                                var tpl = createCartTemplate(data);
 
-                            dropdown.empty();
-                            dropdown.append(tpl)
+                                dropdown.empty();
+                                dropdown.append(tpl)
+                            }
                         }
                     });
                 }

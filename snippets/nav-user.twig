@@ -8,7 +8,7 @@
 <div class="nav-user">
     <a {% if not shop.catalog %}href="{{ 'account' | url }}"{% endif %} class="nav-link d-flex align-items-center">
         {% if not shop.catalog %}
-            {% if user_custom_img %}
+            {% if user_custom_img.src %}
                 <i class="nav-icon nav-custom">
                     <img loading="lazy" class="img-fluid" src="{{ user_custom_img | img_url}}" alt="{{ text }}">
                 </i>

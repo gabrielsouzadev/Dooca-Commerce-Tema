@@ -7,6 +7,10 @@
 {% set thumbs = product.images ?: null %}
 {% set mobile_zoom = section.settings.mobile_zoom %}
 
+{% if theme.settings.product_info_custom_crop_mobile %}
+    {% set img_featured = theme.settings.product_info_custom_crop_mobile ~ '+fill_ffffff' %}
+{% endif %}
+
 <div class="product-gallery-mobile {{ theme.settings.product_image_crop }} row owl-carousel owl-theme">
     {% for thumb in thumbs %}
         <div 
@@ -27,7 +31,7 @@
                 <div class="product-gallery-video-bg vertical dc-gallery__video" style="background-image: url('https://img.youtube.com/vi/{{ product_video.id }}/sddefault.jpg')"></div>
             {% endif %}
             
-            <div class="product-gallery-video {{ theme.settings.product_image_crop }} position-relative">
+            <div class="product-gallery-video-mobile {{ theme.settings.product_image_crop }} position-relative">
                 <div class="icon-play">
                     <svg viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M0 34C0 15.232 15.232 0 34 0C52.768 0 68 15.232 68 34C68 52.768 52.768 68 34 68C15.232 68 0 52.768 0 34ZM47.6 34L27.2 18.7V49.3L47.6 34Z" fill="currentColor"></path>
@@ -105,7 +109,7 @@
             var modal = section.find('.video-modal.mobile').modal();
             var close = $('.video-modal.mobile').find('.video-close');
 
-            $('body').delegate('.product-gallery-video', 'click', function(e) {
+            $('body').delegate('.product-gallery-video-mobile', 'click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
 

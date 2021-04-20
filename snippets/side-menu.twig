@@ -118,15 +118,23 @@
         };
 
         close_size.click(function() {
-            toggleMenu();
+            scroll.stop().removeClass('no-scroll');
+            side_menu.stop().removeClass('is-open');
+            side_close.stop().fadeOut(350);
+            $('.side-dropdown').removeClass('open');
         });
 
         button.click(function() {
-            toggleMenu();
+            scroll.stop().addClass('no-scroll');
+            side_menu.stop().addClass('is-open');
+            side_close.stop().fadeIn(350);
         });
 
         side_close.click(function() {
-            toggleMenu();
+            scroll.stop().removeClass('no-scroll');
+            side_menu.stop().removeClass('is-open');
+            side_close.stop().fadeOut(350);
+            $('.side-dropdown').removeClass('open');
         });
 
         $(document).keyup(function(e) {

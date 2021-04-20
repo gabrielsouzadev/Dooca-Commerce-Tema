@@ -18,13 +18,14 @@
                     <div class="col-12 col-md-6">
                         <div
                             class="dc-quantity position-relative w-100"
-                            dc-quantity="dc-quantity"
+                            dc-quantity
+                            data-action="button"
                             data-min="0"
                             data-max="{{ (product.max_quantity > 0) ? product.max_quantity : variation.balance }}"
                         >
                             <button
                                 aria-label="dc-decrease"
-                                dc-quantity-decrease="dc-quantity-decrease"
+                                dc-quantity-decrease
                                 type="button"
                                 class="dc-decrease position-absolute d-flex justify-content-center align-items-center p-0"
                             >
@@ -32,7 +33,7 @@
                             </button>
                             <div class="form-group form-group--input quantity__input">
                                 <input
-                                    dc-quantity-input="dc-quantity-input"
+                                    dc-quantity-input
                                     type="number"
                                     class="input w-100 text-center dc-input"
                                     name="items[{{ loop.index0 }}][quantity]"
@@ -42,7 +43,7 @@
                             </div>
                             <button
                                 aria-label="dc-increase"
-                                dc-quantity-increase="dc-quantity-increase"
+                                dc-quantity-increase
                                 type="button"
                                 class="dc-increase position-absolute d-flex justify-content-center align-items-center p-0"
                             >

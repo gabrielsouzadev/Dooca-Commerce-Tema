@@ -352,6 +352,10 @@
 					]
 				},
 				{
+					"type": "header",
+					"content": "Crop de imagem no dekstop"
+				},
+				{
 					"type": "text",
 					"id": "product_card_custom_crop",
 					"label": "Tamanho da imagem na listagem de produto",
@@ -361,6 +365,16 @@
 					"type": "text",
 					"id": "product_info_custom_crop",
 					"label": "Tamanho da imagem no detalhe de produto",
+					"info": "Exemplo: 620x620 ou 600x800. <br /> <br /> <div style=\"text-transform: none;\"> Não é necessário preencher os campos acima para sua loja funcionar corretamente. Utilize esse recurso apenas se desejar personalizar o formato das suas imagens de produto. Caso o formato aplicado reduza a qualidade da exibição das suas imagens, remova a configuração inserida.</div>"
+				},
+				{
+					"type": "header",
+					"content": "Crop de imagem no mobile"
+				},
+				{
+					"type": "text",
+					"id": "product_info_custom_crop_mobile",
+					"label": "Tamanho da imagem no detalhe de produto em dispositívos moveis",
 					"info": "Exemplo: 620x620 ou 600x800. <br /> <br /> <div style=\"text-transform: none;\"> Não é necessário preencher os campos acima para sua loja funcionar corretamente. Utilize esse recurso apenas se desejar personalizar o formato das suas imagens de produto. Caso o formato aplicado reduza a qualidade da exibição das suas imagens, remova a configuração inserida.</div>"
 				}
 			]

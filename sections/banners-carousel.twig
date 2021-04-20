@@ -147,7 +147,7 @@
                                         background-position: center;
                                     {% endif %}
                                     {% if section_maxheight > 0 %}max-height: {{ section_maxheight }}px;{% endif %}
-                                    {% if not src %} max-height: 72rem;{% endif %}
+                                    {% if not src and not section_maxheight > 0 %} max-height: 72rem;{% endif %}
                                 ">
                                     {% if template == 'hotsite' and not has_h1 and title %}
                                         {% set has_h1 = true %}
@@ -162,8 +162,8 @@
                                         
                                         <div class="d-none d-lg-block">
                                             {% if video %}
-                                                <div class="dc-youtube" dc-youtube="{{ video }}">
-                                                    <div class="frame" id="video"></div>
+                                                <div class="dc-youtube" dc-youtubee="{{ video }}">
+                                                    <div class="frame" id="video{{ loop.index }}"></div>
                                                 </div>
                                             {% else %}
                                                 <div class="carousel-bg {{ parallax }}" style="background-image: url({{ src }});"></div>
@@ -269,6 +269,177 @@
                 touchDrag: true,
                 mouseDrag: true
             });
+
+            var dy1;
+            var dy2;
+            var dy3;
+            var dy4;
+            
+            var dc_youtube = $('[dc-youtubee]');
+            var plugin_src = 'https://www.youtube.com/player_api';
+            
+            if (dc_youtube.length > 0) {
+            	$.getScript(plugin_src, function () {
+                	var playerDefaults = {
+                        autoplay: 0,
+                        autohide: 1,
+                        modestbranding: 0,
+                        rel: 0,
+                        showinfo: 0,
+                        controls: 0,
+                        disablekb: 1,
+                        enablejsapi: 0,
+                        iv_load_policy: 3
+                    };
+                    
+                    var videos = [];
+                    
+                    for (var i = 0; i < dc_youtube.length; i++) {
+                    	var video = $(dc_youtube[i]);
+                        
+                        videos.push({
+                        	'videoId': video.attr('dc-youtubee'),
+                	  		'startSeconds': 0
+                      	})
+                    }
+                    
+                    window.onYouTubePlayerAPIReady = function () {
+                    	if (videos[0]) {
+                            dy1 = new YT.Player('video1', {
+                                events: {
+                                    'onReady': onPlayerReady,
+                                    'onStateChange': onPlayerStateChange
+                                },
+                                playerVars: playerDefaults
+                            });
+                        }
+                        
+                        if (videos[1]) {
+                            dy2 = new YT.Player('video2', {
+                                events: {
+                                    'onReady': onPlayerReady,
+                                    'onStateChange': onPlayerStateChange
+                                },
+                                playerVars: playerDefaults
+                            });
+                        }
+                        
+                        if (videos[2]) {
+                            dy3 = new YT.Player('video3', {
+                                events: {
+                                    'onReady': onPlayerReady,
+                                    'onStateChange': onPlayerStateChange
+                                },
+                                playerVars: playerDefaults
+                            });
+                        }
+                        
+                        if (videos[3]) {
+                            dy4 = new YT.Player('video4', {
+                                events: {
+                                    'onReady': onPlayerReady,
+                                    'onStateChange': onPlayerStateChange
+                                },
+                                playerVars: playerDefaults
+                            });
+                        }
+
+                        vidRescale();
+                    };
+
+                    window.onPlayerReady = function () {
+                    	if (videos[0]) {
+                        	dy1.loadVideoById(videos[0]);
+                        	dy1.mute();
+                        }
+                        
+                        if (videos[1]) {
+                        	dy2.loadVideoById(videos[1]);
+                        	dy2.mute();
+                        }
+                        
+                        if (videos[2]) {
+                        	dy3.loadVideoById(videos[2]);
+                        	dy3.mute();
+                        }
+                        
+                        if (videos[3]) {
+                        	dy4.loadVideoById(videos[3]);
+                        	dy4.mute();
+                        }
+                    };
+
+                    window.onPlayerStateChange = function (e) {
+                        if (e.data === 1) {
+                            $('.dc-youtube .frame').addClass('active');
+                        } else if (e.data === 0) {
+                        	if (videos[0]) {
+                            	dy1.playVideo();
+                            	dy1.seekTo(0);
+                            }
+                            
+                            if (videos[1]) {
+                            	dy2.playVideo();
+                            	dy2.seekTo(0);
+                            }
+                            
+                            if (videos[2]) {
+                            	dy3.playVideo();
+                            	dy3.seekTo(0);
+                            }
+                            
+                            if (videos[3]) {
+                            	dy4.playVideo();
+                            	dy4.seekTo(0);
+                            }
+                        }
+                    };
+
+                    window.vidRescale = function () {
+
+                        var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0) + 250;
+                        var h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) + 250;
+
+                        if (w / h > 16 / 9) {
+                        	if (videos[0]) {
+                            	dy1.setSize(w, w / 16 * 9);
+                            }
+                            
+                            if (videos[1]) {
+                            	dy2.setSize(w, w / 16 * 9);
+                            }
+                            
+                            if (videos[2]) {
+                            	dy3.setSize(w, w / 16 * 9);
+                            }
+                            
+                            if (videos[3]) {
+                            	dy4.setSize(w, w / 16 * 9);
+                            }
+                        } else {
+                        	if (videos[0]) {
+                            	dy1.setSize(h / 9 * 16, h);
+                            }
+                            
+                            if (videos[1]) {
+                            	dy2.setSize(h / 9 * 16, h);
+                            }
+                            
+                            if (videos[2]) {
+                            	dy3.setSize(h / 9 * 16, h);
+                            }
+                            
+                            if (videos[3]) {
+                            	dy4.setSize(h / 9 * 16, h);
+                            }
+                        }
+                    };
+
+                    $(window).on('load resize', function () {
+                        vidRescale();
+                    });
+                });
+            }
         });
     {% endjavascript %}
 {% endif %}
@@ -284,6 +455,12 @@
             "type": "accordion",
             "content": "Aparência",
             "icon": "design"
+        },{
+        	"type": "text",
+          	"id": "section_name",
+          	"label": "Identificação da seção",
+            "info": "Exemplo: Banner de promoções",
+          	"default": ""
         }, {
             "type": "checkbox",
             "label": "Não exibir em dispositivos móveis",

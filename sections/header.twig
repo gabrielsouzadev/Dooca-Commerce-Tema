@@ -90,31 +90,31 @@
 	{% set font_texts = theme.settings.font_texts %}
 
 	:root {
-		--m-ff: {{ font_menu.family ?: mn_ff.css | raw }};
+		--m-ff: '{{ font_menu.family ?: mn_ff.css | raw }}', sans-serif;
 		--m-fs: {{ font_menu.font_size | default(theme.settings.mn_fs) ~ 'px'}};
 		--m-fw: {{ font_menu.font_weight | default(theme.settings.mn_fw) | replace({ 'italic': '' }) }};
 		--m-ls: {{ font_menu.letter_spacing | default(theme.settings.mn_ls) ~ 'px' }};
 		--m-tt: {{ font_menu.text_transform | default(theme.settings.mn_tt) }};
 
-		--h1-ff: {{ font_h1.family ?: h1_ff.css | raw }};
+		--h1-ff: '{{ font_h1.family ?: h1_ff.css | raw }}', sans-serif;
 		--h1-fs: {{ font_h1.font_size | default(theme.settings.h1_fs) ~ 'px'}};
 		--h1-fw: {{ font_h1.font_weight | default(theme.settings.h1_fw) | replace({ 'italic': '' }) }};
 		--h1-ls: {{ font_h1.letter_spacing | default(theme.settings.h1_ls) ~ 'px' }};
 		--h1-tt: {{ font_h1.text_transform | default(theme.settings.h1_tt) }};
 
-		--h2-ff: {{ font_h2.family ?: h2_ff.css | raw }};
+		--h2-ff: '{{ font_h2.family ?: h2_ff.css | raw }}', sans-serif;
 		--h2-fs: {{ font_h2.font_size | default(theme.settings.h2_fs) ~ 'px'}};
 		--h2-fw: {{ font_h2.font_weight | default(theme.settings.h2_fw) | replace({ 'italic': '' }) }};
 		--h2-ls: {{ font_h2.letter_spacing | default(theme.settings.h2_ls) ~ 'px' }};
 		--h2-tt: {{ font_h2.text_transform | default(theme.settings.h2_tt) }};
 
-		--h3-ff: {{ font_h3.family ?: h3_ff.css | raw }};
+		--h3-ff: '{{ font_h3.family ?: h3_ff.css | raw }}', sans-serif;
 		--h3-fs: {{ font_h3.font_size | default(theme.settings.h3_fs) ~ 'px'}};
 		--h3-fw: {{ font_h3.font_weight | default(theme.settings.h3_fw) | replace({ 'italic': '' }) }};
 		--h3-ls: {{ font_h3.letter_spacing | default(theme.settings.h3_ls) ~ 'px' }};
 		--h3-tt: {{ font_h3.text_transform | default(theme.settings.h3_tt) }};
 
-		--tx-ff: {{ font_texts.family ?: tx_ff.css | raw }};
+		--tx-ff: '{{ font_texts.family ?: tx_ff.css | raw }}', sans-serif;
 		--tx-fs: {{ font_texts.font_size | default(theme.settings.tx_fs) ~ 'px'}};
 		--tx-fw: {{ font_texts.font_weight | default(theme.settings.tx_fw) | replace({ 'italic': '' }) }};
 		--tx-ls: {{ font_texts.letter_spacing | default(theme.settings.tx_ls) ~ 'px' }};
@@ -123,7 +123,7 @@
 </style>
 
 <header 
-	class="header header-{{ type }} {{ section.settings.fixed_type }} {% if show_header_fixed %}is-fixed-mobile{% endif %} {% if version %}version{% endif %} {% if not section_primary and version and not opacity %}h-hl-background{% elseif section_primary and not opacity %}h-pr-background{% endif %} {% if template != 'index' and opacity and version %}h-pr-background{% endif %}" 
+	class="header header-{{ type }} {{ section.settings.fixed_type }} {% if show_header_fixed %}is-fixed-mobile{% endif %} {% if version %}version{% endif %} {% if not section_primary and version and not opacity %}h-hl-background{% elseif section_primary and not opacity %}h-pr-background{% endif %} {% if template != 'index' and opacity and version %}h-pr-background{% endif %} {% if not section.settings.logo_dark or not section.settings.logo_light %}no-logo-padding{% endif %}" 
 	id="{{ section.id }}"
 	{% if section.settings.header_bg %}
 		style="
@@ -297,7 +297,8 @@
 {% endjavascript %}
 
 {% if theme.settings.product_cart_add_redirect == 'not_redirect' %}
-	{% include 'cart-redirect-modal.twig' %}
+	{% include 'cart-redirect-modal.twig' with { custom_class: 'default' } %}
+	{% include 'cart-redirect-modal.twig' with { custom_class: 'individual-buy' } %}
 {% endif %}
 
 {% schema %}

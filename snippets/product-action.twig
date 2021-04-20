@@ -76,6 +76,7 @@
 
                     {% app 'customize' %}
                     
+                    {# {% ajax 'product-values' %} #}
                     <div class="product-values mb-5">
                         {% if product.has_price_range and section.settings.variation_cheap_message and not _get.variation %}
                             <div class="product-action-price mt-5">
@@ -117,17 +118,29 @@
                             {% include 'product-installments.twig' %}
                         {% endif %}
                     </div>
-
+					{# {% endajax %} #}
+                    
                     <div class="product-buy d-flex flex-wrap mt-3 no-gutters">
                         {% if has_grid or (section.settings.product_atribute_type == 'grid' and product.attribute.values|length == 0) %}
                             <div class="col-12 col-md-4 md-0 mr-md-3 mb-3 mb-md-0 dc-quantity">
-                                <button aria-label="dc-decrease" class="dc-decrease position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button">
+                                <button dc-quantity-decrease aria-label="dc-decrease" class="dc-decrease position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button">
                                     <i class="icon">{{ 'img/dc-icons/minus.svg' | svg }}</i>
                                 </button>
 
-                                <input aria-label="dc-quantity" type="number" class="input dc-input text-center w-100 h-100" name="quantity" value="{% if _get.quantity > 0 %}{{ _get.quantity }}{% else %}1{% endif %}" min="{{ product.min_quantity }}" {% if not product.sell_out_of_stock %} max="{{ (product.max_quantity > 0) ? product.max_quantity : product.balance }}" {% endif %}>
+                                <input 
+                                    dc-quantity-input  
+                                    aria-label="dc-quantity" 
+                                    type="number" 
+                                    class="input dc-input text-center w-100 h-100" 
+                                    name="quantity" 
+                                    value="{% if _get.quantity > 0 %}{{ _get.quantity }}{% else %}1{% endif %}" 
+                                    min="{{ product.min_quantity }}" 
+                                    {% if not product.sell_out_of_stock %} 
+                                        max="{{ (product.max_quantity > 0) ? product.max_quantity : product.balance }}" 
+                                    {% endif %}
+                                >
 
-                                <button aria-label="dc-increase" class="dc-increase position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button">
+                                <button dc-quantity-increase aria-label="dc-increase" class="dc-increase position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button">
                                     <i class="icon">{{ 'img/dc-icons/plus.svg' | svg }}</i>
                                 </button>
                             </div>
@@ -180,69 +193,3 @@
         {% endif %}
     {% endajax %}
 </div>
-
-{% if has_grid or (section.settings.product_atribute_type == 'grid' and product.attribute.values|length == 0) %}
-    {% javascript %}
-        $(function() {
-            // TODO: arrumar isso na diretiva no front dc-quantity.js
-
-            var action = $('.product-action .dc-quantity');
-
-            action.on('click', '.dc-decrease', function(el) { decrease(el); });
-            action.on('click', '.dc-increase', function(el) { increase(el); });
-            action.on('change', '.dc-input', function(el) { change(el); });
-
-            getInput = function(el) {
-                var input = $(el.target).parents('.dc-quantity').find('.dc-input');
-                console.log(input);
-                var obj = {};
-                
-                obj.val = parseInt(input.val());
-                obj.min = parseInt(input.attr('min'));
-                obj.max = {% if product.sell_out_of_stock %}999999{% else %}parseInt(input.attr('max')){% endif %};
-
-                return obj;
-            };
-
-            decrease = function(el) {
-                var data = getInput(el);
-                var input = $(el.target).parents('.dc-quantity').find('.dc-input');
-
-                var n = data.val - 1;
-                
-                if (n >= data.min) {
-                    input.val(n);
-                }
-            };
-
-            increase = function(el) {
-                var data = getInput(el);
-                var input = $(el.target).parents('.dc-quantity').find('.dc-input');
-
-                var n = data.val + 1;
-
-                if (n <= data.max) {
-                    $('.customize-product').find("input[name='quantity']").attr('value', n);
-                    input.val(n);
-                }
-            };
-
-            change = function(el) {
-                var input = $(el.target);
-                var obj = {};
-
-                obj.val = parseInt(input.val());
-                obj.min = parseInt(input.attr('min'));
-                obj.max = {% if product.sell_out_of_stock %}999999{% else %}parseInt(input.attr('max')){% endif %};
-
-                var data = obj;
-                var n = data.val;
-            
-                if ((n <= data.max) || (n >= data.min)) {
-                    $('.customize-product').find("input[name='quantity']").attr('value', n);
-                    $(el).attr('value', n);
-                }
-            };
-        });
-    {% endjavascript %}
-{% endif %}

@@ -52,7 +52,7 @@
 {% if product.video %}
     {% set product_video = product.video | video_url %}
     
-    <div class="video-modal">
+    <div class="video-modal desktop">
         <div class="container">
             <div class="row align-items-center justify-content-center">
                 <div class="col-12">
@@ -119,8 +119,8 @@
         });
 
         var section = $('.product-gallery');
-        var modal = section.find('.video-modal').modal();
-        var close = $('.video-modal').find('.video-close');
+        var modal = section.find('.video-modal.desktop').modal();
+        var close = $('.video-modal.desktop').find('.video-close');
 
         $('body').delegate('.product-gallery-video', 'click', function(e) {
             e.preventDefault();
@@ -129,7 +129,7 @@
             modal.open();
 
             setTimeout(function() {
-                var video = $('.video-modal');
+                var video = $('.video-modal.desktop');
                 var iframe = video.find('iframe');
                 var url = '';
 
@@ -142,7 +142,7 @@
         });
 
         var stopVideo = function() {
-            var video = $('.video-modal');
+            var video = $('.video-modal.desktop');
             var iframe = video.find('iframe');
             var url = '';
 

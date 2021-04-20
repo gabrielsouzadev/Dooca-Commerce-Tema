@@ -5,7 +5,19 @@ header{
         z-index: 21;
     }
 }
-.header {
+.header { 
+    &.header-2.no-logo-padding {
+        padding-top: 1.5rem;
+        
+        .navigation-link {
+            padding: 2.5rem 0 !important;
+        }
+    }
+
+    &.header-4.no-logo-padding,
+    &.header-3.no-logo-padding {
+        padding: 1.5rem 0;
+    }
     
     // Removed style from links without href
     .navigation,

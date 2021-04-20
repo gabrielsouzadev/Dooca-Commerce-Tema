@@ -54,12 +54,14 @@
                 {% endjavascript %}
             {% endif %}
 
-            {% if product.variation.reference and reference %}
-                <div class="product-reference mt-2 mr-2 {% if center %}text-center{% endif %}">
-                    <span class="text">REF: {{ product.variation.reference }}</span>
-                </div>
-            {% endif %}
-
+            {% ajax 'product-reference' %}
+                {% if product.variation.reference and reference %}
+                    <div class="product-reference mt-2 mr-2 {% if center %}text-center{% endif %}">
+                        <span class="text">REF: {{ product.variation.reference }}</span>
+                    </div>
+                {% endif %}
+            {% endajax %}
+            
             {% ajax 'product-id-erp' %}
                 {% if id_erp and product.variation.external_id %}
                     <div class="product-reference mt-2 {% if center %}text-center{% endif %}">

@@ -1,16 +1,9 @@
 .product-info {
     .product-buy {
-        .dc-decrease {
-            border-right: 0;
-        }
-
-        .dc-increase {
-            border-left: 0;
-        }
-
         .dc-quantity .dc-decrease, 
         .dc-quantity .dc-increase {
             width: 30%;
+            border: 0;
         }
     }
 }

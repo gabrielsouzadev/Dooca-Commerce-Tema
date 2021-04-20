@@ -76,7 +76,7 @@
                 </div>
 
                 <div class="col-10">
-                    <div class="cv-colors {% if product.colors|length > 6 %}owl-carousel owl-theme{% else %}d-flex align-items-center justify-content-center flex-wrap{% endif %}">
+                    <div class="cv-colors owl-carousel owl-theme">
                         {% for color in product.colors %}
                             <div class="cv-color {% if color.id == product.color_id %} active {% endif %}" data-url="{{ color.url }}" data-img-src="{{ color.product_images[0].src }}" data-img-rpt="{{ color.product_images[1].src }}">
                                 <i style="background-color: {{ color.hexadecimal }}; background-image: url({{ color.image | img_url() }});"></i>

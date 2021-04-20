@@ -23,7 +23,7 @@
             {% set has_icon = null %}
 
             {% for nav in data %}
-                {% set has_icon = nav.settings.icon_image ?: null %}
+                {% set has_icon = nav.settings.icon_image.src ?: null %}
             {% endfor %}
 
             {% if data|length > 0 %}
@@ -33,7 +33,7 @@
                             {% for nav in data %}
                                 {% set nav_products = nav.settings.products %}
                                 {% set nav_title = nav.settings.title %}
-                                {% set icon = nav.settings.icon_image ?: null %}
+                                {% set icon = nav.settings.icon_image.src ?: null %}
 
                                 <div class="d-none d-lg-block products-tabs-item col text-center p-3 image {% if nav_title %} d-flex align-items-center justify-content-center {% endif %}" data-link="{{ loop.index0 }}" style="color: {{ section.settings.tabs_background_color }};">
                                     <img loading="lazy" class="img-fluid products-tabs-image" src="{{ icon | img_url }}" alt="{{ nav_title }}" {% if nav_title %}style="margin: 0;"{% endif %}>
@@ -276,6 +276,12 @@
             "type": "accordion",
             "content": "Conteúdo",
             "icon": "content"
+        },{
+        	"type": "text",
+          	"id": "section_name",
+          	"label": "Identificação da seção",
+            "info": "Exemplo: Banner de promoções",
+          	"default": ""
         }, {
             "type": "text",
             "label": "Título",

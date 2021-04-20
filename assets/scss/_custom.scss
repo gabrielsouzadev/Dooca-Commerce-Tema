@@ -24,6 +24,20 @@ $cl: 10;
     }
 }
 
+@include media-breakpoint-up(md) {
+    .logo-link h2 {
+        font-size: 2.4rem;
+    }
+
+    .pl-md-8 {
+        padding-left: 8rem;
+    }
+
+    .pr-md-8 {
+        padding-right: 8rem;
+    }
+}
+
 .collection-content {
     .product-card.iconsmethods {
         @include media-breakpoint-down(md) {
@@ -257,5 +271,12 @@ $cl: 10;
   }
   .position-xl-sticky {
     position: sticky !important;
+  }
+}
+
+@media only screen and (max-width: 920px) {
+  .text-lg-left {
+    width: 100% !important;
+    text-align: center !important;
   }
 }

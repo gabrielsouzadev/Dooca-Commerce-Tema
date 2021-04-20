@@ -34,7 +34,7 @@
                                                 <label class="row customize-product-component d-flex align-items-center justify-content-start mt-4 py-1">
                                                     <div class="col-auto">
                                                         <div class="customize-product-radio">
-                                                            <input type="radio" name="" value="" {% if not component.selected %}checked{% endif %}>
+                                                            <input type="radio" name="components[{{ group.id }}][product_component_id]" value="" {% if not component.selected %}checked{% endif %}>
                                                                 
                                                             <span class="checkmark">
                                                                 <i>{{ 'img/dc-icons/check-bold.svg' | svg }}</i>
@@ -176,15 +176,14 @@
                                                                 {% endif %}
                                                             {% endif %}
                                                         {% elseif variation_select_type == 'buttons' %}
-                                                            
                                                             <div class="customize-product-buttons d-flex flex-wrap mb-2">
                                                                 {% for variation in component.variations %}
                                                                     
                                                                     {% set disabled = (variation.balance <= 0 or variation.balance < component.quantity) ? 'disabled' : null %}
                                                                     
-                                                                    <label class="customize-product-button {% if variation.id in _get.variations %}active{% endif %} mt-2 mr-2 p-2 {{ disabled }}" for="variation-{{ variation.id }}" {% if disabled %}style="pointer-events: none;"{% endif %}>
+                                                                    <label class="customize-product-button mt-2 mr-2 p-2 {% if variation.id in _get.variations %}active{% endif %} {{ disabled }}" for="variation-{{ variation.id }}" {% if disabled %}style="pointer-events: none;"{% endif %}>
                                                                         <span class="text">{{ variation.attribute.name }}</span>
-                                                                        <input id="variation-{{ variation.id }}" type="radio" name="components[{{ component.product_component_group_id }}][variation_id]"  {% if variation.id in _get.variations %}checked{% endif %}value="{{ variation.id }}" required>
+                                                                        <input id="variation-{{ variation.id }}" type="radio" name="components[{{ component.product_component_group_id }}][variation_id]"  value="{{ variation.id }}" {% if variation.id in _get.variations %}checked{% endif %} required>
                                                                     </label>
                                                                 {% endfor %}
 
@@ -218,7 +217,7 @@
                                                 {% if individual_buy %}
                                                     {% set buy_button_text = theme.settings.product_buy_button_text ?: 'Comprar' %}
 
-                                                    <div class="{% if individual_price %}col-12 col-md-5{% else %}col-auto{% endif %}">
+                                                    <div class="{% if individual_price %}col-12 col-md-auto{% else %}col-auto{% endif %}">
                                                         {% if individual_price %}
                                                             <div class="mt-4 mt-md-2">
                                                                 {% include 'product-card-price.twig' with { product: component } %}
@@ -229,15 +228,21 @@
                                                             <div class="row align-items-center no-gutters mt-4 mt-md-2">
                                                                 <div class="col-6 pr-2 product-action">
                                                                     <div class="product-info">
-                                                                        <div class="product-buy">
+                                                                        <div 
+                                                                            class="product-buy"
+                                                                            dc-quantity
+                                                                            data-action="button"
+                                                                            data-min="{{ component.min_quantity ?: 0 }}"
+                                                                            data-max="{{ (component.max_quantity > 0) ? component.max_quantity : component.balance }}"
+                                                                        >
                                                                             <div class="col-12 dc-quantity" style="min-height: 4.6rem;">
-                                                                                <button aria-label="dc-decrease" class="dc-decrease position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button" style="min-height: 100%;">
+                                                                                <button dc-quantity-decrease aria-label="dc-decrease" class="dc-decrease position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button" style="min-height: 100%;">
                                                                                     <i class="icon">{{ 'img/dc-icons/minus.svg' | svg }}</i>
                                                                                 </button>
 
-                                                                                <input aria-label="dc-quantity" type="number" class="input dc-input text-center w-100 h-100" name="quantity" value="1" min="{{ component.min_quantity }}" max="{{ (component.max_quantity > 0) ? component.max_quantity : component.balance }}" style="opacity: 1; left: 0; min-height: 100%;">
+                                                                                <input dc-quantity-input aria-label="dc-quantity" type="number" class="input dc-input text-center w-100 h-100" name="quantity" value="1" min="{{ component.min_quantity }}" max="{{ (component.max_quantity > 0) ? component.max_quantity : component.balance }}" style="opacity: 1; left: 0; min-height: 100%;">
 
-                                                                                <button aria-label="dc-increase" class="dc-increase position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button" style="min-height: 100%;">
+                                                                                <button dc-quantity-increase aria-label="dc-increase" class="dc-increase position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button" style="min-height: 100%;">
                                                                                     <i class="icon">{{ 'img/dc-icons/plus.svg' | svg }}</i>
                                                                                 </button>
                                                                             </div>
@@ -280,7 +285,7 @@
                                             <input type="radio" name="components[{{ loop.index }}][product_component_id]" value="{{ component.product_component_id }}" checked>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="col-auto">
                                         <div class="customize-product-image">
                                             {% if component.image.src %}
@@ -305,6 +310,7 @@
 
                                         {% if component.variations|length > 1 %}
                                             {% if component.variation.attribute_value_id|length > 0 and component.variation.attribute_value_secondary_id|length > 0 %}
+                                                
                                                 {% set _product = _getProduct(component.grid_id) %}
                                                 {% set attributes = [] %}
                                                 {% set attributes = attributes|merge([_product.attribute]) %}
@@ -377,21 +383,12 @@
                                                     </div>
                                                 {% endif %}
                                             {% elseif variation_select_type == 'buttons' %}
-                                                {# {% set has_selected = null %} #}
                                                 {% set _index = loop.index %}
                                                 <div class="customize-product-buttons d-flex flex-wrap mb-2">
                                                     {% for variation in component.variations %}
-
-                                    
                                                         {% set disabled = (variation.balance <= 0 or variation.balance < component.quantity) ? 'disabled' : null %}
 
-                                                        {# {% if not disabled and not has_selected %}
-                                                            {% set has_selected = variation.id %}
-                                                        {% endif %} #}
-
-                                                        
-
-                                                        <label class="customize-product-button {% if variation.id in _get.variations %}active{% endif %} mt-2 mr-2 p-2 {{ disabled }}" for="variation-{{ variation.id }}" {% if disabled %}style="pointer-events: none;"{% endif %}>
+                                                        <label class="customize-product-button mt-2 mr-2 p-2 {% if variation.id in _get.variations %}active{% endif %} {{ disabled }}" for="variation-{{ variation.id }}" {% if disabled %}style="pointer-events: none;"{% endif %}>
                                                             <span class="text">{{ variation.attribute.name }}</span>
                                                                 <input id="variation-{{ variation.id }}" type="radio" name="components[{{ _index }}][variation_id]" value="{{ variation.id }}" {% if variation.id in _get.variations %}checked{% endif %} required>
                                                         </label>
@@ -426,7 +423,7 @@
                                     {% if individual_buy %}
                                         {% set buy_button_text = theme.settings.product_buy_button_text ?: 'Comprar' %}
 
-                                        <div class="{% if individual_price %}col-12 col-md-5{% else %}col-auto{% endif %}">
+                                        <div class="{% if individual_price %}col-12 col-md-6{% else %}col-auto{% endif %}">
                                             {% if individual_price %}
                                                 <div class="mt-4 mt-md-2">
                                                     {% include 'product-card-price.twig' with { product: component } %}
@@ -435,24 +432,30 @@
                                             
                                             {% if theme.settings.product_buy_button_type == 'quantity' %}
                                                 <div class="row align-items-center no-gutters mt-4 mt-md-2">
-                                                    <div class="col-6 pr-2 product-action">
+                                                    <div class="col-12 mb-2 product-action">
                                                         <div class="product-info">
-                                                            <div class="product-buy">
+                                                            <div 
+                                                                class="product-buy"
+                                                                dc-quantity
+                                                                data-action="button"
+                                                                data-min="{{ component.min_quantity ?: 0 }}"
+                                                                data-max="{{ (component.max_quantity > 0) ? component.max_quantity : component.balance }}"
+                                                            >
                                                                 <div class="col-12 dc-quantity" style="min-height: 4.6rem;">
-                                                                    <button aria-label="dc-decrease" class="dc-decrease position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button" style="min-height: 100%;">
+                                                                    <button dc-quantity-decrease aria-label="dc-decrease" class="dc-decrease position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button" style="min-height: 100%;">
                                                                         <i class="icon">{{ 'img/dc-icons/minus.svg' | svg }}</i>
                                                                     </button>
 
-                                                                    <input aria-label="dc-quantity" type="number" class="input dc-input text-center w-100 h-100" name="quantity" value="1" min="{{ component.min_quantity }}" max="{{ (component.max_quantity > 0) ? component.max_quantity : component.balance }}" style="opacity: 1; left: 0; min-height: 100%;">
+                                                                    <input dc-quantity-input aria-label="dc-quantity" type="number" class="input dc-input text-center w-100 h-100" name="quantity" value="1" min="{{ component.min_quantity }}" max="{{ (component.max_quantity > 0) ? component.max_quantity : component.balance }}" style="opacity: 1; left: 0; min-height: 100%;">
 
-                                                                    <button aria-label="dc-increase" class="dc-increase position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button" style="min-height: 100%;">
+                                                                    <button dc-quantity-increase aria-label="dc-increase" class="dc-increase position-absolute d-flex justify-content-center align-items-center p-0 h-100" type="button" style="min-height: 100%;">
                                                                         <i class="icon">{{ 'img/dc-icons/plus.svg' | svg }}</i>
                                                                     </button>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-6">
+                                                    <div class="col-12">
                                                         <button class="btn customize-individual-buy position-relative w-100" style="background-color: {{ theme.settings.color_button_buy }}; color: {{ theme.settings.color_button_buy_text }};" data-variation="components[{{ loop.index }}][variation_id]">
                                                             <div class="product-action-buy-loader">
                                                                 <div class="loader"></div>

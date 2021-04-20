@@ -9,7 +9,7 @@
             <input name="q" type="text" class="smart-input text-left" placeholder="O que você procura ?" style="border-color: {{ color_border }};">
             <button type="submit" class="smart-button btn">
                 <i class="h-hl-color icon">
-                    {% if search_custom_img %}
+                    {% if search_custom_img.src %}
                         <img loading="lazy" src="{{ search_custom_img | img_url }}" alt="Search" class="img-fluid">
                     {% else %}
                         <i class="material-icons md-36">search</i>

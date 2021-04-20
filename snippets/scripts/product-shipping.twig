@@ -182,34 +182,85 @@
             evt.preventDefault();
 
             {% if product.kit %}
-                var customizeButtons = $('.customize-product-buttons');
                 var customizeMessage = false;
                 var offsetTop = false;
 
-                if (customizeButtons.length > 0) {
-                    customizeButtons.each(function() {
-                        var hasSelectedVariation = $(this).find('.active');
+                $('.customize-product-component').each(function() {
+                    var checked = $(this).find("input[type='radio']:checked");
 
-                        if (hasSelectedVariation.length <= 0) {
-                            customizeMessage = true;
+                    if (checked.length > 0) {
+                        var select = $(this).find('.select');
+                        var button = $(this).find('.customize-product-button');
 
-                            var html = `
-                                <div class="alert-shipping col-12 m-0 px-0 customize-product-alert justify-content-start">
-                                    <span>Por favor selecione uma variação antes de calcular o frete.</span>
-                                </div>
-                            `;
+                        if (button) {
+                            if (button.length > 0) {
+                                var hasActive = false;
 
-                            $(this).find('.alert-shipping').empty();
-                            $(this).append(html);
+                                button.each(function() {
+                                    if ($(this).hasClass('active')) {
+                                        hasActive = true;
+                                    }
+                                });
 
-                            if(!offsetTop) {
-                                offsetTop = $(this).offset().top - $('.header-fixed').outerHeight() - 30;
+                                if (!hasActive) {
+                                    customizeMessage = true;
+
+                                    var html = `
+                                        <div class="alert-shipping col-12 m-0 customize-product-alert">
+                                            <span>Por favor selecione uma variação</span>
+                                        </div>
+                                    `;
+
+                                    $(this).find('.alert-shipping').remove();
+                                    $(this).find('.customize-product-title').append(html);
+
+                                    if(!offsetTop) {
+                                        offsetTop = $(this).offset().top;
+
+                                        if (!window.is_mobile) {
+                                            offsetTop = offsetTop - $('.header-fixed').outerHeight();
+                                        }
+
+                                        offsetTop = offsetTop - 30;
+                                    }
+                                } else {
+                                    $(this).find('.alert-shipping').remove();
+                                }
                             }
-                        } else {
-                            $(this).find('.alert-shipping').empty();
                         }
-                    });
-                }
+
+                        if (select) {
+                            if (select.length > 0) {
+                                var hasSelectedVariation = select.val();
+                                
+                                if (!hasSelectedVariation) {
+                                    customizeMessage = true;
+
+                                    var html = `
+                                        <div class="alert-shipping col-12 m-0 customize-product-alert">
+                                            <span>Por favor selecione uma variação</span>
+                                        </div>
+                                    `;
+
+                                    $(this).find('.alert-shipping').remove();
+                                    $(this).find('.customize-product-title').append(html);
+
+                                    if(!offsetTop) {
+                                        offsetTop = $(this).offset().top;
+
+                                        if (!window.is_mobile) {
+                                            offsetTop = offsetTop - $('.header-fixed').outerHeight();
+                                        }
+
+                                        offsetTop = offsetTop - 30;
+                                    }
+                                } else {
+                                    $(this).find('.alert-shipping').remove();
+                                }
+                            }
+                        }
+                    } 
+                });
 
                 if (customizeMessage) {  
                     if (offsetTop > 0) {

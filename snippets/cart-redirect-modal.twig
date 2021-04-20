@@ -1,11 +1,11 @@
 {% set icon = (section.settings.type == '1') ? 'img/cart-magazine.svg' : 'img/cart.svg' %}
 
-<div class="cart-redirect-modal">
+<div class="cart-redirect-modal {{ custom_class }}">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12">
                 <div class="text-center p-5">
-                    {% if section.settings.cart_custom %}
+                    {% if section.settings.cart_custom.src %}
                         <i class="icon nav-custom">
 							<img loading="lazy" class="img-fluid" src="{{ section.settings.cart_custom | img_url }}" alt="Carrinho">
 						</i>
