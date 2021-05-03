@@ -32,7 +32,7 @@
                                 {{ 'img/logo-dooca-commerce.svg' | svg }}
                             </i>
                         </a>
-                        {% if section.settings.logo_partner %}
+                        {% if section.settings.logo_partner.src %}
                             <a href="{{ section.settings.logo_partner_url }}" target="_blank">
                                 <img loading="lazy"  class="ml-3 img-fluid" src="{{ section.settings.logo_partner | img_url('70x40') }}" alt="{{ shop.name }}" style="max-height: 50px; max-width: 120px;">
                             </a>

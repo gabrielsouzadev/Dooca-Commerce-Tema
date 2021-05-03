@@ -1,5 +1,5 @@
 {% if product.balance <= 0 and not product.selling_out_of_stock %}
-    {% set text = 'Avise-me' %}
+    {% set text = theme.settings.product_buy_button_outofstock_text ?: 'Avise-me' %}
 {% endif %}
 
 <div class="product-buy text-center col-12">

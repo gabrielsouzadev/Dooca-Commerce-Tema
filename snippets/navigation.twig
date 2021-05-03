@@ -15,7 +15,7 @@
 {% endif %}
 
 <nav class="navigation {% if menu|length > 4 %}rv-last-items{% endif %}">
-	<div class="row no-gutters {% if section.settings.type == 3 %}justify-content-end{% endif %}">
+	<div class="row no-gutters {% if section.settings.type == 3 %}justify-content-end{% else %}justify-content-between{% endif %}">
 		{% if theme.sections.header.settings.menu_departments %}
 
 			{% set column = null %}
@@ -39,7 +39,7 @@
 				{% endfor %}
 			{% endfor %}
 
-			<div class="{% if section.settings.type == 3 %}col-auto{% else %}col{% endif %} navigation-item {% if not has_third_children and not list %} {{ column }} {% elseif not list %} navigation-banner {% endif %}">
+			<div class="col-auto navigation-item {% if not has_third_children and not list %} {{ column }} {% elseif not list %} navigation-banner {% endif %}">
 				<a 
 					class="
 						{% if version %}h-mn-color{% endif %} 
@@ -80,7 +80,7 @@
                     {% set column = 'triple-column' %}
                 {% endif %}
 
-				<div class="{% if section.settings.type == 3 %}col-auto{% else %}col{% endif %} navigation-item {{ column }} {% if item.banner.src %}navigation-banner{% endif %}">
+				<div class="col-auto navigation-item {{ column }} {% if item.banner.src %}navigation-banner{% endif %}">
 					<a 
 						class="
 							{% if section_menu %}h-mn-color{% endif %} 
@@ -96,7 +96,7 @@
 							<img loading="lazy" class="img-fluid navigation-image mx-3" src="{{ item.image.src | img_url }}" alt="{{ item.name }}">
 						{% endif %}
 						{% if not no_separator %}
-							<div class="navigation-separator" style="color: {{ color_border }};"></div>
+							{# <div class="navigation-separator" style="color: {{ color_border }};"></div> #}
 						{% endif %}
 						<span class="d-flex justify-content-center align-items-center text-center px-4">{{ item.name }}</span>
 					</a>

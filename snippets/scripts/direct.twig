@@ -118,10 +118,10 @@
             var cardUrl = _this.find('.product-link');
             var url = cardUrl.attr('href');
 
-            var cvColors = _this.find('.cv-colors.owl-carousel');
+            var cvColors = _this.find('.cv-colors');
 
             // Owl carousel options
-            var opts = {
+            /*var opts = {
                 items: 6,
                 loop: false,
                 nav: false,
@@ -152,7 +152,7 @@
                 event.stopPropagation();
 
                 cvColors.trigger('next.owl.carousel');
-            });
+            }); */
 
             _this.on('click', '.cv-color', function(event) { 
                 event.preventDefault();
@@ -167,7 +167,7 @@
                 _this.attr('data-product-url', url);
 
                 ajaxAppend(_this, url);
-            });
+            }); 
         });
 
         $('.product-card').each(function () {

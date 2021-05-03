@@ -1,5 +1,5 @@
 {% if product.balance <= 0 and not product.selling_out_of_stock %}
-    {% set text = 'Avise-me' %}
+    {% set text = theme.settings.product_buy_button_outofstock_text ?: 'Avise-me' %}
 {% endif %}
 
 {% if product.kit %}
@@ -24,27 +24,27 @@
                     <div class="loader"></div>
                 </div>
 
-                <div class="col-2 col-sm-1">
+                {# <div class="col-2 col-sm-1">
                     <div class="cv-prev" id="col-prev">
                         <i>{{ 'img/arrow-left.svg' | svg }}</i>
                     </div>
-                </div>
+                </div> #}
 
-                <div class="col-8 col-sm-10">
-                    <div class="cv-colors owl-carousel owl-theme">
+                <div class="col">
+                    <div class="cv-colors d-flex align-items-center flex-wrap justify-content-center">
                         {% for color in product.colors %}
-                            <div class="cv-color {% if color.id == product.color_id %} active {% endif %}" data-url="{{ color.url }}" data-img-src="{{ color.product_images[0].src }}" data-img-rpt="{{ color.product_images[1].src }}">
+                            <div class="cv-color m-2 {% if color.id == product.color_id %} active {% endif %}" data-url="{{ color.url }}" data-img-src="{{ color.product_images[0].src }}" data-img-rpt="{{ color.product_images[1].src }}">
                                 <i class="d-block" style="background-color: {{ color.hexadecimal }}; background-image: url({{ color.image | img_url() }});"></i>
                             </div>
                         {% endfor %}
                     </div>
                 </div>
 
-                <div class="col-2 col-sm-1">
+                {# <div class="col-2 col-sm-1">
                     <div class="cv-next" id="col-next">
                         <i>{{ 'img/arrow-right.svg' | svg }}</i>
                     </div>
-                </div>
+                </div> #}
             </div>
         {% endif %}
 

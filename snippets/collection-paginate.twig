@@ -95,13 +95,21 @@
                 var scroll = $('body, html');
 
                 collection_filter.click(function() {
-                    scroll.addClass('no-scroll');
+                    // scroll.addClass('no-scroll');
+                    $('html, body').css({
+                        overflow: 'hidden',
+                        height: '100%'
+                    });
                     collection_sidebar.addClass('open');
                     collection_sidebar_close.stop().fadeIn();
                 });
 
                 collection_sidebar_close.click(function(e) {
-                    scroll.removeClass('no-scroll');
+                    // scroll.removeClass('no-scroll');
+                    $('html, body').css({
+                        overflow: 'auto',
+                        height: 'auto'
+                    });
                     collection_sidebar.removeClass('open');
                     collection_sidebar_close.stop().fadeOut();
                 });

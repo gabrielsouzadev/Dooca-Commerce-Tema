@@ -34,13 +34,15 @@
 			<meta name="googlebot" content="noindex">
 		{% endif %}
 
-		<meta name="theme_version" content="1.0.21">
+		<meta name="theme_version" content="1.0.25">
 
 		{% if theme.settings.favicon %}
 			<link rel="icon" href="{{ theme.settings.favicon | img_url ('96x96') }}">
 		{% endif %}
 
 		{% if not isGooglePageSpeedInsights %}
+			{{ 'css/dc-utils.css' | dc_assets_url | stylesheet_tag }}
+
 			<link rel="preconnect" href="https://fonts.gstatic.com">
 			<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
 
@@ -221,11 +223,13 @@
 			{% endjavascript %}
 
 			{{ 'js/dc-common.js' | dc_assets_url | script_tag }}
-
-			{% if theme.settings.modal_image.src and theme.settings.modal_time >= 0 %}
-				{% include "modal.twig" %}
+			
+			{% if not theme.settings.modal_disable %}
+				{% if theme.settings.modal_image.src and theme.settings.modal_time >= 0 %}
+					{% include "modal.twig" %}
+				{% endif %}
 			{% endif %}
-
+			
 			{% if not theme.settings.lgpd_disable %}
 				{% include "lgpd.twig" %}
 			{% endif %}

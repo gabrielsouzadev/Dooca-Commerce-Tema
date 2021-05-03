@@ -97,6 +97,11 @@
 			"fixed": 1,
 			"settings": [
 				{
+					"type": "checkbox",
+					"id": "modal_disable",
+					"label": "Desativar popup de aviso"
+				},
+				{
 					"type": "image_picker",
 					"id": "modal_image",
 					"label": "Imagem",
@@ -376,6 +381,12 @@
 					"id": "product_info_custom_crop_mobile",
 					"label": "Tamanho da imagem no detalhe de produto em dispositívos moveis",
 					"info": "Exemplo: 620x620 ou 600x800. <br /> <br /> <div style=\"text-transform: none;\"> Não é necessário preencher os campos acima para sua loja funcionar corretamente. Utilize esse recurso apenas se desejar personalizar o formato das suas imagens de produto. Caso o formato aplicado reduza a qualidade da exibição das suas imagens, remova a configuração inserida.</div>"
+				},
+				{
+					"type": "text",
+					"id": "product_info_custom_crop_zoom_mobile",
+					"label": "Tamanho da imagem no zoom de produto em dispositívos moveis",
+					"info": "Exemplo: 1600x1600 ou 1600x2000. <br /> <br /> <div style=\"text-transform: none;\"> Não é necessário preencher os campos acima para sua loja funcionar corretamente. Utilize esse recurso apenas se desejar personalizar o formato das suas imagens de produto. Caso o formato aplicado reduza a qualidade da exibição das suas imagens, remova a configuração inserida.</div>"
 				}
 			]
 		},

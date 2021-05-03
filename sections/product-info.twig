@@ -3,7 +3,7 @@
 
 {% set text_btn_kit = section.settings.text_btn_kit ?: 'Produtos do kit' %}
 
-<div class="product-info pb-5" id="{{ section.id }}">
+<div class="product-info pb-5" id="product-info">
     {% if has_breadcrumb %}
         <div class="d-none d-lg-block">
             {% include 'breadcrumbs.twig' %}

@@ -97,7 +97,10 @@
 			const item = JSON.parse(itemStr);
 			const now = new Date();
 
-			if (now.getTime() > item.expiry) {
+			console.log('Hoje: ', new Date(now.getTime()));
+			console.log('Expira em: ', new Date(item.expire));
+
+			if (now.getTime() > item.expire) {
 				return true;
 			}
 

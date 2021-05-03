@@ -1,4 +1,8 @@
 .products-counter {
+    @include media-breakpoint-down(md) {
+        background-attachment: unset !important;
+    }
+
     .countdown {
         color: $text-color-secondary;
         position: absolute;
@@ -22,7 +26,7 @@
             text-indent: 0 !important;
 
             @include media-breakpoint-down(md) {
-                width: 8.4vw;
+                width: 7vw;
                 height: 6.4vh;
                 font-size: 1.8rem;
             }

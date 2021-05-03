@@ -1,5 +1,7 @@
 <script type="text/javascript" defer>
 	$(function() {
+        var padding_top = null;
+
         $('body').delegate('.product-installments','click',function() {
             var grid_id = $(this).data('grid-id');
             var variation_id = $(this).data('variation-id');
@@ -16,6 +18,8 @@
                 modal.modal();
                 modal.open();
             }
+
+            padding_top = $('body').css('padding-top');
 		});
 
         var getInstallments = function(grid_id, variation_id) {
@@ -127,5 +131,13 @@
                 return arr.join(',').toString();
             };
         {% endif %}
+
+        $('body').delegate('.modal__overlay', 'click', function() {
+            if (padding_top) {
+                setTimeout(function () {
+                    $('body').css('padding-top', padding_top);
+                }, 100);
+            }
+        });
 	});
 </script>

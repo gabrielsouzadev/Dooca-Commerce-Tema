@@ -3,7 +3,7 @@
 {% set hash1 = random() %}
 {% set hash2 = random() %}
 
-<div class="row justify-content-center">
+<div class="row justify-content-center w-100">
     {% if thumbs %}
         <div class="{% if center %}col-12 order-2{% else %}col-2{% endif %}">
             <div class="thumbs {{ hash2 }} {% if not center %}pr-4{% else %}d-flex justify-content-center center{% endif %}" dc-scroll>

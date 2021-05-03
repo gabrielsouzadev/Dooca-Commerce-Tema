@@ -1,7 +1,7 @@
 {% set type = section.settings.type ?: '1' %}
 
 {% ajax 'product-description' %}
-    <div class="product-description style-{{ type }}" id="{{ section.id }}" {% if is_ajax %}style="border: 0; padding: 0;"{% elseif type != '2' %}style="border-width: {{ section.settings.border_size }}px 0;"{% endif %}>
+    <div class="product-description style-{{ type }}" id="product-description" {% if is_ajax %}style="border: 0; padding: 0;"{% elseif type != '2' %}style="border-width: {{ section.settings.border_size }}px 0;"{% endif %}>
         <div class="container">
             {% include 'product-description/style-' ~ type ~ '.twig' %}
         </div>

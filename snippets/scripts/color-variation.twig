@@ -89,7 +89,7 @@
                 var cvLoader = cvForm.find('.product-card-loader');
 
                 // Owl carousel options
-                var opts = {
+                /* var opts = {
                     items: 5,
                     loop: false,
                     nav: false,
@@ -99,7 +99,7 @@
                     margin: 0,
                     touchDrag: true,
                     mouseDrag: true
-                };
+                }; */
 
                 function request() {
                     cvLoader.css('display', 'flex');
@@ -115,7 +115,7 @@
                         var cvColors = _this.find('.cv-colors');
                         var cvVariations = _this.find('.cv-variations');
 
-                        opts.items = 6;
+                        /* opts.items = 6;
                         cvColors.owlCarousel(opts);
 
                         opts.items = 4;
@@ -137,7 +137,7 @@
 
                         _this.on('click', '#var-next', function() {   
                             cvVariations.trigger('next.owl.carousel');
-                        });   
+                        });   */
 
                         cvLoader.fadeOut(); 
 
@@ -234,7 +234,6 @@
 
                 _this.on('change', 'select[name="variation_id"]', function() {
                     var buyButton = _this.find('.product-buy-button');
-                    console.log(buyButton);
                     buyButton.prop('disabled', false);
                 });
             });
